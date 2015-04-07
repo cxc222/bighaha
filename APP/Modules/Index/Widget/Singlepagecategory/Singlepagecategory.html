@@ -1,0 +1,9 @@
+<dl>
+	<dt>单页文档</dt>
+	<foreach name="singlepage" item="v">
+		<dd>
+			<a href="{:U('/'.$v['filename'])}">{$v.title}</a>
+			<span>({$v.time|date='Y-m-d H:i:s',###})</span>
+		</dd>
+	</foreach>
+</dl>

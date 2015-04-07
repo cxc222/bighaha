@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+		<link rel="stylesheet" href="__PUBLIC__/Css/public.css" />
+	</head>
+	<body>
+		<div class="navlist">
+			<a href="{:U(GROUP_NAME.'/Friendlink/index')}">友情链接列表</a>
+			<a href="{:U(GROUP_NAME.'/Friendlink/add')}" class="cur">友情链接增加</a>
+		</div>
+		<form method="post" action="{:U(GROUP_NAME.'/Friendlink/addRun')}" enctype="multipart/form-data">
+		<table class="table">
+			<tr>
+				<td colspan="2">添加友情链接</td>
+			</tr>
+			<tr>
+				<td align="right">友情链接名称：</td>
+				<td><input type="text" name="sitename"></td>
+			</tr>
+			<tr>
+				<td align="right">友情链接URL：</td>
+				<td><input type="text" name="siteurl"></td>
+			</tr>
+			<tr>
+				<td align="right">友情链接LOGO：</td>
+				<td><input type="file" name="logo"></td>
+			</tr>
+			<tr>
+				<td align="right">排序：</td>
+				<td><input type="text" name="sort" value="100"></td>
+			</tr>	
+			<tr>
+				<td align="right"></td>
+				<td>
+					<input type="submit" value="保存添加" class="submit"/>
+				</td>
+			</tr>			
+		</table>
+		</form>
+	</body>
+</html>

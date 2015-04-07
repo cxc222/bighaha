@@ -1,0 +1,82 @@
+.indexFocusWrap{width: 100%;float: left;}
+.indexFocus{width: 1200px;margin: 130px auto 0px;}
+.tag{float: right;width: 330px;background: #eee;height: 210px;overflow: hidden;padding: 30px;}
+.tag h2{float:left;font-size: 18px;line-height: 22px;color: #333;font-weight: normal;width: 100%;}
+.tag h3{float:left;line-height: 40px;font-size: 16px;color: #333;font-weight: normal;width: 100%;}
+.tag .share{float: left;background: url(/Public/Images/shareindex.png) no-repeat 8px 0;height: 45px;width: 100%;padding: 25px 0 0 0;margin: 9px 0 0;}
+.tag .taglist{float:left;color: #333;margin: 10px 0 0 0;}
+.tag .taglist a{float:left;line-height: 26px;font-size: 13px;color: #333;margin:0 10px  0 0;}
+#focus {width:810px; height:270px; overflow:hidden; position:relative;float: left;}
+#focus ul {height:810px; position:absolute;}
+#focus ul li {float:left; width:810px; height:270px; overflow:hidden; position:relative;background: #fff;}
+#focus ul li .textinfo{float:left; width:340px; height:210px;margin: 30px;}
+#focus ul li .textinfo h2{float:left;line-height: 30px;font-size: 18px;line-height: 22px;color: #333;font-weight: normal;}
+#focus ul li .textinfo span{float:left;width: 100%;font-size: 13px;color: #aaa;line-height: 36px;}
+#focus ul li .textinfo p{float:left;width: 100%;font-size: 13px;color: #333;line-height: 20px;}
+#focus ul li .textinfo .a{float:left;width: 100%;font-size: 13px;color: #000;line-height: 40px;}
+#focus ul li .img{float:left; width:405px; height:270px;}
+#focus ul li .img img{float:left; width:405px; height:270px;}
+#focus .btnBg {position:absolute; width:246px; height:20px; left:0; bottom:0;}
+#focus .btnn {position:absolute; width:370px; height:20px; padding:5px 10px;  top:226px; text-align:right;right: 162px;}
+#focus .btnn span {display:inline-block; _display:inline; _zoom:1; width:13px; height:13px; _font-size:0; margin-left:5px; cursor:pointer; background:url(../Images/bottomNavON.png) no-repeat;}
+#focus .btnn span.on {background:url(./Images/bottomNavON.png) no-repeat;}
+#focus .preNext {width:45px; height:100px; position:absolute; top:130px; cursor:pointer;}
+#focus .pre {left:0;}
+#focus .next {right:0; background-position:right top;}
+
+
+.hotTab{width: 400px;float: left;margin:20px 0 0 20px;}
+.hotTab .pageTab {width:100%;height: 32px;float: left;line-height: 34px;background: #c4c4c4;}
+.hotTab .pageTab li{height: 32px;float:left;cursor:pointer;color:#fff;padding: 0 20px;margin-right: 2px;}
+.hotTab .pageTab li.hover{background:#f77070;}
+.hotTab .pageTabBox{width:300px;margin:10px 0 20px 10px;float:left;overflow: hidden;} 
+.hotTab .pageTabBox li{width:100%;float:left;line-height: 28px;height: 28px;overflow: hidden;text-indent: 10px;} 
+.hotTab .pageTabBox li a{width:100%;float:left;line-height: 28px;color: #444;} 
+.hotTab .pageTabBox li a:hover{width:100%;float:left;line-height: 28px;color: #444;} 
+
+.CatelogTab{width: 340px;float: left;}
+.CatelogTab .pageTab {width:100%;height: 40px;float: left;line-height: 44px;background: #c4c4c4;}
+.CatelogTab .pageTab li{height: 40px;float:left;cursor:pointer;color:#fff;padding: 0 20px;margin-right: 2px;}
+.CatelogTab .pageTab li.hover{background:#f77070;}
+.CatelogTab .pageTabBox{width:300px;margin:14px 0 9px 12px;float:left;overflow: hidden;} 
+.CatelogTab .pageTabBox li{width:100%;float:left;line-height: 28px;height: 28px;overflow: hidden;text-indent: 10px;} 
+.CatelogTab .pageTabBox li a{width:100%;float:left;line-height: 28px;color: #444;} 
+.CatelogTab .pageTabBox li a:hover{width:100%;float:left;line-height: 28px;color: #444;}
+
+.CateTab{width: 400px;float: left;margin:20px 0 0 20px;}
+.CateTab .pageTab {width:100%;height: 32px;float: left;line-height: 34px;background: #c4c4c4;}
+.CateTab .pageTab li{height: 32px;float:left;cursor:pointer;color:#fff;padding: 0 20px;margin-right: 2px;}
+.CateTab .pageTab li.hover{background:#f77070;}
+.CateTab .pageTabBox{width:300px;margin:10px 0 20px 10px;float:left;overflow: hidden;} 
+.CateTab .pageTabBox li{width:100%;float:left;line-height: 28px;height: 28px;overflow: hidden;text-indent: 10px;} 
+.CateTab .pageTabBox li a{width:100%;float:left;line-height: 28px;color: #444;} 
+.CateTab .pageTabBox li a:hover{width:100%;float:left;line-height: 28px;color: #444;} 
+
+/*---------- mainBody ---------*/
+.indexWrap{width:100%;float: left;}
+.index{width: 1200px;margin:0 auto ;padding:10px 0px 0px;}
+.indexLeft{width: 835px;float: left;}
+.indexLeftTitle{width: 835px;float: left;line-height: 40px;height: 40px;font-size: 16px;color:#f77070}
+.indexLeftTitle a{color:#f77070}
+.indexCatalogUl {float: left;width: 845px;overflow: hidden;}
+.indexCatalogUl li{float: left;width: 201px;height:188px;margin: 0 10px 10px 0  ;background: #fff;}
+.indexCatalogUl li:hover .hover{display: block;}
+.indexCatalogUl li a{float: left;height: 164px;position: relative;padding:15px;width: 171px;}
+.indexCatalogUl li a .img{width: 171px;float: left;height: 114px;z-index: 1;position: absolute;}
+.indexCatalogUl li a .text{z-index: 0;position: absolute;width: 171px;bottom: 10px;height: 45px;line-height: 20px;}
+.indexCatalogUl li a .hover{width: 171px;float: left;height: 114px;background: rgba(0,0,0,0.3);z-index: 2;position: absolute;display: none;line-height: 120px;text-align: center;color: #fff;}
+.indexCatalogUl li a .hover img{float: left;margin: 45px 0 0 70px;}
+
+.indexRight{width: 340px;float: right;background: #fff;}
+
+.indexCatalog{width: 1200px;float: left;margin-bottom:20px;background: #fff;}
+
+.ad940{float:right;width:940px;height:120px;margin:10px 24px 10px 20px;}
+.ad300{float: right;width: 300px;height: 250px;margin: 20px 20px 0 0 ;}
+
+.indexAdWrap{width: 100%;float: left;}
+.indexAd{width: 1200px;margin: 20px auto 0px;height: 120px;}
+.indexAdbox{width: 1200px;float:left;height: 120px;}
+.indexAdLeft{width: 900px;float:left;height: 120px;overflow: hidden;}
+.indexAdRight{width: 300px;float:right;height: 120px;}
+.indexAdRight img{width: 300px;float:right;height: 120px;}

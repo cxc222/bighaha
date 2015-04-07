@@ -1,0 +1,30 @@
+@import url("public.css");
+body{font-family: microsoft yahei}
+table,th,td{border:solid 0px #dcdcdc;background: none;}
+table a{color: #333;}
+table input,table button {
+border: none;
+height: 21px;
+padding: 7px 6px;
+color: #999;
+background: #fff;
+vertical-align: middle;
+margin-right: 10px;
+float: left;
+}
+table .submit {
+background: orange;
+height: 30px;
+padding: 0px 30px;
+line-height: 1.8em;
+color: #fff;
+font-size: 14px;
+cursor: pointer;
+border: none;
+margin: 10px 0;
+}
+th{width:80px; font-size: 14px;}
+#top{background:url("../Images/logo.png") no-repeat center top;height:80px;margin-top: 150px;}
+div.login{background: rgba(255,255,255,0.5);width:600px;padding:50px 30px 30px;margin:0px auto;margin-top:10px;}
+.title{font-size:16px;height: 35px;}
+.left{width:280px;}

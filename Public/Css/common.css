@@ -1,0 +1,290 @@
+@charset 'utf-8';
+*{margin:0;padding:0;}
+body{font-size:13px;font-family:Helvetica,"Microsoft YaHei",sans-serif;color:#333333;background:#f5f4f2;}
+ol,ul{list-style:none;}
+a{color:#51504f;text-decoration:none;}
+img{border:none;}
+.fl{float:left;}
+.fr{float:right;}
+.mT10{margin-top: 10px;}
+.mB10{margin-bottom: 10px;}
+.mB15{margin-bottom: 15px;}
+.mB20{margin-bottom: 20px;}
+.mR10{margin-right: 10px;}
+.mL10{margin-left: 10px;}
+.top-list-wrap{width:100%;height:110px;background:#fff;position: fixed;z-index: 888;top: 0;}
+.top-list{width:1200px;height:110px;line-height:80px;margin:0 auto;}
+.top-list .logo{float:left;padding: 32px 0 0 0;}
+.top-list .l-nav{float:left;margin-left: 120px;margin-top: 43px;}
+.top-list .l-nav li{float:left;height: 30px;line-height:30px;}
+.top-list .l-nav li a{color:#333;font-size: 16px;float: left;height: 30px;text-shadow:none;margin: 0 40px 0 0;}
+.top-list .l-nav li a.cur{border-bottom: 4px solid #f77070;}
+.top-list .l-nav li a:hover{border-bottom: 4px solid #f77070;}
+.top-list .r-list{float:right;margin: 22px 0px 00;text-align: center;}
+.top-list .r-list .userlogina{float: left;width: 45px;height: 28px;line-height: 28px;color: #aaa;background: #383838;}
+.top-list .r-list .userrega{float: left;width: 45px;height: 28px;line-height: 28px;color: #aaa;background: #414141;}
+/*---------- 搜索box ---------*/
+.search-box{width: 284px;height: 36px;line-height: 36px;float: right;margin: 38px 0px 00;overflow: hidden;background: #ddd;}
+.search-box form{}
+.search-box form .input{float: left;box-shadow: none;width: 227px;height: 36px;font-size: 12px;border: none;background: #e9e9e9;color: #ccc;padding: 0px 0 0px 10px;line-height: normal;display: inline;overflow: hidden;outline: none;font-family: microsoft yahei;}
+.search-box form .input:focus{background: #e2e2e2;box-shadow: none;}
+.search-box form .submit{width:44px;outline: none;height: 36px;float: left;border: none;background: url(../Images/search-bt.png) 16px 12px no-repeat;text-indent: -99999px;cursor: pointer;}
+
+
+.margin-top-20{margin-top: 20px;}
+.margin-top-30{margin-top: 30px;}
+
+.pageNavWrap{width: 100%;height: 75px;background: url(../Images/pageNav.gif) repeat-x bottom;margin-top: 120px;}
+.pageNav{width: 1200px;height: 75px;margin: 0 auto;}
+.pageNav span{height: 43px;margin:33px 30px 0 0 ;line-height: 42px;color: #333;float: left; font-size: 16px;}
+.pageNav span b{color: #e26;}
+.pageNav span a{height: 43px;margin:0px 0 0 ;padding:0;line-height: 42px;color: #333;float: left; font-size: 16px;border: 0;background: 0;}
+.pageNav a{height: 40px;margin:33px 10px 0 0 ;line-height: 40px;background:#e0e0e0;padding: 0 30px;color: #333;border:1px solid #d0d0d0;float: left; }
+.pageNav a.cur{background:#f1f1f1;color: #333;border:1px solid #d0d0d0;border-bottom: 1px solid #f6f6f6;font-weight: bold; }
+
+
+/*---------- mainBody ---------*/
+.mainWrap{width: 1200px;margin:130px auto 0;clear: both;}
+.main{width: 1200px;float: left; margin: 0 0 ;padding:0px 0px 0px;}
+
+.case-box-wrap{width: 100%;float: left;padding-bottom: 30px;}
+.case-box{height: 300px;width: 1200px;margin: 0 auto;}
+.case-list{width: 1220px;float: left;}
+.case-list li{width: 285px;height:215px;float: left;background: #fff;box-shadow:0px 0px 5px #ccc;margin:0 20px 20px 0;position: relative; }
+.case-list li:hover{box-shadow:0px 0px 5px #999;}
+.case-list li:hover .seeicon{display: block;}
+.case-list li:hover .imgback{display: block;}
+.case-list li .seeicon{width: 100%;height:162px;float: left;position: absolute;top: 0;left: 0;z-index: 8;background: url(../Images/see.png) no-repeat  114px 62px;display: none;}
+.case-list li .imgback{width: 265px;height:159px;float: left;position: absolute;top: 10px;left: 10px;z-index: 7;background: rgba(0,0,0,0.3);display: none;}
+.case-list li .img{width: 285px;height:169px;float: left;position: absolute;top: 0;left: 0;z-index: 6;}
+.case-list li .img img{width: 265px;height:159px;float: left;padding: 10px 10px 0;}
+.case-list li .title{width: 285px;height:47px;float: left;line-height: 47px;color: #333;text-indent: 10px;position: absolute;bottom: 0;}
+
+.case-list-page{width: 880px;float: left;}
+.case-list-page li{width: 270px;height:210px;float: left;background: #fff;box-shadow:0px 0px 5px #ccc;margin:0 20px 20px 0; }
+.case-list-page li:hover{box-shadow:0px 0px 5px #999;}
+.case-list-page li:hover .seeicon{display: block;}
+.case-list-page li:hover .imgback{display: block;}
+.case-list-page li .seeicon{width: 100%;height:162px;float: left;position: absolute;top: 0;left: 0;z-index: 8;background: url(../Images/see.png) no-repeat  114px 62px;display: none;}
+.case-list-page li .imgback{width: 265px;height:159px;float: left;position: absolute;top: 10px;left: 10px;z-index: 7;background: rgba(0,0,0,0.3);display: none;}
+
+.case-list-page li .img{width: 100%;height:162px;float: left;}
+.case-list-page li .img img{width: 100%;height:162px;float: left;}
+.case-list-page li .title{width: 100%;height:47px;float: left;line-height: 47px;color: #333;text-indent: 10px;}
+
+
+/*-- tab1 --*/
+.menuboxtwo {width:100%;float: left;text-shadow:1px 1px 0 #fff;}
+.menuboxtwo ul{width:100%;height:42px;float: left;font-size: 15px;line-height: 42px;color:#333;}
+.menuboxtwo li{height: 42px;float:left;cursor:pointer;margin: 0 10px 0 0 ;padding:0 30px;background: #dcdcdc;}
+.menuboxtwo li.hover{color:#fff;background: #428bca;text-shadow:1px 1px 0 #1c6cb1;}
+.menuboxtwoContent{width:100%;float:left;padding: 20px 0 0 } 
+
+/*---------- 列表 ---------*/
+.indexTabUlNews{float: right;width: 764px;padding: 0 0 0 20px;background:url(../Images/linetwo.png) repeat-y left;height: 220px;}
+.indexTabUlNews li{float: left;width: 100%;text-indent: 13px;line-height: 34px;}
+.indexTabUlNews li a{color: #333;font-size: 13px;float: left;}
+.indexTabUlNews li span{color: #888;font-size: 12px;padding: 0 0 0 15px;float: right;}
+.indexTabUlNews li em{background:url(/images/hot.gif) no-repeat;float: left;width:30px;height: 15px;margin: 12px 0 0 10px;}
+
+.indexTabUlAbout{float: right;width: 764px;padding: 0 0 0 20px;background:url(../Images/linetwo.png) repeat-y left;height: 220px;}
+.indexTabUlAbout img{float: right;}
+.indexTabUlAbout p{float: right;width: 740px;line-height: 24px;padding: 20px 0 0 0;}
+
+/*---------- 底部 ---------*/
+.footerWrap{float: left;width: 100%;background: #fff;padding: 20px 0 ;text-shadow:none;}
+.footer{width: 1200px;margin: 0 auto;color: #555;line-height: 26px;font-size: 12px;}
+.footer p{width:100%;float:left;padding: 0 0 0px; }
+.footer .copyright{width:100%;float:left;padding: 0 0 0px; }
+.footer .copyright span{float: left;}
+.footer .copyright .cnzz{float: left;margin: 7px 0 0 10px;}
+.footer .copyright .bdtj{float: left;margin-right: 10px;}
+.footer .copyright .bdtj a{float: left;line-height: 14px;color: #555;}
+.footer p a{color: #555;float: left;margin: 0 10px 0 0;}
+.footer p span{color: #aaa;float: left;margin: 0 10px 0 0;}
+.footer p strong{color: #555;float: left;margin: 0 10px 0 0;}
+
+.contentArticle{float: left;width: 100%;text-shadow:1px 1px 0 #fff;}
+.pagebox{float: left;width: 100%;text-shadow:1px 1px 0 #fff;}
+.pagebox p{float: left;width: 100%;padding: 0 0 20px;}
+.pagetitle{float: left;width: 100%;line-height: 60px;border-bottom: 1px dotted #ccc;font-size: 22px;}
+.pageinfo{float: left;width: 100%;line-height: 40px;border-bottom: 1px dotted #ccc;color: #666;}
+.pagecontent{float: left;width: 100%;padding: 20px 0 00 ;line-height: 24px;font-size: 14px;overflow: hidden;}
+.pagecontent p{float: left;width: 100%;padding: 0 0  20px ;}
+.pagecontent h3{float: left;width: 100%;padding: 0 0  10px ;font-size: 18px;color: #333;}
+
+/*---------- 列表 ---------*/
+.indexTabUlNews2{float: right;width: 100%;padding: 0 0 0 20px;margin-bottom: 20px;}
+.indexTabUlNews2 li{float: left;width: 100%;text-indent: 0px;line-height: 44px;background: url(../Images/line1.png) repeat-x bottom;}
+.indexTabUlNews2 li a{color: #333;font-size: 15px;float: left;}
+.indexTabUlNews2 li span{color: #888;font-size: 15px;padding: 0 0 0 15px;float: right;}
+.indexTabUlNews2 li em{background:url(/images/hot.gif) no-repeat;float: left;width:30px;height: 15px;margin: 12px 0 0 10px;}
+
+/*-- leftBar --*/
+.leftBar{width: 795px;overflow: hidden;background: #fff;border-radius: 10px;padding: 25px 0 25px 40px;float: left;margin-bottom: 30px;}
+.leftBar .box{width:  100%;float: left;}
+.leftBar .box .title{width: 100%;float: left;height: 34px;color: #333;font-weight: normal;}
+.leftBar .box .title:hover{color: #e26;}
+.leftBar .box .title em{float: left;height: 24px;padding: 11px 0 0 10px;}
+.leftBar .box .title strong{float: left;height: 37px;line-height: 37px;font-size: 14px;color: #f39700;text-indent: 5px;}
+.leftBar .box .title strong a{float: left;height: 37px;line-height: 37px;font-size: 14px;color: #f39700;text-indent: 10px;}
+.leftBar .box .title .more{float: right;height: 37px;line-height: 37px;font-size: 12px;color: #aaa;}
+.leftBar .box .content{width: 100%;float: left;line-height: 24px;font-size: 12px;color: #444;}
+.leftBar .box .content h2{float: left;line-height: 40px;font-size: 15px;color: #888;font-weight: normal;border-left: 10px solid #ccc;margin: 0 0 20px;width: 745px;background: #eee;text-indent: 15px;text-shadow:1px 1px 0 #fff;}
+
+.privewbox{z-index: 999;width: 100%;position: fixed;background: rgba(0,0,0,0.8);height: 100%;top: 0;display: none;}
+.privewboxBox{width: 90%;overflow-y:auto;height: 86%;overflow-y:auto;margin: 0 auto;background:#000;margin-top:30px;border: 40px #000 solid;text-align: center;overflow-x:none;}
+.privewbox img{cursor: pointer;max-width: 100%;overflow-x:none;}
+
+/*-- rightBar 250 --*/
+.rightBar{width: 340px;float: right;}
+.rightBar .box{width:  100%;float: left;margin-bottom: 20px;}
+.rightBar .box270{width:  270px;float: left;background: #fff;padding: 15px;}
+.rightBar .box .title{width: 100%;float: left;height: 37px;background: #eaeaea;line-height: 37px;}
+.rightBar .box .title strong{float: left;height: 37px;color: #333;text-indent: 15px;font-size: 16px;font-weight: normal;}
+.rightBar .box .title .more{float: right;height: 37px;line-height: 37px;font-size: 12px;color: #aaa;}
+.rightBar .box .content{width: 100%;float: left;line-height: 24px;font-size: 12px;color: #444;}
+
+/*-- 标题+图片+描述+时间_列表 --*/
+.articleList{float: left;width:755px;font-size:12px;}
+.articleList li{width:100%;overflow:hidden;clear:both;padding: 0px 0px 20px;margin-bottom: 20px;border-bottom: 1px dotted #ddd;}
+.articleList li .info{width: 60px;float: left;margin-right: 15px;text-align: center;background: #eaeaea url(../Images/subsprites.png) no-repeat 23px 12px;}
+.articleList li strong{height: 36px;line-height: 36px;overflow: hidden;background: #ddd;font-size: 12px;float: left;width: 100%;font-weight: normal;}
+.articleList li span{height: 34px;line-height: 34px;overflow: hidden;font-size: 16px;display: block;margin-top: 30px;font-weight: normal;float: left;width: 100%;}
+.articleList li h4{width: 680px;float: left;font-size: 16px;}
+.articleList li .text{width: 680px;float: left;font-weight: normal;font-size: 16px;}
+.articleList li .text img{width: 110px;height:66px;float: left;}
+.articleList li .text p{width: 550px;height:66px;float: left;font-size: 13px;color: #999;line-height: 22px;padding: 0px 0 0 15px;}
+
+.pageul {float: left;width: 100%;margin-top: 20px;}
+.pageul li{float: left;width: 160px;height:160px;margin: 0 11px 11px 0;background: #eee;padding: 10px 10px 0;position: relative;}
+.pageul li:hover .hover{display: block;}
+.pageul li a.img{width: 160px;float: left;height: 100px;z-index: 1;position: absolute;}
+.pageul li a.img img{width: 160px;float: left;height: 100px;}
+.pageul li a.text{position: absolute;top:120px;width: 160px;height: 32px;line-height: 18px;text-shadow:1px 1px 0 #fff;font-size: 13px;}
+.pageul li a.hover{width: 160px;float: left;height: 100px;background: rgba(0,0,0,0.3);z-index: 2;position: absolute;display: none;line-height: 120px;text-align: center;color: #fff;}
+.pageul li a.hover img{float: left;margin: 35px 0 0 63px;}
+
+
+/*-- 标题+图片+描述+时间_列表 --*/
+.gifList{float: left;margin:0 0px 20px;width:100%;font-size:12px;padding: 0px 0 0 0;}
+.gifList li{width:100%;overflow:hidden;clear:both;padding: 0px 0px 30px;margin-bottom: 0px;float: left;position: relative;}
+.gifList li .avator{width:100px;overflow:hidden;float: left;background: url(../Images/arrow-left.png) no-repeat right center;}
+.gifList li .avator img{width:80px;height: 80px;float: left;border-radius: 40px;}
+.gifList li .gifListBox{width:680px;overflow:hidden;float: left;background: #fff;border-radius: 10px;padding:25px 35px 5px;}
+.gifList li .gifListBox .info{width: 580px;float: left}
+.gifList li .gifListBox .info strong{height: 36px;line-height: 36px;overflow: hidden;background: #ddd;font-size: 12px;float: left;width: 100%;font-weight: normal;}
+.gifList li .gifListBox .info span{height: 34px;line-height: 34px;overflow: hidden;font-size: 16px;display: block;margin-top: 30px;font-weight: normal;float: left;width: 100%;}
+.gifList li .gifListBox .info h1{width: 100%;float: left;font-size: 16px;}
+.gifList li .gifListBox .info h2{width: 100%;float: left;font-size: 16px;}
+.gifList li .gifListBox .info h2 .title{width: 100%;float: left;font-size: 16px;height: 32px;line-height: 24px;}
+.gifList li .gifListBox .info .infocatalog{width:100%;float: left;font-weight: normal;font-size: 13px;line-height: 20px;margin-bottom: 10px;color: #ccc;}
+.gifList li .gifListBox .info .infocatalog a{color: #ccc;}
+.gifList li .position{width:100%;float: left;height: 2px;margin-bottom:0px;position: absolute;bottom:100px;}
+.gifList li .gifListBox .info .text{width:100%;float: left;font-weight: normal;font-size: 16px;color: #444;min-height:270px;margin-bottom: 20px;}
+.gifList li .gifListBox .info .text p{width: 100%;float: left;font-size: 13px;color: #444;line-height: 24px;margin-bottom: 20px;}
+.gifList li .gifListBox .info .text img{max-width: 580px;}
+
+.gifContent{float: left;margin:0 0px 20px;width:100%;font-size:12px;padding: 0px 0 0 0;}
+.gifContent .avator{width:100px;overflow:hidden;float: left;background: url(../Images/arrow-left.png) no-repeat right center;}
+.gifContent .avator img{width:80px;height: 80px;float: left;border-radius: 40px;}
+.gifContent .gifListBox{width:755px;overflow:hidden;float: left;}
+.gifContent .gifListBox .info{width: 100%;float: left}
+.gifContent .gifListBox .info strong{height: 36px;line-height: 36px;overflow: hidden;background: #ddd;font-size: 12px;float: left;width: 100%;font-weight: normal;}
+.gifContent .gifListBox .info span{height: 34px;line-height: 34px;overflow: hidden;font-size: 16px;display: block;margin-top: 30px;font-weight: normal;float: left;width: 100%;}
+.gifContent .gifListBox .info h1{width: 100%;float: left;font-size: 18px;line-height: 24px;height: 32px;font-weight: normal;}
+.gifContent .gifListBox .info h2{width: 100%;float: left;font-size: 16px;}
+.gifContent .gifListBox .info .infocatalog{width:100%;float: left;font-weight: normal;font-size: 13px;line-height: 20px;margin-bottom: 20px;color: #aaa;}
+.gifContent .gifListBox .info .infocatalog a{color: #aaa;}
+.gifContent .gifListBox .info .text{width:100%;float: left;font-weight: normal;font-size: 16px;color: #666;}
+.gifContent .gifListBox .info .text p{width: 100%;float: left;font-size: 13px;color: #666;line-height: 24px;margin-bottom: 20px;}
+.gifContent .gifListBox .info .text img{}
+
+/*-- 新闻列表 --*/
+.newsList{float: left;width: 100%;margin-top: 10px;}
+.newsList li {float: left;width: 100%;border-bottom:1px dotted #ccc;height: 37px;overflow: hidden;}
+.newsList li a{float: left;width: 100%;text-indent: 28px;background: url(../Images/ulListDot.gif) no-repeat 15px 16px;line-height: 37px;font-size: 13px;overflow: hidden;}
+.page{float: left;width: 850px;margin: 15px 0 0 0;border-top: 1px dotted #ccc;line-height: 30px;padding: 15px 0 00;font-size: 14px;}
+.sharebox{float: left;width: 850px;margin: 0px 0 0 0;border-top: 1px dotted #ccc;line-height: 24px;padding: 15px 0 00;}
+
+/*-- 案例右部 --*/
+.casethumbnail{float: left;width: 300px;}
+.casecontent{float: left;width: 790px;margin-bottom: 20px;border-radius: 10px;background: #fff;padding: 30px 30px 0px;}
+.casecontent img{float: left;width: 790px;margin-bottom: 20px;cursor: pointer;}
+.caseinfo{float: left;width: 300px;margin-bottom: 20px;font-size: 14px;}
+.caseinfo p{float: left;width: 300px;border-bottom: 1px dotted  #ccc;line-height: 28px;padding: 5px 0px;}
+.caseinfo h4 {float: left;height: 37px;color: #e26;text-indent: 0px;font-size: 16px;border-bottom: 1px dotted  #ccc;font-weight: normal;width: 100%;float: left;line-height: 37px;font-weight: bold;}
+
+
+.diggbox{float: left;margin: 10px 0 10px 0px;border-top: 1px dotted #ddd;padding-top: 30px;width: 100%;}
+.prebutton,.nextbutton{float: left;width: 50px;height: 50px;padding:20px 25px 20px;color: #aaa;}
+.prebutton{margin: 0 105px 0 0px;}
+.nextbutton{float: right;margin-right: 0px;}
+.sharebutton{width: 32px;height: 32px;position: relative;float: left;background: #ddd;border-radius: 200px;padding:18px 23px 30px 25px;}
+.prebutton:hover,.nextbutton:hover{color: #e26;}
+.diggboxBox{float: left;width:80px;height:80px;border-radius: 200px;background: #ddd;margin: 0 30px 20px 0;outline: none;}
+.diggboxBox:hover{background: #e26;}
+.diggboxBox:hover strong{color: #fff;text-shadow:1px 1px 0 #b9124a;margin: 20px 0 0 27px;float: left;}
+.diggboxBox strong{color: #666;text-shadow:1px 1px 0 #fff;margin: 12px 0 0 27px;float: left;}
+.diggboxBox:hover strong{color: #fff;text-shadow:1px 1px 0 #b9124a;margin: 15px 0 0 27px;float: left;}
+.diggboxBox b{color: #666;text-shadow:1px 1px 0 #fff;margin: 0px 0 0 0px;float: left;width: 100%;text-align: center;}
+.diggboxBox:hover b{color: #fff;text-shadow:1px 1px 0 #b9124a;margin: 0px 0 0 0px;float: left;width: 100%;text-align: center;}
+
+.diggboxgiflist{float: right;margin: 0px 0 10px 0px;width:80px;}
+.diggboxgiflist .downbuttom{float: left;width: 88px;height: 53px;margin-top: 10px;margin-left: 7px;}
+.diggboxBoxlist{float: left;width:80px;height:80px;border-radius: 200px;background: #fff;margin: 0 0px 20px 0;outline: none;border: 1px solid #ddd;}
+.diggboxBoxlist:hover{background: #aaa;border: 1px solid #999;}
+.diggboxBoxlist:hover strong{color: #fff;text-shadow:1px 1px 0 #777;margin: 20px 0 0 27px;float: left;}
+.diggboxBoxlist strong{color: #aaa;text-shadow:1px 1px 0 #fff;margin: 12px 0 0 27px;float: left;}
+.diggboxBoxlist:hover strong{color: #fff;text-shadow:1px 1px 0 #777;margin: 15px 0 0 27px;float: left;}
+.diggboxBoxlist b{color: #aaa;text-shadow:1px 1px 0 #fff;margin: 0px 0 0 0px;float: left;width: 100%;text-align: center;}
+.diggboxBoxlist:hover b{color: #fff;text-shadow:1px 1px 0 #777;margin: 0px 0 0 0px;float: left;width: 100%;text-align: center;}
+
+
+.pagesize{float: left;line-height: 40px;margin-left: 0px;margin-bottom: 20px;margin-top: 20px;}
+.pagesize a,.pagesize .current{float: left;line-height:30px;height: 30px;padding:0 12px;background: #ddd;border-radius:30px;text-align: center;margin: 0 10px 0 0;color: #222;text-shadow:1px 1px 0 #fff;}
+.pagesize .current{background: #bbb;color: #222;}
+
+.pageTabWrap {width:300px;float: left;background: #fff;padding: 20px;}
+.pageTabWrap .pageTab {width:300px;height: 30px;float: left;background: #fff;line-height: 30px;background: #888;}
+.pageTabWrap .pageTab li{height: 30px;float:left;cursor:pointer;color:#fff;padding: 0 17px;}
+.pageTabWrap .pageTab li.hover{background:#383838;}
+.pageTabWrap .pageTabBox{width:300px;margin:10px 0 0;float:left;background: #fff;} 
+.pageTabWrap .pageTabBox li{width:100%;float:left;line-height: 28px;height: 28px;overflow: hidden;} 
+.pageTabWrap .pageTabBox li a{width:100%;float:left;line-height: 28px;color: #555;text-indent: 15px;} 
+.pageTabWrap .pageTabBox li a:hover{width:100%;float:left;line-height: 28px;color: #e26;} 
+.pageTabWrap .pageTabBoxPic{width:320px;float:left;background: #fff;} 
+.pageTabWrap .pageTabBoxPic li{width:123px;float:left;height: 82px;overflow: hidden;position: relative;margin-top: 10px;margin-right: 10px;border: 11px solid #eee;} 
+.pageTabWrap .pageTabBoxPic li:hover{border: 11px solid #666;} 
+.pageTabWrap .pageTabBoxPic li a{width:100%;float:left;} 
+.pageTabWrap .pageTabBoxPic li a .img{width:100%;float:left;height:82px;z-index: 1;position: absolute;} 
+.pageTabWrap .pageTabBoxPic li a .img:hover{opacity: 0.8;} 
+.pageTabWrap .pageTabBoxPic li a h4{width:103px;float:left;height:67px;padding:15px 10px 0;line-height:18px;z-index: 2;position: absolute;bottom: 0;font-size: 12px;font-weight: normal;display: none;} 
+.pageTabWrap .pageTabBoxPic li a h4:hover{background: rgba(0,0,0,0.6);color: #fff;} 
+.pageTabWrap .pageTabBoxPic li a:hover{width:100%;float:left;line-height: 28px;color: #e26;} 
+.pageTabWrap .pageTabBoxPic li a:hover h4{display: block;} 
+
+.pageTabArticle {width:745px;height: 40px;margin-top:20px;float: left;background: #fff;line-height: 40px;background: #eee;border-left: 10px solid #ccc;float: left;}
+.pageTabArticle li{height: 40px;float:left;cursor:pointer;color:#888;padding: 0 13px;font-size: 15px;text-shadow: 1px 1px 0 #fff;}
+.pageTabArticle li.hover{}
+.pageArticle{width:780px;float:left;background: #fff;} 
+.pageArticle li{width:150px;float:left;height: 100px;overflow: hidden;position: relative;margin-top: 14px;margin-right: 14px;border: 14px solid #eee;} 
+.pageArticle li:hover{border: 14px solid #999;} 
+.pageArticle li a{width:100%;float:left;} 
+.pageArticle li a .img{width:100%;float:left;height:105px;z-index: 1;position: absolute;} 
+.pageArticle li a .img:hover{opacity: 0.8;} 
+.pageArticle li a h4{width:130px;float:left;height:75px;line-height:18px;z-index: 2;position: absolute;bottom: 0;font-size: 12px;font-weight: normal;padding: 30px 10px 0;display: none;} 
+.pageArticle li a h4:hover{background: rgba(0,0,0,0.6);color: #fff;} 
+.pageArticle li a:hover{width:100%;float:left;line-height: 28px;color: #e26;} 
+.pageArticle li a:hover h4{display: block;} 
+
+.tagpage{float: left;width: 100%;margin-bottom: 20px;
+font-size: 13px;}
+.tagpage a{color: #b69e88;float: left;line-height: 24px;padding: 0 8px;background: #eee;margin: 0 1px 0 0;}
+
+.ad755{float: left;width: 715px;padding: 19px;border: 1px dotted #ddd;margin-bottom: 20px;}
+.ad336{float: left;width:336px;height: 280px;}
+
+.sonnav{float: left;width: 100%;margin-bottom: 20px;text-shadow:1px 1px 0 #fff;}
+.sonnav a{float: left;border-radius: 35px;line-height: 30px;padding: 0 15px;background: #eee;margin: 0 10px 0 0;}
+.sonnav a.cur{background: #ccc;}

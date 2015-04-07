@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+		<link rel="stylesheet" href="__PUBLIC__/Css/public.css" />
+		<script type="text/javascript">
+			window.UEDITOR_HOME_URL = '__ROOT__/Data/Ueditor2/';
+			window.onload = function(){
+				window.UEDITOR_CONFIG.initialFrameHeight = 300;
+				window.UEDITOR_CONFIG.initialFrameWidth = 1000;
+				window.UEDITOR_CONFIG.imageUrl = "{:U(GROUP_NAME.'/Article/uploadgif')}";           //图片上传提交地址
+    			window.UEDITOR_CONFIG.imagePath = '__ROOT__/Uploads/';   
+				UE.getEditor('content');
+			}
+		</script>
+		<js file='__ROOT__/Data/Ueditor2/ueditor.config.js'/>
+		<js file='__ROOT__/Data/Ueditor2/ueditor.all.min.js'/>
+	</head>
+	<body>
+		<div class="navlist">
+			<a href="{:U(GROUP_NAME.'/Article/index')}">文章列表</a>
+			<a href="{:U(GROUP_NAME.'/Article/add')}"  class="cur">增加文章</a>
+			<a href="{:U(GROUP_NAME.'/Article/trach')}">文章回收站</a>
+		</div>
+		<form method="post" action="{:U(GROUP_NAME.'/Article/addgifRun')}" enctype="multipart/form-data">
+		<table class="table">
+			<tr>
+				<td align="right" width="10%">文章标题：</td>
+				<td>
+					<input type="text" name="title" class="inputlong">
+					<select name="cid" class="select">
+						<option value="1">GIF</option>
+					</select>
+					<select name="username" class="select">
+					<foreach name="user" item="v">
+						<option value="{$v.username}">{$v.username}</option>
+					</foreach>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td align="right" width="10%">文章属性：</td>
+				<td>
+<!-- 					<foreach name="attr" item="v">
+						<label style="margin-right:10px;">
+							<input type="checkbox" name="aid[]" value="{$v.id}"/>&nbsp;<div class="tip">{$v.name}</div>
+						</label>
+					</foreach> -->
+					<input type="checkbox" name="del" value="1"/>&nbsp;<div class="tip">放入回收站</div>
+				</td>
+			</tr>
+			<tr>
+				<td align="right" width="10%">缩略图：</td>
+				<td>
+					<input type="file" name="thumbnail"/>
+				</td>
+			</tr>
+			<tr>
+				<td align="right" width="10%">文章摘要：</td>
+				<td><textarea name="summary" class="textarea"></textarea></td>
+			</tr>
+			<tr>
+				<td align="right" width="10%">关键字：</td>
+				<td><input type="text" name="keyword" class="inputlong"><input type="text" name="click" value="{$click}"/></td>
+			</tr>
+			<tr>
+				<td align="right" width="10%">Tag:</td>
+				<td><input type="text" name="tag" class="inputlong"/><div class="tip2">用英文状态下的,分隔</div></td>
+			</tr>
+			<tr>
+				<td align="right" width="10%"></td>
+				<td>
+					<textarea name="content" id="content" cols="80" rows="6"></textarea>
+				</td>
+			</tr>
+			<tr>
+				<td width="10%"></td>
+				<td>
+					<input type="submit" value="保存添加" class="submit"/>
+				</td>
+			</tr>			
+		</table>
+	</form>
+	</body>
+</html>

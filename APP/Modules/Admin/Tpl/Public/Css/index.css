@@ -1,0 +1,27 @@
+@import url("public.css");
+html{overflow-y: hidden;font-family:Microsoft yahei;}
+#top{height:80px;background:url("../Images/logo-small.png") #333 23px 23px no-repeat; 
+padding-left:340px;border-bottom: solid 0px #000;overflow: hidden; position: relative;}
+#top .menu{margin-top:28px;float: left;height: 47px;}
+#top .menu a{padding:6px 15px;font-size:15px;color:#eee;
+	float:left;margin-right:10px; display:block;  border-radius: 3px;}
+#top .menu a.a{padding:6px 15px;font-size:15px;color:#f90;
+	float:left;margin-right:10px; display:block;  border-radius: 3px;}
+#top .menu a:hover{background:#333;color:#fff; box-shadow:0px 0px 6px #ccc;}
+/***退出****/
+.exit{float: left;float: left;color:#eee;
+margin-top: 20px;
+line-height: 47px;
+height: 47px;margin-right: 30px;font-size: 16px;}
+.exit a{font-size:12px;color:#eee;padding:3px 10px; border-radius: 3px;}
+.exit a:hover{color:#fff;}
+/**左侧**/
+#left{padding-top:0px;width:200px;float:left; overflow-x:hidden;
+	overflow-y:auto;border-right: solid 1px #dcdcdc;background: url(../Images/bg.png) repeat #4a4851; 
+}
+#left dl{padding-bottom: 10px;float: left;width: 100%;}
+#left dl dt{color:#ddd;width: 100%;float: left;background: #000;height: 40px;line-height: 40px;text-indent: 20px;margin-bottom: 5px;}
+#left dl dd{line-height: 32px;height: 32px;float: left;width: 100%;}
+#left dl dd a{font-size:14px;text-indent: 20px;color:#ddd;display:block; }
+#left dl dd a:hover{background:#111;}
+#right{float:left;overflow: hidden;}

@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+		<link rel="stylesheet" href="__PUBLIC__/Css/public.css" />
+	</head>
+	<body>
+		<div class="navlist">
+			<a href="{:U(GROUP_NAME.'/Singlepage/index')}" class="cur">单页列表</a>
+			<a href="{:U(GROUP_NAME.'/Singlepage/add')}">单页增加</a>
+		</div>
+		<form method="post" action="{:U(GROUP_NAME.'/Singlepage/sort')}">
+		<table class="table">
+			<tr>
+				<td width="8%">ID</td>
+				<td>文档标题</td>
+				<td>网页文件名</td>
+				<td>模板文件名</td>
+				<td width="15%">分类</td>
+				<td width="15%">排序</td>
+				<td width="15%">发布时间</td>
+				<td width="15%">操作</td>
+			</tr>
+			<foreach name="singlepage" item="v">
+				<tr>
+					<td>{$v.id}<input type="hidden" name="id[]" value="{$v.id}"></td>
+					<td><a href="{:U('/html/'.$v['filename'].'.html')}" target="_blank" target="_blank">{$v.title}</a></td>
+					<td><a href="{:U('/html/'.$v['filename'].'.html')}" target="_blank" target="_blank">{$v.filename}.html</a></td>
+					<td>{$v.templates}</td>
+					<td>{$v.type}</td>
+					<td><input type="text" name="{$v.id}" value="{$v.sort}"></td>
+					<td>{$v.time|date='Y-m-d H:i:s',###}</td>
+					<td>
+						<a href="javascript:if(confirm('您确定要删除吗?'))location='{:U(GROUP_NAME.\'/Singlepage/delete\',array(\'id\'=>$v[\'id\']))}'">删除</a>&nbsp;&nbsp;
+						<a href="{:U(GROUP_NAME.'/Singlepage/update',array('id'=>$v['id']))}">修改</a>
+					</td>
+				</tr>
+			</foreach>
+			<tr>
+				<td colspan="8" align="center">
+					<input type="submit" value="更新排序" class="submit"/>
+				</td>
+			</tr>	
+		</table>
+		</form>
+	</body>
+</html>

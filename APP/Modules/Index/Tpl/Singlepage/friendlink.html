@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+<title>{$singlepage.title}-{$Think.config.WEB_NAME}</title>
+<meta name="description" content="{$Think.config.WEB_DESRIPTION}" />
+<meta name="keywords" content="{$Think.config.WEB_KEYWORDS}" />
+<include file='Common:headcommon'/>
+<link rel="stylesheet" href="/Public/Css/single.css" />
+<link rel="stylesheet" href="/Data/Ueditor2/third-party/SyntaxHighlighter/shCoreDefault.css" />
+<script type="text/javascript" src="/Data/Ueditor2/third-party/SyntaxHighlighter/shCore.js"></script>
+<link rel="stylesheet" href="__PUBLIC__/Css/bootstrap.css" />
+<link rel="stylesheet" href="__PUBLIC__/Css/buttons.css" />
+<script type="text/javascript">
+    SyntaxHighlighter.all();
+</script>
+</head>
+</body>
+<include file='Common:nav'/>
+<div class="mainWrap">
+    <div class="main">
+        <div class="singlepagemain">
+            <div class="singleLeft">
+                <p>有意思的，风格和内容与本站相关相近的就可以~~~<br/>
+                什么PR值，什么alexa都是神马的浮云~~~<br/>
+                或者给管理员发邮件service@waamei.com<br/>
+                申请之前一定要先加上我的噢~~~<br/>
+                挖霉网 http://www.waamei.com</p>
+                <script type="text/javascript" src="/Public/Js/submitcheck.js"/></script>
+                <div class="submitBox" >
+                    <form method="post" action="{:U(GROUP_NAME.'/Singlepage/add')}" name="submitform">
+                        <div class="left">
+                            <input type="input" name="sitename" class="input" value="网站名" onfocus="if(this.value == '网站名') this.value = ''" onblur="if(this.value =='') this.value = '网站名'"/>
+                            <input type="input" name="siteurl" class="input" value="http://" onfocus="if(this.value == 'http://') this.value = ''" onblur="if(this.value =='') this.value = 'http://'"/>
+                            <input type="input" name="user" class="input" value="您的称呼" onfocus="if(this.value == '您的称呼') this.value = ''" onblur="if(this.value =='') this.value = '您的称呼'"/>
+                            <input type="input" name="email" class="input" value="您的邮箱" onfocus="if(this.value == '您的邮箱') this.value = ''" onblur="if(this.value =='') this.value = '您的邮箱'"/>
+                            <input type="input" name='qq' class="input" value="联系QQ" onfocus="if(this.value == '联系QQ') this.value = ''" onblur="if(this.value =='') this.value = '联系QQ'"/> 
+                            <input type="code" class="input short"  name="code" /> <img src="/Index/Index/verify" id="code" onclick="javascript:void(change_code(this));" class="code"/>
+                            
+                        </div>
+                        <div class="right">
+                            <textarea class="textarea" name="note">亲，有话对我说吗...</textarea>
+                        </div>
+                        <input type="submit" class="submit button button-pill button-caution" value="猛戳我提交" onclick="return submitcheck()"/>
+                    </form>
+                </div>
+            </div>
+            <div class="singleRight">
+                <div class="singleNav">
+                    <foreach name="pagelist" item="v">
+                        <if condition="$v['filename'] eq $filename">
+                            <a href="{:U('/html/'.$v['filename'])}" class="cur">{$v.title}</a>
+                        <else/>
+                            <a href="{:U('/html/'.$v['filename'])}">{$v.title}</a>
+                        </if>
+                    </foreach>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<include file="Common:footer"/>

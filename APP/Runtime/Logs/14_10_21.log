@@ -1,0 +1,184 @@
+[ 2014-10-21T12:20:00+08:00 ] 127.0.0.1 /
+NOTIC: [2] array_walk_recursive() expects parameter 2 to be a valid callback, function 'filter_default' not found or invalid function name F:\webSelf\www.gaoxiaosile.com\www.gaoxiaosile.com.v1\trunk\ThinkPHP\Lib\Core\App.class.php 第 56 行.
+NOTIC: [2] array_walk_recursive() expects parameter 2 to be a valid callback, function 'filter_default' not found or invalid function name F:\webSelf\www.gaoxiaosile.com\www.gaoxiaosile.com.v1\trunk\ThinkPHP\Lib\Core\App.class.php 第 57 行.
+INFO: [ app_begin ] --START--
+INFO: ReadHtmlCache Behavior ::run [ RunTime:0.000768s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000868s ]
+SQL: SHOW COLUMNS FROM `shangfox_article` [ RunTime:0.004592s ]
+SQL: SELECT * FROM `shangfox_article` WHERE (  ( `cid` IN ('1','2','3','4') ) ) AND ( `del` = 0 ) AND ( `thumbnail` <> '' ) ORDER BY time DESC LIMIT 8   [ RunTime:0.001018s ]
+SQL: SELECT * FROM `shangfox_article` WHERE ( `cid` = 1 ) AND ( `del` = 0 ) AND ( `thumbnail` <> '' ) ORDER BY time DESC LIMIT 8   [ RunTime:0.000399s ]
+SQL: SELECT * FROM `shangfox_article` WHERE ( `cid` = 1 ) AND ( `del` = 0 ) AND ( `thumbnail` <> '' ) ORDER BY click DESC LIMIT 13   [ RunTime:0.000429s ]
+SQL: SELECT * FROM `shangfox_article` WHERE ( `cid` = 1 ) AND ( `del` = 0 ) AND ( `thumbnail` <> '' ) ORDER BY ding DESC LIMIT 13   [ RunTime:0.000396s ]
+SQL: SELECT * FROM `shangfox_article` WHERE ( `cid` = 1 ) AND ( `del` = 0 ) AND ( `thumbnail` <> '' ) ORDER BY cai DESC LIMIT 13   [ RunTime:0.000395s ]
+SQL: SELECT * FROM `shangfox_article` WHERE ( `cid` = 2 ) AND ( `del` = 0 ) AND (  ( `thumbnail` <> '' ) ) ORDER BY time DESC LIMIT 8   [ RunTime:0.000459s ]
+SQL: SELECT * FROM `shangfox_article` WHERE ( `cid` = 2 ) AND ( `del` = 0 ) AND (  ( `thumbnail` <> '' ) ) ORDER BY click DESC LIMIT 13   [ RunTime:0.000725s ]
+SQL: SELECT * FROM `shangfox_article` WHERE ( `cid` = 2 ) AND ( `del` = 0 ) AND (  ( `thumbnail` <> '' ) ) ORDER BY ding DESC LIMIT 13   [ RunTime:0.000468s ]
+SQL: SELECT * FROM `shangfox_article` WHERE ( `cid` = 2 ) AND ( `del` = 0 ) AND (  ( `thumbnail` <> '' ) ) ORDER BY cai DESC LIMIT 13   [ RunTime:0.000427s ]
+SQL: SELECT * FROM `shangfox_article` WHERE ( `cid` = 4 ) AND ( `del` = 0 ) AND (  ( `thumbnail` <> '' ) ) ORDER BY time DESC LIMIT 8   [ RunTime:0.000277s ]
+SQL: SELECT * FROM `shangfox_article` WHERE ( `cid` = 4 ) AND ( `del` = 0 ) AND (  ( `thumbnail` <> '' ) ) ORDER BY click DESC LIMIT 13   [ RunTime:0.000240s ]
+SQL: SELECT * FROM `shangfox_article` WHERE ( `cid` = 4 ) AND ( `del` = 0 ) AND (  ( `thumbnail` <> '' ) ) ORDER BY ding DESC LIMIT 13   [ RunTime:0.000240s ]
+SQL: SELECT * FROM `shangfox_article` WHERE ( `cid` = 4 ) AND ( `del` = 0 ) AND (  ( `thumbnail` <> '' ) ) ORDER BY cai DESC LIMIT 13   [ RunTime:0.000252s ]
+SQL: SELECT * FROM `shangfox_article` WHERE ( `cid` = 2 ) AND ( `del` = 0 ) AND (  ( `thumbnail` <> '' ) ) ORDER BY time DESC LIMIT 8   [ RunTime:0.000351s ]
+SQL: SELECT * FROM `shangfox_article` WHERE ( `del` = 0 ) AND (  ( `cid` IN ('1','2','3','4','5','6') ) ) AND (  ( `thumbnail` <> '' ) ) ORDER BY click DESC LIMIT 8   [ RunTime:0.000444s ]
+INFO: [ view_parse ] --START--
+NOTIC: [8] Undefined variable: cateinfo F:\webSelf\www.gaoxiaosile.com\www.gaoxiaosile.com.v1\trunk\APP\Runtime\Cache\Index\dff44c8e9ebea4949049842757e96f1a.php 第 23 行.
+NOTIC: [8] Undefined variable: cateinfo F:\webSelf\www.gaoxiaosile.com\www.gaoxiaosile.com.v1\trunk\APP\Runtime\Cache\Index\dff44c8e9ebea4949049842757e96f1a.php 第 24 行.
+NOTIC: [8] Undefined variable: cateinfo F:\webSelf\www.gaoxiaosile.com\www.gaoxiaosile.com.v1\trunk\APP\Runtime\Cache\Index\dff44c8e9ebea4949049842757e96f1a.php 第 25 行.
+NOTIC: [8] Undefined variable: cateinfo F:\webSelf\www.gaoxiaosile.com\www.gaoxiaosile.com.v1\trunk\APP\Runtime\Cache\Index\dff44c8e9ebea4949049842757e96f1a.php 第 26 行.
+NOTIC: [8] Undefined variable: cateinfo F:\webSelf\www.gaoxiaosile.com\www.gaoxiaosile.com.v1\trunk\APP\Runtime\Cache\Index\dff44c8e9ebea4949049842757e96f1a.php 第 27 行.
+SQL: SELECT `id`,`title`,`click` FROM `shangfox_article` WHERE ( `del` = 0 ) ORDER BY time DESC LIMIT 8   [ RunTime:0.000497s ]
+SQL: SELECT `id`,`title`,`click` FROM `shangfox_article` WHERE ( `del` = 0 ) ORDER BY click DESC LIMIT 8   [ RunTime:0.000379s ]
+SQL: SELECT `id`,`title`,`click` FROM `shangfox_article` WHERE ( `del` = 0 ) ORDER BY ding DESC LIMIT 8   [ RunTime:0.000276s ]
+SQL: SELECT `id`,`title`,`time` FROM `shangfox_article` WHERE ( `del` = 0 ) AND ( `cid` = 1 ) ORDER BY time DESC LIMIT 8   [ RunTime:0.000422s ]
+SQL: SELECT `id`,`title`,`time` FROM `shangfox_article` WHERE ( `del` = 0 ) AND ( `cid` = 2 ) ORDER BY time DESC LIMIT 8   [ RunTime:0.000374s ]
+SQL: SELECT `id`,`title`,`time` FROM `shangfox_article` WHERE ( `del` = 0 ) AND ( `cid` = 3 ) ORDER BY time DESC LIMIT 8   [ RunTime:0.000281s ]
+NOTIC: [8] Undefined index: limit F:\webSelf\www.gaoxiaosile.com\www.gaoxiaosile.com.v1\trunk\APP\Modules\Index\Widget\FriendlinkWidget.class.php 第 7 行.
+SQL: SHOW COLUMNS FROM `shangfox_friendlink` [ RunTime:0.002810s ]
+SQL: SELECT `id`,`sitename`,`sort`,`siteurl` FROM `shangfox_friendlink` WHERE ( statu = 1 ) ORDER BY sort ASC  [ RunTime:0.000235s ]
+INFO: ParseTemplate Behavior ::run [ RunTime:0.072900s ]
+INFO: [ view_parse ] --END-- [ RunTime:0.073054s ]
+INFO: [ view_filter ] --START--
+INFO: ContentReplace Behavior ::run [ RunTime:0.000674s ]
+INFO: TokenBuild Behavior ::run [ RunTime:0.000572s ]
+INFO: WriteHtmlCache Behavior ::run [ RunTime:0.000347s ]
+INFO: ShowRuntime Behavior ::run [ RunTime:0.000517s ]
+INFO: [ view_filter ] --END-- [ RunTime:0.002342s ]
+INFO: [ view_end ] --START--
+INFO: ShowPageTrace Behavior ::run [ RunTime:0.000555s ]
+INFO: [ view_end ] --END-- [ RunTime:0.000632s ]
+
+[ 2014-10-21T12:20:28+08:00 ] 127.0.0.1 /
+NOTIC: [2] array_walk_recursive() expects parameter 2 to be a valid callback, function 'filter_default' not found or invalid function name F:\webSelf\www.gaoxiaosile.com\www.gaoxiaosile.com.v1\trunk\ThinkPHP\Lib\Core\App.class.php 第 56 行.
+NOTIC: [2] array_walk_recursive() expects parameter 2 to be a valid callback, function 'filter_default' not found or invalid function name F:\webSelf\www.gaoxiaosile.com\www.gaoxiaosile.com.v1\trunk\ThinkPHP\Lib\Core\App.class.php 第 57 行.
+INFO: [ app_begin ] --START--
+INFO: ReadHtmlCache Behavior ::run [ RunTime:0.000525s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000617s ]
+SQL: SHOW COLUMNS FROM `shangfox_article` [ RunTime:0.002444s ]
+SQL: SELECT * FROM `shangfox_article` WHERE (  ( `cid` IN ('1','2','3','4') ) ) AND ( `del` = 0 ) AND ( `thumbnail` <> '' ) ORDER BY time DESC LIMIT 8   [ RunTime:0.000656s ]
+SQL: SELECT * FROM `shangfox_article` WHERE ( `cid` = 1 ) AND ( `del` = 0 ) AND ( `thumbnail` <> '' ) ORDER BY time DESC LIMIT 8   [ RunTime:0.000312s ]
+SQL: SELECT * FROM `shangfox_article` WHERE ( `cid` = 1 ) AND ( `del` = 0 ) AND ( `thumbnail` <> '' ) ORDER BY click DESC LIMIT 13   [ RunTime:0.000375s ]
+SQL: SELECT * FROM `shangfox_article` WHERE ( `cid` = 1 ) AND ( `del` = 0 ) AND ( `thumbnail` <> '' ) ORDER BY ding DESC LIMIT 13   [ RunTime:0.000491s ]
+SQL: SELECT * FROM `shangfox_article` WHERE ( `cid` = 1 ) AND ( `del` = 0 ) AND ( `thumbnail` <> '' ) ORDER BY cai DESC LIMIT 13   [ RunTime:0.001446s ]
+SQL: SELECT * FROM `shangfox_article` WHERE ( `cid` = 2 ) AND ( `del` = 0 ) AND (  ( `thumbnail` <> '' ) ) ORDER BY time DESC LIMIT 8   [ RunTime:0.000422s ]
+SQL: SELECT * FROM `shangfox_article` WHERE ( `cid` = 2 ) AND ( `del` = 0 ) AND (  ( `thumbnail` <> '' ) ) ORDER BY click DESC LIMIT 13   [ RunTime:0.000415s ]
+SQL: SELECT * FROM `shangfox_article` WHERE ( `cid` = 2 ) AND ( `del` = 0 ) AND (  ( `thumbnail` <> '' ) ) ORDER BY ding DESC LIMIT 13   [ RunTime:0.000434s ]
+SQL: SELECT * FROM `shangfox_article` WHERE ( `cid` = 2 ) AND ( `del` = 0 ) AND (  ( `thumbnail` <> '' ) ) ORDER BY cai DESC LIMIT 13   [ RunTime:0.000431s ]
+SQL: SELECT * FROM `shangfox_article` WHERE ( `cid` = 4 ) AND ( `del` = 0 ) AND (  ( `thumbnail` <> '' ) ) ORDER BY time DESC LIMIT 8   [ RunTime:0.000253s ]
+SQL: SELECT * FROM `shangfox_article` WHERE ( `cid` = 4 ) AND ( `del` = 0 ) AND (  ( `thumbnail` <> '' ) ) ORDER BY click DESC LIMIT 13   [ RunTime:0.000235s ]
+SQL: SELECT * FROM `shangfox_article` WHERE ( `cid` = 4 ) AND ( `del` = 0 ) AND (  ( `thumbnail` <> '' ) ) ORDER BY ding DESC LIMIT 13   [ RunTime:0.000245s ]
+SQL: SELECT * FROM `shangfox_article` WHERE ( `cid` = 4 ) AND ( `del` = 0 ) AND (  ( `thumbnail` <> '' ) ) ORDER BY cai DESC LIMIT 13   [ RunTime:0.000259s ]
+SQL: SELECT * FROM `shangfox_article` WHERE ( `cid` = 2 ) AND ( `del` = 0 ) AND (  ( `thumbnail` <> '' ) ) ORDER BY time DESC LIMIT 8   [ RunTime:0.000388s ]
+SQL: SELECT * FROM `shangfox_article` WHERE ( `del` = 0 ) AND (  ( `cid` IN ('1','2','3','4','5','6') ) ) AND (  ( `thumbnail` <> '' ) ) ORDER BY click DESC LIMIT 8   [ RunTime:0.000382s ]
+INFO: [ view_parse ] --START--
+NOTIC: [8] Undefined variable: cateinfo F:\webSelf\www.gaoxiaosile.com\www.gaoxiaosile.com.v1\trunk\APP\Runtime\Cache\Index\dff44c8e9ebea4949049842757e96f1a.php 第 23 行.
+NOTIC: [8] Undefined variable: cateinfo F:\webSelf\www.gaoxiaosile.com\www.gaoxiaosile.com.v1\trunk\APP\Runtime\Cache\Index\dff44c8e9ebea4949049842757e96f1a.php 第 24 行.
+NOTIC: [8] Undefined variable: cateinfo F:\webSelf\www.gaoxiaosile.com\www.gaoxiaosile.com.v1\trunk\APP\Runtime\Cache\Index\dff44c8e9ebea4949049842757e96f1a.php 第 25 行.
+NOTIC: [8] Undefined variable: cateinfo F:\webSelf\www.gaoxiaosile.com\www.gaoxiaosile.com.v1\trunk\APP\Runtime\Cache\Index\dff44c8e9ebea4949049842757e96f1a.php 第 26 行.
+NOTIC: [8] Undefined variable: cateinfo F:\webSelf\www.gaoxiaosile.com\www.gaoxiaosile.com.v1\trunk\APP\Runtime\Cache\Index\dff44c8e9ebea4949049842757e96f1a.php 第 27 行.
+SQL: SELECT `id`,`title`,`click` FROM `shangfox_article` WHERE ( `del` = 0 ) ORDER BY time DESC LIMIT 8   [ RunTime:0.000375s ]
+SQL: SELECT `id`,`title`,`click` FROM `shangfox_article` WHERE ( `del` = 0 ) ORDER BY click DESC LIMIT 8   [ RunTime:0.000212s ]
+SQL: SELECT `id`,`title`,`click` FROM `shangfox_article` WHERE ( `del` = 0 ) ORDER BY ding DESC LIMIT 8   [ RunTime:0.000195s ]
+SQL: SELECT `id`,`title`,`time` FROM `shangfox_article` WHERE ( `del` = 0 ) AND ( `cid` = 1 ) ORDER BY time DESC LIMIT 8   [ RunTime:0.000442s ]
+SQL: SELECT `id`,`title`,`time` FROM `shangfox_article` WHERE ( `del` = 0 ) AND ( `cid` = 2 ) ORDER BY time DESC LIMIT 8   [ RunTime:0.000510s ]
+SQL: SELECT `id`,`title`,`time` FROM `shangfox_article` WHERE ( `del` = 0 ) AND ( `cid` = 3 ) ORDER BY time DESC LIMIT 8   [ RunTime:0.000557s ]
+NOTIC: [8] Undefined index: limit F:\webSelf\www.gaoxiaosile.com\www.gaoxiaosile.com.v1\trunk\APP\Modules\Index\Widget\FriendlinkWidget.class.php 第 7 行.
+SQL: SHOW COLUMNS FROM `shangfox_friendlink` [ RunTime:0.004652s ]
+SQL: SELECT `id`,`sitename`,`sort`,`siteurl` FROM `shangfox_friendlink` WHERE ( statu = 1 ) ORDER BY sort ASC  [ RunTime:0.000231s ]
+INFO: ParseTemplate Behavior ::run [ RunTime:0.064542s ]
+INFO: [ view_parse ] --END-- [ RunTime:0.064636s ]
+INFO: [ view_filter ] --START--
+INFO: ContentReplace Behavior ::run [ RunTime:0.000516s ]
+INFO: TokenBuild Behavior ::run [ RunTime:0.000441s ]
+INFO: WriteHtmlCache Behavior ::run [ RunTime:0.000301s ]
+INFO: ShowRuntime Behavior ::run [ RunTime:0.000499s ]
+INFO: [ view_filter ] --END-- [ RunTime:0.001966s ]
+INFO: [ view_end ] --START--
+INFO: ShowPageTrace Behavior ::run [ RunTime:0.000503s ]
+INFO: [ view_end ] --END-- [ RunTime:0.000580s ]
+
+[ 2014-10-21T12:20:30+08:00 ] 127.0.0.1 /gif
+INFO: [ route_check ] --START--
+INFO: CheckRoute Behavior ::run [ RunTime:0.001568s ]
+INFO: [ route_check ] --END-- [ RunTime:0.001811s ]
+NOTIC: [2] array_walk_recursive() expects parameter 2 to be a valid callback, function 'filter_default' not found or invalid function name F:\webSelf\www.gaoxiaosile.com\www.gaoxiaosile.com.v1\trunk\ThinkPHP\Lib\Core\App.class.php 第 56 行.
+NOTIC: [2] array_walk_recursive() expects parameter 2 to be a valid callback, function 'filter_default' not found or invalid function name F:\webSelf\www.gaoxiaosile.com\www.gaoxiaosile.com.v1\trunk\ThinkPHP\Lib\Core\App.class.php 第 57 行.
+INFO: [ app_begin ] --START--
+INFO: ReadHtmlCache Behavior ::run [ RunTime:0.001063s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001225s ]
+SQL: SHOW COLUMNS FROM `shangfox_cate` [ RunTime:0.002756s ]
+SQL: SELECT `id` FROM `shangfox_cate` WHERE ( `filename` = 'gif' ) LIMIT 1   [ RunTime:0.000224s ]
+SQL: SELECT * FROM `shangfox_cate` WHERE ( `filename` = 'gif' )  [ RunTime:0.000197s ]
+SQL: SELECT * FROM `shangfox_cate` ORDER BY sort  [ RunTime:0.000210s ]
+SQL: SELECT * FROM `shangfox_cate` WHERE ( `id` = 1 ) LIMIT 1   [ RunTime:0.000179s ]
+SQL: SHOW COLUMNS FROM `shangfox_article` [ RunTime:0.002320s ]
+SQL: SELECT COUNT(*) AS tp_count FROM `shangfox_article` WHERE ( `cid` IN ('1') ) AND ( `del` = 0 ) LIMIT 1   [ RunTime:0.000305s ]
+SQL: SHOW COLUMNS FROM `shangfox_user` [ RunTime:0.002045s ]
+SQL: SELECT article.id AS id,article.title AS title,article.time AS time,article.click AS click,article.summary AS summary,article.thumbnail AS thumbnail,article.content AS content,article.ding AS ding,article.cai AS cai,article.username AS username,article.click AS click,cate.id AS ppid,cate.name AS name,cate.sort AS sort,cate.filename AS filename,user.avatar AS avatar FROM shangfox_article article LEFT JOIN shangfox_cate cate ON article.cid = cate.id  JOIN shangfox_user user ON article.username = user.username WHERE ( `cid` IN ('1') ) AND ( `del` = 0 ) ORDER BY article.time DESC LIMIT 0,20   [ RunTime:0.004627s ]
+INFO: [ view_parse ] --START--
+SQL: SELECT `id`,`title`,`time`,`thumbnail` FROM `shangfox_article` WHERE ( `del` = 0 ) AND ( `cid` = 1 ) AND ( `thumbnail` <> '' ) ORDER BY click DESC LIMIT 12   [ RunTime:0.000502s ]
+SQL: SELECT `id`,`title`,`click` FROM `shangfox_article` WHERE ( `del` = 0 ) ORDER BY time DESC LIMIT 8   [ RunTime:0.000437s ]
+SQL: SELECT `id`,`title`,`click` FROM `shangfox_article` WHERE ( `del` = 0 ) ORDER BY click DESC LIMIT 8   [ RunTime:0.000253s ]
+SQL: SELECT `id`,`title`,`click` FROM `shangfox_article` WHERE ( `del` = 0 ) ORDER BY ding DESC LIMIT 8   [ RunTime:0.000246s ]
+SQL: SELECT `id`,`title`,`time`,`thumbnail` FROM `shangfox_article` WHERE ( `del` = 0 ) AND ( `cid` = 1 ) AND ( `thumbnail` <> '' ) ORDER BY time DESC LIMIT 4   [ RunTime:0.000436s ]
+SQL: SELECT `id`,`title`,`time`,`thumbnail` FROM `shangfox_article` WHERE ( `del` = 0 ) AND ( `cid` = 4 ) AND ( `thumbnail` <> '' ) ORDER BY time DESC LIMIT 4   [ RunTime:0.000352s ]
+SQL: SELECT `id`,`title`,`time` FROM `shangfox_article` WHERE ( `del` = 0 ) AND ( `cid` = 1 ) ORDER BY time DESC LIMIT 8   [ RunTime:0.000983s ]
+SQL: SELECT `id`,`title`,`time` FROM `shangfox_article` WHERE ( `del` = 0 ) AND ( `cid` = 2 ) ORDER BY time DESC LIMIT 8   [ RunTime:0.000617s ]
+SQL: SELECT `id`,`title`,`time` FROM `shangfox_article` WHERE ( `del` = 0 ) AND ( `cid` = 3 ) ORDER BY time DESC LIMIT 8   [ RunTime:0.000361s ]
+NOTIC: [8] Undefined index: limit F:\webSelf\www.gaoxiaosile.com\www.gaoxiaosile.com.v1\trunk\APP\Modules\Index\Widget\FriendlinkWidget.class.php 第 7 行.
+SQL: SHOW COLUMNS FROM `shangfox_friendlink` [ RunTime:0.002284s ]
+SQL: SELECT `id`,`sitename`,`sort`,`siteurl` FROM `shangfox_friendlink` WHERE ( statu = 1 ) ORDER BY sort ASC  [ RunTime:0.000200s ]
+INFO: ParseTemplate Behavior ::run [ RunTime:0.082994s ]
+INFO: [ view_parse ] --END-- [ RunTime:0.083122s ]
+INFO: [ view_filter ] --START--
+INFO: ContentReplace Behavior ::run [ RunTime:0.000517s ]
+INFO: TokenBuild Behavior ::run [ RunTime:0.000426s ]
+INFO: WriteHtmlCache Behavior ::run [ RunTime:0.000287s ]
+INFO: ShowRuntime Behavior ::run [ RunTime:0.000620s ]
+INFO: [ view_filter ] --END-- [ RunTime:0.002057s ]
+INFO: [ view_end ] --START--
+INFO: ShowPageTrace Behavior ::run [ RunTime:0.000667s ]
+INFO: [ view_end ] --END-- [ RunTime:0.000742s ]
+
+[ 2014-10-21T12:20:50+08:00 ] 127.0.0.1 /gif
+INFO: [ route_check ] --START--
+INFO: CheckRoute Behavior ::run [ RunTime:0.001357s ]
+INFO: [ route_check ] --END-- [ RunTime:0.001601s ]
+NOTIC: [2] array_walk_recursive() expects parameter 2 to be a valid callback, function 'filter_default' not found or invalid function name F:\webSelf\www.gaoxiaosile.com\www.gaoxiaosile.com.v1\trunk\ThinkPHP\Lib\Core\App.class.php 第 56 行.
+NOTIC: [2] array_walk_recursive() expects parameter 2 to be a valid callback, function 'filter_default' not found or invalid function name F:\webSelf\www.gaoxiaosile.com\www.gaoxiaosile.com.v1\trunk\ThinkPHP\Lib\Core\App.class.php 第 57 行.
+INFO: [ app_begin ] --START--
+INFO: ReadHtmlCache Behavior ::run [ RunTime:0.001181s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001386s ]
+SQL: SHOW COLUMNS FROM `shangfox_cate` [ RunTime:0.005076s ]
+SQL: SELECT `id` FROM `shangfox_cate` WHERE ( `filename` = 'gif' ) LIMIT 1   [ RunTime:0.001028s ]
+SQL: SELECT * FROM `shangfox_cate` WHERE ( `filename` = 'gif' )  [ RunTime:0.000868s ]
+SQL: SELECT * FROM `shangfox_cate` ORDER BY sort  [ RunTime:0.000664s ]
+SQL: SELECT * FROM `shangfox_cate` WHERE ( `id` = 1 ) LIMIT 1   [ RunTime:0.000258s ]
+SQL: SHOW COLUMNS FROM `shangfox_article` [ RunTime:0.004225s ]
+SQL: SELECT COUNT(*) AS tp_count FROM `shangfox_article` WHERE ( `cid` IN ('1') ) AND ( `del` = 0 ) LIMIT 1   [ RunTime:0.001084s ]
+SQL: SHOW COLUMNS FROM `shangfox_user` [ RunTime:0.003639s ]
+SQL: SELECT article.id AS id,article.title AS title,article.time AS time,article.click AS click,article.summary AS summary,article.thumbnail AS thumbnail,article.content AS content,article.ding AS ding,article.cai AS cai,article.username AS username,article.click AS click,cate.id AS ppid,cate.name AS name,cate.sort AS sort,cate.filename AS filename,user.avatar AS avatar FROM shangfox_article article LEFT JOIN shangfox_cate cate ON article.cid = cate.id  JOIN shangfox_user user ON article.username = user.username WHERE ( `cid` IN ('1') ) AND ( `del` = 0 ) ORDER BY article.time DESC LIMIT 0,20   [ RunTime:0.004340s ]
+INFO: [ view_parse ] --START--
+SQL: SELECT `id`,`title`,`time`,`thumbnail` FROM `shangfox_article` WHERE ( `del` = 0 ) AND ( `cid` = 1 ) AND ( `thumbnail` <> '' ) ORDER BY click DESC LIMIT 12   [ RunTime:0.000509s ]
+SQL: SELECT `id`,`title`,`click` FROM `shangfox_article` WHERE ( `del` = 0 ) ORDER BY time DESC LIMIT 8   [ RunTime:0.000464s ]
+SQL: SELECT `id`,`title`,`click` FROM `shangfox_article` WHERE ( `del` = 0 ) ORDER BY click DESC LIMIT 8   [ RunTime:0.003372s ]
+SQL: SELECT `id`,`title`,`click` FROM `shangfox_article` WHERE ( `del` = 0 ) ORDER BY ding DESC LIMIT 8   [ RunTime:0.000365s ]
+SQL: SELECT `id`,`title`,`time`,`thumbnail` FROM `shangfox_article` WHERE ( `del` = 0 ) AND ( `cid` = 1 ) AND ( `thumbnail` <> '' ) ORDER BY time DESC LIMIT 4   [ RunTime:0.000457s ]
+SQL: SELECT `id`,`title`,`time`,`thumbnail` FROM `shangfox_article` WHERE ( `del` = 0 ) AND ( `cid` = 4 ) AND ( `thumbnail` <> '' ) ORDER BY time DESC LIMIT 4   [ RunTime:0.000546s ]
+SQL: SELECT `id`,`title`,`time` FROM `shangfox_article` WHERE ( `del` = 0 ) AND ( `cid` = 1 ) ORDER BY time DESC LIMIT 8   [ RunTime:0.000759s ]
+SQL: SELECT `id`,`title`,`time` FROM `shangfox_article` WHERE ( `del` = 0 ) AND ( `cid` = 2 ) ORDER BY time DESC LIMIT 8   [ RunTime:0.000863s ]
+SQL: SELECT `id`,`title`,`time` FROM `shangfox_article` WHERE ( `del` = 0 ) AND ( `cid` = 3 ) ORDER BY time DESC LIMIT 8   [ RunTime:0.000511s ]
+NOTIC: [8] Undefined index: limit F:\webSelf\www.gaoxiaosile.com\www.gaoxiaosile.com.v1\trunk\APP\Modules\Index\Widget\FriendlinkWidget.class.php 第 7 行.
+SQL: SHOW COLUMNS FROM `shangfox_friendlink` [ RunTime:0.008269s ]
+SQL: SELECT `id`,`sitename`,`sort`,`siteurl` FROM `shangfox_friendlink` WHERE ( statu = 1 ) ORDER BY sort ASC  [ RunTime:0.000210s ]
+INFO: ParseTemplate Behavior ::run [ RunTime:0.086836s ]
+INFO: [ view_parse ] --END-- [ RunTime:0.087202s ]
+INFO: [ view_filter ] --START--
+INFO: ContentReplace Behavior ::run [ RunTime:0.000673s ]
+INFO: TokenBuild Behavior ::run [ RunTime:0.000583s ]
+INFO: WriteHtmlCache Behavior ::run [ RunTime:0.000352s ]
+INFO: ShowRuntime Behavior ::run [ RunTime:0.000634s ]
+INFO: [ view_filter ] --END-- [ RunTime:0.002569s ]
+INFO: [ view_end ] --START--
+INFO: ShowPageTrace Behavior ::run [ RunTime:0.000859s ]
+INFO: [ view_end ] --END-- [ RunTime:0.000960s ]
+

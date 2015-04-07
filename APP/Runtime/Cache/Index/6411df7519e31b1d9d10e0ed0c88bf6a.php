@@ -1,0 +1,1 @@
+<?php if (!defined('THINK_PATH')) exit(); if(is_array($friendlink)): foreach($friendlink as $key=>$v): ?><a href="<?php echo ($v["siteurl"]); ?>" target="_blank"><?php echo ($v["sitename"]); ?></a>&nbsp;&nbsp;&nbsp;&nbsp;<?php endforeach; endif; ?>

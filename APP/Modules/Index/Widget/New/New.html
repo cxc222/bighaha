@@ -1,0 +1,14 @@
+<div class="box">
+    <div class="title"><strong>最新文章</strong></div>
+    <div class="content">
+    	<ul class="newsList">
+		<foreach name="article" item="v">
+			<li>
+				<a href="{:U('/article-'.$v['id'])}">{$v.title}</a>
+			</li>
+		</foreach>
+	</ul>
+    </div>
+</div>
+
+

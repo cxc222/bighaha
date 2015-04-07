@@ -1,0 +1,9 @@
+User-agent: * 
+Disallow: /Data
+Disallow: /Public
+Disallow: /Uploads
+Disallow: /App/Class
+Disallow: /App/Common
+Disallow: /App/Conf
+Disallow: /App/Lang
+Disallow: /App/Lib

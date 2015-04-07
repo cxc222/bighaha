@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+<title>{$cateinfo['catetitle']}-{$cateinfo['name']}-{$Think.config.WEB_NAME}</title>
+<meta name="description" content="<empty name="cateinfo['description']">{$Think.config.WEB_DESRIPTION}<else/>{$cateinfo['description']}</empty>" />
+<meta name="keywords" content="<empty name="cateinfo['keywords']">{$Think.config.WEB_KEYWORDS}<else/>{$cateinfo['keywords']}</empty>" />
+<include file='Common:headcommon'/>
+</head>
+<body>
+<include file='Common:nav'/>
+<div class="mainWrap">
+    <div class="main">
+        <div class="leftBar mT15">
+            <div class="box">
+                <div class="content">
+                  <h2>
+                    <a href="/">首页 </a>>
+                    <php>$last = count($parent)-1;</php>
+                    <foreach name="parent" item="v">
+                        <a href="{:U('/'.$v['filename'])}"> {$v.name} </a><if condition='$key neq $last'> > </if>
+                    </foreach>
+                  </h2>
+                    <notempty name="sister">
+                    <div class="sonnav">
+                        <foreach name="sister" item="v">
+                            <if condition="$v['id'] eq $nowid">
+                                <a href="{:U('/'.$v['filename'])}" class="cur">{$v.name}</a>
+                            <else/>
+                                <a href="{:U('/'.$v['filename'])}">{$v.name}</a>
+                            </if>
+                        </foreach>
+                    
+                    </div>
+                    </notempty>
+                    <include file='Common:ad_760_130_color_text'/>
+                    <ul class="pageul">
+                      <foreach name="article" item="v">
+                      <li>
+                        <a href="/{$v.id}.html"class="hover" title="{$v.title}"><img src="/Public/Images/look.png"/></a>
+                        <a href="/{$v.id}.html"class="text" title="{$v.title}">{$v.title}</a>
+                        <a href="/{$v.id}.html"class="img" title="{$v.title}"><img src="/Uploads/{$v.thumbnail|default='default.gif'}"/></a>
+                      </li>
+                      </foreach>
+                    </ul>
+                    <div class="pagesize">{$page}</div>
+                    <include file='Common:ad_760_130_color_text'/>
+                    {:W('CommandArticle',array('limit'=>12,'cid'=>$cateinfo['id']))}
+                    <include file='Common:ad_760_90_pic'/>
+                </div>
+            </div>
+        </div>
+        <div class="rightBar mT15">
+            <script type="text/JavaScript" src='__PUBLIC__/Js/tab.js'></script>
+            <div class="pageTabWrap mB20" style="background: #fff url(/Public/Images/share.gif) no-repeat 29px 15px;padding: 53px 20px 15px;">
+              <div class="bdsharebuttonbox"><a href="#" class="bds_more" data-cmd="more"></a><a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a><a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a><a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博"></a><a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网"></a><a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a><a href="#" class="bds_bdysc" data-cmd="bdysc" title="分享到百度云收藏"></a><a href="#" class="bds_kaixin001" data-cmd="kaixin001" title="分享到开心网"></a><a href="#" class="bds_tqf" data-cmd="tqf" title="分享到腾讯朋友"></a><a href="#" class="bds_douban" data-cmd="douban" title="分享到豆瓣网"></a><a href="#" class="bds_diandian" data-cmd="diandian" title="分享到点点网"></a><a href="#" class="bds_mogujie" data-cmd="mogujie" title="分享到蘑菇街"></a><a href="#" class="bds_meilishuo" data-cmd="meilishuo" title="分享到美丽说"></a></div>
+            <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"32"},"share":{},"image":{"viewList":["qzone","tsina","tqq","renren","weixin","bdysc","kaixin001","tqf","douban","diandian","mogujie","meilishuo"],"viewText":"分享到：","viewSize":"16"}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+            </div>
+            <include file="Common:right"/>
+        </div>
+    </div>
+</div>
+<include file="Common:footer"/>

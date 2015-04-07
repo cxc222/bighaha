@@ -1,0 +1,30 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<link rel="stylesheet" href="__PUBLIC__/Css/public.css" />
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+<head>
+</head>
+<body>
+<div class="navlist">
+	<a href="{:U(GROUP_NAME.'/Attribute/index')}" class="cur">属性列表</a>
+	<a href="{:U(GROUP_NAME.'/Attribute/add')}">属性增加</a>
+</div>
+<table class="table">
+	<tr>
+		<td>ID</td>
+		<td>属性名称</td>
+		<td>颜色</td>
+		<td>操作</td>
+	</tr>
+	<foreach name="attr" item="v">
+	<tr>
+		<td>{$v.id}</td>
+		<td>{$v.name}</td>
+		<td><div style="height:20px;width:20px;background:{$v.color}"></div></td>
+		<!-- <td><a href="{:U(GROUP_NAME.'/Attribute/delete',array('id'=>$v['id']))}">删除</a></td> -->
+		<td><a href="javascript:if(confirm('您确定要删除吗？'))location='{:U(GROUP_NAME.\'/Attribute\/delete\',array(\'id\'=>$v[\'id\']))}';">删除</a></td>
+	</tr>
+	</foreach>
+</table>
+</body>
+</html>

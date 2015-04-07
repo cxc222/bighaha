@@ -1,0 +1,11 @@
+<div class="pageNavWrap">
+    <div class="pageNav">
+        <foreach name="pagelist" item="v">
+            <if condition="$v['filename'] eq $filename">
+                <a href="{:U('/html/'.$v['filename'])}" class="cur">{$v.title}</a>
+            <else/>
+                <a href="{:U('/html/'.$v['filename'])}">{$v.title}</a>
+            </if>
+        </foreach>
+    </div>
+</div>

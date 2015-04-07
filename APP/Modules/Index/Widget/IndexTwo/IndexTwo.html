@@ -1,0 +1,8 @@
+<foreach name="article" item="v">
+	<a class="w320box" href="{:U('/'.$v['id'])}">
+		<div class="allHover"><img src="/Public/Images/go.png"/></div>
+		<h3>{$v['title']}</h3>
+	    <img src="/Uploads/{$v['thumbnail']}" class="img"/>
+	</a>
+</foreach>
+

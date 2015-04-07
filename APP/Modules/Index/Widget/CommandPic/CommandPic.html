@@ -1,0 +1,23 @@
+<ul class="pageTab">
+    <li id="tabbb1" onclick="setTab('tabbb',1,3)" class="hover">推荐动态图</li>
+    <li id="tabbb2" onclick="setTab('tabbb',2,3)" class="">推荐视频</li>
+</ul>
+<div id="con_tabbb_1" class="hover" style="display: block;">
+    <ul class="pageTabBoxPic">
+		<foreach name="articlegif" item="v">
+			<li>
+				<a href="{:U('/'.$v['id'])}" title="{$v.title}"><h4>{$v.title}</h4><img src="/Uploads/{$v['thumbnail']}" class="img"/></a>
+			</li>
+		</foreach>
+    </ul>
+</div>
+<div id="con_tabbb_2" style="display: none;">
+    <ul class="pageTabBoxPic">
+		<foreach name="articlevideo" item="v" title="{$v.title}">
+			<li>
+				<a href="{:U('/'.$v['id'])}" title="{$v.title}"><img src="/Uploads/{$v['thumbnail']}" class="img"/><h4>+ {$v.title}</h4></a>
+			</li>
+		</foreach>
+    </ul>
+</div>
+

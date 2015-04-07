@@ -1,0 +1,51 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+		<link rel="stylesheet" href="__PUBLIC__/Css/public.css" />
+	</head>
+	<body>
+		<div class="navlist">
+			<a href="{:U(GROUP_NAME.'/Category/index')}">栏目列表</a>
+			<a href="{:U(GROUP_NAME.'/Category/add')}"  class="cur">增加栏目</a>
+		</div>
+		<form method="post" action="{:U(GROUP_NAME.'/Category/addRun')}">
+		<table class="table">
+			<tr>
+				<td colspan="2">添加栏目分类</td>
+			</tr>
+			<tr>
+				<td align="right">分类栏目名称：</td>
+				<td><input type="text" name="name" class="inputlong"></td>
+			</tr>
+			<tr>
+				<td align="right">栏目标题：</td>
+				<td><input type="text" name="catetitle" class="inputlong"></td>
+			</tr>
+			<tr>
+				<td align="right">文件名：</td>
+				<td><input type="text" name="filename" class="inputlong"></td>
+			</tr>
+			<tr>
+				<td align="right">排序：</td>
+				<td><input type="text" name="sort" value="100" class="inputlong"></td>
+			</tr>	
+			<tr>
+				<td align="right">栏目关键词：</td>
+				<td><input type="text" name="keywords" value="" class="inputlong"></td>
+			</tr>
+			<tr>
+				<td align="right">栏目描述：</td>
+				<td><textarea type="text" name="description" value="" class="textarea"></textarea></td>
+			</tr>
+			<tr>
+				<td align="right"></td>
+				<td>
+					<input type="hidden" value="{$pid}" name="pid"/>
+					<input type="submit" value="保存添加" class="submit"/>
+				</td>
+			</tr>			
+		</table>
+	</form>
+	</body>
+</html>
