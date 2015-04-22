@@ -306,10 +306,10 @@ class MongoModel extends Model{
             // 返回数据个数
             if(true !== $sepa) {// 当sepa指定为true的时候 返回所有数据
                 $options['limit']   =   is_numeric($sepa)?$sepa:1;
-            }            // 查找符合的记录
-            $result = $this->db->select($options);
+            }            // 查找一条记录
+            $result = $this->db->find($options);
             if(!empty($result)) {
-                if(1==$options['limit']) return reset($result)[$field];
+                if(1==$options['limit']) return reset($result[0]);
                 foreach ($result as $val){
                     $array[]    =   $val[$field];
                 }

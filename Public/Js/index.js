@@ -1,1 +1,0 @@
-$('.top-list ul li:nth-child(1) a').addClass('cur');

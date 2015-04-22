@@ -1,0 +1,42 @@
+<extend name="Base/common"/>
+
+<block name="header">
+	
+</block>
+
+<block name="body">
+    <div class="span9">
+        <!-- Contents
+        ================================================== -->
+        <section id="contents">
+        	<!-- 头部幻灯 -->
+        	<div id="focus">
+		        <ul>
+		          <foreach name="focus" item="v">
+		            <li>
+		              <a href="/{$v.id}.html" title="{$v.title}" target="_blank" class="img"><img src="/Uploads/{$v['thumbnail']}" alt="" /></a>
+		              <div class="textinfo">
+		                <a href="/{$v.id}.html" title="{$v.title}"><h2>{$v.title}</h2></a>
+		                <span>已经有{$v.click}人看过~~</span>
+		                <p>{$v.summary}...</p>
+		                <a href="/{$v.id}.html" title="{$v.title}" class="a">+点击查看+</a>
+		              </div>
+		            </li>
+		          </foreach>
+		        </ul>
+		    </div> 
+        	
+        	
+        </section>
+    </div>
+</block>
+
+<block name="side">
+<!-- 右侧 nav
+================================================== -->
+    <div class="span3 bs-docs-sidebar">
+        <ul class="nav nav-list bs-docs-sidenav">
+            {:W('Category/lists', array(1, true))}
+        </ul>
+    </div>
+</block>

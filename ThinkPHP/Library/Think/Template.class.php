@@ -66,7 +66,7 @@ class  Template {
     /**
      * 加载模板
      * @access public
-     * @param string $templateFile 模板文件
+     * @param string $tmplTemplateFile 模板文件
      * @param array  $templateVar 模板变量
      * @param string $prefix 模板标识前缀
      * @return void
@@ -80,21 +80,21 @@ class  Template {
     /**
      * 加载主模板并缓存
      * @access public
-     * @param string $templateFile 模板文件
+     * @param string $tmplTemplateFile 模板文件
      * @param string $prefix 模板标识前缀
      * @return string
      * @throws ThinkExecption
      */
-    public function loadTemplate ($templateFile,$prefix='') {
-        if(is_file($templateFile)) {
-            $this->templateFile    =  $templateFile;
+    public function loadTemplate ($tmplTemplateFile,$prefix='') {
+        if(is_file($tmplTemplateFile)) {
+            $this->templateFile    =  $tmplTemplateFile;
             // 读取模板文件内容
-            $tmplContent =  file_get_contents($templateFile);
+            $tmplContent =  file_get_contents($tmplTemplateFile);
         }else{
-            $tmplContent =  $templateFile;
+            $tmplContent =  $tmplTemplateFile;
         }
          // 根据模版文件名定位缓存文件
-        $tmplCacheFile = $this->config['cache_path'].$prefix.md5($templateFile).$this->config['cache_suffix'];
+        $tmplCacheFile = $this->config['cache_path'].$prefix.md5($tmplTemplateFile).$this->config['cache_suffix'];
 
         // 判断是否启用布局
         if(C('LAYOUT_ON')) {
@@ -180,8 +180,8 @@ class  Template {
         foreach ($tagLibs as $tag){
             $this->parseTagLib($tag,$content,true);
         }
-        //解析普通模板标签 {$tagName}
-        $content = preg_replace_callback('/('.$this->config['tmpl_begin'].')([^\d\w\s'.$this->config['tmpl_begin'].$this->config['tmpl_end'].'].+?)('.$this->config['tmpl_end'].')/is', array($this, 'parseTag'),$content);
+        //解析普通模板标签 {tagName}
+        $content = preg_replace_callback('/('.$this->config['tmpl_begin'].')([^\d\s'.$this->config['tmpl_begin'].$this->config['tmpl_end'].'].+?)('.$this->config['tmpl_end'].')/is', array($this, 'parseTag'),$content);
         return $content;
     }
 
@@ -462,6 +462,10 @@ class  Template {
         //if (MAGIC_QUOTES_GPC) {
             $tagStr = stripslashes($tagStr);
         //}
+        //还原非模板标签
+        if(preg_match('/^[\s|\d]/is',$tagStr))
+            //过滤空格和数字打头的标签
+            return C('TMPL_L_DELIM') . $tagStr .C('TMPL_R_DELIM');
         $flag   =  substr($tagStr,0,1);
         $flag2  =  substr($tagStr,1,1);
         $name   = substr($tagStr,1);

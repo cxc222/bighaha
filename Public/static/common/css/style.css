@@ -1,0 +1,142 @@
+@CHARSET "UTF-8";
+body{
+	padding-top:62px;
+}
+.navbar-inverse .navbar-inner {
+	background: none;
+}
+
+body > .navbar .brand {
+	background: url("../image/logo.png");
+	text-indent: -99999;
+	height: 30px;
+    width: 185px;
+	 margin-right: 45px;
+}
+.navbar .nav{
+	margin-top: 15px;
+}
+.navbar-inverse .nav > li > a{
+	color: #333;
+    float: left;
+    font-size: 16px;
+    height: 26px;
+    margin: 0 40px 0 0;
+    text-shadow: none;
+	padding: 0;
+}
+
+.navbar-inverse .nav > li > a:hover, .navbar-inverse .nav > li > a:focus {
+    border-bottom: 4px solid #f77070;
+	color: #333;
+}
+
+.navbar-inverse .nav > li > a:focus, .navbar-inverse .nav > li > a:hover {
+     border-bottom: 4px solid #f77070;
+	color: #333;
+}
+
+#focus {
+    float: left;
+    height: 270px;
+    overflow: hidden;
+    position: relative;
+    width: 810px;
+}
+#focus ul {
+    height: 810px;
+    position: absolute;
+}
+#focus ul li {
+    background: none repeat scroll 0 0 #fff;
+    float: left;
+    height: 270px;
+    overflow: hidden;
+    position: relative;
+    width: 810px;
+}
+#focus ul li .textinfo {
+    float: left;
+    height: 210px;
+    margin: 30px;
+    width: 340px;
+}
+#focus ul li .textinfo h2 {
+    color: #333;
+    float: left;
+    font-size: 18px;
+    font-weight: normal;
+    line-height: 22px;
+}
+#focus ul li .textinfo span {
+    color: #aaa;
+    float: left;
+    font-size: 13px;
+    line-height: 36px;
+    width: 100%;
+}
+#focus ul li .textinfo p {
+    color: #333;
+    float: left;
+    font-size: 13px;
+    line-height: 20px;
+    width: 100%;
+}
+#focus ul li .textinfo .a {
+    color: #000;
+    float: left;
+    font-size: 13px;
+    line-height: 40px;
+    width: 100%;
+}
+#focus ul li .img {
+    float: left;
+    height: 270px;
+    width: 405px;
+}
+#focus ul li .img img {
+    float: left;
+    height: 270px;
+    width: 405px;
+}
+#focus .btnBg {
+    bottom: 0;
+    height: 20px;
+    left: 0;
+    position: absolute;
+    width: 246px;
+}
+#focus .btnn {
+    height: 20px;
+    padding: 5px 10px;
+    position: absolute;
+    right: 162px;
+    text-align: right;
+    top: 226px;
+    width: 370px;
+}
+#focus .btnn span {
+    background: url("../images/bottomNavON.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0);
+    cursor: pointer;
+    display: inline-block;
+    height: 13px;
+    margin-left: 5px;
+    width: 13px;
+}
+#focus .btnn span.on {
+    background: url("./images/bottomNavON.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0);
+}
+#focus .preNext {
+    cursor: pointer;
+    height: 100px;
+    position: absolute;
+    top: 130px;
+    width: 45px;
+}
+#focus .pre {
+    left: 0;
+}
+#focus .next {
+    background-position: right top;
+    right: 0;
+}

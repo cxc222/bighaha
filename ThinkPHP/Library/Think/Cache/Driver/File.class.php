@@ -51,7 +51,7 @@ class File extends Cache {
      * @return string
      */
     private function filename($name) {
-        $name	=	md5(C('DATA_CACHE_KEY').$name);
+        $name	=	md5($name);
         if(C('DATA_CACHE_SUBDIR')) {
             // 使用子目录
             $dir   ='';
