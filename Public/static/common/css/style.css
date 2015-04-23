@@ -158,3 +158,36 @@ body > .navbar .brand {
     background-position: right top;
     right: 0;
 }
+
+.web_left{width:620px;background:#FFF;height:auto;overflow:hidden;border:solid 1px #b1b1b1;box-shadow:0 0 0 1px #FFFFFF inset, 0 0 5px 1px #c6c6c6;margin-bottom:20px;}
+.web_left .user_info{vertical-align:middle; padding-left:20px; padding-top:7px; padding-bottom:0px;color:#B6B6B6;height:38px;background-color:#F5F5F5;}
+.web_left .user_info li{float:left;}
+.web_left .user_info li.user_name p{color:#777777;height:18px;margin-top:6px;margin-left:12px;margin-right:5px;}
+.web_left .user_info .time{margin-top:6px;height:18px;color:#b5b5b5;}
+.web_left .web_conter{height:auto;overflow:hidden;border-bottom:solid 0px #b2b2b2;padding:20px 20px;margin:0 auto;padding-bottom:0px;}
+.p_times{color: #777777;float: right;font-size: 14px;line-height: 30px;margin-right: 10px;}
+.web_left .web_conter .web_size{font-size:14px;color:#252525;line-height:20px;}
+.web_left .web_conter .budejie_mutua{}
+.web_left .budejie_share{width:215px;background:url('http://img.spriteapp.com/ws/www/img/share_bg.png') center center no-repeat;height:100px;position:absolute;display:none;border-radius:5px;}
+.web_left .budejie_share a{float:left;height:30px;line-height:30px;vertical-align: middle;display:inline-block;margin-left:21px;margin-top:7px;padding-left:30px;cursor: pointer;}
+.web_left .budejie_share a.weibo{background: url('http://img.spriteapp.com/ws/www/img/share_weibo.png') center left no-repeat ; }
+.web_left .budejie_share a.renren{background: url('http://img.spriteapp.com/ws/www/img/share_renren.png') center left no-repeat; }
+.web_left .budejie_share a.tqq{background: url('http://img.spriteapp.com/ws/www/img/share_qqweibo.png') center left no-repeat; }
+.web_left .budejie_share a.qzone{background: url('http://img.spriteapp.com/ws/www/img/share_qzone.png') center left no-repeat;}
+
+.web_left .budejie_mutual{text-align:center;height:80px;line-height:80px}
+.web_left .budejie_mutual a{cursor:pointer;color:#6A6A6A;font-family:"微软雅黑";border:solid 1px #B7B7B7;padding:7px 10px 7px 8px;box-shadow:0 1px 2px #EEEEEE, 0 0 0 1px #FFFFFF inset;border-radius:5px 5px 5px 5px;*padding-right:7px!important;padding-right:7px\9;}
+.web_left .budejie_mutual a:hover{background:#e6e6e6;}
+.web_left .budejie_mutual li{float:left;margin-right:16px;}
+.web_left .budejie_mutual_no{text-align:center;height:80px;line-height:80px}
+.web_left .budejie_mutual_no a{color:#6A6A6A;font-family:"微软雅黑";border:solid 1px #B7B7B7;padding:7px 10px 7px 8px;box-shadow:0 1px 2px #EEEEEE, 0 0 0 1px #FFFFFF inset;border-radius:5px 5px 5px 5px;}
+.web_left .budejie_mutual_no a:hover{}
+.web_left .budejie_mutual_no li{float:left;margin-right:20px;}
+.love span{background: url('http://img.spriteapp.com/ws/www/img/icon/ding.png') no-repeat;background-position:0px 1px;padding:5px 0px 5px 30px;color:#FFA303;}
+.no_love span{background: url('http://img.spriteapp.com/ws/www/img/icon/no_ding.png') no-repeat;background-position:0px 1px;padding:5px 0px 10px 30px;}
+.cai span{background: url('http://img.spriteapp.com/ws/www/img/icon/cai.png') no-repeat;background-position:0px 1px;padding:5px 0px 5px 30px;color:#FFA303;}
+.no_cai span{background: url('http://img.spriteapp.com/ws/www/img/icon/no_cai.png') no-repeat;background-position:0px 1px;padding:5px 0px 5px 30px;}
+.bookmark span{background: url('http://img.spriteapp.com/ws/www/img/icon/bookmark.png') no-repeat;background-position:4px 1px;padding:5px 12px 5px 12px;}
+.no_bookmark span{background: url('http://img.spriteapp.com/ws/www/img/icon/no_bookmark.png') no-repeat;background-position:4px 1px;padding:5px 12px 5px 12px;}
+.repost span{background: url('http://img.spriteapp.com/ws/www/img/icon/repost.png') no-repeat;padding:5px 0px 5px 30px;}
+.review{}

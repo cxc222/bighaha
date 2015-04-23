@@ -15,11 +15,8 @@ class IndexController extends BaseController {
 	}
 	
     public function index(){
-    	
     	$result = $this->atlasApi->listAllAtlas($page, 5);
-    	print_r($result);
-    	die();
+    	$this->assign('list', $result['list']);
     	$this->display();
     }
-    
 }
