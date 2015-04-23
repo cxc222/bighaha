@@ -1,0 +1,3 @@
+<?php
+//000000000000a:7:{s:2:"id";i:1;s:7:"content";s:63:"成都春熙路现＂强吻男＂舌吻假模特十分钟动作";s:7:"addtime";i:1378898976;s:10:"can_delete";i:0;s:4:"user";a:8:{s:5:"score";s:2:"10";s:3:"uid";s:1:"1";s:8:"nickname";s:5:"admin";s:8:"avatar32";s:40:"/bighaha/Addons/Avatar/default_32_32.jpg";s:8:"avatar64";s:40:"/bighaha/Addons/Avatar/default_64_64.jpg";s:9:"avatar128";s:42:"/bighaha/Addons/Avatar/default_128_128.jpg";s:9:"avatar256";s:42:"/bighaha/Addons/Avatar/default_256_256.jpg";s:9:"avatar512";s:42:"/bighaha/Addons/Avatar/default_512_512.jpg";}s:3:"uid";s:1:"1";s:12:"fetchContent";s:0:"";}
+?>

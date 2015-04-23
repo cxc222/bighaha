@@ -12,14 +12,12 @@
  * 所有系统级别的配置
  */
 return array(
+	'SHOW_PAGE_TRACE' =>true,
     /* 模块相关配置 */
     'AUTOLOAD_NAMESPACE' => array('Addons' => ONETHINK_ADDON_PATH), //扩展模块列表
     'DEFAULT_MODULE'     => 'Atlas',
     'MODULE_DENY_LIST'   => array('Common','User','Admin','Install'),
     //'MODULE_ALLOW_LIST'  => array('Home','Admin'),
-    
-	/* 主题设置 */
-	'DEFAULT_THEME' =>  'default',  // 默认模板主题名称
 	
     /* 系统数据加密设置 */
     'DATA_AUTH_KEY' => 'PjH4bt#IQnr-,_C^l/}{u7X!mv0f(zGZs>95*EWk', //默认数据加密KEY

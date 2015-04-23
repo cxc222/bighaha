@@ -251,7 +251,18 @@ function T($template='',$layer=''){
     }elseif('/' != $depr){
         $file   =   substr_count($file,'/')>1 ? substr_replace($file,$depr,strrpos($file,'/'),1) : str_replace('/', $depr, $file);
     }
-    return $baseUrl.($theme?$theme.'/':'').$file.C('TMPL_TEMPLATE_SUFFIX');
+
+    /*OpenSNS新增对common下的模板检测*/
+    //如果模版存在，则返回该模版
+    $result = $baseUrl.($theme?$theme.'/':'').$file.C('TMPL_TEMPLATE_SUFFIX');
+    if(file_exists($result)) {
+        return $result;
+    }
+    //如果模版不存在，则返回公共目录下的模版
+    $baseUrl = APP_PATH.'Common/View/';
+    $result = $baseUrl.$file.C('TMPL_TEMPLATE_SUFFIX');
+    return $result;
+    /*OpenSNS新增对common下的模板检测end*/
 }
 
 /**

@@ -1,9 +1,9 @@
 @CHARSET "UTF-8";
 body{
-	padding-top:62px;
+	padding-top:50px;
 }
 .navbar-inverse .navbar-inner {
-	background: none;
+	background: #fff;
 }
 
 body > .navbar .brand {
@@ -34,6 +34,24 @@ body > .navbar .brand {
 .navbar-inverse .nav > li > a:focus, .navbar-inverse .nav > li > a:hover {
      border-bottom: 4px solid #f77070;
 	color: #333;
+}
+
+.navbar-inverse .nav li.dropdown.open > .dropdown-toggle, .navbar-inverse .nav li.dropdown.active > .dropdown-toggle, .navbar-inverse .nav li.dropdown.open.active > .dropdown-toggle{
+	background-color: #fff;
+    color: #111;
+}
+
+.navbar-inverse .nav li.dropdown > a:hover .caret,
+.navbar-inverse .nav li.dropdown > a:focus .caret {
+  border-top-color: #111;
+  border-bottom-color: #111;
+}
+
+.navbar-inverse .nav li.dropdown.open > .dropdown-toggle .caret,
+.navbar-inverse .nav li.dropdown.active > .dropdown-toggle .caret,
+.navbar-inverse .nav li.dropdown.open.active > .dropdown-toggle .caret {
+  border-top-color: #111;
+  border-bottom-color: #111;
 }
 
 #focus {

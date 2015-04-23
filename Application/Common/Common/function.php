@@ -30,6 +30,10 @@ function is_login(){
     }
 }
 
+function get_uid()
+{
+	return is_login();
+}
 /**
  * 检测当前用户是否为管理员
  * @return boolean true-管理员，false-非管理员
@@ -1015,4 +1019,70 @@ function check_category_model($info){
     $cate   =   get_category($info['category_id']);
     $array  =   explode(',', $info['pid'] ? $cate['model_sub'] : $cate['model']);
     return in_array($info['model_id'], $array);
+}
+
+/**
+ * 导入其他class
+ */
+require_once(APP_PATH . '/Common/Common/query_user.php');
+require_once(APP_PATH . '/Common/Common/thumb.php');
+require_once(APP_PATH . '/Common/Common/type.php');
+
+/**
+ * t函数用于过滤标签，输出没有html的干净的文本
+ * @param string text 文本内容
+ * @return string 处理后内容
+ */
+function op_t($text)
+{
+	$text = nl2br($text);
+	$text = real_strip_tags($text);
+	$text = addslashes($text);
+	$text = trim($text);
+	return $text;
+}
+
+/**
+ * h函数用于过滤不安全的html标签，输出安全的html
+ * @param string $text 待过滤的字符串
+ * @param string $type 保留的标签格式
+ * @return string 处理后内容
+ */
+function op_h($text, $type = 'html')
+{
+	// 无标签格式
+	$text_tags = '';
+	//只保留链接
+	$link_tags = '<a>';
+	//只保留图片
+	$image_tags = '<img>';
+	//只存在字体样式
+	$font_tags = '<i><b><u><s><em><strong><font><big><small><sup><sub><bdo><h1><h2><h3><h4><h5><h6>';
+	//标题摘要基本格式
+	$base_tags = $font_tags . '<p><br><hr><a><img><map><area><pre><code><q><blockquote><acronym><cite><ins><del><center><strike>';
+	//兼容Form格式
+	$form_tags = $base_tags . '<form><input><textarea><button><select><optgroup><option><label><fieldset><legend>';
+	//内容等允许HTML的格式
+	$html_tags = $base_tags . '<ul><ol><li><dl><dd><dt><table><caption><td><th><tr><thead><tbody><tfoot><col><colgroup><div><span><object><embed><param>';
+	//专题等全HTML格式
+	$all_tags = $form_tags . $html_tags . '<!DOCTYPE><meta><html><head><title><body><base><basefont><script><noscript><applet><object><param><style><frame><frameset><noframes><iframe>';
+	//过滤标签
+	$text = real_strip_tags($text, ${$type . '_tags'});
+	// 过滤攻击代码
+	if ($type != 'all') {
+		// 过滤危险的属性，如：过滤on事件lang js
+		while (preg_match('/(<[^><]+)(ondblclick|onclick|onload|onerror|unload|onmouseover|onmouseup|onmouseout|onmousedown|onkeydown|onkeypress|onkeyup|onblur|onchange|onfocus|action|background|codebase|dynsrc|lowsrc)([^><]*)/i', $text, $mat)) {
+			$text = str_ireplace($mat[0], $mat[1] . $mat[3], $text);
+		}
+		while (preg_match('/(<[^><]+)(window\.|javascript:|js:|about:|file:|document\.|vbs:|cookie)([^><]*)/i', $text, $mat)) {
+			$text = str_ireplace($mat[0], $mat[1] . $mat[3], $text);
+		}
+	}
+	return $text;
+}
+
+function real_strip_tags($str, $allowable_tags = "")
+{
+	$str = html_entity_decode($str, ENT_QUOTES, 'UTF-8');
+	return strip_tags($str, $allowable_tags);
 }
