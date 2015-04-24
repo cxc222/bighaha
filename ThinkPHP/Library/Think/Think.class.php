@@ -10,6 +10,7 @@
 // +----------------------------------------------------------------------
 
 namespace Think;
+
 /**
  * ThinkPHP 引导类
  */
@@ -321,7 +322,7 @@ class Think {
      * @param string $label 标签
      * @param string $level 日志级别(或者页面Trace的选项卡)
      * @param boolean $record 是否记录日志
-     * @return void|array
+     * @return void
      */
     static public function trace($value='[think]',$label='',$level='DEBUG',$record=false) {
         static $_trace =  array();
@@ -332,7 +333,10 @@ class Think {
             $level  =   strtoupper($level);
             
             if((defined('IS_AJAX') && IS_AJAX) || !C('SHOW_PAGE_TRACE')  || $record) {
-                Log::record($info,$level,$record);
+                if(true==APP_DEBUG){//修正非调试模式下无法进入后台编辑的问题
+                    Log::record($info,$level,$record);
+                }
+
             }else{
                 if(!isset($_trace[$level]) || count($_trace[$level])>C('TRACE_MAX_RECORD')) {
                     $_trace[$level] =   array();

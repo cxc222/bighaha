@@ -15,7 +15,7 @@ table,caption,tr,th,td {
 	margin:0;
 	padding:0;
 }
-ol,ul {
+ol,ul,li {
 	list-style:none;
 }
 table {
@@ -128,4 +128,13 @@ input::-moz-focus-inner {
 	text-decoration: none;
 	outline: none;
 	border-bottom: 0 none;
+}
+.data-table tr:hover{
+    background: #ccc !important;
+}
+
+.btn-error{
+    color: #ffffff !important;
+    background-color: red !important;
+    border:red 1px solid !important; ;
 }

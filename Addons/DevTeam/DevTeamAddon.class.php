@@ -9,6 +9,7 @@
 
 
 namespace Addons\DevTeam;
+
 use Common\Controller\Addon;
 
 /**
@@ -16,30 +17,34 @@ use Common\Controller\Addon;
  * @author thinkphp
  */
 
-    class DevTeamAddon extends Addon{
+class DevTeamAddon extends Addon
+{
 
-        public $info = array(
-            'name'=>'DevTeam',
-            'title'=>'开发团队信息',
-            'description'=>'开发团队成员信息',
-            'status'=>1,
-            'author'=>'thinkphp',
-            'version'=>'0.1'
-        );
+    public $info = array(
+        'name' => 'DevTeam',
+        'title' => '开发团队信息',
+        'description' => '开发团队成员信息',
+        'status' => 1,
+        'author' => 'thinkphp',
+        'version' => '0.1'
+    );
 
-        public function install(){
-            return true;
-        }
-
-        public function uninstall(){
-            return true;
-        }
-
-        //实现的AdminIndex钩子方法
-        public function AdminIndex($param){
-            $config = $this->getConfig();
-            $this->assign('addons_config', $config);
-            if($config['display'])
-                $this->display('widget');
-        }
+    public function install()
+    {
+        return true;
     }
+
+    public function uninstall()
+    {
+        return true;
+    }
+
+    //实现的AdminIndex钩子方法
+    public function AdminIndex($param)
+    {
+        $config = $this->getConfig();
+        $this->assign('addons_config', $config);
+        if ($config['display'])
+            $this->display('widget');
+    }
+}

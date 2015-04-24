@@ -18,6 +18,7 @@
 defined('THINK_PATH') or exit();
 return  array(
     /* 应用设定 */
+    'APP_FILE_CASE'         =>  false,   // 是否检查文件的大小写 对Windows平台有效
     'APP_USE_NAMESPACE'     =>  true,    // 应用类库是否使用命名空间
     'APP_SUB_DOMAIN_DEPLOY' =>  false,   // 是否开启子域名部署
     'APP_SUB_DOMAIN_RULES'  =>  array(), // 子域名部署规则
@@ -52,7 +53,7 @@ return  array(
     'DEFAULT_FILTER'        =>  'htmlspecialchars', // 默认参数过滤方法 用于I函数...
 
     /* 数据库设置 */
-    'DB_TYPE'               =>  '',     // 数据库类型
+    'DB_TYPE'               =>  'mysqli',     // 数据库类型
     'DB_HOST'               =>  '', // 服务器地址
     'DB_NAME'               =>  '',          // 数据库名
     'DB_USER'               =>  '',      // 用户名
@@ -85,7 +86,8 @@ return  array(
     /* 错误设置 */
     'ERROR_MESSAGE'         =>  '页面错误！请稍后再试～',//错误显示信息,非调试模式有效
     'ERROR_PAGE'            =>  '',	// 错误定向页面
-    'SHOW_ERROR_MSG'        =>  false,    // 显示错误信息
+    'SHOW_ERROR_MSG'        =>  true,    // 显示错误信息
+    'TRACE_EXCEPTION'       =>  true,   // TRACE错误信息是否抛异常 针对trace方法
     'TRACE_MAX_RECORD'      =>  100,    // 每个级别的错误信息 最大记录数
 
     /* 日志设置 */

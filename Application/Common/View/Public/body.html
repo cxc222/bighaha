@@ -1,17 +1,7 @@
 <block name="header"></block>
 <div id="main-container" class="container">
-    <div class="row">
+    <div class="row" >
         <block name="body"></block>
-        <block name="side">
-        <!-- 右侧 nav
-        ================================================== -->
-            <div class="span3 bs-docs-sidebar">
-                <block name="publish"></block>
-                <ul class="nav nav-list bs-docs-sidenav">
-                    {:W('Category/lists', array($category['id'], ACTION_NAME == 'index'))}
-                </ul>
-            </div>
-        </block>
     </div>
 </div>
 

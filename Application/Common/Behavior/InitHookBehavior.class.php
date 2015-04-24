@@ -19,7 +19,7 @@ class InitHookBehavior extends Behavior {
     // 行为扩展的执行入口必须是run
     public function run(&$content){
         if(defined('BIND_MODULE') && BIND_MODULE === 'Install') return;
-        
+
         $data = S('hooks');
         if(!$data){
             $hooks = M('Hooks')->getField('name,addons');

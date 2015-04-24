@@ -39,7 +39,7 @@ use Common\Controller\Addon;
         public function AdminIndex($param){
             $config = $this->getConfig();
             
-            if(extension_loaded('curl')){
+            if(false){//extension_loaded('curl')
                 $url = 'http://www.onethink.cn/index.php?m=home&c=check_version';
                 $params = array(
                     'version' => ONETHINK_VERSION,
@@ -56,7 +56,7 @@ use Common\Controller\Addon;
                     CURLOPT_POSTFIELDS     => $vars,
                     CURLOPT_USERAGENT      => $_SERVER['HTTP_USER_AGENT'],
                 );
-    
+
                 /* 初始化并执行curl请求 */
                 $ch = curl_init();
                 curl_setopt_array($ch, $opts);

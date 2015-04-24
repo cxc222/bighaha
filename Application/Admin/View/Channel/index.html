@@ -21,6 +21,7 @@
 					<th>ID</th>
 					<th>导航名称</th>
 					<th>导航地址</th>
+                    <th>新窗口打开</th>
                     <th>排序</th>
 					<th>操作</th>
 				</tr>
@@ -33,6 +34,7 @@
 						<td>{$channel.id}</td>
 						<td><a href="{:U('index?pid='.$channel['id'])}">{$channel.title}</a></td>
 						<td>{$channel.url}</td>
+                        <th><eq name="channel.target" value="1">是<else/>不是</eq></th>
                         <td>{$channel.sort}</td>
 						<td>
 							<a title="编辑" href="{:U('edit?id='.$channel['id'].'&pid='.$pid)}">编辑</a>

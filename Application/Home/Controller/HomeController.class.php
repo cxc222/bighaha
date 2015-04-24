@@ -23,6 +23,8 @@ class HomeController extends Controller {
 
 
     protected function _initialize(){
+        $a=  D('Member')->need_login();
+
         /* 读取站点配置 */
         $config = api('Config/lists');
         C($config); //添加配置
@@ -38,4 +40,10 @@ class HomeController extends Controller {
 		is_login() || $this->error('您还没有登录，请先登录！', U('User/login'));
 	}
 
+    protected function ensureApiSuccess($result)
+    {
+        if (!$result['success']) {
+            $this->error($result['message'], $result['url']);
+        }
+    }
 }

@@ -7,9 +7,12 @@
 
     <div class="tools auth-botton">
         <a id="add-group" class="btn" href="{:U('createGroup')}">新 增</a>
-        <a url="{:U('changestatus?method=resumeGroup')}" class="btn ajax-post" target-form="ids" >启 用</a>
-        <a url="{:U('changestatus?method=forbidGroup')}" class="btn ajax-post" target-form="ids" >禁 用</a>
-        <a url="{:U('changestatus?method=deleteGroup')}" class="btn ajax-post confirm" target-form="ids" >删 除</a>
+        <a url="{:U('changestatus',array('method'=>'resumeGroup'))}" class="btn ajax-post" target-form="ids" >启 用</a>
+        <a url="{:U('changestatus',array('method'=>'forbidGroup'))}" class="btn ajax-post" target-form="ids" >禁 用</a>
+        <a url="{:U('changestatus',array('method'=>'deleteGroup'))}" class="btn ajax-post confirm" target-form="ids" >删 除</a>
+        &nbsp; &nbsp; &nbsp; &nbsp;
+        <a class="btn" href="{:U('Admin/menu/add')}">新增后台菜单</a>
+        <a class="btn" href="{:U('addNode')}">新增前台权限节点</a>
     </div>
 	<!-- 数据列表 -->
 	<div class="data-table table-striped">
@@ -44,7 +47,9 @@
 				<else/>
 				<a href="{:U('AuthManager/changeStatus?method=resumeGroup&id='.$vo['id'])}" class="ajax-get">启用</a>
 				</eq>
+<!--修改内容开始-->
 				<a href="{:U('AuthManager/changeStatus?method=deleteGroup&id='.$vo['id'])}" class="confirm ajax-get">删除</a>
+<!--修改内容结束-->
                 </td>
 		</tr>
 		</volist>

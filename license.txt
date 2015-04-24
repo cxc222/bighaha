@@ -1,3 +1,11 @@
+OpenSNS基于OneThink开发，并提供免费使用。
+版权所有Copyright © 2014-2015 嘉兴想天信息科技有限公司 (http://www.ourstu.com)
+
+
+OpenSNS遵循Apache2开源协议发布，并提供免费使用。
+OpenSNS基于OneThink开发。
+版权所有Copyright © 2014-2015 嘉兴想天信息科技有限公司 (http://www.ourstu.com)
+
 
 OneThink遵循Apache2开源协议发布，并提供免费使用。
 版权所有Copyright © 2013 上海顶想信息科技有限公司 (http://www.onethink.cn)

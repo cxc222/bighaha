@@ -102,12 +102,12 @@ class Database{
      */
     private function write($sql){
         $size = strlen($sql);
-        
+
         //由于压缩原因，无法计算出压缩后的长度，这里假设压缩率为50%，
         //一般情况压缩率都会高于50%；
         $size = $this->config['compress'] ? $size / 2 : $size;
-        
-        $this->open($size); 
+
+        $this->open($size);
         return $this->config['compress'] ? @gzwrite($this->fp, $sql) : @fwrite($this->fp, $sql);
     }
 
@@ -129,7 +129,7 @@ class Database{
             $sql .= "-- Table structure for `{$table}`\n";
             $sql .= "-- -----------------------------\n";
             $sql .= "DROP TABLE IF EXISTS `{$table}`;\n";
-            $sql .= trim($result[0]['create table']) . ";\n\n";
+            $sql .= trim($result[0]['Create Table']) . ";\n\n";
             if(false === $this->write($sql)){
                 return false;
             }
@@ -138,7 +138,7 @@ class Database{
         //数据总数
         $result = $db->query("SELECT COUNT(*) AS count FROM `{$table}`");
         $count  = $result['0']['count'];
-            
+
         //备份表数据
         if($count){
             //写入数据注释
@@ -180,14 +180,14 @@ class Database{
             $size = filesize($this->file[1]);
             $gz   = fopen($this->file[1], 'r');
         }
-        
+
         $sql  = '';
         if($start){
             $this->config['compress'] ? gzseek($gz, $start) : fseek($gz, $start);
         }
-        
+
         for($i = 0; $i < 1000; $i++){
-            $sql .= $this->config['compress'] ? gzgets($gz) : fgets($gz); 
+            $sql .= $this->config['compress'] ? gzgets($gz) : fgets($gz);
             if(preg_match('/.*;$/', trim($sql))){
                 if(false !== $db->execute($sql)){
                     $start += strlen($sql);

@@ -48,7 +48,7 @@ class  Template {
         return str_replace(
             array('{','}','(',')','|','[',']','-','+','*','.','^','?'),
             array('\{','\}','\(','\)','\|','\[','\]','\-','\+','\*','\.','\^','\?'),
-            $str);        
+            $str);
     }
 
     // 模板变量获取和设置
@@ -86,6 +86,7 @@ class  Template {
      * @throws ThinkExecption
      */
     public function loadTemplate ($tmplTemplateFile,$prefix='') {
+
         if(is_file($tmplTemplateFile)) {
             $this->templateFile    =  $tmplTemplateFile;
             // 读取模板文件内容
@@ -102,15 +103,12 @@ class  Template {
                 $tmplContent = str_replace('{__NOLAYOUT__}','',$tmplContent);
             }else{ // 替换布局的主体内容
                 $layoutFile  =  THEME_PATH.C('LAYOUT_NAME').$this->config['template_suffix'];
-                // 检查布局文件
-                if(!is_file($layoutFile)) {
-                    E(L('_TEMPLATE_NOT_EXIST_').':'.$layoutFile);
-                }
                 $tmplContent = str_replace($this->config['layout_item'],$tmplContent,file_get_contents($layoutFile));
             }
         }
         // 编译模板内容
         $tmplContent =  $this->compiler($tmplContent);
+        if(strval($this->config['cache_path'])!='')
         Storage::put($tmplCacheFile,trim($tmplContent),'tpl');
         return $tmplCacheFile;
     }
@@ -244,7 +242,7 @@ class  Template {
     // 解析模板中的extend标签
     protected function parseExtend($content) {
         $begin      =   $this->config['taglib_begin'];
-        $end        =   $this->config['taglib_end'];        
+        $end        =   $this->config['taglib_end'];
         // 读取模板中的继承标签
         $find       =   preg_match('/'.$begin.'extend\s(.+?)\s*?\/'.$end.'/is',$content,$matches);
         if($find) {
@@ -382,7 +380,7 @@ class  Template {
      * @access public
      * @param string $tagLib 要解析的标签库
      * @param string $content 要解析的模板内容
-     * @param boolean $hide 是否隐藏标签库前缀
+     * @param boolen $hide 是否隐藏标签库前缀
      * @return string
      */
     public function parseTagLib($tagLib,&$content,$hide=false) {
@@ -393,7 +391,7 @@ class  Template {
             $className  =   $tagLib;
             $tagLib     =   substr($tagLib,strrpos($tagLib,'\\')+1);
         }else{
-            $className  =   'Think\\Template\TagLib\\'.ucwords($tagLib);            
+            $className  =   'Think\\Template\TagLib\\'.ucwords($tagLib);
         }
         $tLib       =   \Think\Think::instance($className);
         $that       =   $this;
@@ -443,10 +441,10 @@ class  Template {
      */
     public function parseXmlTag($tagLib,$tag,$attr,$content) {
         if(ini_get('magic_quotes_sybase'))
-            $attr   =   str_replace('\"','\'',$attr);
-        $parse      =   '_'.$tag;
-        $content    =   trim($content);
-        $tags       =   $tagLib->parseXmlAttr($attr,$tag);
+            $attr   =	str_replace('\"','\'',$attr);
+        $parse      =	'_'.$tag;
+        $content    =	trim($content);
+		$tags		=   $tagLib->parseXmlAttr($attr,$tag);
         return $tagLib->$parse($tags,$content);
     }
 
@@ -563,7 +561,7 @@ class  Template {
         for($i=0;$i<$length ;$i++ ){
             $args = explode('=',$varArray[$i],2);
             //模板函数过滤
-            $fun = trim($args[0]);
+            $fun = strtolower(trim($args[0]));
             switch($fun) {
             case 'default':  // 特殊模板函数
                 $name = '(isset('.$name.') && ('.$name.' !== ""))?('.$name.'):'.$args[1];
@@ -683,13 +681,13 @@ class  Template {
      * @access private
      * @param string $tmplPublicName  模板文件名
      * @return string
-     */    
+     */
     private function parseTemplateName($templateName){
         if(substr($templateName,0,1)=='$')
             //支持加载变量文件名
             $templateName = $this->get(substr($templateName,1));
         $array  =   explode(',',$templateName);
-        $parseStr   =   ''; 
+        $parseStr   =   '';
         foreach ($array as $templateName){
             if(empty($templateName)) continue;
             if(false === strpos($templateName,$this->config['template_suffix'])) {
@@ -700,5 +698,5 @@ class  Template {
             $parseStr .= file_get_contents($templateName);
         }
         return $parseStr;
-    }    
+    }
 }

@@ -10,7 +10,7 @@ html {
     overflow-y: scroll;
 }
 body{
-    padding: 50px 0 0 200px;
+    padding: 40px 0 0 200px;
 }
 .header {
     position: fixed;
@@ -18,15 +18,16 @@ body{
     left: 0;
     z-index: 1000;
     width: 100%;
-    height: 50px;
+    height: 40px;
     line-height: 50px;
     background-color: #383838;
 }
 .header .logo {
+    margin-top: -8px;
     float: left;
     margin-left: 16px;
-    width: 184px;
-    height: 49px;
+    width: 154px;
+    height: 39px;
     background: url(../images/bg_icon.png) no-repeat 0 -45px;
 }
 
@@ -35,17 +36,22 @@ body{
     float: left;
     overflow: hidden;
 }
-.main-nav li {
+.main-nav li{
     float: left;
-    width: 82px;
+}
+.main-nav li a{
+
+    padding-left:10px ;
+    padding-right: 10px;
 }
 .main-nav a {
     display: block;
-    height: 50px;
-    line-height: 50px;
+    font-weight: normal;
+    height: 40px;
+    line-height: 40px;
     font-size: 16px;
     color: #FFF;
-    text-align: center; font-weight: bold;
+    text-align: center; 
 }
 .main-nav a:hover {
     text-decoration: none;
@@ -235,25 +241,25 @@ body{
 }
 .index-main {
     margin: 0 20px;
-    padding-top: 30px;
+    padding-top: 60px;
 }
 /* 首页数据 */
 .top-columns {
-    margin: 25px 0 5px;
+    margin: 0 0 5px;
     text-align: center;
 }
 .show-num-mod {
     display: inline-block;
     *display: inline;
     *zoom: 1;
-    margin: 0 10px 15px;
+    margin: 0 15px 15px;
     border: 1px solid #cdcdcd;
     background-color: #fff;
 }
 .show-num-mod dt,
 .show-num-mod dd {
     float:left;
-    padding: 10px;
+    padding: 5px;
 }
 .show-num-mod dt {
     width: 65px;
@@ -359,7 +365,7 @@ body{
     float: right;
 }
 .columns-mod .bd {
-    height: 255px;
+    height: 310px;
     overflow-y: auto;
     background-color: #fafafa;
     *overflow-x:hidden;

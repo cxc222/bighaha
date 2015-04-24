@@ -38,6 +38,14 @@ class PictureModel extends Model{
         /* 上传文件 */
         $setting['callback'] = array($this, 'isFile');
 		$setting['removeTrash'] = array($this, 'removeTrash');
+        /*加水印处理*/
+        foreach ($files as $key => $file) {
+            $ext = strtolower($file['ext']);
+            if(in_array($ext, array('jpg','jpeg','bmp','png'))){
+                hook('dealPicture',$file['tmp_name']);
+            }
+        }
+        /*加水印处理*/
         $Upload = new Upload($setting, $driver, $config);
         $info   = $Upload->upload($files);
 
@@ -49,7 +57,20 @@ class PictureModel extends Model{
                 }
 
                 /* 记录文件信息 */
-                $value['path'] = substr($setting['rootPath'], 1).$value['savepath'].$value['savename'];	//在模板里的url路径
+                if(strtolower($driver)=='sae'){
+                    $value['path'] = $config['rootPath'].'Picture/'.$value['savepath'].$value['savename']; //在模板里的url路径
+                }else{
+                    if(strtolower($driver) != 'local'){
+                        $value['path'] =$value['url'];
+                    }
+                    else{
+                        $value['path'] = (substr($setting['rootPath'], 1).$value['savepath'].$value['savename']);	//在模板里的url路径
+                    }
+
+                }
+
+                $value['type'] = strtolower($driver);
+
                 if($this->create($value) && ($id = $this->add())){
                     $value['id'] = $id;
                 } else {
@@ -57,6 +78,21 @@ class PictureModel extends Model{
                     unset($info[$key]);
                 }
             }
+
+            foreach($info as &$t_info){
+                if($t_info['type'] =='local'){
+                    $t_info['path']=fixAttachUrl($t_info['path']);
+                }
+                else{
+                    $t_info['path']=$t_info['path'];
+                }
+
+
+            }
+          /*  dump(getRootUrl());
+            dump($info);
+            exit;*/
+
             return $info; //文件上传成功
         } else {
             $this->error = $Upload->getError();

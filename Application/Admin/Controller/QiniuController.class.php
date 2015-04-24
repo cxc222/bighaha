@@ -4,7 +4,7 @@
 // +----------------------------------------------------------------------
 // | Copyright (c) 2013 http://www.onethink.cn All rights reserved.
 // +----------------------------------------------------------------------
-// | Author: yangweijie <yangweijiester@gmail.com>
+// | Author: huajie <yangweijiester@gmail.com>
 // +----------------------------------------------------------------------
 
 namespace Admin\Controller;
@@ -18,10 +18,10 @@ class QiniuController extends AdminController {
 
     public function _initialize(){
         $config = array(
-            'accessKey'=>'__ODsglZwwjRJNZHAu7vtcEf-zgIxdQAY-QqVrZD',
-            'secrectKey'=>'Z9-RahGtXhKeTUYy9WCnLbQ98ZuZ_paiaoBjByKv',
-            'bucket'=>'blackwhite',
-            'domain'=>'blackwhite.u.qiniudn.com'
+            'accessKey'=>'xNBzD_m7hoJrb60Qtyomdr2WVJSb4vnO0MkSYCym',
+            'secrectKey'=>'g-p3P9vOWrg_WZOd_3OtL4FNTh8xhgBOeEVPJw3Y',
+            'bucket'=>'tox-shang',
+            'domain'=>'tox-shang.qiniudn.com'
         );
         $this->qiniu = new QiniuStorage($config);
         parent:: _initialize();

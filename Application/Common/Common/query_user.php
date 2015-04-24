@@ -1,9 +1,9 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: zff
- * Date: 15-4-23
- * Time: PM2:40
+ * User: caipeichao
+ * Date: 14-3-10
+ * Time: PM7:40
  */
 
 /**
@@ -75,6 +75,7 @@ function query_user($fields = null, $uid = null)
         $ucenterResult = $model->where(array('id' => $uid))->field($ucenterFields)->find();
     }
 
+
     //读取头像数据
     $result = array();
     $avatarAddon = new \Addons\Avatar\AvatarAddon();
@@ -86,6 +87,7 @@ function query_user($fields = null, $uid = null)
             include_once './api/uc_client/client.php';
              $avatarUrl = UC_API.'/avatar.php?uid='.$uid.'&size=big';
         }
+
 
         $result[$e] = $avatarUrl;
     }
@@ -108,7 +110,7 @@ function query_user($fields = null, $uid = null)
     if (in_array('space_url', $fields)) {
         $result['space_url'] = U('UserCenter/Index/index', array('uid' => $uid));
     }
-    
+
     if (in_array('nickname', $fields)) {
         $ucenterResult['nickname'] = op_t($ucenterResult['nickname']);
     }

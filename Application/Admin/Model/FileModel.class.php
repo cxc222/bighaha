@@ -46,7 +46,7 @@ class FileModel extends Model{
         $setting['callback'] = array($this, 'isFile');
 		$setting['removeTrash'] = array($this, 'removeTrash');
         $Upload = new Upload($setting, $driver, $config);
-        $info   = $Upload->upload($files);
+        $info    = $Upload->upload($files);
 
         /* 设置文件保存位置 */
 		$this->_auto[] = array('location', 'ftp' === strtolower($driver) ? 1 : 0, self::MODEL_INSERT);
@@ -55,11 +55,12 @@ class FileModel extends Model{
             foreach ($info as $key => &$value) {
                 /* 已经存在文件记录 */
                 if(isset($value['id']) && is_numeric($value['id'])){
-                    $value['path'] = substr($setting['rootPath'], 1).$value['savepath'].$value['savename']; //在模板里的url路径
                     continue;
                 }
-
-                $value['path'] = substr($setting['rootPath'], 1).$value['savepath'].$value['savename']; //在模板里的url路径
+                if(strtolower($driver) != 'local'){
+                    $value['savepath'] =$value['url'];
+                }
+                $value['driver'] = strtolower($driver);
                 /* 记录文件信息 */
                 if($this->create($value) && ($id = $this->add())){
                     $value['id'] = $id;
