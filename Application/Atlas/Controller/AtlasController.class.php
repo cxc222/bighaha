@@ -35,7 +35,6 @@ class AtlasController extends Controller
             $this->error('站点已经关闭，请稍后访问~');
         }
         $this->setTitle('图集');
-
     }
 
 

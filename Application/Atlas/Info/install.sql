@@ -8,3 +8,16 @@ CREATE TABLE IF NOT EXISTS `opensns_atlas` (
   `status` tinyint(4) NOT NULL DEFAULT '1' COMMENT '状态, 0=需要审核,1=通过',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='搞笑图集';
+
+
+
+/* menu 插入 */
+
+INSERT INTO `opensns_menu` (`title`, `pid`, `sort`, `url`, `hide`, `tip`, `group`, `is_dev`) VALUES
+( '图集', 0, 22, 'atlas/index', 0, '', '', 0);
+
+set @tmp_id=0;
+select @tmp_id:= id from `opensns_menu` where title = '图集';
+
+INSERT INTO `opensns_menu` ( `title`, `pid`, `sort`, `url`, `hide`, `tip`, `group`, `is_dev`) VALUES
+( '内容管理', @tmp_id, 0, 'atlas/index', 0, '', '内容管理', 0);
