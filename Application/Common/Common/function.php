@@ -1027,6 +1027,7 @@ function check_category_model($info){
 require_once(APP_PATH . '/Common/Common/query_user.php');
 require_once(APP_PATH . '/Common/Common/thumb.php');
 require_once(APP_PATH . '/Common/Common/type.php');
+require_once(APP_PATH . '/Common/Common/time.php');
 
 /**
  * t函数用于过滤标签，输出没有html的干净的文本

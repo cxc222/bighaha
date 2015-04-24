@@ -47,6 +47,7 @@ class AtlasApi extends Api {
 		if (empty($atlas)) {
 			//没有缓存重新查询
 			$atlas = $this->atlasModel->find($id);
+			//获取图片信息
 			
 			$atlas = array(
 					'id' => intval($atlas['id']),
