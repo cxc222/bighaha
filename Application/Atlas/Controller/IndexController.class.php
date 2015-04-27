@@ -15,8 +15,8 @@ use Think\Controller;
 class IndexController extends Controller {
 	
 	public function index($page = 1) {
-		print_r(213);
-		die();
+	    
+	    
 		$this->display ();
 	}
 }

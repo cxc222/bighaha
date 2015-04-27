@@ -1,7 +1,7 @@
 @CHARSET "UTF-8";
 .web_content_left{clear:both;width:630px;float:left;}
 .web_left{width:620px;background:#FFF;height:auto;overflow:hidden;border:solid 1px #b1b1b1;box-shadow:0 0 0 1px #FFFFFF inset, 0 0 5px 1px #c6c6c6;margin-bottom:20px;}
-.web_left .user_info{vertical-align:middle; padding-left:20px; padding-top:7px; padding-bottom:0px;color:#B6B6B6;height:38px;background-color:#F5F5F5;}
+.web_left .user_info{vertical-align:middle; padding-left:20px; padding-top:7px; padding-bottom:0px;color:#B6B6B6;height:44px;background-color:#F5F5F5;}
 .web_left .user_info li{float:left;}
 .web_left .user_info li.user_name p{color:#777777;height:18px;margin-top:6px;margin-left:12px;margin-right:5px;}
 .web_left .user_info .time{margin-top:6px;height:18px;color:#b5b5b5;}
@@ -24,3 +24,17 @@
 .web_left .budejie_mutual_no a{color:#6A6A6A;font-family:"微软雅黑";border:solid 1px #B7B7B7;padding:7px 10px 7px 8px;box-shadow:0 1px 2px #EEEEEE, 0 0 0 1px #FFFFFF inset;border-radius:5px 5px 5px 5px;}
 .web_left .budejie_mutual_no a:hover{}
 .web_left .budejie_mutual_no li{float:left;margin-right:20px;}
+.love span{background: url('http://img.spriteapp.com/ws/www/img/icon/ding.png') no-repeat;background-position:0px 1px;padding:5px 0px 5px 30px;color:#FFA303;}
+.no_love span{background: url('http://img.spriteapp.com/ws/www/img/icon/no_ding.png') no-repeat;background-position:0px 1px;padding:5px 0px 10px 30px;}
+.cai span{background: url('http://img.spriteapp.com/ws/www/img/icon/cai.png') no-repeat;background-position:0px 1px;padding:5px 0px 5px 30px;color:#FFA303;}
+.no_cai span{background: url('http://img.spriteapp.com/ws/www/img/icon/no_cai.png') no-repeat;background-position:0px 1px;padding:5px 0px 5px 30px;}
+.bookmark span{background: url('http://img.spriteapp.com/ws/www/img/icon/bookmark.png') no-repeat;background-position:4px 1px;padding:5px 12px 5px 12px;}
+.no_bookmark span{background: url('http://img.spriteapp.com/ws/www/img/icon/no_bookmark.png') no-repeat;background-position:4px 1px;padding:5px 12px 5px 12px;}
+.repost span{background: url('http://img.spriteapp.com/ws/www/img/icon/repost.png') no-repeat;padding:5px 0px 5px 30px;}
+.review{}
+
+
+.post-body img, .audio-cont p img {
+    height: auto;
+    width: 450px;
+}
