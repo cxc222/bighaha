@@ -1,0 +1,7 @@
+$(function () {
+    bindAtlasEvent();
+});
+
+function bindAtlasEvent() {
+	
+}

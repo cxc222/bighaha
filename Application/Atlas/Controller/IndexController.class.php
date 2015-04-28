@@ -8,15 +8,23 @@
 // +----------------------------------------------------------------------
 namespace Atlas\Controller;
 use Think\Controller;
+use Think\Hook;
+use Atlas\Api\AtlasApi;
+use Think\Exception;
+use Common\Exception\ApiException;
+
 /**
  * 前台首页控制器
  * 主要获取首页聚合数据
  */
 class IndexController extends AtlasController {
 	private $atlasModel;
+	private $atlasApi;
 	
 	public function _initialize(){
 		$this->atlasModel = D('Atlas');
+		
+		$this->atlasApi = new AtlasApi();
 	}
 	
 	public function index($page = 1) {
@@ -32,8 +40,16 @@ class IndexController extends AtlasController {
 	 * 喜欢还是不喜欢
 	 * 
 	 */
-	function dolike(){
-		
+	function dolike($id,$type){
+	    
+	    $this->atlasApi->dolike($id,$type);
+	    
+	    if(!is_login()){
+	        
+	    }
+	    $atlas_likeModel = M('atlas_like');
+	    $atlas_likeModel->where();
+	    //$this->atlasModel->
 	}
 	
 }
