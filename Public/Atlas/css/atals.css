@@ -38,3 +38,5 @@
     height: auto;
     width: 450px;
 }
+
+.comment_button span{background: url('http://img.spriteapp.com/ws/www/img/icon/comment.png') no-repeat;padding:5px 0px 5px 30px;background-position:0px 2px;}

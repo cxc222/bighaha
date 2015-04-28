@@ -44,4 +44,36 @@ class AtlasController extends Controller
             $this->error($result['message'], $result['url']);
         }
     }
+    
+    /**
+     * 获取结构
+     * @param unknown $ids
+     * @return multitype:NULL
+     */
+    public function getAtlasByIds($ids)
+    {
+    	$ids = is_array($ids) ? $ids : implode(',', $ids);
+    	$list = array();
+    	foreach ($ids as $v) {
+    		$list[] = $this->getAtlas($v);
+    	}
+    	return $list;
+    }
+    
+    /**
+     * 获取数据详情
+     * @param unknown $id
+     * @return Ambigous <mixed, \Think\mixed, object>
+     */
+    public function getAtlas($id)
+    {
+    	$id=intval($id);
+    	$atlas = S('atlas_' . $id);
+    	if (empty($atlas)) {
+    		$atlas = D('Atlas')->where(array('status' => 1, 'id' => $id))->find();
+    		$atlas['user'] = query_user(array('avatar128', 'avatar64', 'nickname', 'uid', 'space_url', 'icons_html'), $atlas['uid']);
+    		S('atlas_' . $id, $atlas, 300);
+    	}
+    	return $atlas;
+    }
 }
