@@ -37,19 +37,23 @@ class IndexController extends AtlasController {
 	}
 	
 	/**
+	 * 图集详情
+	 * @param unknown $id
+	 */
+	function detail($id){
+		$detail = $this->atlasApi->getAtlas($id);
+		$this->assign('detail', $detail);
+		$this->display();
+	}
+	
+	/**
 	 * 喜欢还是不喜欢
 	 * 
 	 */
 	function dolike($id,$type){
-	    
-	    $this->atlasApi->dolike($id,$type);
-	    
-	    if(!is_login()){
-	        
-	    }
-	    $atlas_likeModel = M('atlas_like');
-	    $atlas_likeModel->where();
-	    //$this->atlasModel->
+	    $likeCountArray = $this->atlasApi->dolike($id,$type);
+	    //返回成功结果
+	    $this->ajaxReturn(apiToAjax($likeCountArray));
 	}
 	
 }

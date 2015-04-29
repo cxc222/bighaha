@@ -16,22 +16,20 @@
 
 		<div class="web_conter clearfix">
 			<div class="post-body">
-				<p style="WORD-BREAK: break-all;" id="title-14006007"
+				<p style="WORD-BREAK: break-all;" id="title-{$atlas.id}"
 					class="web_size">{$atlas.content|parseWeiboContent}</p>
 				<p style="margin-top: 20px;">
-					<a href="/detail-14006007.html" target="_blank"> <img
-						alt="{$atlas.content|parseWeiboContent}" id="pic-14006007"
+					<a href="{:U('atlas/index/detail',array('id'=>$atlas['id']))}" target="_blank"> <img
+						alt="{$atlas.content|parseWeiboContent}" id="pic-{$atlas.id}"
 						src="{$atlas.image_id|getThumbImageById=300,300}">
 					</a>
 				</p>
 			</div>
 			<div class="budejie_mutual clearfix">
 				<ul class="pull-left interactive list-unstyled">
-					<li><a class="dolove no_love" data-postid="14006007"
-						data-userid=""> <span id="loveNum-14006007">{$atlas.like_count}</span>
+					<li><a class="dolove no_love" data-postid="{$atlas.id}" > <span id="loveNum-{$atlas.id}" class="num">{$atlas.like_count}</span>
 					</a></li>
-					<li><a class="notlove no_cai" data-postid="14006007"
-						data-userid=""> <span id="noloveNum-14006007">{$atlas.unlike_count}</span>
+					<li><a class="notlove no_cai" data-postid="{$atlas.id}" > <span id="noloveNum-{$atlas.id}" class="num">{$atlas.unlike_count}</span>
 					</a></li>
 					<!-- <li style="height: 50px;"><a style="display: none;"
 						class="bookmark" onclick="do_cancelBookmark('', '14006007')">
@@ -44,16 +42,10 @@
 					<!-- <li><a class="share-content"> <span id="repost-14006007">3</span>
 					</a></li> -->
 					<li style="margin-right: 0px;"><a class="comment_button"
-						href="/detail-14006007.html" target="_blank"> <span>{$atlas.comment_count}</span>
+						href="{:U('atlas/index/detail',array('id'=>$atlas['id']))}" target="_blank"> <span>{$atlas.comment_count}</span>
 					</a></li>
 				</ul>
 			</div>
-		</div>
-		<div class="budejie_share" style="display: none;">
-			<a onclick="share('weibo','14006007')" class="weibo">新浪微博</a> <a
-				onclick="share('renren', '14006007')" class="renren">人人网</a> <a
-				onclick="share('tqq', '14006007')" class="tqq">腾讯微博</a> <a
-				onclick="share('qzone', '14006007')" class="qzone">QQ空间</a>
 		</div>
 	</div>
 </div>
