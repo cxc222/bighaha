@@ -8,165 +8,60 @@
 <div class="span9">
 
 	<div class="web_content_left">
-		
-			<div onclick="hide_share();" class="web_left ">
-<!--				<div class="white_border">-->
-					<div class="user_info">
-						<ul class="list-unstyled">
-							<li style="height:30px;">
-								<img width="30px;" height="30px;" src="http://img.spriteapp.cn/profile/large/2015/04/27/553dc2d285b3b_mini.jpg">
-							</li>
-							<li class="user_name">
-								<p>叮铃叮铃～</p>
-							</li>
-							<li>
-								<p class="time">发布于2015-04-28 23:44:02</p>
-							</li>
-						</ul>
-						<div style="display:none" class="p_times"><span>0</span>次播放</div>
-					</div>
 
-					<div class="web_conter clear">
-						<div style="clear:both" class="web_list_left">
-							<p id="title-14015535" class="web_size">有创意～看懂了么？</p>
+		<div class="web_left ">
+			<div class="user_info">
+				<ul class="list-unstyled">
+					<li style="height: 30px;"><img width="30px;" height="30px;"
+						src="{$detail.user.avatar128}"></li>
+					<li class="user_name">
+						<p>{$detail.user.nickname}</p>
+					</li>
+					<li>
+						<p class="time">发布于{$detail.addtime|friendlyDate}</p>
+					</li>
+				</ul>
+			</div>
 
-														<p>
-								<img id="pic-14015535" src="http://ww4.sinaimg.cn/large/005P15krjw1erkjkmqqb7j30go0ph74n.jpg">
-							</p>
-													</div>
+			<div class="web_conter clear">
+				<div style="clear: both" class="web_list_left">
+					<p id="title-{$detail.id}" class="web_size">{$detail.content|parseWeiboContent}</p>
+					<p>
+						<img id="pic-{$detail.id}"
+							src="{$detail.image_id|getThumbImageById=300,300}">
+					</p>
+				</div>
 
-						<div class="budejie_mutual clear">
-							<ul class="pull-left list-unstyled">
-								<li>
-									<a class="dolove love" data-postid="14015535" data-userid="5120107">
-										<span id="loveNum-14015535">1613</span>
-									</a>
-								</li>
-								<li>
-									<a class="notlove no_cai" data-postid="14015535" data-userid="5120107">
-										<span id="noloveNum-14015535">331</span>
-									</a>
-								</li>
-								<li>
-									<a style="display:none;" class="bookmark" onclick="do_cancelBookmark('5120107', '14015535')">
-										<span id="bookmark-14015535">&nbsp;&nbsp;</span>
-									</a>
-									<a style="" class="no_bookmark" onclick="do_bookmark('5120107', '14015535')">
-										<span id="no_bookmark-14015535">&nbsp;&nbsp;</span>
-									</a>
-								</li>
-							</ul>
-							<ul class="pull-right list-unstyled">
-								<li>
-									<a class="share-content">
-										<span id="repost-14015535">30</span>
-									</a>
-								</li>
-								<li style="margin-right:0px;">
-									<a class="comment_button" href="#main_conter">
-										<span>54</span>
-									</a>
-								</li>
-							</ul>
-						</div>
+				<div class="budejie_mutual clear">
+					<ul class="pull-left list-unstyled">
+						<li><a class="dolove love" data-postid="{$detail.id}"> <span
+								id="loveNum-{$detail.id}" class="num">{$detail.like_count}</span>
+						</a></li>
+						<li><a class="notlove no_cai" data-postid="{$detail.id}">
+								<span id="noloveNum-{$detail.id}" class="num">{$detail.unlike_count}</span>
+						</a></li>
 
-						<div class="budejie_share">
-							<a onclick="share('weibo', '14015535')" class="weibo">新浪微博</a>
-							<a onclick="share('renren', '14015535')" class="renren">人人网</a>
-							<a onclick="share('tqq', '14015535')" class="tqq">腾讯微博</a>
-							<a onclick="share('qzone', '14015535')" class="qzone">QQ空间</a>
-						</div>
-					</div>
+					</ul>
+					<ul class="pull-right list-unstyled">
+						<li style="margin-right: 0px;"><a class="comment_button"
+							href="#main_conter"> <span>54</span>
+						</a></li>
+					</ul>
+				</div>
+			</div>
 
-					<div class="comment-list" id="pj_div14015535">
-					
-												<div class="host-comment">
-							<h5>热门评论</h5>
-							<ul class="list-unstyled">
-																<li class="comment_item">
-									<div class="left">
-										<img src="http://qzapp.qlogo.cn/qzapp/100336987/92149E142D12B9BBF9AEDB855219ABD5/100">
-									</div>
-									<div class="right">
-										<h6>加油.666</h6>
-										<p>闭上你的鸟嘴.否则让你毫无存在感.</p>
-									</div>
-									<a class="no_love" onclick="do_cmt_love('5120107', '25228536')">
-										<span id="cmtLoveNum-25228536">308</span>
-									</a>
-								</li>
-																<li class="comment_item">
-									<div class="left">
-										<img src="http://qzapp.qlogo.cn/qzapp/100336987/25E14F1A86E313AA2A0B25D8A3616D88/100">
-									</div>
-									<div class="right">
-										<h6>q321</h6>
-										<p>安静使人优雅</p>
-									</div>
-									<a class="no_love" onclick="do_cmt_love('5120107', '25224852')">
-										<span id="cmtLoveNum-25224852">138</span>
-									</a>
-								</li>
-																<li class="comment_item">
-									<div class="left">
-										<img src="http://img.spriteapp.cn/profile/large/2015/04/21/5536558186af8_mini.jpg">
-									</div>
-									<div class="right">
-										<h6>FC吕大侠</h6>
-										<p>用尾巴把鸟打下去的瞬间。</p>
-									</div>
-									<a class="no_love" onclick="do_cmt_love('5120107', '25220879')">
-										<span id="cmtLoveNum-25220879">105</span>
-									</a>
-								</li>
-																<li class="comment_item">
-									<div class="left">
-										<img src="http://qzapp.qlogo.cn/qzapp/100336987/F0208F10217443000D08D1A6ACEDF05C/100">
-									</div>
-									<div class="right">
-										<h6>天天听你话</h6>
-										<p>进来找答案的点</p>
-									</div>
-									<a class="no_love" onclick="do_cmt_love('5120107', '25296193')">
-										<span id="cmtLoveNum-25296193">39</span>
-									</a>
-								</li>
-																<li class="comment_item">
-									<div class="left">
-										<img src="http://img.spriteapp.cn/profile/large/2014/04/30/536054aacef58_mini.jpg">
-									</div>
-									<div class="right">
-										<h6>如果不坚强、懦弱给谁看</h6>
-										<p>猫和鹅的故事</p>
-									</div>
-									<a class="no_love" onclick="do_cmt_love('5120107', '25296698')">
-										<span id="cmtLoveNum-25296698">12</span>
-									</a>
-								</li>
-															</ul>
-						</div>
-						
-						<div id="new_comment" class="new-comment">
-							<h5>最新评论</h5>
-							<ul id="show_commint"><li class="comment_item"><div class="left"><img src="http://img.spriteapp.cn/profile/large/2015/04/20/55346e0ff317d_mini.jpg"></div><div class="right"><h6>苍松枫井岛空</h6><p>我觉得二楼是正解</p></div><a class="no_love" onclick="do_cmt_love(5120107, 25315933)"><span id="cmtLoveNum-25315933">1</span></a></li><li class="comment_item"><div class="left"><img src="http://qzapp.qlogo.cn/qzapp/100336987/32B16EA08001A6345840F828E79817B5/100"></div><div class="right"><h6>呦！这么巧~</h6><p>一只猫，一只鸟，可以杂交后，生成了一只天鹅的故事。</p></div><a class="no_love" onclick="do_cmt_love(5120107, 25314789)"><span id="cmtLoveNum-25314789">0</span></a></li><li class="comment_item"><div class="left"><img src="http://img.spriteapp.cn/profile/large/2015/03/31/551a7b968b160_mini.jpg"></div><div class="right"><h6>ゞΑΙмs丿夏沫﹏.</h6><p>猫尾鸟</p></div><a class="no_love" onclick="do_cmt_love(5120107, 25311364)"><span id="cmtLoveNum-25311364">1</span></a></li><li class="comment_item"><div class="left"><img src="http://img.spriteapp.cn/profile/large/2014/10/16/543fcd8580663_mini.jpg"></div><div class="right"><h6>抱个大西瓜</h6><p>看懂了，挺无趣</p></div><a class="no_love" onclick="do_cmt_love(5120107, 25310792)"><span id="cmtLoveNum-25310792">0</span></a></li><li class="comment_item"><div class="left"><img src="http://qzapp.qlogo.cn/qzapp/100336987/8D5B670D6B3C3DD2C9B72EA8FF3E0338/100"></div><div class="right"><h6>冬至JC0</h6><p>明明就是用猫尾巴把嘴给堵上了吗…</p></div><a class="no_love" onclick="do_cmt_love(5120107, 25308866)"><span id="cmtLoveNum-25308866">2</span></a></li><li class="comment_item"><div class="left"><img src="http://img.spriteapp.cn/profile/large/2014/11/10/5460c55c62979_mini.jpg"></div><div class="right"><h6>忽然NANA</h6><p>天猫能让你闭嘴？</p></div><a class="no_love" onclick="do_cmt_love(5120107, 25308845)"><span id="cmtLoveNum-25308845">5</span></a></li><li class="comment_item"><div class="left"><img src="http://img.spriteapp.cn/profile/large/2014/12/24/549ae10d6e580_mini.jpg"></div><div class="right"><h6>海尔兄弟的兄弟</h6><p>不就是鹅屁股上长个猫嘛，谁看不懂</p></div><a class="no_love" onclick="do_cmt_love(5120107, 25307344)"><span id="cmtLoveNum-25307344">0</span></a></li><li class="comment_item"><div class="left"><img src="http://tp2.sinaimg.cn/1317731465/50/5640860791/0"></div><div class="right"><h6>冰糖雪梨蓝瓶装</h6><p>看不懂哎</p></div><a class="no_love" onclick="do_cmt_love(5120107, 25306755)"><span id="cmtLoveNum-25306755">0</span></a></li><li class="comment_item"><div class="left"><img src="http://tp2.sinaimg.cn/3142309521/50/5649821473/1"></div><div class="right"><h6>王阿硕0512</h6><p>←_←大骗纸</p></div><a class="no_love" onclick="do_cmt_love(5120107, 25305156)"><span id="cmtLoveNum-25305156">1</span></a></li><li class="comment_item"><div class="left"><img src="http://qzapp.qlogo.cn/qzapp/100336987/E65AE24160D01535F11733958A36605C/100"></div><div class="right"><h6>大风歌111</h6><p>小鸟求安慰</p></div><a class="no_love" onclick="do_cmt_love(5120107, 25303449)"><span id="cmtLoveNum-25303449">1</span></a></li><li class="comment_item"><div class="left"><img src="http://img.spriteapp.cn/profile/large/2014/10/12/5439d5fc971ef_mini.jpg"></div><div class="right"><h6>   不朽丶</h6><p>666666</p></div><a class="no_love" onclick="do_cmt_love(5120107, 25302023)"><span id="cmtLoveNum-25302023">5</span></a></li><li class="comment_item"><div class="left"><img src="http://qzapp.qlogo.cn/qzapp/100336987/6E897D9F540A40B53B216DA302275000/100"></div><div class="right"><h6>丧心病狂的点赞党</h6><p>那4个点呢</p></div><a class="no_love" onclick="do_cmt_love(5120107, 25300842)"><span id="cmtLoveNum-25300842">2</span></a></li><li class="comment_item"><div class="left"><img src="http://img.spriteapp.cn/profile/large/2015/04/12/5529ba93d2b82_mini.jpg"></div><div class="right"><h6>二踢脚丶日破天</h6><p>一秒变天鹅！</p></div><a class="no_love" onclick="do_cmt_love(5120107, 25300223)"><span id="cmtLoveNum-25300223">4</span></a></li><li class="comment_item"><div class="left"><img src="http://qzapp.qlogo.cn/qzapp/100336987/8593C3A67BBDFE69198E95A158574F57/100"></div><div class="right"><h6>五庄观镇元子111</h6><p>看不懂</p></div><a class="no_love" onclick="do_cmt_love(5120107, 25299733)"><span id="cmtLoveNum-25299733">7</span></a></li><li class="comment_item"><div class="left"><img src="http://qzapp.qlogo.cn/qzapp/100336987/7A9ECF775E115AE61F6EB652AF9F33AC/100"></div><div class="right"><h6>火柴7NH</h6><p>“压”雀无声</p></div><a class="no_love" onclick="do_cmt_love(5120107, 25299465)"><span id="cmtLoveNum-25299465">10</span></a></li><li class="comment_item"><div class="left"><img src="http://qzapp.qlogo.cn/qzapp/100336987/94D5D0E81EEA25B68B9C3732F0305BA9/100"></div><div class="right"><h6>っ莋何解釋〃</h6><p>你有没去注册</p></div><a class="no_love" onclick="do_cmt_love(5120107, 25298800)"><span id="cmtLoveNum-25298800">3</span></a></li><li class="comment_item"><div class="left"><img src="http://qzapp.qlogo.cn/qzapp/100336987/8758E75D1C675B7CDDE9C0D5B76BE6AA/100"></div><div class="right"><h6>  二</h6><p>你鸭的给我闭嘴？</p></div><a class="no_love" onclick="do_cmt_love(5120107, 25298753)"><span id="cmtLoveNum-25298753">5</span></a></li><li class="comment_item"><div class="left"><img src="http://img.spriteapp.cn/profile/large/2014/04/30/536054aacef58_mini.jpg"></div><div class="right"><h6>如果不坚强、懦弱给谁看</h6><p>猫和鹅的故事</p></div><a class="no_love" onclick="do_cmt_love(5120107, 25296698)"><span id="cmtLoveNum-25296698">12</span></a></li><li class="comment_item"><div class="left"><img src="http://qzapp.qlogo.cn/qzapp/100336987/F0208F10217443000D08D1A6ACEDF05C/100"></div><div class="right"><h6>天天听你话</h6><p>进来找答案的点</p></div><a class="no_love" onclick="do_cmt_love(5120107, 25296193)"><span id="cmtLoveNum-25296193">39</span></a></li><li class="comment_item"><div class="left"><img src="http://img.spriteapp.cn/profile/large/2014/08/07/53e2732ff2b31_mini.jpg"></div><div class="right"><h6>豆腐脑儿</h6><p>脑洞大开</p></div><a class="no_love" onclick="do_cmt_love(5120107, 25296127)"><span id="cmtLoveNum-25296127">4</span></a></li><li class="comment_item"><div class="left"><img src="http://qzapp.qlogo.cn/qzapp/100336987/2F2B4E6241DB5CD766F4CC40E297EB56/100"></div><div class="right"><h6>企鹅K95</h6><p>的确有创意，够瞎扯蛋</p></div><a class="no_love" onclick="do_cmt_love(5120107, 25295092)"><span id="cmtLoveNum-25295092">4</span></a></li><li class="comment_item"><div class="left"><img src=""></div><div class="right"><h6>心中无码自然超清</h6><p>天猫</p></div><a class="no_love" onclick="do_cmt_love(5120107, 25293886)"><span id="cmtLoveNum-25293886">7</span></a></li><li class="comment_item"><div class="left"><img src="http://qzapp.qlogo.cn/qzapp/100336987/5CCC3428C33EC100B41B9AE02A6DEF8C/100"></div><div class="right"><h6>吉柏林</h6><p>一天早上，小鸟叫，猫睡觉，鸭子醒来吃了鸟，睡了猫</p></div><a class="no_love" onclick="do_cmt_love(5120107, 25293601)"><span id="cmtLoveNum-25293601">9</span></a></li><li class="comment_item"><div class="left"><img src="http://qzapp.qlogo.cn/qzapp/100336987/F78BF030C9067DB34324BDA76A090713/100"></div><div class="right"><h6>再见花开又落</h6><p>猫咪另类的讽刺 “你以为唱的像百灵，我觉得像鸭子”</p></div><a class="no_love" onclick="do_cmt_love(5120107, 25293577)"><span id="cmtLoveNum-25293577">3</span></a></li><li class="comment_item"><div class="left"><img src="http://qzapp.qlogo.cn/qzapp/100336987/BCA54B9F2B0668E355509D19A60CE8C8/100"></div><div class="right"><h6>读取失败</h6><p>猫咪在睡觉，我只看到猫</p></div><a class="no_love" onclick="do_cmt_love(5120107, 25293262)"><span id="cmtLoveNum-25293262">5</span></a></li><li class="comment_item"><div class="left"><img src="http://img.spriteapp.cn/profile/2014/05/17/537758ea4c1e9.png"></div><div class="right"><h6>吃饱了等下顿</h6><p>闭不闭嘴你都是个鸟</p></div><a class="no_love" onclick="do_cmt_love(5120107, 25292526)"><span id="cmtLoveNum-25292526">5</span></a></li><li class="comment_item"><div class="left"><img src="http://img.spriteapp.cn/profile/large/2015/03/26/551399e9c4770_mini.jpg"></div><div class="right"><h6>用户248914</h6><p>猫和鸟不干自己的正事就是怪物</p></div><a class="no_love" onclick="do_cmt_love(5120107, 25292342)"><span id="cmtLoveNum-25292342">3</span></a></li><li class="comment_item"><div class="left"><img src="http://img.spriteapp.cn/profile/large/2014/05/09/536c7e43cb093_mini.jpg"></div><div class="right"><h6>----一</h6><p>好直白</p></div><a class="no_love" onclick="do_cmt_love(5120107, 25292229)"><span id="cmtLoveNum-25292229">1</span></a></li><li class="comment_item"><div class="left"><img src="http://img.spriteapp.cn/profile/2013/10/30/52712a020695c_mini.jpg"></div><div class="right"><h6>xiZE4</h6><p>尾巴把鸟吃了</p></div><a class="no_love" onclick="do_cmt_love(5120107, 25292115)"><span id="cmtLoveNum-25292115">5</span></a></li><li class="comment_item"><div class="left"><img src="http://img.spriteapp.cn/profile/large/2015/01/06/54abf555eefb9_mini.jpg"></div><div class="right"><h6>xiaoxue小雪</h6><p>明明是把尾巴伸高和闭嘴的鸟看起来就是只天鹅，天鹅的嘴巴还是那只鸟只是把嘴巴闭上了</p></div><a class="no_love" onclick="do_cmt_love(5120107, 25292092)"><span id="cmtLoveNum-25292092">4</span></a></li><li class="comment_item"><div class="left"><img src="http://img.spriteapp.cn/profile/large/2015/01/06/54abf555eefb9_mini.jpg"></div><div class="right"><h6>xiaoxue小雪</h6><p>闭上嘴巴我会让你从鸟变成天鹅</p></div><a class="no_love" onclick="do_cmt_love(5120107, 25291976)"><span id="cmtLoveNum-25291976">1</span></a></li><li class="comment_item"><div class="left"><img src="http://qzapp.qlogo.cn/qzapp/100336987/D80F72EBD1141BC89EA26BB10ECF65AD/100"></div><div class="right"><h6>Deja Vu0EV</h6><p>很难懂的吗？</p></div><a class="no_love" onclick="do_cmt_love(5120107, 25291831)"><span id="cmtLoveNum-25291831">2</span></a></li><li class="comment_item"><div class="left"><img src="http://img.spriteapp.cn/profile/large/2014/07/18/53c93a2feabec_mini.jpg"></div><div class="right"><h6>驴被脑袋踢了</h6><p>尾巴让你闭嘴</p></div><a class="no_love" onclick="do_cmt_love(5120107, 25291525)"><span id="cmtLoveNum-25291525">3</span></a></li><li class="comment_item"><div class="left"><img src="http://img.spriteapp.cn/profile/2015/04/28/553fad972ea9a.jpg"></div><div class="right"><h6>都昌站街女</h6><p>难道我会告诉你搜 柳冷朵 可以看岛国大片！</p></div><a class="no_love" onclick="do_cmt_love(5120107, 25291398)"><span id="cmtLoveNum-25291398">5</span></a></li><li class="comment_item"><div class="left"><img src="http://qzapp.qlogo.cn/qzapp/100336987/B228EE3B86BDFFCD991A8E67B5EE83D3/100"></div><div class="right"><h6>媛媛</h6><p>我以为一只鹅把鸟吃掉了呢</p></div><a class="no_love" onclick="do_cmt_love(5120107, 25291368)"><span id="cmtLoveNum-25291368">1</span></a></li><li class="comment_item"><div class="left"><img src="http://qzapp.qlogo.cn/qzapp/100336987/BF7DEA759ABD75074A1306F623648D3D/100"></div><div class="right"><h6>          /kz坏、小孩</h6><p>尾巴塞进嘴里来</p></div><a class="no_love" onclick="do_cmt_love(5120107, 25291362)"><span id="cmtLoveNum-25291362">0</span></a></li><li class="comment_item"><div class="left"><img src="http://qzapp.qlogo.cn/qzapp/100336987/32101A78D8FD702317A741DFA5CBDC09/100"></div><div class="right"><h6>㏒無關風月≌戀√999</h6><p>再吵吵把伱拿去做鸭子</p></div><a class="no_love" onclick="do_cmt_love(5120107, 25291194)"><span id="cmtLoveNum-25291194">3</span></a></li><li class="comment_item"><div class="left"><img src="http://img.spriteapp.cn/profile/2015/04/28/553fad972ea9a.jpg"></div><div class="right"><h6>都昌站街女</h6><p>1难道我会告诉你搜 陶颜荷 可以看岛国大片！</p></div><a class="no_love" onclick="do_cmt_love(5120107, 25290956)"><span id="cmtLoveNum-25290956">0</span></a></li><li class="comment_item"><div class="left"><img src="http://img.spriteapp.cn/profile/2015/04/28/553fad972ea9a.jpg"></div><div class="right"><h6>都昌站街女</h6><p>难道我会告诉你搜 陶颜荷 可以看岛国大片！</p></div><a class="no_love" onclick="do_cmt_love(5120107, 25290953)"><span id="cmtLoveNum-25290953">1</span></a></li><li class="comment_item"><div class="left"><img src="http://img.spriteapp.cn/profile/large/2015/04/10/552728fecf3ed_mini.jpg"></div><div class="right"><h6>一路向徆</h6><p>天鹅的菊花长个猫脸</p></div><a class="no_love" onclick="do_cmt_love(5120107, 25290919)"><span id="cmtLoveNum-25290919">0</span></a></li><li class="comment_item"><div class="left"><img src="http://img.spriteapp.cn/profile/large/2015/04/22/55368766b63e6_mini.jpg"></div><div class="right"><h6>诗和田野</h6><p>说得真好</p></div><a class="no_love" onclick="do_cmt_love(5120107, 25290860)"><span id="cmtLoveNum-25290860">2</span></a></li><li class="comment_item"><div class="left"><img src="http://qzapp.qlogo.cn/qzapp/100336987/42CD9199E99345705984DDED5401063F/100"></div><div class="right"><h6>画心XC0</h6><p>你吖是猫还是鹅啊。你睡觉还是吃东西啊为毛尾巴还粗来个头啊？为毛我这么大意见啊！我特么就是那个鸟啊啊啊啊啊啊</p></div><a class="no_love" onclick="do_cmt_love(5120107, 25290697)"><span id="cmtLoveNum-25290697">2</span></a></li><li class="comment_item"><div class="left"><img src="http://img.spriteapp.cn/profile/large/2015/04/09/552551641b35a_mini.jpg"></div><div class="right"><h6>小青年卡克</h6><p>那5个点点去那了？</p></div><a class="no_love" onclick="do_cmt_love(5120107, 25290683)"><span id="cmtLoveNum-25290683">0</span></a></li><li class="comment_item"><div class="left"><img src="http://qzapp.qlogo.cn/qzapp/100336987/077DC9C29FB8B4455DB85AF89C37FBB8/100"></div><div class="right"><h6>生活愉快</h6><p>🐱把鸟吃了，吞到尾巴上了</p></div><a class="no_love" onclick="do_cmt_love(5120107, 25290673)"><span id="cmtLoveNum-25290673">0</span></a></li><li class="comment_item"><div class="left"><img src="http://qzapp.qlogo.cn/qzapp/100336987/8C3B0B40C0BCDF6F8C2C8013C23C195D/100"></div><div class="right"><h6>      ♬  卡农</h6><p>一只长着猫头屁股的鹅。</p></div><a class="no_love" onclick="do_cmt_love(5120107, 25290566)"><span id="cmtLoveNum-25290566">3</span></a></li><li class="comment_item"><div class="left"><img src="http://qzapp.qlogo.cn/qzapp/100336987/92149E142D12B9BBF9AEDB855219ABD5/100"></div><div class="right"><h6>加油.666</h6><p>闭上你的鸟嘴.否则让你毫无存在感.</p></div><a class="no_love" onclick="do_cmt_love(5120107, 25228536)"><span id="cmtLoveNum-25228536">308</span></a></li><li class="comment_item"><div class="left"><img src=""></div><div class="right"><h6>大众黑_</h6><p>还真没懂</p></div><a class="no_love" onclick="do_cmt_love(5120107, 25225541)"><span id="cmtLoveNum-25225541">1</span></a></li><li class="comment_item"><div class="left"><img src="http://qzapp.qlogo.cn/qzapp/100336987/25E14F1A86E313AA2A0B25D8A3616D88/100"></div><div class="right"><h6>q321</h6><p>安静使人优雅</p></div><a class="no_love" onclick="do_cmt_love(5120107, 25224852)"><span id="cmtLoveNum-25224852">138</span></a></li><li class="comment_item"><div class="left"><img src="http://qzapp.qlogo.cn/qzapp/100336987/0860E4FBABBAF57C1A2C5BE2C7FA2EE5/100"></div><div class="right"><h6>八嘎吖鲁</h6><p>你吖闭嘴</p></div><a class="no_love" onclick="do_cmt_love(5120107, 25223029)"><span id="cmtLoveNum-25223029">2</span></a></li><li class="comment_item"><div class="left"><img src="http://img.spriteapp.cn/profile/large/2015/04/21/5536558186af8_mini.jpg"></div><div class="right"><h6>FC吕大侠</h6><p>用尾巴把鸟打下去的瞬间。</p></div><a class="no_love" onclick="do_cmt_love(5120107, 25220879)"><span id="cmtLoveNum-25220879">105</span></a></li></ul>
 
-						</div>
-						
-
-			<!-- UY BEGIN -->
+			<!-- 评论开始 -->
+				<!-- UY BEGIN -->
 				<div id="uyan_frame"></div>
-				<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=902588"></script>
-			<!-- UY END -->
-			
-			
-        </div>   	
-      </div>
-		
+				<script type="text/javascript"
+					src="http://v2.uyan.cc/code/uyan.js?uid=902588"></script>
+				<!-- UY END -->
+			<!-- 评论结束 -->
+		</div>
 	</div>
-
 </div>
-<script src="__JS__/atlas.js"></script>
-</block>
+<script src="__JS__/atlas.js"></script> </block>
 
 <block name="side"> <!-- 右侧 nav
 ================================================== -->
