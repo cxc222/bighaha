@@ -28,6 +28,9 @@ class IndexController extends AtlasController {
 	}
 	
 	public function index($page = 1) {
+	    hook('documentDetailAfter');
+	    //hook('loginEnd');
+	    die();
 	    //获取图集列表
 		$atlas_list = $this->atlasModel->page($page, 10)->select();
 		$list_ids = getSubByKey($atlas_list, 'id');

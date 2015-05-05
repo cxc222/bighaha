@@ -42,21 +42,22 @@
 						</a></li>
 
 					</ul>
-					<ul class="pull-right list-unstyled">
+					<!-- <ul class="pull-right list-unstyled">
 						<li style="margin-right: 0px;"><a class="comment_button"
 							href="#main_conter"> <span>54</span>
 						</a></li>
-					</ul>
+					</ul> -->
 				</div>
 			</div>
 
 
 			<!-- 评论开始 -->
-				<!-- UY BEGIN -->
-				<div id="uyan_frame"></div>
-				<script type="text/javascript"
-					src="http://v2.uyan.cc/code/uyan.js?uid=902588"></script>
-				<!-- UY END -->
+				<div class="comment-frame">
+					<!-- UY BEGIN -->
+						{:hook('documentDetailAfter')}
+					<!-- UY END -->
+				</div>
+				
 			<!-- 评论结束 -->
 		</div>
 	</div>

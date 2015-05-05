@@ -119,6 +119,7 @@ class MemberModel extends Model
         session('user_auth', null);
         session('user_auth_sign', null);
         cookie('OX_LOGGED_USER', NULL);
+        setcookie('syncuyan', 'logout', time() + 3600, '/', 'blog.jiathis.com');
     }
 
     /**
@@ -158,7 +159,9 @@ class MemberModel extends Model
                 D('user_token')->where('uid=' . $user['uid'])->save($data);
             }
         }
-
+        
+        hook('loginEnd');   //登录钩子
+        
         if (!$this->getCookieUid() && $remember) {
             $expire = 3600 * 24 * 7;
             cookie('OX_LOGGED_USER', $this->jiami($this->change() . ".{$user['uid']}.{$token}"), $expire);
