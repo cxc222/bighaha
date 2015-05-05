@@ -38,7 +38,7 @@ class AtlasController extends AdminController
 
         $attr['class'] = 'btn ajax-post';
         $attr['target-form'] = 'ids';
-
+        
         $builder->title('内容管理')
         	->buttonNew(U('Atlas/editAtlas'))
             ->setStatusUrl(U('setEventContentStatus'))
@@ -141,6 +141,7 @@ class AtlasController extends AdminController
                 ->buttonSubmit(U('editAtlas'))->buttonBack()
                 ->display();
         } else { //判断是否为编辑模式
+        	
             $isEdit = $id ? true : false;
             //生成数据
             $data = array('content' => $content, 'addtime' => time(), 'status' => $status, 'image_id' => $image_id);
@@ -148,11 +149,11 @@ class AtlasController extends AdminController
             $model = $this->atlasModel;
             if ($isEdit) {
                 $data['id'] = $id;
-                $data = $model->create($data);
+               // $data = $model->create($data);
                 $result = $model->where(array('id' => $id))->save($data);
             } else {
-                $data = $model->create($data);
-                $data['uid']=1;
+            	$data['uid']=1;
+                $model->create($data);
                 $result = $model->add($data);
                 if (!$result) {
                     $this->error('创建失败');
