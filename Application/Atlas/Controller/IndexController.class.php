@@ -29,10 +29,14 @@ class IndexController extends AtlasController {
 	
 	public function index($page = 1) {
 	    //获取图集列表
+		$map['status'] = 1;
+		$page = intval($page);
 		$atlas_list = $this->atlasModel->page($page, 10)->select();
+		$totalCount = $this->atlasModel->where($map)->count();
 		$list_ids = getSubByKey($atlas_list, 'id');
 		$atlas_list = $this->getAtlasByIds($list_ids);
 		$this->assign('atlas_list', $atlas_list);
+		$this->assign('totalCount', $totalCount);
 		$this->display ();
 	}
 	

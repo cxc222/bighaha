@@ -371,3 +371,12 @@ function get_action_type($type, $all = false){
 	}
 	return $list[$type];
 }
+
+/**
+ * 
+ * @param unknown $html
+ */
+function get_pregImg($html){
+	preg_match_all ( '/<img(.*?)src=(\s+)?"(.*?)(?=")/i', stripslashes ( $html ), $matches );
+	return $matches;
+}

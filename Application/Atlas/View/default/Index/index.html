@@ -11,7 +11,9 @@
 
 		<volist name="atlas_list" id="atlas"> <include
 			file="Public/atlas-item" /> </volist>
-
+		<div class="pull-right">
+			{:getPagination($totalCount)}
+		</div>
 	</div>
 
 </div>

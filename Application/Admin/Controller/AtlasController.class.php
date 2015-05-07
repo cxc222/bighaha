@@ -12,16 +12,26 @@ use Admin\Builder\AdminConfigBuilder;
 use Admin\Builder\AdminListBuilder;
 use Admin\Builder\AdminTreeListBuilder;
 use Think\Model;
+use Think\Upload\Driver\Qiniu\QiniuStorage;
 
 class AtlasController extends AdminController
 {
     protected $atlasModel;
+    protected $qiniu;
 
     function _initialize()
     {
         parent::_initialize();
         $this->meta_title = '图集管理';
         $this->atlasModel = D('Atlas/Atlas');
+        
+        $config = array(
+        		'accessKey'=>'WPWs-mQSibJXZd7m_kL_cM0hwTIMCyFjzvgTFeRq',
+        		'secrectKey'=>'TTUZUuWL8jug5LzxtQGwCPuVmN8-9DXMeFSrDzBa',
+        		'bucket'=>'bighaha',
+        		'domain'=>'7xih3v.com1.z0.glb.clouddn.com'
+        );
+        $this->qiniu = new QiniuStorage($config);
     }
     
     public function index($page = 1, $r = 10)
@@ -46,10 +56,59 @@ class AtlasController extends AdminController
             ->buttonDelete()
             ->button('设为推荐', array_merge($attr, array('url' => U('doRecommend', array('tip' => 1)))))
             ->button('取消推荐', array_merge($attr, array('url' => U('doRecommend', array('tip' => 0)))))
-            ->keyId()->keyLink('content', '内容', 'Event/Index/detail?id=###')->keyUid()->keyCreateTime('addtime')->keyStatus()->keyMap('is_recommend', '是否推荐', array(0 => '否', 1 => '是'))
+            
+            ->button('采集数据', array_merge($attr, array('url' => U('collection'))))	//采集数据
+            
+            ->keyId()->keyLink('content', '内容', 'Atlas/Index/detail?id=###')
+            ->keyUid()->keyCreateTime('addtime')->keyStatus()
+            ->keyMap('is_recommend', '是否推荐', array(0 => '否', 1 => '是'))
             ->data($list)
             ->pagination($totalCount, $r)
             ->display();
+    }
+    
+    /**
+     * 采集临时数据库里面的数据
+     * 
+     */
+    function collection(){
+    	$CollectionModel = D('Collection');
+    	$collections = $CollectionModel->select();
+
+    	/* 调用文件上传组件上传文件 */
+    	$Picture = D('Picture');
+    	$pic_driver = C('PICTURE_UPLOAD_DRIVER');
+    	
+    	foreach ($collections as $k => $v){
+    		$html = get_pregImg($v['content']);
+    		$pathName = $html[3][0];
+    		$file = $CollectionModel->pathDir.$pathName;
+    		if($pathName && file_exists(iconv('UTF-8','GB2312',$file))){
+    			$file = array(
+    					'name'=>'file',
+    					'fileName'=>'atlas/'.basename($pathName),
+    					'fileBody'=>file_get_contents(iconv('UTF-8','GB2312',$file))
+    			);
+    			
+    			$info = $Picture->upload(
+    					$_FILES,
+    					C('PICTURE_UPLOAD'),
+    					C('PICTURE_UPLOAD_DRIVER'),
+    					C("UPLOAD_{$pic_driver}_CONFIG")
+    			); //TODO:上传到远程服务器
+    			
+    			print_r($info);
+    			die();
+    			
+    			$config = array();
+    			$result = $this->qiniu->upload($config, $file);
+    			print_r($result);
+    			die();
+    		}
+    		
+    		print_r($html[3]);
+    		die();
+    	}
     }
     
     /**
