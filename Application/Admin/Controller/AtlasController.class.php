@@ -72,9 +72,13 @@ class AtlasController extends AdminController
      * 
      */
     function collection(){
+    	set_time_limit(0);
     	$CollectionModel = D('Collection');
-    	$collections = $CollectionModel->select();
-
+    	$CollectionConfigModel = D('CollectionConfig');
+    	$MaxId = $CollectionConfigModel->getField("MaxId");
+    	$MaxId ? $where['pid'] = array('gt',$MaxId) : '';
+    	$collections = $CollectionModel->where($where)->select();
+    	
     	/* 调用文件上传组件上传文件 */
     	$Picture = D('Picture');
     	$pic_driver = C('PICTURE_UPLOAD_DRIVER');
@@ -84,11 +88,14 @@ class AtlasController extends AdminController
     		$pathName = $html[3][0];
     		$file = $CollectionModel->pathDir.$pathName;
     		if($pathName && file_exists(iconv('UTF-8','GB2312',$file))){
-    			$file = array(
-    					'name'=>'file',
-    					'fileName'=>'atlas/'.basename($pathName),
-    					'fileBody'=>file_get_contents(iconv('UTF-8','GB2312',$file))
-    			);
+    			//模拟一组 $_FILES 格式
+    			$fileGBK = iconv('UTF-8','GB2312',$file);
+    			$fileInfo['size'] = filesize($fileGBK);
+    			$fileInfo['name'] = $pathName;
+    			$fileInfo['error'] = 0;
+    			$fileInfo['type'] = mime_content_type($fileGBK);
+    			$fileInfo['tmp_name'] = $fileGBK;
+    			$_FILES['imgFile'] = $fileInfo;
     			
     			$info = $Picture->upload(
     					$_FILES,
@@ -99,7 +106,14 @@ class AtlasController extends AdminController
     			
     			print_r($info);
     			die();
-    			
+
+
+    			$file = array(
+    					'name'=>'file',
+    					'fileName'=>'atlas/'.basename($pathName),
+    					'fileBody'=>file_get_contents(iconv('UTF-8','GB2312',$file))
+    			);
+    			 
     			$config = array();
     			$result = $this->qiniu->upload($config, $file);
     			print_r($result);

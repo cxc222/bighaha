@@ -1,17 +1,14 @@
 <?php
-
 namespace Admin\Model;
 
 use Think\Model;
 
 /**
  * 采集模型
- * 
+ *
  * @author zff
  */
-class CollectionModel extends Model {
-	public $pathDir = 'C:/Users/Administrator/Documents/火车头';
-	
+class CollectionConfigModel extends Model {
 	protected $connection = array (
 			'db_type' => 'mysql',
 			'db_user' => 'locoy',
@@ -19,9 +16,7 @@ class CollectionModel extends Model {
 			'db_host' => '112.124.42.201',
 			'db_port' => '3306',
 			'db_name' => 'locoy',
-			'db_charset' => 'utf8' 
+			'db_charset' => 'utf8'
 	);
-	
-	protected $trueTableName = 'item';
-	
+	protected $trueTableName = 'config';
 }

@@ -25,12 +25,7 @@ class UploadController extends AddonsController
         $setting = C('EDITOR_UPLOAD');
         /* 调用文件上传组件上传文件 */
         $this->uploader = new Upload($setting, C('PICTURE_UPLOAD_DRIVER'));
-
-
         $info = $this->uploader->upload($_FILES);
-
-
-
         if ($info) {
             /* 记录文件信息 */
             if(strtolower(C('PICTURE_UPLOAD_DRIVER'))=='sae'){
