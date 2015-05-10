@@ -18,6 +18,7 @@ class AtlasController extends AdminController
 {
     protected $atlasModel;
     protected $qiniu;
+    public $error;
 
     function _initialize()
     {
@@ -57,7 +58,7 @@ class AtlasController extends AdminController
             ->button('设为推荐', array_merge($attr, array('url' => U('doRecommend', array('tip' => 1)))))
             ->button('取消推荐', array_merge($attr, array('url' => U('doRecommend', array('tip' => 0)))))
             
-            ->button('采集数据', array_merge($attr, array('url' => U('collection'))))	//采集数据
+            ->button('采集数据',array('href'=>U('collection')))	//采集数据
             
             ->keyId()->keyLink('content', '内容', 'Atlas/Index/detail?id=###')
             ->keyUid()->keyCreateTime('addtime')->keyStatus()
@@ -83,6 +84,7 @@ class AtlasController extends AdminController
     	$Picture = D('Picture');
     	$pic_driver = C('PICTURE_UPLOAD_DRIVER');
     	
+    	$zindex = 1;
     	foreach ($collections as $k => $v){
     		$html = get_pregImg($v['content']);
     		$pathName = $html[3][0];
@@ -95,34 +97,32 @@ class AtlasController extends AdminController
     			$fileInfo['error'] = 0;
     			$fileInfo['type'] = mime_content_type($fileGBK);
     			$fileInfo['tmp_name'] = $fileGBK;
-    			$_FILES['imgFile'] = $fileInfo;
     			
-    			$info = $Picture->upload(
-    					$_FILES,
-    					C('PICTURE_UPLOAD'),
-    					C('PICTURE_UPLOAD_DRIVER'),
-    					C("UPLOAD_{$pic_driver}_CONFIG")
+    			$info = $Picture->moveUpload(
+    			    $fileInfo,
+    			    C('PICTURE_UPLOAD'),
+    			    C('PICTURE_UPLOAD_DRIVER'),
+    			    C("UPLOAD_{$pic_driver}_CONFIG")
     			); //TODO:上传到远程服务器
     			
-    			print_r($info);
-    			die();
-
-
-    			$file = array(
-    					'name'=>'file',
-    					'fileName'=>'atlas/'.basename($pathName),
-    					'fileBody'=>file_get_contents(iconv('UTF-8','GB2312',$file))
-    			);
-    			 
-    			$config = array();
-    			$result = $this->qiniu->upload($config, $file);
-    			print_r($result);
-    			die();
+    			if(!$info){
+    			    //$this->error[] = '';
+    			}else{
+    			    $_data['uid'] = 1;
+    			    $_data['content'] = $v['title'];
+    			    $_data['image_id'] = $info['id'];
+    			    $_data['addtime'] = time();
+    			    $_data['status'] = 1;
+    			    if($this->atlasModel->create($_data) && ($id = $this->atlasModel->add())){
+    			        $zindex++;
+    			    }
+    			}
+    		}else{
+    		    //空文件
+    		    
     		}
-    		
-    		print_r($html[3]);
-    		die();
     	}
+    	$this->success('采集成功, 成功数: '.$zindex);
     }
     
     /**

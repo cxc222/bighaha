@@ -10,7 +10,7 @@ use Think\Model;
  * @author zff
  */
 class CollectionModel extends Model {
-	public $pathDir = 'C:/Users/Administrator/Documents/火车头';
+	public $pathDir = 'C:/Users/Administrator/Documents/locoy';
 	
 	protected $connection = array (
 			'db_type' => 'mysql',
