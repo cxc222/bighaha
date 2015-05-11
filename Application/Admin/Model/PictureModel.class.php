@@ -188,15 +188,17 @@ class PictureModel extends Model{
 	 */
 	public function moveUpload($files, $setting, $driver = 'Qiniu', $config = null){
 	    
-	    $qiniuConfig = array(
+		$qiniuConfig = C('QINIU_CONFIG');
+	    /* $qiniuConfig = array(
 	        'accessKey'=>'WPWs-mQSibJXZd7m_kL_cM0hwTIMCyFjzvgTFeRq',
 	        'secrectKey'=>'TTUZUuWL8jug5LzxtQGwCPuVmN8-9DXMeFSrDzBa',
 	        'bucket'=>'bighaha',
 	        'domain'=>'7xih3v.com1.z0.glb.clouddn.com'
-	    );
+	    ); */
+		
 	    $qiniuStorage = new QiniuStorage($qiniuConfig);
 	    
-	    $savepath = '/Uploads/atlas/';
+	    $savepath = 'Uploads/atlas/';
 	    
 	    $file = array(
 	        'name'=>'file',
@@ -212,13 +214,13 @@ class PictureModel extends Model{
 	        
 	        /* 记录文件信息 */
 	        if(strtolower($driver)=='sae'){
-	            $value['path'] = $config['rootPath'].'Picture/'.$savepath.$files['name']; //在模板里的url路径
+	            $value['path'] = $config['rootPath'].'Picture/'.$savepath.basename($files['name']); //在模板里的url路径
 	        }else{
 	            if(strtolower($driver) != 'local'){
-	                $value['path'] =$savepath.$files['name'];
+	                $value['path'] =$savepath.basename($files['name']);
 	            }
 	            else{
-	                $value['path'] = (substr($setting['rootPath'], 1).$savepath.$files['name']);	//在模板里的url路径
+	                $value['path'] = (substr($setting['rootPath'], 1).$savepath.basename($files['name']));	//在模板里的url路径
 	            }
 	        }
 	        $value['type'] = strtolower($driver);

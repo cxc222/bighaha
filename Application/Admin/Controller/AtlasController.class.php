@@ -122,6 +122,8 @@ class AtlasController extends AdminController
     		    
     		}
     	}
+    	//清空缓存库
+    	$CollectionModel->delete();
     	$this->success('采集成功, 成功数: '.$zindex);
     }
     
