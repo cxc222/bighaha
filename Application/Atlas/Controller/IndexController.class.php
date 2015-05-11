@@ -60,4 +60,30 @@ class IndexController extends AtlasController {
 	    $this->ajaxReturn(apiToAjax($likeCountArray));
 	}
 	
+	/**
+	 * 测试
+	 * 
+	 */
+	function test(){
+		
+		$url = 'http://www.budejie.com/';
+		//Vendor('Snoopy.Snoopy');
+		require_once('ThinkPHP/Library/Vendor/Snoopy/Snoopy.class.php');
+		$snoopy = new \Snoopy;
+		$snoopy->fetch($url); //获取所有内容
+		//$snoopy->fetchlinks($url);
+		$results = $snoopy->results;
+		
+		require_once('ThinkPHP/Library/Vendor/simplehtmldom/simple_html_dom.php');
+		$html = str_get_html($results);
+		foreach ($html->find('.web_left') as $webLeft){
+			foreach ($webLeft->find('.post-body') as $postbody){
+				$img = $postbody->find('img',0);
+				$src = $img->src;
+				$alt = $img->alt;
+			}
+		}
+		
+	}
+	
 }
