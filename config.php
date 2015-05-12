@@ -20,4 +20,12 @@ return array(
 		'DB_PWD' => 'z3787582', // 密码
 		'DB_PORT' => '3306', // 端口
 		'DB_PREFIX' => 'big_', // 数据库表前缀 */
+		
+		/* 七牛上传相关配置 */
+		'QINIU_CONFIG' => array (
+				'accessKey' => 'WPWs-mQSibJXZd7m_kL_cM0hwTIMCyFjzvgTFeRq', // 七牛 accessKey
+				'secrectKey' => 'TTUZUuWL8jug5LzxtQGwCPuVmN8-9DXMeFSrDzBa', // 七牛 secrectKey
+				'bucket' => 'wedding', // 七牛 空间名
+				'domain' => '7xi9zc.com1.z0.glb.clouddn.com'  // 七牛资源域名
+		)
 );

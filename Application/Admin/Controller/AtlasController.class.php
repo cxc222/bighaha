@@ -40,7 +40,7 @@ class AtlasController extends AdminController
         //读取列表
         $map = array('status' => 1);
         $model = $this->atlasModel;
-        $list = $model->where($map)->page($page, $r)->select();
+        $list = $model->where($map)->order('id desc')->page($page, $r)->select();
         unset($li);
         $totalCount = $model->where($map)->count();
 
@@ -68,19 +68,135 @@ class AtlasController extends AdminController
             ->display();
     }
     
+    /* public function config()
+    {
+    	$admin_config = new AdminConfigBuilder();
+    	$data = $admin_config->handleConfig();
+    
+    	$admin_config->title('图集基本设置')
+    	->keyBool('NEED_VERIFY', '创建活动是否需要审核','默认无需审核')
+    	->buttonSubmit('', '保存')->data($data);
+    	$admin_config->display();
+    } */
+    
+    
+    
     /**
      * 采集临时数据库里面的数据
      * 
      */
     function collection(){
     	set_time_limit(0);
-    	$CollectionModel = D('Collection');
+    	
+    	$url = 'http://www.budejie.com/';
+    	$page_suffix = '{page}';
+    	$page_Count = 2;	//页码
+    	
+    	//保存Model
+    	$atlas_configModel = D('atlas_config');
+    	$Picture = D('Picture');
+    	/* 调用文件上传组件上传文件 */
+    	$pic_driver = C('PICTURE_UPLOAD_DRIVER');
+    	
+    	//保存路径	Uploads/atlas/005OPWbujw1ergwtgwamig306403dhdt.gif
+    	$diskPath = 'Uploads/atlas/';
+    	
+    	if (!file_exists($diskPath)){	//判断目录不存在, 自动创建
+    		mkdir($diskPath, 0777,true);
+    	}
+    	
+    	Vendor('Curl.Curl');
+    	require_once('ThinkPHP/Library/Vendor/Snoopy/Snoopy.class.php');
+    	require_once('ThinkPHP/Library/Vendor/simplehtmldom/simple_html_dom.php');
+    	//require_once('ThinkPHP/Library/Vendor/Curl/Curl.php');
+    	
+    	//开始下载
+    	$curl = new \Curl\Curl();
+    	$snoopy = new \Snoopy;
+    	$url = $url.$page_suffix;
+    	
+    	$zindex = 1;	//总共采集多少条,
+    	
+    	//循环读取页面
+    	for ($i = 1; $i<$page_Count; $i++){
+    		$siteUrl = str_replace('{page}',$i,$url);
+    		$snoopy->fetch($siteUrl); //获取所有内容
+    		$results = $snoopy->results;
+    		$html = str_get_html($results);
+    		foreach ($html->find('.web_left') as $webLeft){
+    			foreach ($webLeft->find('.post-body') as $postbody){
+    				if($i == 1 && $zindex == 1){
+    					//首次采集, 记录ID号
+    					
+    				}
+    				$img = $postbody->find('img',0);
+    				$src = $img->src;
+    				$alt = $img->alt;
+    				$id = str_replace('pic-',' ',$img->id);
+    				
+    				//开始下载
+    				//$file = 'Uploads/atlas/' . basename($instance->url);
+    				$file = $diskPath . basename($src);
+    				$pathName = basename($src);
+    				
+    				$curl_down = $curl->download($img->src, $diskPath.$pathName);
+    				/* $curl_down = $curl->download($img->src,  function($instance, $tmpfile) {
+    					//本地保存成功
+					    $file = 'Uploads/atlas/' . basename($instance->url);
+					    $pathName = basename($instance->url);
+					    
+					    //执行保存文件
+					    $fh = fopen($file, 'wb');
+					    stream_copy_to_stream($tmpfile, $fh);
+					    fclose($fh);
+					    //return array('file'=>$file,'name'=>$pathName);
+					}); */
+    				//下载结束
+    				if($curl_down){
+    					$filePath = ROOT_PATH.'/'.$file;
+    					//模拟一组 $_FILES 格式
+    					$fileGBK = iconv('UTF-8','GB2312',$filePath);
+    					$fileInfo['size'] = filesize($fileGBK);
+    					$fileInfo['name'] = $pathName;
+    					$fileInfo['error'] = 0;
+    					$fileInfo['type'] = mime_content_type($fileGBK);
+    					$fileInfo['tmp_name'] = $fileGBK;
+    					
+    					//执行文件移动
+    					$info = $Picture->moveUpload(
+    							$fileInfo,
+    							C('PICTURE_UPLOAD'),
+    							C('PICTURE_UPLOAD_DRIVER'),
+    							C("UPLOAD_{$pic_driver}_CONFIG")
+    					); //TODO:上传到远程服务器
+    					
+    					if(!$info){
+    						//$this->error[] = '';
+    					}else{
+    						//暂停60秒
+    						//sleep(60);
+    						$_data['uid'] = 1;
+    						$_data['content'] = $alt;
+    						$_data['image_id'] = $info['id'];
+    						$_data['addtime'] = time();
+    						$_data['status'] = 1;
+    						if($this->atlasModel->create($_data) && ($id = $this->atlasModel->add())){
+    							$zindex++;
+    						}
+    					}
+    				}
+    			}
+    		}
+    		$html->clear();	//清理
+    	}
+    	/* ------------------------------------------------------------------------------------------------------------- */
+    	/* $CollectionModel = D('Collection');
     	$CollectionConfigModel = D('CollectionConfig');
     	$MaxId = $CollectionConfigModel->getField("MaxId");
     	$MaxId ? $where['pid'] = array('gt',$MaxId) : '';
     	$collections = $CollectionModel->where($where)->select();
     	
-    	/* 调用文件上传组件上传文件 */
+    	// 调用文件上传组件上传文件
     	$Picture = D('Picture');
     	$pic_driver = C('PICTURE_UPLOAD_DRIVER');
     	
@@ -123,8 +239,9 @@ class AtlasController extends AdminController
     		}
     	}
     	//清空缓存库
-    	$CollectionModel->delete();
-    	$this->success('采集成功, 成功数: '.$zindex);
+    	$CollectionModel->delete(); */
+    	//模块/控制器/操作
+    	$this->success('采集成功, 成功数: '.$zindex,U('admin/atlas/index'));
     }
     
     /**

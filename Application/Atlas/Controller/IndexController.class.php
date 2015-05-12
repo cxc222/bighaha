@@ -31,7 +31,7 @@ class IndexController extends AtlasController {
 	    //获取图集列表
 		$map['status'] = 1;
 		$page = intval($page);
-		$atlas_list = $this->atlasModel->page($page, 10)->select();
+		$atlas_list = $this->atlasModel->page($page, 10)->order('id desc')->select();
 		$totalCount = $this->atlasModel->where($map)->count();
 		$list_ids = getSubByKey($atlas_list, 'id');
 		$atlas_list = $this->getAtlasByIds($list_ids);
@@ -66,24 +66,40 @@ class IndexController extends AtlasController {
 	 */
 	function test(){
 		
-		$url = 'http://www.budejie.com/';
+		/* $url = 'http://www.budejie.com/';
+		$page_suffix = '{page}';
+		$page_Count = 50;	//页码
+		
+		//保存Model
+		
+		
 		//Vendor('Snoopy.Snoopy');
 		require_once('ThinkPHP/Library/Vendor/Snoopy/Snoopy.class.php');
-		$snoopy = new \Snoopy;
-		$snoopy->fetch($url); //获取所有内容
-		//$snoopy->fetchlinks($url);
-		$results = $snoopy->results;
-		
 		require_once('ThinkPHP/Library/Vendor/simplehtmldom/simple_html_dom.php');
-		$html = str_get_html($results);
-		foreach ($html->find('.web_left') as $webLeft){
-			foreach ($webLeft->find('.post-body') as $postbody){
-				$img = $postbody->find('img',0);
-				$src = $img->src;
-				$alt = $img->alt;
-			}
-		}
 		
-	}
+		$snoopy = new \Snoopy;
+		$url = $url.$page_suffix;
+		//循环读取页面
+		for ($i = 1; $i<$page_Count; $i++){
+			$siteUrl = str_replace('{page}',$i,$url);
+			
+			$snoopy->fetch($siteUrl); //获取所有内容
+			$results = $snoopy->results;
+			$html = str_get_html($results);
+			foreach ($html->find('.web_left') as $webLeft){
+				foreach ($webLeft->find('.post-body') as $postbody){
+					$img = $postbody->find('img',0);
+					$src = $img->src;
+					$alt = $img->alt;
+					$id = str_replace('pic-',' ',$img->id);
+					//保存到数据库
+					
+					print_r($id);
+					die();
+				}
+			}
+			$html->clear();	//清理
+		}*/
+	} 
 	
 }

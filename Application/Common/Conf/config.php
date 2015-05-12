@@ -129,12 +129,5 @@ return array_merge ($config,array(
 				'replace' => false, // 存在同名是否覆盖
 				'hash' => true, // 是否生成hash编码
 				'callback' => false  // 检测文件是否存在回调函数，如果存在返回文件信息数组
-				),
-/* 七牛上传相关配置 */
-'QINIU_CONFIG' => array (
-				'accessKey' => 'WPWs-mQSibJXZd7m_kL_cM0hwTIMCyFjzvgTFeRq', // 七牛 accessKey
-				'secrectKey' => 'TTUZUuWL8jug5LzxtQGwCPuVmN8-9DXMeFSrDzBa', // 七牛 secrectKey
-				'bucket' => 'bighaha', // 七牛 空间名
-				'domain' => '7xih3v.com1.z0.glb.clouddn.com'  // 七牛资源域名
-				) 
+				)
 ) );
