@@ -29,7 +29,7 @@ return array_merge ($config,array(
 		'DATA_AUTH_KEY' => 'n~sm]Ur/e"Ad|TuJG9;CiMSB)o_7PHOK8IyW6}h,', // 默认数据加密KEY
 		
 		/* 调试配置 */
-		'SHOW_PAGE_TRACE' => false,
+		'SHOW_PAGE_TRACE' => true,
 
 /* 用户相关设置 */
 'USER_MAX_CACHE' => 1000, // 最大缓存用户数
