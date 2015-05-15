@@ -23,6 +23,8 @@ return array(
     'DATA_CACHE_PREFIX' => 'onethink_', // 缓存前缀
     'DATA_CACHE_TYPE'   => 'File', // 数据缓存类型
     
+	'PICTURE_UPLOAD_DRIVER' => 'qiniu',
+	'DOWNLOAD_UPLOAD_DRIVER' => 'qiniu',
 		
     /* 编辑器图片上传相关配置 */
     'EDITOR_UPLOAD' => array(

@@ -99,8 +99,4 @@ class Sae{
         return $this->error;
     }
 
-    public function info($fname){
-        return true;
-    }
-
 }

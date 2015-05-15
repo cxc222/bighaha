@@ -83,7 +83,7 @@ class Local{
             $this->error = '文件上传保存错误！';
             return false;
         }
-
+        
         return true;
     }
 
@@ -114,7 +114,4 @@ class Local{
         return $this->error;
     }
 
-    public function info($filename){
-        return true;
-    }
 }

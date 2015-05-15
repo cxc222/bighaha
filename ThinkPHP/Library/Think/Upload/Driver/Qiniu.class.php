@@ -78,7 +78,7 @@ class Qiniu{
      * @return boolean          保存状态，true-成功，false-失败
      */
     public function save(&$file,$replace=true) {
-        //$file['name'] = $file['savepath'] . $file['savename'];
+        $file['name'] = $file['savepath'] . $file['savename'];
         $key = str_replace('/', '_', $file['name']);
         $upfile = array(
             'name'=>'file',
@@ -99,8 +99,4 @@ class Qiniu{
     public function getError(){
         return $this->qiniu->errorStr;
     }
-    public function info($key){
-        return $this->qiniu->info($key);
-    }
-
 }

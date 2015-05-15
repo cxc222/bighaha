@@ -64,9 +64,7 @@ class Mysqli extends Db{
      * @access public
      */
     public function free() {
-        if(is_object($this->queryID)){
-            $this->queryID->free_result();
-        }
+        $this->queryID->free_result();
         $this->queryID = null;
     }
 
@@ -337,7 +335,7 @@ class Mysqli extends Db{
      */
     protected function parseKey(&$key) {
         $key   =  trim($key);
-        if(!is_numeric($key) && !preg_match('/[,\'\"\*\(\)`.\s]/',$key)) {
+        if(!preg_match('/[,\'\"\*\(\)`.\s]/',$key)) {
            $key = '`'.$key.'`';
         }
         return $key;

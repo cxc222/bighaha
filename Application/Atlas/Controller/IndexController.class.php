@@ -62,7 +62,14 @@ class IndexController extends AtlasController {
 	}
 	
 	/**
-	 * 测试
+	 * 测试2
+	 */
+	function test2(){
+		$this->display();
+	}
+	
+	/**
+	 * 测试采集
 	 * 
 	 */
 	function test(){

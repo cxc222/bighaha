@@ -86,6 +86,9 @@ SQL
         $this->assign('mod', $mod);
         $this->assign('row_id', $row_id);
         $this->assign('uid', $uid);
+        //print_r(T('Addons://Advertising@Advertising/edit'));
+        /* print_r(T('Addons://LocalComment@LocalComment/ajax_single'));
+        die(); */
         $this->display('comment');
     }
 

@@ -53,9 +53,7 @@
 
 			<!-- 评论开始 -->
 				<div class="comment-frame">
-					<!-- UY BEGIN -->
-						{:hook('documentDetailAfter')}
-					<!-- UY END -->
+					 {:hook('localComment', array('path'=>"Atlas/index/$detail[id]", 'uid'=>$detail['uid']))}
 				</div>
 				
 			<!-- 评论结束 -->

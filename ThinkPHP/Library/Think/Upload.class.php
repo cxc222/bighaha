@@ -9,7 +9,6 @@
 // | Author: 麦当苗儿 <zuojiazi@vip.qq.com> <http://www.zjzit.cn>
 // +----------------------------------------------------------------------
 namespace Think;
-use Think\Hook;
 class Upload{
 	/**
 	 * 默认上传配置
@@ -54,7 +53,7 @@ class Upload{
         $this->config   =   array_merge($this->config, $config);
         $driver         =   $driver? $driver : ($this->driver? $this->driver : C('FILE_UPLOAD_TYPE'));
         $driverConfig   =   $driverConfig? $driverConfig : ($this->driverConfig? $this->driverConfig :C('UPLOAD_TYPE_CONFIG'));
-        $this->driverConfig = $driverConfig;
+
         /* 设置上传驱动 */
         $class      =   strpos($driver,'\\')? $driver : 'Think\\Upload\\Driver\\'.ucfirst(strtolower($driver));
     	$this->setDriver($class, $driverConfig);
@@ -142,8 +141,7 @@ class Upload{
             $finfo   =  finfo_open ( FILEINFO_MIME_TYPE );
         }
         // 对上传文件数组信息处理
-        $files   =  $this->dealFiles($files);
-
+        $files   =  $this->dealFiles($files);    
         foreach ($files as $key => $file) {
             if(!isset($file['key']))   $file['key']    =   $key;
             /* 通过扩展获取文件类型，可解决FLASH上传$FILES数组返回文件类型错误的问题 */
@@ -167,16 +165,8 @@ class Upload{
 
             /* 调用回调函数检测文件是否存在 */
             $data = call_user_func($this->callback, $file);
-
-
             if( $this->callback && $data ){
-                $drconfig = $this->driverConfig;
-                $fname = str_replace('http://'.$drconfig['domain'].'/','',$data['url']);
-
                 if ( file_exists('.'.$data['path'])  ) {
-                    $info[$key] = $data;
-                    continue;
-                }elseif($this->uploader->info($fname)){
                     $info[$key] = $data;
                     continue;
                 }elseif($this->removeTrash){
@@ -190,7 +180,6 @@ class Upload{
                 continue;
             } else {
                 $file['savename'] = $savename;
-                $file['name'] = $savename;
             }
 
             /* 检测并创建子目录 */
@@ -211,7 +200,6 @@ class Upload{
                 }
             }
 
-
             /* 保存文件 并记录保存成功的文件 */
             if ($this->uploader->save($file,$this->replace)) {
                 unset($file['error'], $file['tmp_name']);
@@ -223,7 +211,6 @@ class Upload{
         if(isset($finfo)){
             finfo_close($finfo);
         }
-
         return empty($info) ? false : $info;
     }
 

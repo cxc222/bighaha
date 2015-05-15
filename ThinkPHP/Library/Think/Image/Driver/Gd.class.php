@@ -78,7 +78,7 @@ class Gd{
      * @param  boolean $interlace 是否对JPEG类型图像设置隔行扫描
      */
     public function save($imgname, $type = null, $interlace = true){
-        if(empty($this->img)) return '';// E('没有可以被保存的图像资源');
+        if(empty($this->img)) E('没有可以被保存的图像资源');
 
         //自动获取图像类型
         if(is_null($type)){
@@ -98,12 +98,7 @@ class Gd{
             $this->gif->save($imgname);
         } else {
             $fun = "image{$type}";
-            if($type=='jpg' || $type=='jpeg'){
-                $fun($this->img, $imgname,100);
-            }else{
-                $fun($this->img, $imgname);
-            }
-
+            $fun($this->img, $imgname);
         }
     }
 
@@ -194,7 +189,7 @@ class Gd{
      * @param  integer $type   缩略图裁剪类型
      */
     public function thumb($width, $height, $type = Image::IMAGE_THUMB_SCALE){
-        if(empty($this->img)) return'';// E('没有可以被缩略的图像资源');
+        if(empty($this->img)) E('没有可以被缩略的图像资源');
 
         //原图宽度和高度
         $w = $this->info['width'];

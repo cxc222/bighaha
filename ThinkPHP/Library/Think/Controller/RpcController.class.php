@@ -9,13 +9,13 @@
 // | Author: liu21st <liu21st@gmail.com>
 // +----------------------------------------------------------------------
 namespace Think\Controller;
-use Think\Controller;
 /**
  * ThinkPHP RPC控制器类
  */
-class RpcController extends Controller {
+class RpcController {
 
     protected $allowMethodList  =   '';
+    protected $debug            =   false;
 
    /**
      * 架构函数
@@ -33,10 +33,11 @@ class RpcController extends Controller {
             $methods    =   $this->allowMethodList;
         }else{
             $methods    =   get_class_methods($this);
+            $methods    =   array_diff($methods,array('__construct','__call','_initialize'));   
         }
         $server->add($methods,$this);
 
-        if(APP_DEBUG) {
+        if(APP_DEBUG || $this->debug ) {
             $server->setDebugMode(true);
         }
         $server->setEnableGZIP(true);
@@ -44,4 +45,12 @@ class RpcController extends Controller {
         echo $server->comment();
     }
 
+    /**
+     * 魔术方法 有不存在的操作的时候执行
+     * @access public
+     * @param string $method 方法名
+     * @param array $args 参数
+     * @return mixed
+     */
+    public function __call($method,$args){}
 }

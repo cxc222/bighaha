@@ -2,7 +2,7 @@
 // +----------------------------------------------------------------------
 // | ThinkPHP [ WE CAN DO IT JUST THINK IT ]
 // +----------------------------------------------------------------------
-// | Copyright (c) 2006-2014 http://thinkphp.cn All rights reserved.
+// | Copyright (c) 2006-2013 http://thinkphp.cn All rights reserved.
 // +----------------------------------------------------------------------
 // | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
@@ -10,7 +10,6 @@
 // +----------------------------------------------------------------------
 
 namespace Think;
-
 /**
  * ThinkPHP 引导类
  */
@@ -57,12 +56,12 @@ class Think {
 
           // 加载应用模式配置文件
           foreach ($mode['config'] as $key=>$file){
-              is_numeric($key)?C(load_config($file)):C($key,load_config($file));
+              is_numeric($key)?C(include $file):C($key,include $file);
           }
 
           // 读取当前应用模式对应的配置文件
-          if('common' != APP_MODE && is_file(CONF_PATH.'config_'.APP_MODE.CONF_EXT))
-              C(load_config(CONF_PATH.'config_'.APP_MODE.CONF_EXT));  
+          if('common' != APP_MODE && is_file(CONF_PATH.'config_'.APP_MODE.'.php'))
+              C(include CONF_PATH.'config_'.APP_MODE.'.php');  
 
           // 加载模式别名定义
           if(isset($mode['alias'])){
@@ -94,25 +93,22 @@ class Think {
             // 调试模式加载系统默认的配置文件
             C(include THINK_PATH.'Conf/debug.php');
             // 读取应用调试配置文件
-            if(is_file(CONF_PATH.'debug'.CONF_EXT))
-                C(include CONF_PATH.'debug'.CONF_EXT);           
+            if(is_file(CONF_PATH.'debug.php'))
+                C(include CONF_PATH.'debug.php');           
           }
       }
 
       // 读取当前应用状态对应的配置文件
-      if(APP_STATUS && is_file(CONF_PATH.APP_STATUS.CONF_EXT))
-          C(include CONF_PATH.APP_STATUS.CONF_EXT);   
+      if(APP_STATUS && is_file(CONF_PATH.APP_STATUS.'.php'))
+          C(include CONF_PATH.APP_STATUS.'.php');   
 
       // 设置系统时区
       date_default_timezone_set(C('DEFAULT_TIMEZONE'));
 
       // 检查应用目录结构 如果不存在则自动创建
-      if(C('CHECK_APP_DIR')) {
-          $module     =   defined('BIND_MODULE') ? BIND_MODULE : C('DEFAULT_MODULE');
-          if(!is_dir(APP_PATH.$module) || !is_dir(LOG_PATH)){
-              // 检测应用目录结构
-              Build::checkDir($module);
-          }
+      if(C('CHECK_APP_DIR') && !is_dir(LOG_PATH)) {
+          // 创建应用目录结构
+          require THINK_PATH.'Common/build.php';
       }
 
       // 记录加载文件时间
@@ -150,7 +146,7 @@ class Think {
         // 检查是否存在映射
         if(isset(self::$_map[$class])) {
             include self::$_map[$class];
-        }elseif(false !== strpos($class,'\\')){
+        }elseif(strpos($class,'\\')){
           $name           =   strstr($class, '\\', true);
           if(in_array($name,array('Think','Org','Behavior','Com','Vendor')) || is_dir(LIB_PATH.$name)){ 
               // Library目录下面的命名空间自动定位
@@ -168,7 +164,7 @@ class Think {
               }
               include $filename;
           }
-        }elseif (!C('APP_USE_NAMESPACE')) {
+        }else{
             // 自动加载的类库层
             foreach(explode(',',C('APP_AUTOLOAD_LAYER')) as $layer){
                 if(substr($class,-strlen($layer))==$layer){
@@ -183,7 +179,7 @@ class Think {
                     // 如果加载类成功则返回
                     return ;
             }
-        }
+          }
     }
 
     /**
@@ -333,10 +329,7 @@ class Think {
             $level  =   strtoupper($level);
             
             if((defined('IS_AJAX') && IS_AJAX) || !C('SHOW_PAGE_TRACE')  || $record) {
-                if(true==APP_DEBUG){//修正非调试模式下无法进入后台编辑的问题
-                    Log::record($info,$level,$record);
-                }
-
+                Log::record($info,$level,$record);
             }else{
                 if(!isset($_trace[$level]) || count($_trace[$level])>C('TRACE_MAX_RECORD')) {
                     $_trace[$level] =   array();

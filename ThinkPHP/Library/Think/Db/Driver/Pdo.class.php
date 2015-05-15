@@ -2,7 +2,7 @@
 // +----------------------------------------------------------------------
 // | ThinkPHP [ WE CAN DO IT JUST THINK IT ]
 // +----------------------------------------------------------------------
-// | Copyright (c) 2006-2014 http://thinkphp.cn All rights reserved.
+// | Copyright (c) 2006-2013 http://thinkphp.cn All rights reserved.
 // +----------------------------------------------------------------------
 // | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
@@ -30,7 +30,6 @@ class Pdo extends Db{
             if(empty($this->config['params'])) {
                 $this->config['params'] =   array();
             }
-            $this->dbType = $this->_getDsnType($config['dsn']);            
         }
 
     }
@@ -170,7 +169,7 @@ class Pdo extends Db{
             }else{
               $val  = array($key,$val);
             }
-            call_user_func_array(array($this->PDOStatement,'bindValue'),$val);
+            call_user_func_array(array($this->PDOStatement,'bindParam'),$val);
         }      
     }
 
@@ -388,7 +387,7 @@ class Pdo extends Db{
      * @return string
      */
     protected function parseKey(&$key) {
-        if(!is_numeric($key) && $this->dbType=='MYSQL'){
+        if($this->dbType=='MYSQL'){
             $key   =  trim($key);
             if(!preg_match('/[,\'\"\*\(\)`.\s]/',$key)) {
                $key = '`'.$key.'`';
@@ -436,11 +435,11 @@ class Pdo extends Db{
      */
     public function escapeString($str) {
          switch($this->dbType) {
+            case 'PGSQL':
             case 'MSSQL':
             case 'SQLSRV':
             case 'MYSQL':
                 return addslashes($str);
-            case 'PGSQL':                
             case 'IBASE':                
             case 'SQLITE':
             case 'ORACLE':
