@@ -3,9 +3,11 @@
 <block name="style">
     <link href="__CSS__/shops.css" rel="stylesheet" type="text/css"/>
 </block>
-
+<block name="header">
+<include file="_nav"/>
+</block>
 <block name="body">
-{:W('Common/SubMenu/render',array($sub_menu,$current,'商城',''))}
+
 <div class="container">
 
 <div class="row shop">
@@ -31,8 +33,8 @@
                                             <font title="{$vo.goods_name|op_t}">{$vo.goods_name}</font>
                                         </a>
                                     </div>
-                                    <div class="right" style="color: #d61f39;"><a><font title="所需{$tox_money_name}"><i
-                                            class="ico_to_money"></i>&nbsp;{$vo.tox_money_need}</font></a></div>
+                                    <div class="right" style="color: #d61f39;"><a><font title="所需{$money_type.title}"><i
+                                            class="ico_to_money"></i>&nbsp;{$vo.money_need} {$money_type.unit}</font></a></div>
                                     <div class="clearfix"></div>
                                 </dd>
                                 <dd class="color_84 font_s_14">
@@ -40,7 +42,7 @@
                                     <php>
                                         $class='';
                                         if(is_login()){
-                                        if($my_tox_money>=$vo['tox_money_need']){
+                                        if($my_money>=$vo['money_need']){
                                         $class='open-popup-link';
                                         }else{
                                         $class='money_not_enough ';
@@ -82,8 +84,8 @@
                                           <font title="{$vo.goods_name|op_t}">{$vo.goods_name}</font>
                                       </a>
                                   </div>
-                                  <div class="right" style="color: #d61f39;"><a><font title="所需{$tox_money_name}"><i
-                                          class="ico_to_money"></i>&nbsp;{$vo.tox_money_need}</font></a></div>
+                                  <div class="right" style="color: #d61f39;"><a><font title="所需{$money_type.title}"><i
+                                          class="ico_to_money"></i>&nbsp;{$vo.money_need} {$money_type.unit}</font></a></div>
                                   <div class="clearfix"></div>
                               </dd>
                               <dd class="color_84 clearfix">
@@ -91,7 +93,7 @@
                                   <php>
                                       $class='';
                                       if(is_login()){
-                                      if($my_tox_money>=$vo['tox_money_need']){
+                                      if($my_money>=$vo['money_need']){
                                       $class='open-popup-link';
                                       }else{
                                       $class='money_not_enough ';
@@ -175,7 +177,7 @@
     <!-- /.modal -->
 </if>
 </div>
-<input type="hidden" id="tox_money_name" value="{$tox_money_name}"/>
+<input type="hidden" id="money_name" value="{$money_type.title}"/>
 </block>
 
 <block name="script">
@@ -183,7 +185,7 @@
     <script type="text/javascript" src="__STATIC__/uploadify/jquery.uploadify.min.js"></script>
     <script type="text/javascript" src="__PUBLIC__/Core/js/ext/magnific/jquery.magnific-popup.min.js"></script>
     <script>
-        var tox_money_name = $('#tox_money_name').val().trim();
+        var money_name = $('#money_name').val().trim();
         $(function () {
             $('.exchange_goods').click(function () {
                 if (MID == 0) {
@@ -195,7 +197,7 @@
             });
             if (MID != 0) {
                 $('.money_not_enough').click(function () {
-                    toast.info('你的' + tox_money_name + '不足！', '提示消息');
+                    toast.info('你的' + money_name + '不足！', '提示消息');
                     return false;
                 });
                 $('.open-popup-link').magnificPopup({

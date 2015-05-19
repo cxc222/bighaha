@@ -4,14 +4,9 @@
 namespace Event\Controller;
 
 use Think\Controller;
-use Weibo\Api\WeiboApi;
 
 class IndexController extends Controller
 {
-    /**
-     * 业务逻辑都放在 WeiboApi 中
-     * @var
-     */
     public function _initialize()
     {
         $tree = D('EventType')->where(array('status' => 1))->select();
@@ -192,26 +187,22 @@ class IndexController extends Controller
         $content['type_id'] = intval($type_id);
         if ($id) {
             $content_temp = D('Event')->find($id);
-            if (!is_administrator(is_login())) { //不是管理员则进行检测
-                if ($content_temp['uid'] != is_login()) {
-                    $this->error('小样儿，可别学坏。别以为改一下页面元素就能越权操作。');
-                }
-            }
+            $this->checkAuth('Event/Index/edit',$content_temp['uid'],'您无该活动编辑权限。');
             $content['uid'] = $content_temp['uid']; //权限矫正，防止被改为管理员
             $rs = D('Event')->save($content);
-
-            $postUrl = "http://$_SERVER[HTTP_HOST]" . U('Event/Index/detail', array('id' => $id));
-            $weiboApi = new WeiboApi();
-            $weiboApi->resetLastSendTime();
-            $weiboApi->sendWeibo("我修改了活动【" . $title . "】：" . $postUrl);
-
-
+            if(D('Common/Module')->isInstalled('Weibo')){//安装了微博模块
+                $postUrl = "http://$_SERVER[HTTP_HOST]" . U('Event/Index/detail', array('id' => $id));
+                $weiboModel=D('Weibo/Weibo');
+                $weiboModel->addWeibo("我修改了活动【" . $title . "】：" . $postUrl);
+            }
             if ($rs) {
                 $this->success('编辑成功。', U('detail', array('id' => $content['id'])));
             } else {
                 $this->success('编辑失败。', '');
             }
         } else {
+            $this->checkActionLimit('add_event', 'event', 0, is_login(), true);
+            $this->checkAuth('Event/Index/add',-1,'您无活动发布权限。');
             if (modC('NEED_VERIFY',0) && !is_administrator()) //需要审核且不是管理员
             {
                 $content['status'] = 0;
@@ -220,14 +211,13 @@ class IndexController extends Controller
                 D('Common/Message')->sendMessage(C('USER_ADMINISTRATOR'), "{$user['nickname']}发布了一个活动，请到后台审核。", $title = '活动发布提醒', U('Admin/Event/verify'), is_login(), 2);
             }
             $rs = D('Event')->add($content);
+            if(D('Common/Module')->isInstalled('Weibo')){//安装了微博模块
+                //同步到微博
+                $postUrl = "http://$_SERVER[HTTP_HOST]" . U('Event/Index/detail', array('id' => $rs));
 
-
-//同步到微博
-            $postUrl = "http://$_SERVER[HTTP_HOST]" . U('Event/Index/detail', array('id' => $rs));
-            $weiboApi = new WeiboApi();
-            $weiboApi->resetLastSendTime();
-            $weiboApi->sendWeibo("我发布了一个新的活动【" . $title . "】：" . $postUrl);
-
+                $weiboModel=D('Weibo/Weibo');
+                $weiboModel->addWeibo("我发布了一个新的活动【" . $title . "】：" . $postUrl);
+            }
 
             if ($rs) {
                 $this->success('发布成功。' . $tip, U('index'));
@@ -325,11 +315,7 @@ class IndexController extends Controller
         if (!$event_content) {
             $this->error('404 not found');
         }
-        if (!is_administrator(is_login())) { //不是管理员则进行检测
-            if ($event_content['uid'] != is_login()) {
-                $this->error('404 not found');
-            }
-        }
+        $this->checkAuth('Event/Index/edit',$event_content['uid'],'您无该活动编辑权限。');
         $event_content['user'] = query_user(array('id', 'username', 'nickname', 'space_url', 'space_link', 'avatar64', 'rank_html', 'signature'), $event_content['uid']);
         $this->assign('content', $event_content);
         $this->setTitle('编辑活动' . '——活动');
@@ -339,6 +325,7 @@ class IndexController extends Controller
 
     public function add()
     {
+        $this->checkAuth('Event/Index/add',-1,'您无活动发布权限。');
         $this->setTitle('添加活动' . '——活动');
         $this->setKeywords('添加' . ',活动');
         $this->display();
@@ -407,13 +394,19 @@ class IndexController extends Controller
     public function shenhe($uid, $event_id, $tip)
     {
         $event_content = D('Event')->where(array('status' => 1, 'id' => $event_id))->find();
-        if (!$event_content) {
-            $this->error('活动不存在！');
+        if (!$event_content||$event_content['deadline']<time()) {
+            $this->error('活动不存在或活动已结束！');
         }
         if ($event_content['uid'] == is_login()) {
             $res = D('event_attend')->where(array('uid' => $uid, 'event_id' => $event_id))->setField('status', $tip);
             if ($tip) {
-                D('Event')->where(array('id' => $event_id))->setInc('attentionCount');
+                if($event_content['attentionCount']+1==$event_content['limitCount']){
+                    $data['deadline']=time();
+                    $data['attentionCount']=$event_content['limitCount'];
+                    D('Event')->where(array('id' => $event_id))->setField($data);
+                }else{
+                    D('Event')->where(array('id' => $event_id))->setInc('attentionCount');
+                }
                 D('Message')->sendMessageWithoutCheckSelf($uid, query_user('nickname', is_login()) . '已经通过了您对活动' . $event_content['title'] . '的报名请求', '审核通知', U('Event/Index/detail', array('id' => $event_id)), is_login());
             } else {
                 D('Event')->where(array('id' => $event_id))->setDec('attentionCount');
@@ -524,7 +517,9 @@ class IndexController extends Controller
             $this->error('活动不存在！');
         }
         if ($event_content['uid'] == is_login() || is_administrator(is_login())) {
-            $res = D('Event')->where(array('status' => 1, 'id' => $event_id))->setField('eTime', time());
+            $data['eTime']=time();
+            $data['deadline']=time();
+            $res = D('Event')->where(array('status' => 1, 'id' => $event_id))->setField($data);
             if ($res) {
                 $this->success('操作成功！');
             } else {

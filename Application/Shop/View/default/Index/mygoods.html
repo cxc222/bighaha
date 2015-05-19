@@ -3,9 +3,10 @@
 <block name="style">
     <link href="__CSS__/shops.css" rel="stylesheet" type="text/css"/>
 </block>
-
+<block name="header">
+    <include file="_nav"/>
+</block>
 <block name="body">
-    {:W('Common/SubMenu/render',array($sub_menu,$current,'商城',''))}
     <div class="container">
         <div class="row shop">
             <div class="col-md-12 clearfix">
@@ -46,7 +47,7 @@
                                                 <font title="{$vo.goods.goods_name|op_t}">{$vo.goods.goods_name}</font>
                                             </a>
                                         </div>
-                                        <div class="right" style="color: #d61f39;"><a><font title="所需{$tox_money_name}"><i class="ico_to_money"></i>&nbsp;{$vo.goods.tox_money_need}</font></a></div>
+                                        <div class="right" style="color: #d61f39;"><a><font title="所需{$money_type.title}"><i class="ico_to_money"></i>&nbsp;{$vo.goods.money_need} {$money_type.unit}</font></a></div>
                                         <div class="clearfix"></div>
                                     </dd>
                                     <dd class="color_84 font_s_14">

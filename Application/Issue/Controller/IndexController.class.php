@@ -16,6 +16,35 @@ class IndexController extends Controller
     {
         $tree = D('Issue')->getTree();
         $this->assign('tree', $tree);
+
+
+        $sub_menu =
+            array(
+                'left' =>
+                    array(
+                        array('tab' => 'home', 'title' => '首页', 'href' => U('Issue/index/index')),
+                    ),
+            );
+        if (check_auth('addIssueContent')) {
+            $sub_menu['right'] = array(
+                array('tab' => 'post', 'title' => '发布', 'href' => '#frm-post-popup','a_class'=>'open-popup-link')
+            );
+        }
+        foreach ($tree as $cat) {
+            if ($cat['_']) {
+                $children = array();
+                $children[] = array('tab' => 'cat_' . $cat['id'], 'title' => '全部', 'href' => U('Issue/index/index', array('issue_id' => $cat['id'])));
+                foreach ($cat['_'] as $child) {
+                    $children[] = array('tab' => 'cat_' . $cat['id'], 'title' => $child['title'], 'href' => U('Issue/index/index', array('issue_id' => $child['id'])));
+                }
+
+            }
+            $menu_item = array('children' => $children, 'tab' => 'cat_' . $cat['id'], 'title' => $cat['title'], 'href' => U('blog/article/lists', array('category' => $cat['id'])));
+            $sub_menu['left'][] = $menu_item;
+            unset($children);
+        }
+        $this->assign('sub_menu', $sub_menu);
+
     }
 
     public function index($page = 1, $issue_id = 0)

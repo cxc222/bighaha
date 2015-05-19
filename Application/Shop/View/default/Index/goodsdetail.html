@@ -4,9 +4,10 @@
     <link href="__CSS__/shops.css" rel="stylesheet" type="text/css"/>
 
 </block>
-
+<block name="header">
+    <include file="_nav"/>
+</block>
 <block name="body">
-{:W('Common/SubMenu/render',array($sub_menu,$current,'商城',''))}
 <div class="container">
 <div class="row shop">
     <div class="col-md-12  clearfix">
@@ -31,18 +32,18 @@
 
                         <div class="clearfix mb_34 info_item_s">
                             <if condition="is_login() neq 0">
-                                <font title="我的{$tox_money_cname}：{$my_tox_money}"><span>所需{$tox_money_name}：<aq>
-                                    {$content.tox_money_need}
+                                <font title="我的{$money_type.title}：{$my_money} {$money_type.unit}"><span>所需{$money_type.title}：<aq>
+                                    {$content.money_need} {$money_type.unit}
                                 </aq></span></font>
                                 <else/>
-                                <span>所需{$tox_money_name}：<aq>{$content.tox_money_need}</aq></span>
+                                <span>所需{$money_type.title}：<aq>{$content.money_need} {$money_type.unit}</aq></span>
                             </if>
                             <span>库存：<aq>{$content.goods_num}</aq></span>
                         </div>
                         <php>
                             $class='';
                             if(is_login()){
-                            if($my_tox_money>=$vo['tox_money_need']){
+                            if($my_money>=$vo['money_need']){
                             $class='open-popup-link';
                             }else{
                             $class='money_not_enough ';
@@ -88,12 +89,12 @@
                                                         title="{$vo.goods_name|op_t}">{$vo.goods_name}</font>
                                                 </h3>
 
-                                                <div class="money"><font title="所需{$tox_money_name}"><i class="ico_to_money"></i>&nbsp;{$vo.tox_money_need}</font>
+                                                <div class="money"><font title="所需{$money_name}"><i class="ico_to_money"></i>&nbsp;{$vo.money_need}</font>
                                                 </div>
                                                 <php>
                                                     $class='';
                                                     if(is_login()){
-                                                    if($my_tox_money>=$vo['tox_money_need']){
+                                                    if($my_money>=$vo['money_need']){
                                                     $class='open-popup-link';
                                                     }else{
                                                     $class='money_not_enough ';
@@ -132,12 +133,12 @@
                                                     title="{$vo.goods_name|op_t}">{$vo.goods_name}</font>
                                             </h3>
 
-                                            <div class="money"><font title="所需{$tox_money_name}"><i class="ico_to_money"></i>&nbsp;{$vo.tox_money_need}</font>
+                                            <div class="money"><font title="所需{$money_name}"><i class="ico_to_money"></i>&nbsp;{$vo.money_need}</font>
                                             </div>
                                             <php>
                                                 $class='';
                                                 if(is_login()){
-                                                if($my_tox_money>=$vo['tox_money_need']){
+                                                if($my_money>=$vo['money_need']){
                                                 $class='open-popup-link';
                                                 }else{
                                                 $class='money_not_enough ';
@@ -221,7 +222,7 @@
 <!-- /.modal -->
 </if>
 </div>
-<input type="hidden" id="tox_money_name" value="{$tox_money_name}"/>
+<input type="hidden" id="money_name" value="{$money_name}"/>
 </block>
 
 <block name="script">
@@ -229,7 +230,7 @@
     <script type="text/javascript" src="__STATIC__/uploadify/jquery.uploadify.min.js"></script>
     <script type="text/javascript" src="__PUBLIC__/Core/js/ext/magnific/jquery.magnific-popup.min.js"></script>
     <script>
-        var tox_money_name=$('#tox_money_name').val().trim();
+        var money_name=$('#money_name').val().trim();
         $(function () {
             $('.exchange_goods').click(function () {
                 if (MID == 0) {
@@ -241,7 +242,7 @@
             });
             if (MID != 0) {
                 $('.money_not_enough').click(function(){
-                    toast.info('你的'+tox_money_name+'不足！', '提示消息');
+                    toast.info('你的'+money_name+'不足！', '提示消息');
                     return false;
                 });
                 $('.open-popup-link').magnificPopup({

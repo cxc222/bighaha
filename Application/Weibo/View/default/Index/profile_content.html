@@ -24,7 +24,7 @@
                                 border-top: #f5f5f5 1px solid;
                             }
                         </style>
-                        <div class="weibo_content" id="weibo_content1">
+                        <div class="weibo_content">
                             <div class="weibo_content_sj pull-left hidden-xs"></div>
 
                             <eq name="weibo.is_top" value="1">
@@ -106,7 +106,7 @@
                         </div>
                         <div class="row weibo-comment-list" style="display: none;" data-weibo-id="{$weibo.id}">
                             <div class="col-xs-12">
-                                <div class="light-jumbotron" style="padding: 1em 2em;">
+                                <div class="light-jumbotron weibo-comment-block" style="padding: 1em 2em;">
                                     <div class="weibo-comment-container">
                                     </div>
                                 </div>
@@ -127,7 +127,7 @@
 
 <script>
     ucard();
-    bindSupport();
+    bind_support();
     bind_weibo_managment1();
 
 

@@ -16,6 +16,7 @@ class AdminSortBuilder extends AdminBuilder {
 
     public function title($title) {
         $this->title = $title;
+        $this->meta_title=$title;
         return $this;
     }
 
@@ -79,9 +80,9 @@ class AdminSortBuilder extends AdminBuilder {
             $res += M($table)->where(array('id'=>$value))->setField('sort', $key+1);
         }
         if(!$res) {
-            $this->error('排序出错');
+            $this->error('未修改排序或排序错误。');
         } else {
-            $this->success('排序成功', $backUrl);
+            $this->success('排序成功。', cookie('__SELF__'));
         }
     }
 }

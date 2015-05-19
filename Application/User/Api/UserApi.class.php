@@ -69,62 +69,7 @@ class UserApi extends Api{
 
     }
 
-    public function ucLogin($username,$password){
-        include_once './api/uc_client/client.php';
-        //Ucenter 内数据
-        $uc_user = uc_user_login($username,$password,0);
-        //关联表内数据
-        $uc_user_ref = tox_get_ucenter_user_ref('',$uc_user['0'],'');
-        //登录
-        if($uc_user_ref['uid'] && $uc_user_ref['uc_uid'] && $uc_user[0] > 0 ){
-            return $uc_user_ref['uid'];
-        }
-        //本地帐号信息
-        $tox_user = $this->model->getLocal($username,$password);
-        // 关联表无、UC有、本地无的
-        if( $uc_user[0] > 0 && !$tox_user['id'] ){
-           $uid = $this->register($uc_user[1],$uc_user[1],$uc_user[2],$uc_user[3]);
-            if($uid<=0){
-                return A('Home/User')->showRegError($uid);
-            }
-            $result = tox_add_ucenter_user_ref($uid,$uc_user[0],$uc_user[1],$uc_user[3]);
-            if(!$result){
-                return '用户不存在或密码错误';
-            }
-            return $uid;
-        }
-        // 关联表无、UC有、本地有的
-        if( $uc_user[0] > 0 && $tox_user['id'] > 0 ){
-            $result = tox_add_ucenter_user_ref($tox_user['id'],$uc_user[0],$uc_user[1],$uc_user[3]);
-            if(!$result){
-                return '用户不存在或密码错误';
-            }
-            return  $tox_user['id'];
-        }
-        // 关联表无、UC无、本地有
-        if( $uc_user[0] < 0 && $tox_user['id'] > 0 ){
-            //写入UC
-            $uc_uid = uc_user_register($tox_user['username'], $password, $tox_user['email'],'','', get_client_ip());
-            if($uc_uid <= 0 ){
-                return 'UC帐号注册失败，请联系管理员';
-            }
-            //写入关联表
-            if( M('ucenter_user_link')->where(array('uid'=>$tox_user['id']))->find()){
-                $result = tox_update_ucenter_user_ref($tox_user['id'],$uc_uid,$tox_user['username'],$tox_user['email']);
-            }
-            else{
-                $result = tox_add_ucenter_user_ref($tox_user['id'],$uc_uid,$tox_user['username'],$tox_user['email']);
-            }
-            if(!$result){
-                return '用户不存在或密码错误';
-            }
-            return $tox_user['id'];
-        }
 
-         //关联表无、UC无、本地无的
-        return '用户不存在';
-
-    }
 
     /**
      * 获取用户信息

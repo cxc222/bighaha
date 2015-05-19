@@ -1,6 +1,4 @@
 
-
-
 <ul>
     <volist name="lzlList" id="vo" key="k">
 
@@ -26,7 +24,6 @@
                     <b class="pull-right">&nbsp;|&nbsp;</b>
                     <a class="pull-right del_lzl_reply" args="lzl_reply_id={$vo.id}&to_f_reply_id={$to_f_reply_id}"
                        href="javascript:">删除</a>
-
                 </if>
 
             </p>
@@ -34,7 +31,6 @@
 
         </div>
         <div class="clearfix"></div>
-
         </li>
 
 
@@ -49,7 +45,7 @@
     </span>
 
 </if>
-<div class="pagination" id="pagination_{$to_f_reply_id}"
+<div class="pager" id="pagination_{$to_f_reply_id}"
      style="margin-left: 40px;<if condition='$nowPage eq 1'>display:none;</if>">
     {$html}
 </div>

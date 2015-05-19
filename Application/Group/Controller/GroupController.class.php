@@ -1,348 +1,767 @@
 <?php
 /**
- * 所属项目 阿里研究院.
- * 开发者: 陈一枭
- * 创建日期: 7/29/14
- * 创建时间: 3:44 PM
- * 版权所有 想天软件工作室(www.ourstu.com)
+ * Created by PhpStorm.
+ * User: caipeichao
+ * Date: 14-3-11
+ * Time: PM5:41
  */
 
-namespace Group\Controller;
+namespace Admin\Controller;
 
-use Think\Controller;
-use Think\Hook;
-class GroupController extends Controller
+use Admin\Builder\AdminListBuilder;
+use Admin\Builder\AdminConfigBuilder;
+use Admin\Builder\AdminSortBuilder;
+use Think\Model;
+use Weibo\Api\WeiboApi;
+
+class GroupController extends AdminController
 {
-    public function _initialize()
+
+    function _initialize()
     {
-
-        $sub_menu =
-            array(
-                'left' =>
-                    array(
-                        array('tab' => 'home', 'title' => '全部群组', 'href' => U('group/index/index')),
-                        array('tab' => 'mygroup', 'title' => '我的群组', 'href' => is_login()?U('group/index/mygroup'):"javascript:toast.error('登录后才能操作')"),
-                    ),
-                'right' =>
-                    array(
-                        array('tab' => 'create', 'title' => '创建群组', 'href' =>is_login()?U('group/index/create'):"javascript:toast.error('登录后才能操作')"),
-                    )
-            );
-        $this->assign('sub_menu', $sub_menu);
-        $this->assign('current', 'home');
-        /* 读取站点配置 */
-        $config = api('Config/lists');
-        C($config); //添加配置
-
+        parent::_initialize();
     }
 
 
-
-    public function getGroupByIds($ids)
+    public function config()
     {
-        $ids = is_array($ids) ? $ids : implode(',', $ids);
-        $list = array();
-        foreach ($ids as $v) {
-            $list[] = $this->getGroup($v);
+        $admin_config = new AdminConfigBuilder();
+        $data = $admin_config->handleConfig();
+        $admin_config->title('群组基本设置')
+            ->keyBool('GROUP_NEED_VERIFY', '创建群组是否需要审核', '默认无需审核')
+            ->keyText('GROUP_POST_IMG_COUNT', '帖子显示图片的数量限制', '默认为10')
+            ->keyCheckBox('GROUP_SEND_WEIBO', '创建/修改群组发送微博开关', '', array('add_group' => '创建群组', 'edit_group' => '编辑群组'))
+            ->keyCheckBox('GROUP_POST_SEND_WEIBO', '创建/修改帖子发送微博开关', '', array('add_group_post' => '新增帖子', 'edit_group_post' => '编辑帖子'))
+
+            ->keyRadio('GROUP_LZL_REPLY_ORDER', '楼中楼排序', '', array(0 => '时间降序', 1 => '时间升序'))
+            ->keyText('GROUP_LZL_SHOW_COUNT', '楼中楼显示数量')
+            ->buttonSubmit('', '保存')->data($data)
+            ->keyDefault('GROUP_NEED_VERIFY', 0)
+            ->keyDefault('GROUP_POST_IMG_COUNT', 10)
+            ->keyDefault('GROUP_SEND_WEIBO', 'add_group,edit_group')
+            ->keyDefault('GROUP_POST_SEND_WEIBO', 'add_group_post,edit_group_post')
+            ->keyDefault('GROUP_LZL_REPLY_ORDER', 1)
+            ->keyDefault('GROUP_LZL_SHOW_COUNT', 5)
+            ->group('群组设置', 'GROUP_NEED_VERIFY,GROUP_SEND_WEIBO')
+            ->group('帖子设置', 'GROUP_POST_IMG_COUNT,GROUP_POST_SEND_WEIBO')
+            // ->group('回复设置','')
+            ->group('楼中楼设置', 'GROUP_LZL_REPLY_ORDER,GROUP_LZL_SHOW_COUNT');
+        $admin_config->display();
+    }
+
+    public function index()
+    {
+        redirect(U('group'));
+    }
+
+    public function group()
+    {
+
+        $aPage = I('get.page', 1, 'intval');
+        $aTypeId = I('get.type_id', 0, 'intval');
+        $r = 20;
+
+        //读取数据
+        $map = array('status' => 1);
+        if ($aTypeId != 0) {
+            $map['type_id'] = $aTypeId;
         }
-        return $list;
+        $model = M('Group');
+        $list = $model->where($map)->page($aPage, $r)->order('sort asc')->select();
+        $totalCount = $model->where($map)->count();
+        //显示页面
+        $builder = new AdminListBuilder();
+        $builder
+            ->title('群组管理')
+            ->buttonNew(U('Group/editGroup'))
+            ->setStatusUrl(U('Group/setGroupStatus'))->buttonDisable('', '审核不通过')->buttonDelete()
+            ->buttonSort(U('Group/sortGroup'))
+            ->keyId()->keyLink('title', '标题', 'Group/post?group_id=###')
+            ->keyCreateTime()->keyText('post_count', '文章数量')->keyStatus()->keyDoActionEdit('editGroup?id=###')
+            ->data($list)
+            ->pagination($totalCount, $r)
+            ->display();
     }
 
-    public function getGroup($id)
+
+    public function unverify()
     {
-        $id=intval($id);
-        $group = S('group_' . $id);
-        if (empty($group)) {
-            $group = D('Group/Group')->where(array('status' => 1, 'id' => $id))->find();
-            $group['post_list'] = D('Group/GroupPost')->where(array('status' => 1, 'group_id' => $group['id']))->limit(4)->select();
-            $group['member_count'] = D('GroupMember')->where(array('group_id' => $group['id'], 'status' => 1))->count();
-            $group['month_count'] = D('GroupPost')->where(array('create_time' => array('between', array(strtotime("-1 month"), time())), 'group_id' => $group['id']))->count();
-            $group['user'] = query_user(array('avatar128', 'avatar64', 'nickname', 'uid', 'space_url', 'icons_html'), $group['uid']);
-            $group['user']['group_count'] = D('Group')->where(array('uid' => $group['uid'], 'status' => 1))->count();
-            S('group_' . $id, $group, 300);
+        $aPage = I('get.page', 1, 'intval');
+        $aTypeId = I('get.type_id', 0, 'intval');
+        $r = 20;
+        //读取数据
+        $map = array('status' => 0);
+        if ($aTypeId != 0) {
+            $map['type_id'] = $aTypeId;
         }
-        return $group;
+        $model = M('Group');
+        $list = $model->where($map)->page($aPage, $r)->order('sort asc')->select();
+        $totalCount = $model->where($map)->count();
+        //显示页面
+        $builder = new AdminListBuilder();
+        $builder
+            ->title('群组管理')
+            ->setStatusUrl(U('Group/setGroupStatus'))->buttonEnable(U('Group/setGroupStatus', array('tip' => 'verify')), '审核通过')->buttonDelete()
+            ->buttonSort(U('Group/sortGroup'))
+            ->keyId()->keyLink('title', '标题', 'Group/post?group_id=###')
+            ->keyCreateTime()->keyText('post_count', '文章数量')->keyStatus()->keyDoActionEdit('editGroup?id=###')
+            ->data($list)
+            ->pagination($totalCount, $r)
+            ->display();
     }
 
-
-
-    /**
-     * getGroupType 返回群组类型，0=>公共的  1=>私有的
-     * @param $group_id
-     * @return mixed
-     * @author:xjw129xjt xjt@ourstu.com
-     */
-    protected  function getGroupType($group_id)
+    public function groupType()
     {
-        $group = D('Group')->where(array('id' => $group_id, 'status' => 1))->find();
-        return $group['type'];
-    }
+        //读取数据
+        $map = array('status' => array('GT', -1), 'pid' => 0);
 
-    /**
-     * getGroupCate  获取群组分类
-     * @param $group_id
-     * @return mixed
-     * @author:xjw129xjt xjt@ourstu.com
-     */
-    protected   function getGroupCate($group_id)
-    {
-        $group = D('Group')->where(array('id' => $group_id, 'status' => 1))->find();
-        return $this->getGroupCateByTypeId($group['type_id']);
-    }
+        $model = M('GroupType');
+        $list = $model->where($map)->order('sort asc')->select();
 
-    /**
-     * getGroupCateByTypeId  获取群组分类名称
-     * @param $type_id
-     * @return mixed
-     * @author:xjw129xjt xjt@ourstu.com
-     */
-    protected  function getGroupCateByTypeId($type_id)
-    {
-        $type = D('GroupType')->where(array('id' => $type_id, 'status' => 1))->find();
-        return $type['title'];
-    }
-
-    /**
-     * getPostCateName  获取帖子分类名称
-     * @param $type_id
-     * @return mixed
-     * @author:xjw129xjt xjt@ourstu.com
-     */
-    protected  function getPostCateName($type_id)
-    {
-        $type = D('GroupPostCategory')->where(array('id' => $type_id, 'status' => 1))->find();
-        return $type['title'];
-    }
-
-    protected  function assignAllowPublish()
-    {
-
-        $group_id = $this->get('group_id');
-        $allow_publish = $this->isGroupAllowPublish($group_id);
-        $this->assign('allow_publish', $allow_publish);
-    }
-
-    protected  function requireLogin()
-    {
-        if (!$this->isLogin()) {
-            $this->error('需要登录才能操作');
-        }
-    }
-
-    protected  function isLogin()
-    {
-        return is_login() ? true : false;
-    }
-
-    protected  function requireGroupAllowPublish($group_id)
-    {
-        $this->requireGroupExists($group_id);
-        $this->requireLogin();
-        $this->requireGroupAllowCurrentUserGroup($group_id);
-    }
-
-    protected  function isGroupAllowPublish($group_id)
-    {
-        if (!$this->isLogin()) {
-            return false;
-        }
-        if (!$this->isGroupExists($group_id)) {
-            return false;
-        }
-        /*        if (!$this->isGroupAllowCurrentUserGroup($group_id)) {
-                    return false;
-                }*/
-
-        if (!is_joined($group_id)) {
-            return false;
-        }
-        return true;
-    }
-
-    protected  function isAllowEditGroup($group_id)
-    {
-        if (!$this->isGroupExists($group_id)) {
-            return false;
-        }
-        if (!$this->isLogin()) {
-            return false;
-        }
-        if (is_administrator()) {
-            return true;
-        }
-
-        $group = D('Group')->where(array('id' => $group_id, 'status' => 1))->find();
-        if ($group['uid'] != is_login()) {
-            return false;
-        }
-        return true;
-
-
-    }
-
-    protected  function requireAllowEditGroup($group_id)
-    {
-        $this->requireGroupExists($group_id);
-        $this->requireLogin();
-
-        if (is_administrator()) {
-            return true;
-        }
-        //确认帖子时自己的
-        $group = D('Group')->where(array('id' => $group_id, 'status' => 1))->find();
-        if ($group['uid'] != is_login()) {
-            $this->error('没有权限编辑群组');
-        } else {
-            return true;
-        }
-
-    }
-
-    protected  function requireAllowEditPost($post_id)
-    {
-        $this->requirePostExists($post_id);
-        $this->requireLogin();
-
-        if (is_administrator()) {
-            return true;
-        }
-        //确认帖子时自己的
-        $post = D('GroupPost')->where(array('id' => $post_id, 'status' => 1))->find();
-        if ($post['uid'] != is_login()) {
-            $this->error('没有权限编辑帖子');
-        }
-    }
-
-    /**检查可视权限
-     * @param $group_id
-     * @auth 陈一枭
-     */
-    protected  function requireGroupAllowView($group_id)
-    {
-        $this->requireGroupExists($group_id);
-    }
-
-    protected  function requireGroupExists($group_id)
-    {
-        if (!$this->isGroupExists($group_id)) {
-            $this->error('群组不存在');
-        }
-    }
-
-    protected function isGroupExists($group_id)
-    {
-        $group = D('Group')->where(array('id' => $group_id, 'status' => 1))->find();
-        return $group ? true : false;
-    }
-
-    protected function requireAllowReply($post_id)
-    {
-        $this->requirePostExists($post_id);
-        $this->requireLogin();
-    }
-
-    protected function requirePostExists($post_id)
-    {
-        $post = D('GroupPost')->where(array('id' => $post_id))->find();
-        if (!$post) {
-            $this->error('帖子不存在');
-        }
-    }
-
-    protected function requireGroupAllowCurrentUserGroup($group_id)
-    {
-        return true;
-        /*        if (!$this->isGroupAllowCurrentUserGroup($group_id)) {
-                    $this->error('该板块不允许发帖');
-                }*/
-    }
-
-    protected function isGroupAllowCurrentUserGroup($group_id)
-    {
-        //如果是超级管理员，直接允许
-        if (is_login() == 1) {
-            return true;
-        }
-
-        //如果帖子不属于任何板块，则允许发帖
-        if (intval($group_id) == 0) {
-            return true;
-        }
-
-        //读取贴吧的基本信息
-        $group = D('Group')->where(array('id' => $group_id))->find();
-        $userGroups = explode(',', $group['allow_user_group']);
-
-        //读取用户所在的用户组
-        $list = M('AuthGroupAccess')->where(array('uid' => is_login()))->select();
-        foreach ($list as &$e) {
-            $e = $e['group_id'];
-        }
-
-        //每个用户都有一个默认用户组
-        $list[] = '1';
-
-        //判断用户组是否有权限
-        $list = array_intersect($list, $userGroups);
-        return $list ? true : false;
-    }
-
-    protected function getGroupTypes()
-    {
-        $groupType = D('GroupType')->where(array('status' => 1,'pid'=>0))->select();
-        $this->assign('groupType', $groupType);
-
-        $child =array();
-        foreach($groupType as $v){
-            $child[$v['id']] = D('GroupType')->where(array('status' => 1,'pid'=>$v['id']))->select();
-        }
-        $this->assign('childType', $child);
-
-        foreach ($groupType as $k => $v) {
-            $child = D('GroupType')->where(array('pid' => $v['id'], 'status' => 1))->order('sort asc')->select();
+        foreach ($list as $k => $v) {
+            $child = $model->where(array('pid' => $v['id'], 'status' => 1))->order('sort asc')->select();
             //获取数组中第一父级的位置
-            $key_name = array_search($v, $groupType);
+            $key_name = array_search($v, $list);
             foreach ($child as $key => $val) {
                 $val['title'] = '------' . $val['title'];
                 //在父级后面添加数组
-                array_splice($groupType, $key_name + 1, 0, array($val));
+                array_splice($list, $key_name + 1, 0, array($val));
             }
         }
-        $this->assign('groupTypeAll',$groupType);
-        return $groupType;
+
+        foreach ($list as &$type) {
+            $type['group_count'] = D('Group')->where(array('type_id' => $type['id']))->count();
+        }
+        unset($type);
+        //显示页面
+        $builder = new AdminListBuilder();
+        $builder
+            ->title('分类管理')
+            ->buttonNew(U('Group/editGroupType'))
+            ->setStatusUrl(U('Group/setGroupTypeStatus'))->buttonEnable()->buttonDisable()->buttonDelete()
+            ->buttonSort(U('Group/sortGroupType'))
+            ->keyId()->keyLink('title', '标题', 'Group/group?type_id=###')
+            ->keyCreateTime()->keyText('group_count', '群组数量')->keyStatus()->keyDoActionEdit('editGroupType?id=###')
+            ->data($list)
+            ->display();
     }
 
-
-
-    protected function getNotice($group_id)
+    public function setGroupTypeStatus($ids, $status)
     {
-        $notice = D('GroupNotice')->where('group_id=' . $group_id)->find();
-        $this->assign('notice', $notice);
-        return $notice;
+        $builder = new AdminListBuilder();
+
+        $builder->doSetStatus('GroupType', $ids, $status);
+
     }
 
-    protected function getGroupIdByPost($post_id)
+
+    public function editGroupType()
     {
-        $post = D('GroupPost')->where('id=' . $post_id)->find();
-        return $post['group_id'];
+        $aId = I('id', 0, 'intval');
+        if (IS_POST) {
+            if ($aId != 0) {
+                $data = D('GroupType')->create();
+                $res = D('GroupType')->save($data);
+            } else {
+                $data = D('GroupType')->create();
+                $res = D('GroupType')->add($data);
+            }
+            if ($res) {
+                $this->success(($aId == 0 ? '添加' : '编辑') . '成功');
+            } else {
+                $this->error(($aId == 0 ? '添加' : '编辑') . '失败');
+            }
 
+        } else {
+            $builder = new AdminConfigBuilder();
+
+            $types = M('GroupType')->where(array('pid' => 0))->select();
+            $opt = array();
+            foreach ($types as $type) {
+                $opt[$type['id']] = $type['title'];
+            }
+
+
+            if ($aId != 0) {
+                $wordCate1 = D('GroupType')->find($aId);
+            } else {
+                $wordCate1 = array('status' => 1, 'sort' => 0);
+            }
+            $builder->title('新增分类')->keyId()->keyText('title', '标题')->keySelect('pid', '父分类', '选择父级分类', array('0' => '顶级分类') + $opt)
+                ->keyStatus()->keyCreateTime()->keyText('sort', '排序')
+                ->data($wordCate1)
+                ->buttonSubmit(U('Group/editGroupType'))->buttonBack()->display();
+        }
     }
 
 
-
-    protected function getPostCategory($group_id=0)
+    public function sortGroupType($ids = null)
     {
-        $map['status']=1;
-        $group_id &&   $map['group_id']=$group_id;
-        $cate = D('GroupPostCategory')->where($map)->order('sort asc')->select();
-        $this->assign('post_cate', $cate);
-        return $cate;
+        if (IS_POST) {
+            $builder = new AdminSortBuilder();
+            $builder->doSort('GroupType', $ids);
+        } else {
+            $map['status'] = array('egt', 0);
+            $list = D('GroupType')->where($map)->order("sort asc")->select();
+            foreach ($list as $key => $val) {
+                $list[$key]['title'] = $val['title'];
+            }
+            $builder = new AdminSortBuilder();
+            $builder->meta_title = '分组排序';
+            $builder->data($list);
+            $builder->buttonSubmit(U('sortGroupType'))->buttonBack();
+            $builder->display();
+        }
     }
 
-    protected function clearcache($group_id=''){
+    public function groupTrash()
+    {
+        $aPage = I('get.page', 1, 'intval');
+        $r = 20;
+        //读取回收站中的数据
+        $map = array('status' => '-1');
+        $model = M('Group');
+        $list = $model->where($map)->page($aPage, $r)->order('sort asc')->select();
+        $totalCount = $model->where($map)->count();
 
-        $group_id && S('group_'.$group_id,null);
-        S('group_key_value_ids', null);
+        //显示页面
+        $builder = new AdminListBuilder();
+        $builder
+            ->title('群组回收站')->buttonClear(U('groupClear'))
+            ->setStatusUrl(U('Group/setGroupStatus'))->buttonRestore()
+            ->keyId()->keyLink('title', '标题', 'Group/post?group_id=###')
+            ->keyCreateTime()->keyText('post_count', '文章数量')
+            ->data($list)
+            ->pagination($totalCount, $r)
+
+            ->display();
     }
 
-} 
+    public function groupClear($ids)
+    {
+        $builder=new AdminListBuilder();
+        $builder->doClear('Group',$ids);
+    }
+
+    /**
+     * sortGroup 群组排序页面
+     * @author:xjw129xjt xjt@ourstu.com
+     */
+    public function sortGroup()
+    {
+        if (IS_POST) {
+            $builder = new AdminSortBuilder();
+            $builder->doSort('Group', $ids);
+        } else {
+            //读取群组列表
+            $list = M('Group')->where(array('status' => array('EGT', 0)))->order('sort asc')->select();
+
+            //显示页面
+            $builder = new AdminSortBuilder();
+            $builder->title('群组排序')
+                ->data($list)
+                ->buttonSubmit(U('sortGroup'))->buttonBack()
+                ->display();
+        }
+
+    }
+
+
+    /**
+     * setGroupStatus  设置群组状态
+     * @param $ids
+     * @param $status
+     * @author:xjw129xjt xjt@ourstu.com
+     */
+    public function setGroupStatus($ids, $status)
+    {
+        $ids = is_array($ids)?$ids:array($ids);
+        if (I('get.tip') == 'verify') {
+            foreach ($ids as $v) {
+                $postUrl = "http://$_SERVER[HTTP_HOST]" . U('Group/Index/group', array('id' => $v));
+                $title = D('Group/Group')->where(array('id' => $v))->field('title')->find();
+                if(class_exists(parse_res_name('Weibo/weibo','Model'))) {
+                    D('Weibo/weibo')->addWeibo(is_login(),"管理员通过了群组【" . $title['title'] . "】的审核：" . $postUrl);
+                }
+            }
+        }
+        foreach ($ids as $v) {
+            S('group_' . $v, null);
+        }
+        S('group_post_exist_ids', null);
+        S('group_exist_ids', null);
+        $builder = new AdminListBuilder();
+        $builder->doSetStatus('Group', $ids, $status);
+    }
+
+
+    public function editGroup($id = 0)
+    {
+        if (IS_POST) {
+            $aId = I('post.id', 0, 'intval');
+            $aTitle = I('post.title', '', 'text');
+            $aCreateTime = I('post.create_time', 0, 'intval');
+            $aStatus = I('post.create_time', 0, 'intval');
+            $aAllowUserGroup = I('post.allow_user_group', 0, 'intval');
+            $aLogo = I('post.logo', 0, 'intval');
+            $aTypeId = I('post.type_id', 0, 'intval');
+            $aDetail = I('post.detail', '', 'text');
+            $aType = I('post.type', 0, 'intval');
+
+            $isEdit = $aId ? true : false;
+            //生成数据
+            $data = array('title' => $aTitle, 'create_time' => $aCreateTime, 'status' => $aStatus, 'allow_user_group' => $aAllowUserGroup, 'logo' => $aLogo, 'type_id' => $aTypeId, 'detail' => $aDetail, 'type' => $aType);
+            //写入数据库
+            $model = M('Group');
+            if ($isEdit) {
+                $data['id'] = $aId;
+                $data = $model->create($data);
+                $result = $model->where(array('id' => $aId))->save($data);
+
+            } else {
+                $data = $model->create($data);
+                $data['uid'] = 1;
+                $result = $model->add($data);
+                if (!$result) {
+                    $this->error('创建失败');
+                }
+            }
+            S('group_list', null);
+            //返回成功信息
+            $this->success($isEdit ? '编辑成功' : '保存成功');
+        } else {
+            $aId = I('get.id', 0, 'intval');
+            //判断是否为编辑模式
+            $isEdit = $aId ? true : false;
+            //如果是编辑模式，读取群组的属性
+            if ($isEdit) {
+                $group = M('Group')->where(array('id' => $aId))->find();
+            } else {
+                $group = array('create_time' => time(), 'post_count' => 0, 'status' => 1);
+            }
+            $groupType = D('GroupType')->where(array('status' => 1, 'pid' => 0))->limit(100)->select();
+            foreach ($groupType as $k => $v) {
+                $child = D('GroupType')->where(array('pid' => $v['id'], 'status' => 1))->order('sort asc')->select();
+                //获取数组中第一父级的位置
+                $key_name = array_search($v, $groupType);
+                foreach ($child as $key => $val) {
+                    $val['title'] = '------' . $val['title'];
+                    //在父级后面添加数组
+                    array_splice($groupType, $key_name + 1, 0, array($val));
+                }
+            }
+            foreach ($groupType as $type) {
+                $opt[$type['id']] = $type['title'];
+            }
+            //显示页面
+            $builder = new AdminConfigBuilder();
+            $builder
+                ->title($isEdit ? '编辑群组' : '新增群组')
+                ->keyId()->keyTitle()->keyTextArea('detail', '群组介绍')
+                ->keyRadio('type', '群组类型', '群组的类型', array(0 => '公共群组', 1 => '私有群组'))
+                ->keySelect('type_id', '分类', '选择分类', $opt)
+                /* ->keyMultiUserGroup('allow_user_group', '允许发帖的用户组')*/
+                ->keyStatus()
+                ->keySingleImage('logo', '群组logo', '群组logo，300px*300px')
+                ->keySingleImage('background', '群组背景', '用于显示的背景，1050px*200px')->keyCreateTime()
+                ->data($group)
+                ->buttonSubmit(U('editGroup'))->buttonBack()
+                ->display();
+        }
+    }
+
+
+    public function post()
+    {
+        $aPage = I('get.page', 1, 'intval');
+        $aGroupId = I('get.group_id', 0, 'intval');
+        $aTitle = I('get.title', '', 'text');
+        $aContent = I('get.content', '', 'text');
+        $r = 20;
+
+        $groups = D('group')->where(array('status' => 1))->field('id')->cache('group_exist_ids', 60 * 5)->select();
+        $group_ids = getSubByKey($groups, 'id');
+
+        //读取文章数据
+        $map = array('status' => array('EGT', 0), 'group_id' => array('in', $group_ids));
+        if ($aTitle != '') {
+            $map['title'] = array('like', '%' . $aTitle . '%');
+        }
+        if ($aContent != '') {
+            $map['content'] = array('like', '%' . $aContent . '%');
+        }
+        if ($aGroupId) $map['group_id'] = $aGroupId;
+        $model = M('GroupPost');
+        $list = $model->where($map)->order('last_reply_time desc')->page($aPage, $r)->select();
+        $totalCount = $model->where($map)->count();
+
+        foreach ($list as &$v) {
+            if ($v['is_top'] == 1) {
+                $v['top'] = '版内置顶';
+            } else if ($v['is_top'] == 2) {
+                $v['top'] = '全局置顶';
+            } else {
+                $v['top'] = '不置顶';
+            }
+        }
+        //读取群组基本信息
+        if ($aGroupId) {
+            $group = D('Group/Group')->getGroup($aGroupId);
+            $groupTitle = ' - ' . $group['title'];
+        } else {
+            $groupTitle = '';
+        }
+
+        //显示页面
+        $builder = new AdminListBuilder();
+        $builder->title('文章管理' . $groupTitle)
+            ->setStatusUrl(U('Group/setPostStatus'))->buttonEnable()->buttonDisable()->buttonDelete()
+            ->keyId()->keyLink('title', '标题', 'Group/reply?post_id=###')
+            ->keyCreateTime()->keyUpdateTime()->keyTime('last_reply_time', '最后回复时间')->keyText('top', '是否置顶')->keyStatus()->keyDoActionEdit('group/index/edit?post_id=###')
+            ->setSearchPostUrl(U('post'))->search('标题', 'title')->search('内容', 'content')
+            ->data($list)
+            ->pagination($totalCount, $r)
+            ->display();
+    }
+
+    public function postTrash()
+    {
+        $aPage = I('get.page', 1, 'intval');
+        $r = 20;
+        //读取文章数据
+        $map = array('status' => -1);
+        $model = M('GroupPost');
+        $list = $model->where($map)->order('last_reply_time desc')->page($aPage, $r)->select();
+        $totalCount = $model->where($map)->count();
+
+        //显示页面
+        $builder = new AdminListBuilder();
+        $builder->title('文章回收站')
+            ->setStatusUrl(U('Group/setPostStatus'))->buttonRestore()->buttonClear(U('postClear'))
+            ->keyId()->keyLink('title', '标题', 'Group/reply?post_id=###')
+            ->keyCreateTime()->keyUpdateTime()->keyTime('last_reply_time', '最后回复时间')->keyBool('is_top', '是否置顶')
+            ->data($list)
+            ->pagination($totalCount, $r)
+            ->display();
+    }
+    public function postClear($ids)
+    {
+        $builder=new AdminListBuilder();
+        $builder->doClear('GroupPost',$ids);
+    }
+
+    /**
+     * setPostStatus  设置帖子状态
+     * @param $ids
+     * @param $status
+     * @author:xjw129xjt xjt@ourstu.com
+     */
+    public function setPostStatus($ids, $status)
+    {
+        $builder = new AdminListBuilder();
+        $ids = is_array($ids)?$ids:array($ids);
+        foreach ($ids as $v) {
+            S('group_post_' . $v, null);
+        }
+        S('group_post_exist_ids', null);
+        S('group_exist_ids', null);
+        $builder->doSetStatus('GroupPost', $ids, $status);
+    }
+
+
+    public function reply()
+    {
+        //读取回复列表
+
+        $aPage = I('get.page', 1, 'intval');
+        $aPostId = I('get.post_id', 0, 'intval');
+        $aUid = I('get.uid', 0, 'intval');
+        $aKeyword = I('get.keyword', '', 'text');
+        $r = 20;
+
+        $groups = D('group')->where(array('status' => 1))->field('id')->cache('group_exist_ids', 60 * 5)->select();
+        $group_ids = getSubByKey($groups, 'id');
+        $posts = D('group_post')->where(array('status' => 1, 'group_id' => array('in', $group_ids)))->field('id')->cache('group_post_exist_ids', 60 * 5)->select();
+        $post_ids = getSubByKey($posts, 'id');
+
+        $map = array('status' => array('EGT', 0), 'post_id' => array('in', $post_ids));
+        $aKeyword != '' && $map['content'] = array('like', '%' . $aKeyword . '%');
+        $aUid != 0 && $map['uid'] = $aUid;
+        if ($aPostId) $map['post_id'] = $aPostId;
+        $model = M('GroupPostReply');
+        $list = $model->where($map)->order('create_time asc')->page($aPage, $r)->select();
+        $totalCount = $model->where($map)->count();
+
+        foreach ($list as &$v) {
+            $v['uname'] = get_nickname($v['uid']);
+            $post = D('Group/GroupPost')->getPost($v['post_id']);
+            $v['post_title'] = $post['title'];
+            $v['show'] = '查看楼中楼回复';
+        }
+        //显示页面
+        $builder = new AdminListBuilder();
+        $builder->title('回复管理')
+            ->setStatusUrl(U('setReplyStatus'))->buttonEnable()->buttonDisable()->buttonDelete()
+            ->keyId()
+            ->keyLinkByFlag('post_title', '帖子标题', 'group/index/detail?id=###&#{$id}', 'post_id')
+            ->keyText('uname', '发布者')->keyCreateTime()
+            ->keyUpdateTime()->keyStatus()
+            ->keyLink('show', '楼中楼', 'Admin/Group/lzlreply?id=###')->keyDoActionEdit('group/index/editreply?reply_id=###')
+            ->data($list)
+            ->setSearchPostUrl(U('reply'))->search('用户ID', 'uid')->search('关键词', 'keyword')
+            ->pagination($totalCount, $r)
+            ->display();
+    }
+
+    public function replyTrash()
+    {
+
+        $aPage = I('get.page', 1, 'intval');
+        $r = 20;
+
+        //读取回复列表
+        $map = array('status' => -1);
+        $model = M('GroupPostReply');
+        $list = $model->where($map)->order('create_time asc')->page($aPage, $r)->select();
+        $totalCount = $model->where($map)->count();
+        foreach ($list as &$v) {
+            $v['uname'] = get_nickname($v['uid']);
+
+            $v['show'] = '查看楼中楼回复';
+        }
+        //显示页面
+        $builder = new AdminListBuilder();
+        $builder->title('回复回收站')
+            ->setStatusUrl(U('setReplyStatus'))->buttonRestore()->buttonClear(U('postReplyClear'))
+            ->keyId()->keyTruncText('content', '内容', 50)->keyText('uname', '发布者')->keyCreateTime()->keyUpdateTime()->keyStatus()->keyLink('show', '楼中楼', 'Admin/Group/lzlreplyTrash?id=###')
+            ->data($list)
+            ->pagination($totalCount, $r)
+            ->display();
+    }
+
+    public function postReplyClear($ids)
+    {
+        $builder=new AdminListBuilder();
+        $builder->doClear('GroupPostReply',$ids);
+    }
+
+
+    public function setReplyStatus($ids, $status)
+    {
+        $builder = new AdminListBuilder();
+        $builder->doSetStatus('GroupPostReply', $ids, $status);
+    }
+
+
+    public function postType()
+    {
+        $aPage = I('get.page', 1, 'intval');
+        $r = 20;
+        //读取数据
+        $map = array('status' => array('GT', -1));
+        $model = M('GroupPostCategory');
+        $list = $model->where($map)->page($aPage, $r)->order('group_id asc, sort asc')->select();
+        $totalCount = $model->where($map)->count();
+        foreach ($list as &$cate) {
+            $group = D('Group')->where(array('id' => $cate['group_id']))->find();
+            $cate['group_name'] = $group['title'];
+            $cate['post_count'] = D('GroupPost')->where(array('cate_id' => $cate['id']))->count();
+        }
+        unset($cate);
+        //显示页面
+        $builder = new AdminListBuilder();
+        $builder
+            ->title('分类管理')
+            ->buttonNew(U('Group/editPostCate'))
+            ->setStatusUrl(U('Group/setGroupPostCateStatus'))->buttonEnable()->buttonDisable()->buttonDelete()
+            /*  ->buttonSort(U('Group/sortPostCate'))*/
+            ->keyId()->keyText('group_name', '所属群组')->keyText('title', '标题')
+            ->keyCreateTime()->keyText('post_count', '群组数量')->keyStatus()->keyDoActionEdit('editPostCate?id=###')
+            ->data($list)
+            ->pagination($totalCount, $r)
+            ->display();
+    }
+
+    public function setGroupPostCateStatus($ids, $status)
+    {
+
+        $builder = new AdminListBuilder();
+        $builder->doSetStatus('GroupPostCategory', $ids, $status);
+
+    }
+
+    public function editPostCate()
+    {
+        $aId = I('id', 0, 'intval');
+        if (IS_POST) {
+            $data = D('GroupPostCategory')->create();
+            if ($aId != 0) {
+                $res = D('GroupPostCategory')->save($data);
+            } else {
+                $res = D('GroupPostCategory')->add($data);
+            }
+            if ($res) {
+                $this->success(($aId == 0 ? '添加' : '编辑') . '成功');
+            } else {
+                $this->error(($aId == 0 ? '添加' : '编辑') . '失败');
+            }
+
+        } else {
+            $builder = new AdminConfigBuilder();
+
+            $groups = D('Group')->where(array('status' => 1))->select();
+            foreach ($groups as $group) {
+                $opt[$group['id']] = $group['title'];
+            }
+
+            if ($aId != 0) {
+                $wordCate1 = D('GroupPostCategory')->find($aId);
+            } else {
+                $wordCate1 = array('status' => 1, 'sort' => 0);
+            }
+            $builder->title('新增分类')->keyId()->keySelect('group_id', '所属群组', '', $opt)->keyText('title', '标题')
+                ->keyStatus()->keyCreateTime()
+                ->data($wordCate1)
+                ->buttonSubmit(U('Group/editPostCate'))->buttonBack()->display();
+        }
+    }
+
+    public function sortPostCate($ids = null)
+    {
+        if (IS_POST) {
+            $builder = new AdminSortBuilder();
+            $builder->doSort('GroupPostCategory', $ids);
+        } else {
+            $map['status'] = array('egt', 0);
+            $list = D('GroupPostCategory')->where($map)->order("sort asc")->select();
+            foreach ($list as $key => $val) {
+                $list[$key]['title'] = $val['title'];
+            }
+            $builder = new AdminSortBuilder();
+            $builder->meta_title = '分组排序';
+            $builder->data($list);
+            $builder->buttonSubmit(U('sortPostCate'))->buttonBack();
+            $builder->display();
+        }
+    }
+
+
+    public function lzlreply()
+    {
+        $aPage = I('get.page', 1, 'intval');
+        $aId = I('get.id', 0, 'intval');
+        $aUid = I('get.uid', 0, 'intval');
+        $aKeyword = I('get.keyword', '', 'text');
+        $r = 20;
+        //读取回复列表
+        $map = array('status' => array('EGT', 0));
+        $aKeyword != '' && $map['content'] = array('like', '%' . $aKeyword . '%');
+        $aUid != 0 && $map['uid'] = $aUid;
+        if ($aId) $map['to_f_reply_id'] = $aId;
+        $model = M('GroupLzlReply');
+        $list = $model->where($map)->order('create_time asc')->page($aPage, $r)->select();
+        $totalCount = $model->where($map)->count();
+        foreach ($list as &$v) {
+            $v['uname'] = get_nickname($v['uid']);
+        }
+        //显示页面
+        $builder = new AdminListBuilder();
+        $builder->title('楼中楼回复管理')
+            ->setStatusUrl(U('setLzlReplyStatus'))->buttonEnable()->buttonDisable()->buttonDelete()
+            ->keyId()->keyTruncText('content', '内容', 50)->keyText('uname', '发布者')->keyTime('create_time', '创建时间')->keyStatus()->keyDoActionEdit('editLzlReply?id=###')
+            ->data($list)
+            ->setSearchPostUrl(U('lzlreply', array('id' => $aId)))->search('用户ID', 'uid')->search('关键词', 'keyword')
+            ->pagination($totalCount, $r)
+            ->display();
+    }
+
+    public function lzlreplyTrash()
+    {
+        $aPage = I('get.page', 1, 'intval');
+        $aId = I('get.id', 0, 'intval');
+        $r = 20;
+
+        //读取回复列表
+        $map = array('status' => -1);
+        if ($aId) $map['to_f_reply_id'] = $aId;
+        $model = M('GroupLzlReply');
+        $list = $model->where($map)->order('create_time asc')->page($aPage, $r)->select();
+        $totalCount = $model->where($map)->count();
+        foreach ($list as &$v) {
+            $v['uname'] = get_nickname($v['uid']);
+        }
+        //显示页面
+        $builder = new AdminListBuilder();
+        $builder->title('回复回收站')
+            ->setStatusUrl(U('setLzlReplyStatus'))->buttonRestore()->buttonClear(U('lzlClear'))
+            ->keyId()->keyTruncText('content', '内容', 50)->keyText('uname', '发布者')->keyCreateTime()->keyUpdateTime()->keyStatus()
+            ->data($list)
+            ->pagination($totalCount, $r)
+            ->display();
+    }
+
+    public function lzlClear($ids)
+    {
+        $builder=new AdminListBuilder();
+        $builder->doClear('GroupLzlReply',$ids);
+    }
+
+    public function setLzlReplyStatus($ids, $status)
+    {
+        $builder = new AdminListBuilder();
+        $builder->doSetStatus('GroupLzlReply', $ids, $status);
+
+    }
+
+
+    public function editLzlReply()
+    {
+        $aId = I('id', 0, 'intval');
+        if (IS_POST) {
+            $aContent = I('post.content', '', 'text');
+            $aCreateTime = I('post.create_time', 0, 'intval');
+            $aStatus = I('post.status', 0, 'intval');
+            //判断是否为编辑模式
+            $isEdit = $aId ? true : false;
+
+            //写入数据库
+            $data = array('content' => $aContent, 'create_time' => $aCreateTime, 'status' => $aStatus);
+            $model = M('GroupLzlReply');
+            if ($isEdit) {
+                $result = $model->where(array('id' => $aId))->save($data);
+            } else {
+                $result = $model->add($data);
+            }
+
+            //如果写入出错，则显示错误消息
+            if (!$result) {
+                $this->error($isEdit ? '编辑失败' : '创建失败');
+            }
+
+            //返回成功消息
+            $this->success($isEdit ? '编辑成功' : '创建成功', U('lzlreply'));
+        } else {
+            //判断是否为编辑模式
+            $isEdit = $aId ? true : false;
+
+            //读取回复内容
+            if ($isEdit) {
+                $model = M('GroupLzlReply');
+                $reply = $model->where(array('id' => $aId))->find();
+            } else {
+                $reply = array('status' => 1);
+            }
+
+            //显示页面
+            $builder = new AdminConfigBuilder();
+            $builder->title($isEdit ? '编辑回复' : '创建回复')
+                ->keyId()->keyTextArea('content', '内容')->keyTime('create_time', '创建时间')->keyStatus()
+                ->data($reply)
+                ->buttonSubmit(U('editLzlReply'))->buttonBack()
+                ->display();
+        }
+
+    }
+
+
+}

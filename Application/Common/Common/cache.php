@@ -23,6 +23,9 @@ function op_cache($key, $func, $interval)
     return $result;
 }
 
+/**清理全部缓存
+ * @auth 陈一枭
+ */
 function clean_all_cache()
 {
     $dirname = './Runtime/';

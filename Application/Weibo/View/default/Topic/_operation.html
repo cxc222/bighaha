@@ -1,5 +1,10 @@
-{:Hook('support',array('table'=>'weibo','row'=>$weibo['id'],'app'=>'Weibo','uid'=>$weibo['uid']))}
-{:Hook('repost',array('weiboId'=>$weibo['id']))}
-<div class=" col-xs-4"style="padding: 0px"><span class="weibo-comment-link cpointer " data-weibo-id="{$weibo.id}">
+<div class="col-xs-4"style="padding: 0px">{:Hook('support',array('table'=>'weibo','row'=>$weibo['id'],'app'=>'Weibo','uid'=>$weibo['uid']))}</div>
+
+<php>$sourseId =$weibo['data']['sourseId']?$weibo['data']['sourseId']:$weibo['id']; </php>
+<a title="转发"  data-role="send_repost"  href="{:U('Weibo/Index/sendrepost',array('sourseId'=>$sourseId,'weiboId'=>$weibo['id']))}">转发 {$weibo.repost_count}</a>
+
+
+<div class=" col-xs-4" style="padding: 0px"><span class="cpointer" data-role="weibo_comment_btn"  data-weibo-id="{$weibo.id}">
     评论 {$weiboCommentTotalCount}
-</span></div>
+</span>
+</div>

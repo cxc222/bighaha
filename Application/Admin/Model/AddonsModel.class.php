@@ -46,6 +46,20 @@ class AddonsModel extends Model {
         if(!$addon_dir)
             $addon_dir = ONETHINK_ADDON_PATH;
         $dirs = array_map('basename',glob($addon_dir.'*', GLOB_ONLYDIR));
+        //TODO 新增模块插件的支持
+       /* $modules=D('Module')->getAll();
+        foreach($modules as $m){
+            if($m['is_setup']){
+                $module_dir=APP_PATH.$m['name'].'/Addons/';
+                if(!file_exists($module_dir)){
+                    continue;
+                }
+                $tmp_dirs = array_map('basename',glob($module_dir.'*', GLOB_ONLYDIR));
+                $dirs=array_merge($dirs,$tmp_dirs);
+            }
+        }*/
+
+
         if($dirs === FALSE || !file_exists($addon_dir)){
             $this->error = '插件目录不可读或者不存在';
             return FALSE;
@@ -58,6 +72,7 @@ class AddonsModel extends Model {
 			$addons[$addon['name']]	=	$addon;
 		}
         foreach ($dirs as $value) {
+
             if(!isset($addons[$value])){
 				$class = get_addon_class($value);
 				if(!class_exists($class)){ // 实例化插件失败忽略执行
@@ -72,6 +87,7 @@ class AddonsModel extends Model {
 				}
 			}
         }
+        //dump($list);exit;
         int_to_string($addons, array('status'=>array(-1=>'损坏', 0=>'禁用', 1=>'启用', null=>'未安装')));
         $addons = list_sort_by($addons,'uninstall','desc');
         return $addons;

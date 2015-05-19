@@ -1,0 +1,23 @@
+<a href="{:U('Weibo/Share/shareBox',array('query'=>$query))}" data-role="share_box" class="share_btn" >{$text}</a>
+
+<script>
+
+$(function(){
+    $('[data-role="share_box"]').magnificPopup({
+        type: 'ajax',
+        overflowY: 'scroll',
+        modal: true,
+
+        callbacks: {
+            ajaxContentAdded: function () {
+                // Ajax content is loaded and appended to DOM
+                $('#repost_content').focus();
+                console.log(this.content);
+            }, open: function () {
+                $('.mfp-bg').css('opacity', 0.1)
+            }
+        }
+    });
+})
+
+</script>

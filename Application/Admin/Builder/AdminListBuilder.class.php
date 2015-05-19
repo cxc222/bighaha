@@ -1,28 +1,44 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: caipeichao
- * Date: 14-3-12
- * Time: AM10:08
- */
+
 
 namespace Admin\Builder;
 
 class AdminListBuilder extends AdminBuilder
 {
     private $_title;
+    private $_suggest;
     private $_keyList = array();
     private $_buttonList = array();
     private $_pagination = array();
     private $_data = array();
     private $_setStatusUrl;
     private $_searchPostUrl;
+    private $_selectPostUrl;
+    private $_setClearUrl;
 
     private $_search = array();
+    private $_select = array();
 
+    /**设置页面标题
+     * @param $title 标题文本
+     * @return $this
+     * @auth 陈一枭
+     */
     public function title($title)
     {
         $this->_title = $title;
+        $this->meta_title=$title;
+        return $this;
+    }
+
+    /**
+     * suggest  页面标题边上的提示信息
+     * @param $suggest
+     * @return $this
+     * @author:xjw129xjt(肖骏涛) xjt@ourstu.com
+     */
+    public function suggest($suggest){
+        $this->_suggest = $suggest;
         return $this;
     }
 
@@ -36,10 +52,43 @@ class AdminListBuilder extends AdminBuilder
         return $this;
     }
 
+    /**设置回收站根据ids彻底删除的URL
+     * @param $url
+     * @return $this
+     * @author 郑钟良<zzl@ourstu.com>
+     */
+    public function setClearUrl($url)
+    {
+        $this->_setClearUrl = $url;
+        return $this;
+    }
+
+    /**
+     * 筛选下拉选择url
+     * @param $url string 已被U函数解析的地址
+     * @return $this
+     * @author 郑钟良<zzl@ourstu.com>
+     */
+    public function setSelectPostUrl($url)
+    {
+        $this->_selectPostUrl = $url;
+        return $this;
+    }
+
     /**设置搜索提交表单的URL
      * @param $url
      * @return $this
      * @auth 陈一枭
+     */
+    /**原@auth 陈一枭
+     *public function setSearchPostUrl($url)
+     *{
+     *  $this->_searchPostUrl = $url;
+     *  return $this;
+     *}
+     */
+     /**更新筛选搜索功能 ，修正连续提交多出N+个GET参数的BUG
+     * @param $url   提交的getURL
      */
     public function setSearchPostUrl($url)
     {
@@ -47,12 +96,26 @@ class AdminListBuilder extends AdminBuilder
         return $this;
     }
 
+    /**加入一个按钮
+     * @param $title
+     * @param $attr
+     * @return $this
+     * @auth 陈一枭
+     */
+    
     public function button($title, $attr)
     {
         $this->_buttonList[] = array('title' => $title, 'attr' => $attr);
         return $this;
     }
 
+    /**加入新增按钮
+     * @param        $href
+     * @param string $title
+     * @param array  $attr
+     * @return AdminListBuilder
+     * @auth 陈一枭
+     */
     public function buttonNew($href, $title = '新增', $attr = array())
     {
         $attr['href'] = $href;
@@ -64,6 +127,22 @@ class AdminListBuilder extends AdminBuilder
         $attr['class'] = 'btn ajax-post';
         $attr['url'] = $this->addUrlParam($url, $params);
         $attr['target-form'] = 'ids';
+        return $this->button($title, $attr);
+    }
+
+    /**加入模态弹窗按钮
+     * @param $url
+     * @param $params
+     * @param $title
+     * @param array $attr
+     * @return $this
+     * @author 郑钟良<zzl@ourstu.com>
+     */
+    public function buttonModalPopup($url, $params, $title, $attr = array())
+    {
+        //$attr中可选参数，data-title：模态框标题，target-form：要传输的数据
+        $attr['modal-url'] = $this->addUrlParam($url, $params);
+        $attr['data-role']='modal_popup';
         return $this->button($title, $attr);
     }
 
@@ -102,14 +181,19 @@ class AdminListBuilder extends AdminBuilder
         return $this->buttonSetStatus($url, 1, $title, $attr);
     }
 
-    /**清空回收站
-     * @param null $model 要清空回收站的模型
+    /**彻底删除回收站
+     * @param null $url
      * @return $this
-     * @auth 陈一枭
+     * @author 陈一枭 -> 郑钟良<zzl@ourstu.com>
      */
-    public function buttonClear($model = null)
+    public function buttonClear($url=null)
     {
-        return $this->button('清空', array('class' => 'btn ajax-post tox-confirm', 'data-confirm' => '您确实要清空回收站吗？（清空后不可恢复）', 'url' => U('', array('model' => $model)), 'target-form' => 'ids'));
+        if (!$url) $url = $this->_setClearUrl;
+        $attr['class'] = 'btn ajax-post tox-confirm';
+        $attr['data-confirm']='您确实要彻底删除吗？（彻底删除后不可恢复）';
+        $attr['url'] = $url;
+        $attr['target-form'] = 'ids';
+        return $this->button('彻底删除', $attr);
     }
 
     public function buttonSort($href, $title = '排序', $attr = array())
@@ -127,9 +211,61 @@ class AdminListBuilder extends AdminBuilder
      * @return $this
      * @auth 陈一枭
      */
-    public function search($title = '搜索', $name = 'key', $type = 'text', $des = '', $attr)
+    /**原@auth 陈一枭
+    public function search($title = '搜索', $name = 'key', $type = 'text', $des = '', $attr )
     {
         $this->_search[] = array('title' => $title, 'name' => $name, 'type' => $type, 'des' => $des, 'attr' => $attr);
+        return $this;
+    }
+    */
+    
+    /**更新筛选搜索功能 ，修正连续提交多出N+个GET参数的BUG
+     * @param string $title 标题
+     * @param string $name  键名
+     * @param string $type  类型，默认文本
+     * @param string $des   描述
+     * @param        $attr  标签文本
+     * @param string $arrdb 择筛选项数据来源
+     * @param string $arrvalue 筛选数据（包含ID 和value的数组:array(array('id'=>1,'value'=>'系统'),array('id'=>2,'value'=>'项目'),array('id'=>3,'value'=>'机构'));）
+     * @return $this
+     * @auth MingYang <xint5288@126.com>
+     */
+    public function search($title = '搜索', $name = 'key', $type = 'text', $des = '', $attr , $arrdb = '',$arrvalue = null)
+    {
+        
+        if(empty($type) && $type = 'text'){
+            $this->_search[] = array('title' => $title, 'name' => $name, 'type' => $type, 'des' => $des, 'attr' => $attr);
+            $this->setSearchPostUrl('');
+        } else {
+            if (empty($arrdb)) {
+                $this->_search[] = array('title' => $title, 'name' => $name, 'type' => $type, 'des' => $des, 'attr' => $attr,'field'=>$field,'table'=>$table,'arrvalue'=>$arrvalue);
+                $this->setSearchPostUrl('');
+            } else {
+                //TODO:呆完善如果$arrdb存在的就把当前数据表的$name字段的信息全部查询出来供筛选。
+            }
+        }
+         return $this;
+    }
+
+    /**
+     * 添加筛选功能
+     * @param string $title 标题
+     * @param string $name  键名
+     * @param string $type  类型，默认文本
+     * @param string $des   描述
+     * @param        $attr  标签文本
+     * @param string $arrdb 择筛选项数据来源
+     * @param string $arrvalue 筛选数据（包含ID 和value的数组:array(array('id'=>1,'value'=>'系统'),array('id'=>2,'value'=>'项目'),array('id'=>3,'value'=>'机构'));）
+     * @return $this
+     * @author 郑钟良<zzl@ourstu.com>
+     */
+    public function select($title='筛选',$name = 'key', $type = 'select', $des = '', $attr ,$arrdb = '',$arrvalue = null)
+    {
+        if (empty($arrdb)) {
+            $this->_select[] = array('title' => $title, 'name' => $name, 'type' => $type, 'des' => $des, 'attr' => $attr,'arrvalue'=>$arrvalue);
+        } else {
+            //TODO:呆完善如果$arrdb存在的就把当前数据表的$name字段的信息全部查询出来供筛选。
+        }
         return $this;
     }
 
@@ -140,11 +276,23 @@ class AdminListBuilder extends AdminBuilder
         return $this;
     }
 
+    /**显示纯文本
+     * @param $name 键名
+     * @param $title 标题
+     * @return AdminListBuilder
+     * @auth 陈一枭
+     */
     public function keyText($name, $title)
     {
-        return $this->key($name, op_t($title), 'text');
+        return $this->key($name, text($title), 'text');
     }
 
+    /**显示html
+     * @param $name 键名
+     * @param $title 标题
+     * @return AdminListBuilder
+     * @auth 陈一枭
+     */
     public function keyHtml($name, $title)
     {
         return $this->key($name, op_h($title), 'html');
@@ -161,6 +309,18 @@ class AdminListBuilder extends AdminBuilder
     }
 
     /**
+     * 图标展示
+     * @param string $name
+     * @param string $title
+     * @return $this
+     * @author 郑钟良<zzl@ourstu.com>
+     */
+    public function keyIcon($name='icon',$title='图标')
+    {
+        return $this->key($name, $title, 'icon');
+    }
+
+    /**
      * @param $name
      * @param $title
      * @param $getUrl Closure|string
@@ -173,6 +333,11 @@ class AdminListBuilder extends AdminBuilder
         //如果getUrl是一个字符串，则表示getUrl是一个U函数解析的字符串
         if (is_string($getUrl)) {
             $getUrl = $this->createDefaultGetUrlFunction($getUrl);
+        }
+        
+        //修整添加多个空字段时显示不正常的BUG@mingyangliu
+        if(empty($name)){
+            $name = $title;
         }
 
         //添加key
@@ -220,10 +385,64 @@ class AdminListBuilder extends AdminBuilder
     {
         return $this->key($name, $title, 'uid');
     }
+    public function keyNickname($name='uid', $title, $subtitle = null)
+    {
+        return $this->key($name, $title, $subtitle, 'nickname');
+    }
 
     public function keyTitle($name = 'title', $title = '标题')
     {
         return $this->keyText($name, $title);
+    }
+
+    //关联表字段显示+URL连接
+    public function keyJoin($name, $title , $mate , $return , $model, $url ='')
+    {
+        $map = array('mate'=>$mate ,'return'=>$return,'model'=>$model,'url'=>$url);
+        return $this->key($name, $title , 'Join' , $map);
+    }
+
+    /**
+     * 模态弹窗
+     * @param $getUrl
+     * @param $text
+     * @param $title
+     * @param array $attr
+     * @return $this
+     * @author 郑钟良<zzl@ourstu.com>
+     */
+    public function keyDoActionModalPopup($getUrl,$text,$title,$attr=array())
+    {
+        //attr中需要设置data-title，用于设置模态弹窗标题
+        $attr['data-role']='modal_popup';
+        //获取默认getUrl函数
+        if (is_string($getUrl)) {
+            $getUrl = $this->createDefaultGetUrlFunction($getUrl);
+        }
+        //确认已经创建了DOACTIONS字段
+        $doActionKey = null;
+        foreach ($this->_keyList as $key) {
+            if ($key['name'] === 'DOACTIONS') {
+                $doActionKey = $key;
+                break;
+            }
+        }
+        if (!$doActionKey) {
+            $this->key('DOACTIONS', $title, 'doaction', $attr);
+        }
+
+        //找出第一个DOACTIONS字段
+        $doActionKey = null;
+        foreach ($this->_keyList as &$key) {
+            if ($key['name'] == 'DOACTIONS') {
+                $doActionKey = & $key;
+                break;
+            }
+        }
+
+        //在DOACTIONS中增加action
+        $doActionKey['opt']['actions'][] = array('text' => $text, 'get_url' => $getUrl,'opt'=>$attr);
+        return $this;
     }
 
     public function keyDoAction($getUrl, $text, $title = '操作')
@@ -297,7 +516,10 @@ class AdminListBuilder extends AdminBuilder
         return $this;
     }
 
-    public function display()
+    /**
+     * $solist 判断是否属于选择返回数据的列表页，如果是在列表页->display('admin_solist');@mingyangliu
+     * */
+    public function display($solist = '')
     {
         //key类型的等价转换
         //map转换成text
@@ -307,8 +529,14 @@ class AdminListBuilder extends AdminBuilder
 
         //uid转换成text
         $this->convertKey('uid', 'text', function ($value) {
-            $value = query_user(array('username', 'uid', 'space_url'), $value);
-            return "<a href='" . $value['space_url'] . "' target='_blank'>[{$value[uid]}]" . $value['username'] . '</a>';
+            $value = query_user(array('nickname', 'uid', 'space_url'), $value);
+            return "<a href='" . $value['space_url'] . "' target='_blank'>[{$value[uid]}]" . $value['nickname'] . '</a>';
+        });
+
+        //nickname转换成text
+        $this->convertKey('nickname', 'text', function ($value) {
+            $value = query_user(array('nickname', 'uid', 'space_url'), $value);exit;
+            return "<a href='" . $value['space_url'] . "' target='_blank'>[{$value[uid]}]" . $value['nickname'] . '</a>';
         });
 
         //time转换成text
@@ -337,18 +565,40 @@ class AdminListBuilder extends AdminBuilder
             $value = htmlspecialchars($value);
             $getUrl = $key['opt'];
             $url = $getUrl($item);
-            return "<a href=\"$url\">$value</a>";
+            //允许字段为空，如果字段名为空将标题名填充到A变现里
+            if(!$value){
+                return "<a href=\"$url\" target=\"_blank\">".$key['title']."</a>";
+            } else {
+                return "<a href=\"$url\" target=\"_blank\">$value</a>";
+            }
+        });
+
+        //如果icon为空
+        $this->convertKey('icon', 'html', function ($value, $key, $item) {
+            $value = htmlspecialchars($value);
+            if($value==''){
+                $html="无";
+            }else{
+                $html="<i class=\"$value\"></i> $value";
+            }
+            return $html;
         });
 
         //image转换为图片
 
         $this->convertKey('image', 'html', function ($value, $key, $item) {
-            $value = htmlspecialchars($value);
-            $sc_src = get_cover($value, 'path');
+            if(intval($value)){//value是图片id
+                $value = htmlspecialchars($value);
+                $sc_src = get_cover($value, 'path');
 
-            $src = getThumbImageById($value, 80, 80);
-            $sc_src = $sc_src == '' ? $src : $sc_src;
-            return "<div class='popup-gallery'><a title=\"查看大图\" href=\"$sc_src\"><img src=\"$src\"/ style=\"width:80px;height:80px\"></a></div>";
+                $src = getThumbImageById($value, 80, 80);
+                $sc_src = $sc_src == '' ? $src : $sc_src;
+                $html="<div class='popup-gallery'><a title=\"查看大图\" href=\"$sc_src\"><img src=\"$sc_src\"/ style=\"width:80px;height:80px\"></a></div>";
+            }else{//value是图片路径
+                $sc_src=$value;
+                $html="<div class='popup-gallery'><a title=\"查看大图\" href=\"$sc_src\"><img src=\"$sc_src\"/ style=\"border-radius:100%;\"></a></div>";
+            }
+            return $html;
         });
 
         //doaction转换为html
@@ -359,9 +609,39 @@ class AdminListBuilder extends AdminBuilder
                 $getUrl = $action['get_url'];
                 $linkText = $action['text'];
                 $url = $getUrl($item);
-                $result[] = "<a href=\"$url\">$linkText</a>";
+                if(isset($action['opt'])){
+                    $content = array();
+                    foreach($action['opt'] as $key=>$value) {
+                        $value = htmlspecialchars($value);
+                        $content[] = "$key=\"$value\"";
+                    }
+                    $content = implode(' ', $content);
+                    if(isset($action['opt']['data-role'])&&$action['opt']['data-role']=="modal_popup"){//模态弹窗
+                        $result[] = "<a href=\" javascrapt:void(0);\" modal-url=\"$url\" ".$content.">$linkText</a>";
+                    }else{
+                        $result[] = "<a href=\"$url\" ".$content.">$linkText</a>";
+                    }
+                }else{
+                    $result[] = "<a href=\"$url\">$linkText</a>";
+                }
             }
             return implode(' ', $result);
+        });
+
+        //Join转换为html
+        $this->convertKey('Join', 'html', function ($value,$key) {
+            if($value!=0){
+                $val = get_table_field($value, $key['opt']['mate'], $key['opt']['return'] , $key['opt']['model']);
+                if(!$key['opt']['url']){
+                    return $val;
+                } else {
+                    $urld = U($key['opt']['url'],array($key['opt']['return']=>$value));
+                    return "<a href=\"$urld\">$val</a>";
+                }
+            }
+            else{
+                return '-';
+            }  
         });
 
         //status转换为html
@@ -389,6 +669,7 @@ class AdminListBuilder extends AdminBuilder
             return $value;
         });
 
+
         //编译buttonList中的属性
         foreach ($this->_buttonList as &$button) {
             $button['tag'] = isset($button['attr']['href']) ? 'a' : 'button';
@@ -404,6 +685,7 @@ class AdminListBuilder extends AdminBuilder
 
         //显示页面
         $this->assign('title', $this->_title);
+        $this->assign('suggest', $this->_suggest);
         $this->assign('keyList', $this->_keyList);
         $this->assign('buttonList', $this->_buttonList);
         $this->assign('pagination', $paginationHtml);
@@ -411,15 +693,30 @@ class AdminListBuilder extends AdminBuilder
         /*加入搜索 陈一枭*/
         $this->assign('searches', $this->_search);
         $this->assign('searchPostUrl', $this->_searchPostUrl);
-        parent::display('admin_list');
+
+        /*加入筛选select 郑钟良*/
+        $this->assign('selects', $this->_select);
+        $this->assign('selectPostUrl', $this->_selectPostUrl);
+        //如果是选择返回数据的列表页就调用admin_solist模板文件，否则编译原有模板
+        if($solist){
+            parent::display('admin_solist');
+        } else {
+            parent::display('admin_list');
+        }
     }
 
-    public function doSetStatus($model, $ids, $status)
+    public function doSetStatus($model, $ids, $status=1)
     {
-        $ids = is_array($ids) ? $ids : explode(',', $ids);
-        M($model)->where(array('id' => array('in', $ids)))->save(array('status' => $status));
+        $id = array_unique((array)$ids);
+        $rs=M($model)->where(array('id' => array('in', $id)))->save(array('status' => $status));
+        if($rs===false)
+        {
+            $this->error('设置失败。');
+        }
         $this->success('设置成功', $_SERVER['HTTP_REFERER']);
     }
+
+
 
     private function convertKey($from, $to, $convertFunction)
     {
@@ -455,13 +752,16 @@ class AdminListBuilder extends AdminBuilder
      */
     private function createDefaultGetUrlFunction($pattern)
     {
-        return function ($item) use ($pattern) {
+        $explode = explode('|',$pattern);
+        $pattern = $explode[0];
+        $fun = empty($explode[1])?'U':$explode[1];
+        return function ($item) use ($pattern,$fun) {
             $pattern = str_replace('###', $item['id'], $pattern);
             //调用ThinkPHP中的解析引擎解析变量
             $view = new \Think\View();
             $view->assign($item);
             $pattern = $view->fetch('', $pattern);
-            return U($pattern);
+            return $fun($pattern);
         };
     }
 
@@ -494,6 +794,17 @@ class AdminListBuilder extends AdminBuilder
             }
         }
     }
+    /**执行彻底删除数据，只适用于无关联的数据表
+     * @param $model
+     * @param $ids
+     * @author 郑钟良<zzl@ourstu.com>
+     */
+    public function doClear($model, $ids)
+    {
+        $ids = is_array($ids) ? $ids : explode(',', $ids);
+        M($model)->where(array('id' => array('in', $ids)))->delete();
+        $this->success('彻底删除成功', $_SERVER['HTTP_REFERER']);
+    }
 
     /**
      * keyLinkByFlag  带替换表示的链接
@@ -516,6 +827,12 @@ class AdminListBuilder extends AdminBuilder
         return $this->key($name, $title, 'link', $getUrl);
     }
 
+    /**解析Url
+     * @param $pattern URL文本
+     * @param $flag
+     * @return callable
+     * @auth 陈一枭
+     */
     private function ParseUrl($pattern, $flag)
     {
         return function ($item) use ($pattern, $flag) {

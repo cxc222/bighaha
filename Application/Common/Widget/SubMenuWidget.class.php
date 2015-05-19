@@ -48,6 +48,9 @@ class SubMenuWidget extends Action
         );
         $this->assign('current', $current);
         $this->assign('menu_list', $menu_list);
+        if(!is_array($brand)){
+            $brand['title']=$brand;
+        }
         $this->assign('brand', $brand);
         $this->display(T('Application://Common@Widget/menu'));
     }

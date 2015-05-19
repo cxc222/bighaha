@@ -25,6 +25,11 @@ return array(
     //开发者网站
     'website' => 'http://www.ourstu.com',
     //前台入口，可用U函数
-    'entry' => 'Event/index/index'
+    'entry' => 'Event/index/index',
 
+    'admin_entry' => 'Admin/Event/index',
+
+    'icon' => 'map-marker',
+
+    'can_uninstall' => 1
 );

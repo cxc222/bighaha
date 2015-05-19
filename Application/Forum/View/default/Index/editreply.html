@@ -12,7 +12,11 @@
                 <form action="{:U('Forum/Index/doReplyEdit')}" method="post" id="edit-article-form">
                     <input type="hidden" name="reply_id" value="{$reply.id}"/>
                     <p>
-                        {:W('UeditorMini/editor',array('contentEditor','content',$reply['content'],'100%','250px',$config))}
+                        {:W('Ueditor/editor',array('contentEditor','content',$reply['content'],'100%','250px',$config))}
+                        <php>
+                            $config="toolbars:[['source','|','bold','italic','underline','fontsize','forecolor','justifyleft','fontfamily','|','map','emotion','insertimage','insertcode']]";
+                        </php>
+                        {:W('Common/Ueditor/editor',array('myeditor','content',$reply['content'],'378px','250px',$config))}
                     </p>
                     <p>&nbsp;</p>
                     <p class="pull-right">

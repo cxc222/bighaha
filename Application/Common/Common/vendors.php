@@ -18,7 +18,8 @@
  * 淘宝IP接口
  * @Return: array
  */
- use Vendor\PHPMailer;
+use Vendor\PHPMailer;
+
 function get_city_by_ip($ip)
 {
     $url = "http://ip.taobao.com/service/getIpInfo.php?ip=" . $ip;
@@ -48,6 +49,13 @@ function get_city_by_ip($ip)
  */
 function send_mail($to = '', $subject = '', $body = '', $name = '', $attachment = null)
 {
+    $host = C('MAIL_SMTP_HOST');
+    $user = C('MAIL_SMTP_USER');
+    $pass = C('MAIL_SMTP_PASS');
+    if (empty($host) || empty($user) || empty($pass)) {
+        return '管理员还未配置邮件信息，请联系管理员配置';
+    }
+
     if (is_sae()) {
         return sae_mail($to, $subject, $body, $name);
     } else {
@@ -66,17 +74,18 @@ function send_mail($to = '', $subject = '', $body = '', $name = '', $attachment 
  */
 function sae_mail($to = '', $subject = '', $body = '', $name = '')
 {
+    $site_name = modC('WEB_SITE_NAME', 'OpenSNS开源社交系统', 'Config');
     if ($to == '') {
         $to = C('MAIL_SMTP_CE'); //邮件地址为空时，默认使用后台默认邮件测试地址
     }
     if ($name == '') {
-        $name = C('WEB_SITE'); //发送者名称为空时，默认使用网站名称
+        $name = $site_name; //发送者名称为空时，默认使用网站名称
     }
     if ($subject == '') {
-        $subject = C('WEB_SITE'); //邮件主题为空时，默认使用网站标题
+        $subject = $site_name; //邮件主题为空时，默认使用网站标题
     }
     if ($body == '') {
-        $body = C('WEB_SITE'); //邮件内容为空时，默认使用网站描述
+        $body = $site_name; //邮件内容为空时，默认使用网站描述
     }
     $mail = new SaeMail();
     $mail->setOpt(array(
@@ -99,8 +108,9 @@ function is_sae()
     return function_exists('sae_debug');
 }
 
-function is_local(){
-    return strtolower(C('PICTURE_UPLOAD_DRIVER')) == 'local'?true:false;
+function is_local()
+{
+    return strtolower(C('PICTURE_UPLOAD_DRIVER')) == 'local' ? true : false;
 }
 
 /**
@@ -109,7 +119,7 @@ function is_local(){
 function send_mail_local($to = '', $subject = '', $body = '', $name = '', $attachment = null)
 {
     $from_email = C('MAIL_SMTP_USER');
-    $from_name = C('WEB_SITE');
+    $from_name = modC('WEB_SITE_NAME', 'OpenSNS开源社交系统', 'Config');
     $reply_email = '';
     $reply_name = '';
 
@@ -134,13 +144,13 @@ function send_mail_local($to = '', $subject = '', $body = '', $name = '', $attac
         $to = C('MAIL_SMTP_CE'); //邮件地址为空时，默认使用后台默认邮件测试地址
     }
     if ($name == '') {
-        $name = C('WEB_SITE'); //发送者名称为空时，默认使用网站名称
+        $name = modC('WEB_SITE_NAME', 'OpenSNS开源社交系统', 'Config'); //发送者名称为空时，默认使用网站名称
     }
     if ($subject == '') {
-        $subject = C('WEB_SITE'); //邮件主题为空时，默认使用网站标题
+        $subject = modC('WEB_SITE_NAME', 'OpenSNS开源社交系统', 'Config'); //邮件主题为空时，默认使用网站标题
     }
     if ($body == '') {
-        $body = C('WEB_SITE'); //邮件内容为空时，默认使用网站描述
+        $body = modC('WEB_SITE_NAME', 'OpenSNS开源社交系统', 'Config'); //邮件内容为空时，默认使用网站描述
     }
     $mail->AddReplyTo($replyEmail, $replyName);
     $mail->Subject = $subject;
@@ -181,10 +191,107 @@ function modC($key, $default = '', $module = '')
         $config = D('Config')->where(array('name' => '_' . strtoupper($mod) . '_' . strtoupper($key)))->find();
         if (!$config) {
             $result = $default;
-        }else{
+        } else {
             $result = $config['value'];
         }
-        S('conf_' . strtoupper($mod) . '_' . strtoupper($key),$result);
+        S('conf_' . strtoupper($mod) . '_' . strtoupper($key), $result);
     }
     return $result;
+}
+
+/**发送短消息
+ * @param        $mobile 手机号码
+ * @param        $content 内容
+ * @param string $time 定时发送
+ * @param string $mid 子扩展号
+ * @return string
+ * @auth 肖骏涛
+ */
+function sendSMS($mobile, $content, $time = '', $mid = '')
+{
+    $uid = modC('SMS_UID', '', 'USERCONFIG');
+    $pwd = modC('SMS_PWD', '', 'USERCONFIG');
+    $http = modC('SMS_HTTP', '', 'USERCONFIG');
+
+    if (empty($http) || empty($uid) || empty($pwd)) {
+        return '管理员还未配置短信信息，请联系管理员配置';
+    }
+    $data = array
+    (
+        'uid' => $uid, //用户账号
+        'pwd' => strtolower(md5($pwd)), //MD5位32密码
+        'mobile' => $mobile, //号码
+        'content' => $content, //内容 如果对方是utf-8编码，则需转码iconv('gbk','utf-8',$content); 如果是gbk则无需转码
+        'time' => $time, //定时发送
+        'mid' => $mid, //子扩展号
+        'encode' => 'utf8',
+    );
+    $re = postSMS($http, $data); //POST方式提交
+    if (trim($re) == '100') {
+        return "发送成功!";
+    } else {
+        return "发送失败! 状态：" . $re;
+    }
+}
+
+function postSMS($url, $data = '')
+{
+    $row = parse_url($url);
+    $host = $row['host'];
+    $port = $row['port'] ? $row['port'] : 80;
+    $file = $row['path'];
+    $post = '';
+    while (list($k, $v) = each($data)) {
+        $post .= rawurlencode($k) . "=" . rawurlencode($v) . "&"; //转URL标准码
+    }
+    $post = substr($post, 0, -1);
+    $len = strlen($post);
+    $fp = @fsockopen($host, $port, $errno, $errstr, 10);
+    if (!$fp) {
+        return "$errstr ($errno)\n";
+    } else {
+        $receive = '';
+        $out = "POST $file HTTP/1.1\r\n";
+        $out .= "Host: $host\r\n";
+        $out .= "Content-type: application/x-www-form-urlencoded\r\n";
+        $out .= "Connection: Close\r\n";
+        $out .= "Content-Length: $len\r\n\r\n";
+        $out .= $post;
+        fwrite($fp, $out);
+        while (!feof($fp)) {
+            $receive .= fgets($fp, 128);
+        }
+        fclose($fp);
+        $receive = explode("\r\n\r\n", $receive);
+        unset($receive[0]);
+        return implode("", $receive);
+    }
+}
+
+/**
+ * get_kanban_config  获取看板配置
+ * @param $key
+ * @param $kanban
+ * @param string $default
+ * @param string $module
+ * @return array|bool
+ * @author:xjw129xjt(肖骏涛) xjt@ourstu.com
+ */
+function get_kanban_config($key, $kanban, $default = '', $module = '')
+{
+    $config = modC($key, $default, $module);
+    if (is_array($config)) {
+        return $config;
+    } else {
+        $config = json_decode($config, true);
+        foreach ($config as $v) {
+            if ($v['data-id'] == $kanban) {
+                $res = $v['items'];
+                break;
+            }
+        }
+        return getSubByKey($res, 'data-id');
+    }
+
+
 }

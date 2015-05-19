@@ -26,7 +26,7 @@ function check_env(){
 
 	//PHP环境检测
 	if($items['php'][3] < $items['php'][1]){
-		$items['php'][4] = 'error';
+		$items['php'][4] = 'remove';
 		session('error', true);
 	}
 
@@ -47,7 +47,7 @@ function check_env(){
 	$tmp = function_exists('gd_info') ? gd_info() : array();
 	if(empty($tmp['GD Version'])){
 		$items['gd'][3] = '未安装';
-		$items['gd'][4] = 'error';
+		$items['gd'][4] = 'remove';
 		session('error', true);
 	} else {
 		$items['gd'][3] = $tmp['GD Version'];
@@ -68,12 +68,12 @@ function check_env(){
  */
 function check_dirfile(){
 	$items = array(
-		array('dir',  '可写', 'success', './Uploads/Download'),
-		array('dir',  '可写', 'success', './Uploads/Picture'),
-		array('dir',  '可写', 'success', './Uploads/Editor'),
-		array('dir',  '可写', 'success', './Runtime'),
-		array('dir', '可写', 'success', './Application/User/Conf'),
-		array('file', '可写', 'success', './Application/Common/Conf/config.php'),
+		array('dir',  '可写', 'ok', './Uploads/Download'),
+		array('dir',  '可写', 'ok', './Uploads/Picture'),
+		array('dir',  '可写', 'ok', './Uploads/Editor'),
+		array('dir',  '可写', 'ok', './Runtime'),
+		array('file', '可写', 'ok', './Conf/user.php'),
+		array('file', '可写', 'ok', './Conf/common.php'),
 
 	);
 
@@ -82,11 +82,11 @@ function check_dirfile(){
 			if(!is_writable(INSTALL_APP_PATH . $val[3])) {
 				if(is_dir($items[1])) {
 					$val[1] = '可读';
-					$val[2] = 'error';
+					$val[2] = 'remove';
 					session('error', true);
 				} else {
 					$val[1] = '不存在';
-					$val[2] = 'error';
+					$val[2] = 'remove';
 					session('error', true);
 				}
 			}
@@ -94,13 +94,13 @@ function check_dirfile(){
 			if(file_exists(INSTALL_APP_PATH . $val[3])) {
 				if(!is_writable(INSTALL_APP_PATH . $val[3])) {
 					$val[1] = '不可写';
-					$val[2] = 'error';
+					$val[2] = 'remove';
 					session('error', true);
 				}
 			} else {
 				if(!is_writable(dirname(INSTALL_APP_PATH . $val[3]))) {
 					$val[1] = '不存在';
-					$val[2] = 'error';
+					$val[2] = 'remove';
 					session('error', true);
 				}
 			}
@@ -116,15 +116,15 @@ function check_dirfile(){
  */
 function check_func(){
 	$items = array(
-		array('mysql_connect',     '支持', 'success'),
-		array('file_get_contents', '支持', 'success'),
-		array('mb_strlen',		   '支持', 'success'),
+		array('mysql_connect',     '支持', 'ok'),
+		array('file_get_contents', '支持', 'ok'),
+		array('mb_strlen',		   '支持', 'ok'),
 	);
 
 	foreach ($items as &$val) {
 		if(!function_exists($val[0])){
 			$val[1] = '不支持';
-			$val[2] = 'error';
+			$val[2] = 'remove';
 			$val[3] = '开启';
 			session('error', true);
 		}
@@ -153,13 +153,13 @@ function write_config($config, $auth){
 
 		//写入应用配置文件
 		if(!IS_WRITE){
-			return '由于您的环境不可写，请复制下面的配置文件内容覆盖到相关的配置文件，然后再登录后台。<p>'.realpath(APP_PATH).'/Common/Conf/config.php</p>
+			return '由于您的环境不可写，请复制下面的配置文件内容覆盖到相关的配置文件，然后再登录后台。<p>'.realpath('').'./Conf/common.php</p>
 			<textarea name="" style="width:650px;height:185px">'.$conf.'</textarea>
-			<p>'.realpath(APP_PATH).'/User/Conf/config.php</p>
+			<p>'.realpath('').'./Conf/user.php</p>
 			<textarea name="" style="width:650px;height:125px">'.$user.'</textarea>';
 		}else{
-			if(file_put_contents(APP_PATH . 'Common/Conf/config.php', $conf) &&
-			   file_put_contents(APP_PATH . 'User/Conf/config.php', $user)){
+			if(file_put_contents('./Conf/common.php', $conf) &&
+			   file_put_contents('./Conf/user.php', $user)){
 				show_msg('配置文件写入成功');
 			} else {
 				show_msg('配置文件写入失败！', 'error');
@@ -185,13 +185,14 @@ function create_tables($db, $prefix = ''){
 	$orginal = C('ORIGINAL_TABLE_PREFIX');
 	$sql = str_replace(" `{$orginal}", " `{$prefix}", $sql);
 
+
 	//开始安装
 	show_msg('开始安装数据库...');
 	foreach ($sql as $value) {
 		$value = trim($value);
 		if(empty($value)) continue;
 		if(substr($value, 0, 12) == 'CREATE TABLE') {
-			$name = preg_replace("/^CREATE TABLE `(\w+)` .*/s", "\\1", $value);
+			$name = preg_replace("/^CREATE TABLE IF NOT EXISTS `(\w+)` .*/s", "\\1", $value);
 			$msg  = "创建数据表{$name}";
 			if(false !== $db->execute($value)){
 				show_msg($msg . '...成功');
@@ -202,30 +203,69 @@ function create_tables($db, $prefix = ''){
 		} else {
 			$db->execute($value);
 		}
-
 	}
+
 }
 
 function register_administrator($db, $prefix, $admin, $auth){
 	show_msg('开始注册创始人帐号...');
-	$sql = "INSERT INTO `[PREFIX]ucenter_member` VALUES " .
-		   "('1', '[NAME]', '[PASS]', '[EMAIL]', '', '[TIME]', '[IP]', 0, 0, '[TIME]', '1')";
+    $uid=1;
+    /*插入用户*/
+	$sql = <<<sql
+REPLACE INTO `[PREFIX]ucenter_member` (`id`, `username`, `password`, `email`, `mobile`, `reg_time`, `reg_ip`, `last_login_time`, `last_login_ip`, `update_time`, `status`, `type`) VALUES
+('[UID]', '[NAME]', '[PASS]','[EMAIL]', '', '[TIME]', '[IP]', '[TIME]', '[IP]',  '[TIME]', 1, 1);
+sql;
+
+      /*  "REPLACE INTO `[PREFIX]ucenter_member` VALUES " .
+		   "('1', '[NAME]', '[PASS]', '[EMAIL]', '', '[TIME]', '[IP]', 0, 0, '[TIME]', '1',1,'finish')";*/
 
 	$password = user_md5($admin['password'], $auth);
 	$sql = str_replace(
-		array('[PREFIX]', '[NAME]', '[PASS]', '[EMAIL]', '[TIME]', '[IP]'),
-		array($prefix, $admin['username'], $password, $admin['email'], NOW_TIME, get_client_ip(1)),
+		array('[PREFIX]', '[NAME]', '[PASS]', '[EMAIL]', '[TIME]', '[IP]','[UID]'),
+		array($prefix, $admin['username'], $password, $admin['email'], NOW_TIME, get_client_ip(1),$uid),
 		$sql);
 	//执行sql
 	$db->execute($sql);
 
-	$sql = "INSERT INTO `[PREFIX]member` VALUES ".
-		   "('1', '[NAME]', '0', '0', '', '0', '1', '0', '[TIME]', '0', '[TIME]', '1','',0,0,0,0,0);";
+    /*插入用户资料*/
+	$sql =<<<sql
+REPLACE INTO `[PREFIX]member` (`uid`, `nickname`, `sex`, `birthday`, `qq`, `login`, `reg_ip`, `reg_time`, `last_login_ip`, `last_login_role`, `show_role`, `last_login_time`, `status`, `signature`) VALUES
+('[UID]','[NAME]', 0,  '0', '', 1, 0, '[TIME]', 0, 1, 1, '[TIME]', 1, '');
+sql;
+
 	$sql = str_replace(
-		array('[PREFIX]', '[NAME]', '[TIME]'),
-		array($prefix, $admin['username'], NOW_TIME),
+		array('[PREFIX]', '[NAME]', '[TIME]','[UID]'),
+		array($prefix, $admin['username'], NOW_TIME,$uid),
 		$sql);
+
+
 	$db->execute($sql);
+
+    /*初始化角色表*/
+    $sql=<<<sql
+REPLACE INTO `[PREFIX]role` (`id`, `group_id`, `name`, `title`, `description`, `user_groups`, `invite`, `audit`, `sort`, `status`, `create_time`, `update_time`) VALUES
+    (1, 0, 'default', '普通用户', '普通用户', '1', 0, 0, 0, 1, [TIME], [TIME]);
+sql;
+    $sql = str_replace(
+        array('[PREFIX]', '[TIME]','[UID]'),
+        array($prefix, NOW_TIME,$uid),
+        $sql);
+    $db->execute($sql);
+
+    /*插入角色和用户对应关系*/
+    $sql=<<<sql
+REPLACE INTO `[PREFIX]user_role` (`id`, `uid`, `role_id`, `status`, `step`, `init`) VALUES
+    (1, [UID], 1, 1, 'finish', 1);
+sql;
+    $sql = str_replace(
+        array('[PREFIX]','[UID]'),
+        array($prefix,$uid),
+        $sql);
+    $db->execute($sql);
+
+    /*初始化用户角色end*/
+
+
 	show_msg('创始人帐号注册完成！');
 }
 
@@ -235,20 +275,12 @@ function register_administrator($db, $prefix, $admin, $auth){
  */
 function show_msg($msg, $class = ''){
 	echo "<script type=\"text/javascript\">showmsg(\"{$msg}\", \"{$class}\")</script>";
-	flush();
-	ob_flush();
+    ob_flush();
+    flush();
+
+
 }
 
-/**
- * 生成系统AUTH_KEY
- * @author 麦当苗儿 <zuojiazi@vip.qq.com>
- */
-function build_auth_key(){
-	$chars  = 'abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-	$chars .= '`~!@#$%^&*()_+-=[]{};:"|,.<>/?';
-	$chars  = str_shuffle($chars);
-	return substr($chars, 0, 40);
-}
 
 /**
  * 系统非常规MD5加密方法

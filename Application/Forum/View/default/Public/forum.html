@@ -2,23 +2,26 @@
 <html>
 <head>
     <include file="Public/head"/>
+    <link type="text/css" rel="stylesheet" href="__CSS__/forum.css"/>
     <script type="text/javascript" src="__JS__/common.js"></script>
 </head>
 <body>
 <!-- 头部 -->
 <include file="Public/header"/>
+<include file="Public/_nav"/>
 <!-- /头部 -->
 
 <!-- 主体 -->
-<div id="main-container" class="conatiner">
-    <div class="container">
-        <div class="col-md-9">
-            <include file="Public/forum-header"/>
+<div id="main-container" class="">
+    <div id="body-container" class="container  common-block">
+        <include file="Public/forum-header"/>
+        <div class="col-xs-9">
+
             <div class="container-fluid">
                 <block name="body"></block>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-xs-3">
             <block name="side"></block>
             <block name="side">
                 <include file="Public/forum-side"/>

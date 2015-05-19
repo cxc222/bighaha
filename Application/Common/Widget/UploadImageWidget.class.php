@@ -1,17 +1,12 @@
 <?php
-/**
- * 所属项目 商业版.
- * 开发者: 陈一枭
- * 创建日期: 14-9-11
- * 创建时间: 下午1:09
- * 版权所有 想天软件工作室(www.ourstu.com)
- */
-
 namespace Common\Widget;
-
-
 use Think\Controller;
 
+/**
+ * Class UploadImageWidget  上传图片组件
+ * @package Common\Widget
+ * @author:xjw129xjt(肖骏涛) xjt@ourstu.com
+ */
 class UploadImageWidget extends Controller
 {
 

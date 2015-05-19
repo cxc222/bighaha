@@ -4,10 +4,13 @@
     <link href="__CSS__/event.css" rel="stylesheet" type="text/css"/>
     <link type="text/css" rel="stylesheet" href="__PUBLIC__/Core/js/ext/magnific/magnific-popup.css"/>
 </block>
-
+<block name="header">
+    <include file="_nav"/>
+</block>
 <block name="body">
 <!--导航-->
-<include file="_nav"/>
+
+
 
 
 
@@ -166,7 +169,6 @@
                 $('#children_' + $(this).attr('data')).show();
             });
 
-            bindSupport();
 
 
         })

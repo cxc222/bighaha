@@ -159,8 +159,8 @@ class uc_note {
             'username' => $ref['uc_username'],
             'last_login_time' => $user['last_login_time'],
         );
-        $_SESSION['onethink_home']['user_auth']=$auth;
-        $_SESSION['onethink_home']['user_auth_sign']=data_auth_sign($auth);
+        $_SESSION['ocenter']['user_auth']=$auth;
+        $_SESSION['ocenter']['user_auth_sign']=data_auth_sign($auth);
 
 	}
 
@@ -172,8 +172,8 @@ class uc_note {
 		//note 同步登出 API 接口
 		header('P3P: CP="CURa ADMa DEVa PSAo PSDo OUR BUS UNI PUR INT DEM STA PRE COM NAV OTC NOI DSP COR"');
         session_start();
-        $_SESSION['onethink_home']['user_auth']=null;
-        $_SESSION['onethink_home']['user_auth_sign']=null;
+        $_SESSION['ocenter']['user_auth']=null;
+        $_SESSION['ocenter']['user_auth_sign']=null;
         session_destroy();
 	}
 

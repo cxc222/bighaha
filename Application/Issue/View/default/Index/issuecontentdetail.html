@@ -94,12 +94,16 @@
             {$content.content}
         </div>
     <div>
-    {:hook('localComment', array('path'=>"Issue/issueContent/$content[id]", 'uid'=>$content['uid']))}
+    {:hook('localComment', array('path'=>"Issue/issueContent/$content[id]", 'uid'=>$content['uid'],'count_model'=>'issue_content','count_field'=>'reply_count'))}
     </div>
 </div>
 
 
-
+    <script type="text/javascript" charset="utf-8" src="__STATIC__/ueditor/third-party/SyntaxHighlighter/shCore.js"></script>
+    <link rel="stylesheet" type="text/css" href="__STATIC__/ueditor/third-party/SyntaxHighlighter/shCoreDefault.css"/>
+    <script type="text/javascript">
+        SyntaxHighlighter.all();
+    </script>
 
     <include file="_box"/>
 </block>

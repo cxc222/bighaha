@@ -18,7 +18,7 @@ use Common\Exception\ApiException;
  * 前台首页控制器
  * 主要获取首页聚合数据
  */
-class IndexController extends AtlasController {
+class IndexController extends FrontBaseController {
 	private $atlasModel;
 	private $atlasApi;
 	

@@ -8,7 +8,7 @@
             <volist name="post_cate" id="type" offset="0"  length="10">
                 <a href="{:U('posts',array('post_cate'=>$type['id']))}" <if condition="$postCate eq $type['id']">class="active"</if>>
                     <!--//TODO 添加标签的链接-->
-                    {$type.title|parseWeiboContent}
+                    {$type.title}
                 </a>
             </volist>
         </div>

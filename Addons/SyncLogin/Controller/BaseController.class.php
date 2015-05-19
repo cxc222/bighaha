@@ -160,8 +160,6 @@ class BaseController extends AddonsController
     public function newAccount()
     {
 
-
-
         $username = I('post.username');
         $nickname = I('post.nickname');
         $email = I('post.email');
@@ -228,7 +226,7 @@ class BaseController extends AddonsController
         $token =session('SYNCLOGIN_TOKEN');
         $user_info = D('Addons://SyncLogin/Info')->$type($token);
         if ($info1 = D('sync_login')->where("`type_uid`='" . $openid . "' AND type='" . $type . "'")->find()) {
-            $user = D('UcenterMember')->where("id=" . $info1 ['uid'])->find();
+            $user = UCenterMember()->where("id=" . $info1 ['uid'])->find();
             if (empty ($user)) {
                 D('sync_login')->where("type_uid=" . $openid . " AND type='" . $type . "'")->delete();
                 //已经绑定过，执行登录操作，设置token
@@ -278,7 +276,7 @@ class BaseController extends AddonsController
     {
         switch ($code) {
             case -1:
-                $error = '用户名长度必须在16个字符以内！';
+                $error = '用户名长度必须在32个字符以内！';
                 break;
             case -2:
                 $error = '用户名被禁止注册！';
@@ -314,7 +312,7 @@ class BaseController extends AddonsController
                 $error = '用户名只能由数字、字母和"_"组成！';
                 break;
             case -21:
-                $error = '昵称不能少于两个字！';
+                $error = '昵称不能少于四个字！';
                 break;
             case -30:
                 $error = '昵称被占用！';

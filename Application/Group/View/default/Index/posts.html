@@ -43,16 +43,14 @@
                     </div>
                 </div>
 
-
                 <div id="myTabContent" class="tab-content">
-
 
                     <div class="" >
                         <div class="row common_block_title">
                             <div class="col-xs-8">
 
                                 <volist name="post_cate" id="cate">
-                                    <a href="{:U('posts',array('post_cate'=>$cate['id']))}">[{$cate.title|parseWeiboContent}]</a>
+                                    <a href="{:U('posts',array('post_cate'=>$cate['id']))}">[{$cate.title}]</a>
                                 </volist>
 
                             </div>
@@ -72,8 +70,7 @@
                                     </div>
                                 </if>
                                 <volist name="list" id="document">
-                                    <include file="Public/post-item"/>
-
+                                    {:W('Group/Detail/post',array('post_id'=>$document))}
                                     <if condition="$i neq count($list)">
                                         <hr class="group-list-hr"/>
                                         <else/>

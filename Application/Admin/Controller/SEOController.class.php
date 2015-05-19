@@ -46,7 +46,7 @@ class SEOController extends AdminController
         //显示页面
         $builder = new AdminListBuilder();
         $builder->title('SEO规则回收站')
-            ->setStatusUrl(U('setRuleStatus'))->buttonRestore()
+            ->setStatusUrl(U('setRuleStatus'))->setClearUrl(U('doClear'))->buttonRestore()->buttonClear()
             ->keyId()->keyTitle()->keyText('app', '模块')->keyText('controller', '控制器')->keyText('action', '方法')
             ->keyText('seo_title', 'SEO标题')->keyText('seo_keywords', 'SEO关键字')->keyText('seo_description', 'SEO描述')
             ->data($ruleList)
@@ -58,6 +58,11 @@ class SEOController extends AdminController
     {
         $builder = new AdminListBuilder();
         $builder->doSetStatus('SeoRule', $ids, $status);
+    }
+
+    public function doClear($ids){
+        $builder = new AdminListBuilder();
+        $builder->doClear('SeoRule', $ids);
     }
 
     public function sortRule()
@@ -97,8 +102,20 @@ class SEOController extends AdminController
 
         //显示页面
         $builder = new AdminConfigBuilder();
+
+
+        $modules = D('Module')->getAll();
+
+
+        $app=array(''=>'-所有模块-');
+        foreach ($modules as $m) {
+            if($m['is_setup']){
+                $app[$m['name']]=$m['alias'];
+            }
+        }
+
         $builder->title($isEdit ? '编辑规则' : '添加规则')
-            ->keyId()->keyText('title', '名称', '规则名称，方便记忆')->keyText('app', '应用名称', '不填表示所有应用')->keyText('controller', '控制器', '不填表示所有控制器')
+            ->keyId()->keyText('title', '名称', '规则名称，方便记忆')->keySelect('app', '模块名称', '不填表示所有模块',$app)->keyText('controller', '控制器', '不填表示所有控制器')
             ->keyText('action2', '方法', '不填表示所有方法')->keyText('seo_title', 'SEO标题', '不填表示使用下一条规则，支持变量')
             ->keyText('seo_keywords', 'SEO关键字', '不填表示使用下一条规则，支持变量')->keyTextArea('seo_description', 'SEO描述', '不填表示使用下一条规则，支持变量')
             ->keyStatus()

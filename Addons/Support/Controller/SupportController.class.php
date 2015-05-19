@@ -40,13 +40,13 @@ class SupportController extends AddonsController
 
                 $this->clearCache($support);
 
-                $user = query_user(array('username'));
+                $user = query_user(array('nickname'));
                 if (I('POST.jump') == 'no') {
                     $jump = $_SERVER['HTTP_REFERER']; //如果设置了jump=no，则默认使用引用页
                 } else {
                     $jump = U($appname . '/Index/' . $table . 'Detail', array('id' => $row));//否则按照约定规则组合消息跳转页面。
                 }
-                D('Message')->sendMessage($message_uid, $user['username'] . '给您点了个赞。', $title =$user['username'] . '赞了您。', $jump, is_login());
+                D('Message')->sendMessage($message_uid, $user['nickname'] . '给您点了个赞。', $title = $user['nickname'] . '赞了您。', $jump, is_login());
                 exit(json_encode(array('status' => 1, 'info' => '感谢您的支持。')));
             } else {
                 exit(json_encode(array('status' => 0, 'info' => '写入数据库失败。')));
@@ -61,10 +61,7 @@ class SupportController extends AddonsController
      */
     private function clearCache($support)
     {
-        unset($support['uid']);
-        unset($support['create_time']);
-        $cache_key = "support_count_" . implode('_', $support);
-        S($cache_key, null);
+        D('Support')->clearCache($support['appname'], $support['table'], $support['row']);
     }
 }
 

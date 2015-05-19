@@ -2,8 +2,8 @@
 
 <block name="body">
 <script type="text/javascript" src="__JS__/common.js"></script>
-<div class="row post_content">
-<div class="col-xs-12 forum_block_border " style="background: white">
+<div class="clearfix post_content">
+<div class="col-xs-12  " style="background: white">
     <div style="margin-top: 15px"></div>
     <php>
         $user = query_user(array('avatar128','uid','nickname','space_url','icons_html','rank_link','space_link'),
@@ -12,8 +12,8 @@
     <if condition="$showMainPost">
         <div class="row" style="position: relative">
             <div class="forum_left_operation">
-                <div class="text-right btn-toolbar btn-group-vertical" role="toolbar">
-                    <div class="btn-group">
+                <div class="text-right btn-toolbar " role="toolbar">
+                    <div class="btn-group btn-group-vertical">
                         <if condition="($post['uid']==is_login()) OR (is_administrator())">
                         <a class="btn" title="编辑"
                            href="{:U('Index/edit',array('post_id'=>$post['id']))}">
@@ -29,11 +29,11 @@
                             $bookmarkStyle = $isBookmark ? $hideStyle : '';
                             $unbookmarkStyle = $isBookmark ? '' : $hideStyle;
                         </php>
-                        <a title="取消收藏" id="unbookmark_button" class="btn " style="{$unbookmarkStyle} padding-bottom: 10px"
+                        <a title="取消收藏" id="unbookmark_button" class="btn " style="{$unbookmarkStyle} padding-bottom: 2px"
                            href="{:U('Index/doBookmark?add=0',array('post_id'=>$post['id']))}">
                             <i class="forum_uncollect"></i></a>
 
-                        <a title="收藏本帖" id="bookmark_button" class="btn " style="{$bookmarkStyle} padding-bottom: 10px"
+                        <a title="收藏本帖" id="bookmark_button" class="btn " style="{$bookmarkStyle} padding-bottom: 2px"
                            href="{:U('Index/doBookmark',array('post_id'=>$post['id']))}"><i
                                 class="forum_collect" ></i></a>
 
@@ -214,8 +214,9 @@
                     <h4>发表回复</h4>
                     <p>
                         <php>$config='';</php>
-                        {:W('UeditorMini/editor',array('contentEditor','content','','100%','250px',$config))}
+
                     </p>
+                    {:W('Common/Ueditor/editor',array('myeditor','content','','100%','350px',$config))}
 
                     <p class="pull-right">
                         <input type="submit" id="reply_button" class="btn btn-primary" value="发表 Ctrl+Enter"/>
@@ -243,9 +244,9 @@
         });
 
 
-        var $inputor = $('#contentEditor').atwho(atwho_config);
-
-        bindSupport();
+       /* var $inputor = $('#contentEditor').atwho(atwho_config);
+*/
+      /*  bindSupport();*/
         $('#bookmark_button, #unbookmark_button').click(function (e) {
 
             //取消默认操作

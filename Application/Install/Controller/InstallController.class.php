@@ -15,8 +15,8 @@ use Think\Storage;
 class InstallController extends Controller{
 
     protected function _initialize(){
-        if(Storage::has(MODULE_PATH . 'Data/install.lock')){
-            $this->error('已经成功安装了OpenSNS，请不要重复安装!');
+        if(Storage::has( 'Conf/install.lock')){
+            $this->error('已经成功安装，请不要重复安装!');
         }
     }
 
@@ -127,6 +127,7 @@ class InstallController extends Controller{
             //show_msg();
         } else {
             session('step', 3);
+
             $this->redirect('Index/complete');
         }
     }

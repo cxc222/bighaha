@@ -1,11 +1,11 @@
 <?php
-// +----------------------------------------------------------------------
-// | OneThink [ WE CAN DO IT JUST THINK IT ]
-// +----------------------------------------------------------------------
-// | Copyright (c) 2013 http://www.onethink.cn All rights reserved.
-// +----------------------------------------------------------------------
-// | Author: 麦当苗儿 <zuojiazi@vip.qq.com> <http://www.zjzit.cn>
-// +----------------------------------------------------------------------
+/**
+ * Created by PhpStorm.
+ * User: Administrator
+ * Date: 15-3-7
+ * Time: 下午1:25
+ * @author 郑钟良<zzl@ourstu.com>
+ */
 
 namespace Admin\Controller;
 
@@ -14,14 +14,19 @@ use Admin\Builder\AdminConfigBuilder;
 
 /**
  * 后台头衔控制器
- * @author 麦当苗儿 <zuojiazi@vip.qq.com>
+ * Class RankController
+ * @package Admin\Controller
+ * @郑钟良
  */
+
 class RankController extends AdminController
 {
 
     /**
      * 头衔管理首页
-     * @author 麦当苗儿 <zuojiazi@vip.qq.com>
+     * @param int $page
+     * @param int $r
+     * @author 郑钟良<zzl@ourstu.com>
      */
     public function index($page = 1, $r = 20)
     {
@@ -44,6 +49,11 @@ class RankController extends AdminController
             ->display();
     }
 
+    /**
+     * 设置头衔前台是否可申请
+     * @param null $id
+     * @author 郑钟良<zzl@ourstu.com>
+     */
     public function changeTypes($id=null){
         if (!$id) {
             $this->error('请选择头衔');
@@ -58,6 +68,11 @@ class RankController extends AdminController
         }
     }
 
+    /**
+     * 删除头衔
+     * @param null $id
+     * @author 郑钟良<zzl@ourstu.com>
+     */
     public function deleteRank($id = null)
     {
         if (!$id) {
@@ -72,6 +87,14 @@ class RankController extends AdminController
         }
     }
 
+    /**
+     * 编辑头衔
+     * @param null $id
+     * @param null $title
+     * @param null $logo
+     * @param int $types
+     * @author 郑钟良<zzl@ourstu.com>
+     */
     public function editRank($id = null, $title = null, $logo = null, $types =1)
     {
         //判断是否为编辑模式
@@ -130,6 +153,10 @@ class RankController extends AdminController
         }
     }
 
+    /**
+     * 用户列表
+     * @author 郑钟良<zzl@ourstu.com>
+     */
     public function userList()
     {
         $nickname = I('nickname');
@@ -146,6 +173,12 @@ class RankController extends AdminController
         $this->display();
     }
 
+    /**
+     * 用户头衔列表
+     * @param null $id
+     * @param int $page
+     * @author 郑钟良<zzl@ourstu.com>
+     */
     public function userRankList($id = null, $page = 1)
     {
         if (!$id) {
@@ -169,6 +202,15 @@ class RankController extends AdminController
             ->display();
     }
 
+    /**
+     * 新增用户头衔关联
+     * @param null $id
+     * @param string $uid
+     * @param string $reason
+     * @param string $is_show
+     * @param string $rank_id
+     * @author 郑钟良<zzl@ourstu.com>
+     */
     public function userAddRank($id = null, $uid = '', $reason = '', $is_show = '', $rank_id = '')
     {
         if (IS_POST) {
@@ -234,6 +276,15 @@ class RankController extends AdminController
         }
     }
 
+    /**
+     * 编辑用户头衔关联
+     * @param null $id
+     * @param string $uid
+     * @param string $reason
+     * @param string $is_show
+     * @param string $rank_id
+     * @author 郑钟良<zzl@ourstu.com>
+     */
     public function userChangeRank($id = null, $uid = '', $reason = '', $is_show = '', $rank_id = '')
     {
         if (IS_POST) {
@@ -299,6 +350,11 @@ class RankController extends AdminController
         }
     }
 
+    /**
+     * 删除用户头衔管理
+     * @param null $id
+     * @author 郑钟良<zzl@ourstu.com>
+     */
     public function deleteUserRank($id = null)
     {
         if (!$id) {
@@ -325,7 +381,11 @@ class RankController extends AdminController
         D('Message')->sendMessage($data['uid'], $content, $type, U('Usercenter/Message/message'), is_login(), 1);
     }
 
-    //待审核
+    /**
+     * 待审核
+     * @param int $page
+     * @author 郑钟良<zzl@ourstu.com>
+     */
     public function rankVerify($page=1)
     {
         $model = D('rankUser');
@@ -349,7 +409,11 @@ class RankController extends AdminController
             ->display();
     }
 
-    //审核不通过
+    /**
+     * 审核不通过
+     * @param int $page
+     * @author 郑钟良<zzl@ourstu.com>
+     */
     public function rankVerifyFailure($page=1)
     {
         $model = D('rankUser');

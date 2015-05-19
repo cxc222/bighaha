@@ -9,13 +9,13 @@
 
 namespace Group\Widget;
 
-use Think\Action;
+use Think\Controller;
 
 /**
  * 活跃的群组widget
  * 用于动态调用分类信息
  */
-class HotGroupWidget extends Action
+class HotGroupWidget extends Controller
 {
 
     /* 显示指定分类的同级分类或子分类列表 */
@@ -23,7 +23,6 @@ class HotGroupWidget extends Action
     {
 
         $hot_group = S('hot_group');
-
         if (empty($hot_group)) {
             $hot_group = D('Group')->where(array( 'status' => 1))->limit(5)->order('activity desc')->select();
             foreach ($hot_group as &$val) {
@@ -31,10 +30,7 @@ class HotGroupWidget extends Action
             }
             S('hot_group' , $hot_group, 10);
         }
-
         $this->assign('hot_group', $hot_group);
-
-
         $this->display('Widget/hot_group');
 
     }

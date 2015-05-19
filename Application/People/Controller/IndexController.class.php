@@ -16,94 +16,60 @@ class IndexController extends Controller
     {
     }
 
-    public function index($page = 1)
+    public function index($page = 1, $keywords = '')
     {
+        $map = $this->setMap();
+        $map['status'] = 1;
+        $map['last_login_time'] = array('neq', 0);
+        $peoples = S('People_peoples_'.I('page',0,'intval').'_' . serialize($map));
+        if (empty($peoples)) {
+            $peoples = D('Member')->where($map)->field('uid', 'reg_time', 'last_login_time')->order('last_login_time desc')->findPage(20);
 
-
-        $peoples = D('Member')->where('status=1 and last_login_time!=0')->field('uid', 'reg_time', 'last_login_time')->order('last_login_time desc')->findPage(18);
-        foreach ($peoples['data'] as &$v) {
-            $v['user'] = query_user(array('avatar128', 'space_url', 'username', 'fans', 'following', 'signature', 'nickname'), $v['uid']);
+            $userConfigModel = D('Ucenter/UserConfig');
+            $titleModel = D('Ucenter/Title');
+            foreach ($peoples['data'] as &$v) {
+                $v = query_user(array('title', 'avatar128', 'nickname', 'uid', 'space_url', 'icons_html', 'score', 'title', 'fans', 'following', 'rank_link'), $v['uid']);
+                $v['level'] = $titleModel->getCurrentTitleInfo($v['uid']);
+                //获取用户封面id
+                $where = getUserConfigMap('user_cover', '', $v['uid']);
+                $where['role_id'] = 0;
+                $model = $userConfigModel;
+                $cover = $model->findData($where);
+                $v['cover_id'] = $cover['value'];
+                $v['cover_path'] = getThumbImageById($cover['value'], 273, 80);
+            }
+            unset($v);
+            S('People_peoples_' . serialize($map), $peoples,300);
         }
-        unset($v);
 
+
+        $this->assign('tab','index');
         $this->assign('lists', $peoples);
-
         $this->display();
     }
 
-    public function find($page = 1, $keywords = '')
+    private function setMap()
     {
-        $nickname = op_t($keywords);
+        $aTag = I('tag', 0, 'intval');
+        $map = array();
+        if ($aTag) {
+            !isset($_GET['tag']) && $_GET['tag'] = $_POST['tag'];
+            $map_uids['tags'] = array('like', '%[' . $aTag . ']%');
+            $links = D('Ucenter/UserTagLink')->getListByMap($map_uids);
+            $uids = array_column($links, 'uid');
+            $map['uid'] = array('in', $uids);
+            $this->assign('tag_id', $aTag);
+        }
+        $userTagModel = D('Ucenter/UserTag');
+        $tag_list = $userTagModel->getTreeList();
+        $this->assign('tag_list', $tag_list);
+
+        $nickname = I('keywords', '', 'op_t');
         if ($nickname != '') {
-            $map['nickname'] = array('like','%'.$nickname.'%');
+            !isset($_GET['keywords']) && $_GET['keywords'] = $_POST['keywords'];
+            $map['nickname'] = array('like', '%' . $nickname . '%');
+            $this->assign('nickname', $nickname);
         }
-        $list = D('Member')->where($map)->findPage(18);
-        foreach ($list['data'] as &$v) {
-            $v['user'] = query_user(array('avatar128', 'space_url', 'username', 'fans', 'following', 'signature', 'nickname'), $v['uid']);
-        }
-        unset($v);
-        $this->assign('lists', $list);
-        $this->assign('nickname',$nickname);
-        $this->display();
-    }
-
-    /**签到排行榜
-     * @param int $page
-     * @param int $limit
-     * @author 郑钟良<zzl@ourstu.com>
-     */
-    public function ranking($page = 1, $limit = 50)
-    {
-        $checkInfoModel = D('CheckInfo');
-        $memberModel=D('Member');
-        if(is_login()){
-            //获取用户信息
-            $user_info = query_user(array('uid', 'nickname', 'space_url', 'avatar64',), is_login());
-            $check_info=$checkInfoModel->where(array('uid'=>is_login()))->find();
-
-            if(!$check_info){
-                $check_info['con_num']=0;
-                $check_info['total_num']=0;
-                $check_info['total_score']=0;
-                $check_info['is_sign']=0;
-            }else{
-                if($check_info['ctime']>=get_some_day(0)){
-                    $check_info['is_sign']=1;
-                }else{
-                    $check_info['is_sign']=0;
-                }
-            }
-            $user_info=array_merge($user_info,$check_info);
-            $ranking = $checkInfoModel->field('uid')->order('total_num desc,uid asc')->select();
-            $ranking = array_column($ranking, 'uid');
-            if(array_search(is_login(), $ranking)===false){
-                $user_info['ranking'] = count($ranking) + 1;
-            }else{
-                $user_info['ranking'] = array_search(is_login(), $ranking) + 1;
-            }
-            $this->assign('user_info', $user_info);
-            //获取用户信息end
-        }
-        $user_list=D('Member as m')->where(array('m.status'=>1))->field('m.uid,m.nickname,c.total_num,c.con_num,c.total_score,c.ctime')->page($page,$limit)->order('c.total_num desc,m.uid asc')->join('LEFT JOIN __CHECK_INFO__ as c ON c.uid=m.uid')->cache('ranking_list_'.$page,60)->select();
-        $totalCount = $memberModel->count();
-        $time = get_some_day(0);
-        foreach ($user_list as $key => &$val) {
-            $val['ranking'] = ($page - 1) * $limit + $key + 1;
-            if ($val['ranking'] <= 3) {
-                $val['ranking'] = '<span style="color:#EB7112;">' . $val['ranking'] . '</span>';
-            }
-            if(!$val['total_num']){
-                $val['con_num']=$val['total_num']=$val['total_score']=0;
-            }
-            if ($val['ctime']&&$time <= $val['ctime']) {
-                $val['status'] = '<span>已签到</span>';
-            } else {
-                $val['status'] = '<span style="color: #BDBDBD;">未签到</span>';
-            }
-        }
-        unset($val, $key);
-        $this->assign('user_list', $user_list);
-        $this->assign('totalCount', $totalCount);
-        $this->display();
+        return $map;
     }
 }

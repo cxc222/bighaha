@@ -191,7 +191,7 @@ class UpdateController extends AdminController
             }
 
             $formBuilder = new AdminConfigBuilder();
-            $formBuilder->keyText('title', '补丁名称')->keyTextArea('des', '用途介绍')->keyTextArea('sql', 'sql语句')->keyText('author', '作者')
+            $formBuilder->title('新增补丁')->keyText('title', '补丁名称')->keyTextArea('des', '用途介绍')->keyTextArea('sql', 'sql语句')->keyText('author', '作者')
                 ->buttonSubmit();
             if ($aId != 0) {
                 $info['id'] = $aId;

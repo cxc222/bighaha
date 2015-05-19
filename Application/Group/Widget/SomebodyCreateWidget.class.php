@@ -9,13 +9,13 @@
 
 namespace Group\Widget;
 
-use Think\Action;
+use Think\Controller;
 
 /**
  * 某人创建的群组widget
  * 用于动态调用分类信息
  */
-class SomebodyCreateWidget extends Action
+class SomebodyCreateWidget extends Controller
 {
 
     /* 显示指定分类的同级分类或子分类列表 */

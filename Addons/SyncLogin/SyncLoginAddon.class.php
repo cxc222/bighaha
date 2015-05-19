@@ -3,7 +3,6 @@
 namespace Addons\SyncLogin;
 
 use Common\Controller\Addon;
-use Weibo\Api\WeiboApi;
 
 /**
  * 同步登陆插件

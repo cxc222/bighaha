@@ -12,7 +12,7 @@ namespace Admin\Controller;
 use Admin\Builder\AdminConfigBuilder;
 use Admin\Builder\AdminListBuilder;
 use Admin\Builder\AdminSortBuilder;
-use Home\Model\MemberModel;
+use Common\Model\MemberModel;
 use User\Api\UserApi;
 
 /**
@@ -42,6 +42,31 @@ class UserController extends AdminController
         $this->display();
     }
 
+    /**
+     * 重置用户密码
+     * @author 郑钟良<zzl@ourstu.com>
+     */
+    public function initPass(){
+        $uids=I('id');
+        !is_array($uids)&&$uids=explode(',',$uids);
+        foreach($uids as $key=>$val){
+            if(!query_user('uid',$val)){
+                unset($uids[$key]);
+            }
+        }
+        if(!count($uids)){
+            $this->error('前选择要重置的用户！');
+        }
+        $ucModel=UCenterMember();
+        $data=$ucModel->create(array('password'=>'123456'));
+        $res=$ucModel->where(array('id'=>array('in',$uids)))->save(array('password'=>$data['password']));
+        if($res){
+            $this->success('密码重置成功！');
+        }else{
+            $this->error('密码重置失败！可能密码重置前就是“123456”。');
+        }
+    }
+
     public function changeGroup()
     {
 
@@ -54,7 +79,7 @@ class UserController extends AdminController
             if ($aAll) {//设置全部用户
                 $prefix = C('DB_PREFIX');
                 D('')->execute("TRUNCATE TABLE {$prefix}auth_group_access");
-                $aUids = M('UcenterMember')->getField('id', true);
+                $aUids = UCenterMember()->getField('id', true);
 
             } else {
                 M('AuthGroupAccess')->where(array('uid' => array('in', implode(',', $aUids))))->delete();;
@@ -75,7 +100,7 @@ class UserController extends AdminController
             }
 
 
-            $groups = M('AuthGroup')->select();
+            $groups = M('AuthGroup')->where(array('status'=>1))->select();
             $this->assign('groups', $groups);
             $this->assign('users', $user);
             $this->display();
@@ -133,38 +158,7 @@ class UserController extends AdminController
         $builder->display();
     }
 
-    public function config()
-    {
-        $admin_config = new AdminConfigBuilder();
-        $data = $admin_config->handleConfig();
-        if (!$data) {
-            $data['DEFAULT_GROUP'] = 1;
 
-            $data['LEVEL'] = <<<str
-0:Lv1 实习
-50:Lv2 试用
-100:Lv3 转正
-200:Lv4 助理
-400:Lv 5 经理
-800:Lv6 董事
-1600:Lv7 董事长
-str;
-        }
-        if(!$data['USER_CHECKIN_SCORE']){
-            $data['USER_CHECKIN_SCORE']=0;
-        }
-
-
-        $groups = M('AuthGroup')->where(array('status' => 1))->select();
-        foreach ($groups as $g) {
-            $groupOption[$g['id']] = $g['title'];
-        }
-        $admin_config->title('基础设置')->keyTextArea('LEVEL', '等级配置', '每行一条，名称和积分之间用冒号分隔')
-            ->keyInteger('USER_CHECKIN_SCORE','签到积分配置','用户每次签到，积分增加数量')
-            ->keyCheckBox('DEFAULT_GROUP', '默认用户组', '设置用户注册后的默认所在用户组', $groupOption)
-            ->buttonSubmit('', '保存')->data($data);
-        $admin_config->display();
-    }
 
     /**用户扩展资料详情
      * @param string $uid
@@ -172,38 +166,73 @@ str;
      */
     public function expandinfo_details($uid = 0)
     {
-        $map['uid'] = $uid;
-        $map['status'] = array('egt', 0);
-        $member = M('Member')->where($map)->find();
-        $member['id'] = $member['uid'];
-        //扩展信息查询
-        $map_profile['status'] = 1;
-        $field_group = D('field_group')->where($map_profile)->select();
-        $field_group_ids = array_column($field_group, 'id');
-        $map_profile['profile_group_id'] = array('in', $field_group_ids);
-        $fields_list = D('field_setting')->where($map_profile)->getField('id,field_name,form_type');
-        $fields_list = array_combine(array_column($fields_list, 'field_name'), $fields_list);
-        $map_field['uid'] = $member['uid'];
-        foreach ($fields_list as $key => $val) {
-            $map_field['field_id'] = $val['id'];
-            $field_data = D('field')->where($map_field)->getField('field_data');
-            if ($field_data == null || $field_data == '') {
-                $member[$key] = '';
+        if(IS_POST){
+            /* 修改积分 xjw129xjt(肖骏涛)*/
+            $data = I('post.');
+            foreach($data as $key=>$val){
+                if(substr($key,0,5) =='score'){
+                    $data_score[$key]=$val;
+                }
+            }
+            $res = D('Member')->where(array('uid'=>$data['id']))->save($data_score);
+            if ($res) {
+                $this->success('设置成功');
             } else {
+                $this->error('设置失败');
+            }
+            /* 修改积分 end*/
+        }else{
+            $map['uid'] = $uid;
+            $map['status'] = array('egt', 0);
+            $member = M('Member')->where($map)->find();
+            $member['id'] = $member['uid'];
+            //扩展信息查询
+            $map_profile['status'] = 1;
+            $field_group = D('field_group')->where($map_profile)->select();
+            $field_group_ids = array_column($field_group, 'id');
+            $map_profile['profile_group_id'] = array('in', $field_group_ids);
+            $fields_list = D('field_setting')->where($map_profile)->getField('id,field_name,form_type');
+            $fields_list = array_combine(array_column($fields_list, 'field_name'), $fields_list);
+            $map_field['uid'] = $member['uid'];
+            foreach ($fields_list as $key => $val) {
+                $map_field['field_id'] = $val['id'];
+                $field_data = D('field')->where($map_field)->getField('field_data');
+                if ($field_data == null || $field_data == '') {
+                    $member[$key] = '';
+                } else {
+                    $member[$key] = $field_data;
+                }
                 $member[$key] = $field_data;
             }
-            $member[$key] = $field_data;
+            $builder = new AdminConfigBuilder();
+            $builder->title("用户扩展资料详情");
+            $builder->meta_title = '用户扩展资料详情';
+            $builder->keyId()->keyReadOnly('nickname', "用户名称");
+            $field_key = array('id','nickname');
+            foreach ($fields_list as $vt) {
+                $field_key[] = $vt['field_name'];
+                $builder->keyReadOnly($vt['field_name'], $vt['field_name']);
+            }
+
+            /* 积分设置 xjw129xjt(肖骏涛)*/
+            $field = D('Ucenter/Score')->getTypeList(array('status'=>1));
+            $score_key = array();
+            foreach($field as $vf){
+               $score_key[]='score'.$vf['id'];
+               $builder->keyText('score'.$vf['id'], $vf['title']);
+            }
+            $score_data = D('Member')->where(array('uid'=>$uid))->field(implode(',',$score_key))->find();
+            $member = array_merge($member,$score_data);
+            /*积分设置end*/
+
+            $builder->group('基本设置', implode(',',$field_key));
+            $builder->group('积分设置', implode(',',$score_key));
+            $builder->data($member);
+            $builder->buttonSubmit('', '保存');
+            $builder->buttonBack();
+            $builder->display();
         }
-        $builder = new AdminConfigBuilder();
-        $builder->title("用户扩展资料详情");
-        $builder->meta_title = '用户扩展资料详情';
-        $builder->keyId()->keyReadOnly('nickname', "用户名称");
-        foreach ($fields_list as $vt) {
-            $builder->keyReadOnly($vt['field_name'], $vt['field_name']);
-        }
-        $builder->data($member);
-        $builder->buttonBack();
-        $builder->display();
+
     }
 
     /**扩展用户信息分组列表
@@ -295,7 +324,7 @@ str;
     {
         if (IS_POST) {
             $builder = new AdminSortBuilder();
-            $builder->doSort('Field_group', $ids);
+            $builder->doSort('FieldSetting', $ids);
         } else {
             $profile = D('field_group')->where('id=' . $id)->find();
             $map['status'] = array('egt', 0);
@@ -336,11 +365,19 @@ str;
             $data['visiable'] = $visiable;
             $data['required'] = $required;
             $data['form_type'] = $form_type;
+            $data['form_default_value'] = $form_default_value;
+            //当表单类型为以下三种是默认值不能为空判断@MingYang
+            $form_types = array('radio','checkbox','select');
+            if(in_array($data['form_type'],$form_types)){
+                if($data['form_default_value'] == ''){
+                    $this->error($data['form_type'].'表单类型默认值不能为空');
+                }
+            }
             $data['input_tips'] = $input_tips;
-            if ($form_type == 'input') {
+            //增加当二级字段类型为join时也提交$child_form_type @MingYang
+            if ($form_type == 'input' && $child_form_type == 'join') {
                 $data['child_form_type'] = $child_form_type;
             }
-            $data['form_default_value'] = $form_default_value;
             $data['validation'] = $validation;
             if ($id != '') {
                 $res = D('field_setting')->where('id=' . $id)->save($data);
@@ -386,9 +423,11 @@ str;
                 'string' => '字符串',
                 'phone' => '手机号码',
                 'email' => '邮箱',
+                //增加可选择关联字段类型 @MingYang
+                'join' => '关联字段',
                 'number' => '数字'
             );
-            $builder->keyReadOnly("id", "标识")->keyReadOnly('profile_group_id', '分组id')->keyText('field_name', "字段名称")->keySelect('form_type', "表单类型", '', $type_default)->keySelect('child_form_type', "二级表单类型", '', $child_type)->keyTextArea('form_default_value', '默认值', "多个值用'|'分割开")
+            $builder->keyReadOnly("id", "标识")->keyReadOnly('profile_group_id', '分组id')->keyText('field_name', "字段名称")->keySelect('form_type', "表单类型", '', $type_default)->keySelect('child_form_type', "二级表单类型", '', $child_type)->keyTextArea('form_default_value',"多个值用'|'分割开,格式【字符串：男|女，数组：1:男|2:女，关联数据表：字段名|表名】开")
                 ->keyText('validation', '表单验证规则', '例：min=5&max=10')->keyText('input_tips', '用户输入提示', '提示用户如何输入该字段信息')->keyBool('visiable', '是否公开')->keyBool('required', '是否必填');
             $builder->data($field_setting);
             $builder->buttonSubmit(U('editFieldSetting'), $id == 0 ? "添加" : "修改")->buttonBack();
@@ -560,7 +599,7 @@ str;
         if ($res['status']) {
             $this->success('修改密码成功！');
         } else {
-            $this->error($res['info']);
+            $this->error(UCenterMember()->getErrorMessage($res['info']));
         }
     }
 
@@ -589,6 +628,10 @@ str;
     public function addAction()
     {
         $this->meta_title = '新增行为';
+
+
+        $module = D('Module')->getAll();
+        $this->assign('module',$module);
         $this->assign('data', null);
         $this->display('editaction');
     }
@@ -603,6 +646,8 @@ str;
         empty($id) && $this->error('参数不能为空！');
         $data = M('Action')->field(true)->find($id);
 
+        $module = D('Module')->getAll();
+        $this->assign('module',$module);
         $this->assign('data', $data);
         $this->meta_title = '编辑行为';
         $this->display();
@@ -645,39 +690,14 @@ str;
                 $this->resume('Member', $map);
                 break;
             case 'deleteuser':
-                $newMap['id'] = $map['uid'];
-                M('UcenterMember')->where($newMap)->setField('status', -1);
                 $this->delete('Member', $map);
                 break;
             default:
                 $this->error('参数非法');
+
         }
     }
 
-    public function add($username = '', $password = '', $repassword = '', $email = '')
-    {
-        if (IS_POST) {
-            /* 检测密码 */
-            if ($password != $repassword) {
-                $this->error('密码和重复密码不一致！');
-            }
-
-            /* 调用注册接口注册用户 */
-            $User = new UserApi;
-            $uid = $User->register($username, $username, $password, $email);
-            if (0 < $uid) { //注册成功
-                $user = array('uid' => $uid, 'nickname' => $username, 'status' => 1);
-                M('Member')->add($user);
-                $this->success('用户添加成功！', U('index'));
-
-            } else { //注册失败，显示错误信息
-                $this->error($this->showRegError($uid));
-            }
-        } else {
-            $this->meta_title = '新增用户';
-            $this->display();
-        }
-    }
 
     /**
      * 获取用户注册错误信息
@@ -688,7 +708,7 @@ str;
     {
         switch ($code) {
             case -1:
-                $error = '用户名长度必须在16个字符以内！';
+                $error = '用户名长度必须在32个字符以内！';
                 break;
             case -2:
                 $error = '用户名被禁止注册！';
@@ -728,5 +748,109 @@ str;
         }
         return $error;
     }
+
+
+
+    public function scoreList()
+    {
+        //读取数据
+        $map = array('status' => array('GT', -1));
+        $model = D('Ucenter/Score');
+        $list = $model->getTypeList($map);
+
+        //显示页面
+        $builder = new AdminListBuilder();
+        $builder
+            ->title('积分类型')
+            ->suggest('id<=4的不能删除')
+            ->buttonNew(U('editScoreType'))
+            ->setStatusUrl(U('setTypeStatus'))->buttonEnable()->buttonDisable()->button('删除',array('class' => 'btn ajax-post tox-confirm', 'data-confirm' => '您确实要删除积分分类吗？（删除后对应的积分将会清空，不可恢复，请谨慎删除！）', 'url' => U('delType'), 'target-form' => 'ids'))
+            ->button('充值',array('href' => U('recharge')))
+
+            ->keyId()->keyText('title', '名称')
+           ->keyText('unit', '单位')->keyStatus()->keyDoActionEdit('editScoreType?id=###')
+            ->data($list)
+            ->display();
+    }
+
+    public function recharge(){
+        $scoreTypes = D('Ucenter/Score')->getTypeList(array('status'=>1));
+        if(IS_POST){
+            $aUids = I('post.uid','','op_t');
+            foreach($scoreTypes as $v){
+                $aAction = I('post.action_score'.$v['id'],'','op_t');
+                $aValue = I('post.value_score'.$v['id'],0,'intval');
+                D('Ucenter/Score')->setUserScore($aUids,$aValue,$v['id'],$aAction);
+            }
+            $this->success('设置成功','refresh');
+        }else{
+
+            $this->assign('scoreTypes',$scoreTypes);
+            $this->display();
+        }
+    }
+
+    public function getNickname(){
+        $uid = I('get.uid',0,'intval');
+        if($uid){
+            $user = query_user(null,$uid);
+            $this->ajaxReturn($user);
+        }
+        else{
+            $this->ajaxReturn(null);
+        }
+
+    }
+
+    public function setTypeStatus($ids, $status)
+    {
+        $builder = new AdminListBuilder();
+        $builder->doSetStatus('ucenter_score_type', $ids, $status);
+
+    }
+
+    public function delType($ids){
+        $model = D('Ucenter/Score');
+        $res = $model->delType($ids);
+        if ($res) {
+            $this->success('删除成功');
+        } else {
+            $this->error('删除失败');
+        }
+    }
+    public function editScoreType(){
+            $aId = I('id',0,'intval');
+            $model = D('Ucenter/Score');
+            if (IS_POST) {
+                $data['title'] = I('post.title','','op_t');
+                $data['status'] = I('post.status',1,'intval');
+                $data['unit'] = I('post.unit','','op_t');
+
+                if ($aId != 0) {
+                    $data['id'] = $aId;
+                    $res = $model->editType($data);
+                } else {
+                    $res = $model->addType($data);
+                }
+                if ($res) {
+                    $this->success(($aId == 0 ? '添加' : '编辑') . '成功');
+                } else {
+                    $this->error(($aId == 0 ? '添加' : '编辑') . '失败');
+                }
+            } else {
+                $builder = new AdminConfigBuilder();
+                if ($aId != 0) {
+                    $type = $model->getType(array('id'=>$aId));
+                } else {
+                    $type = array('status' => 1, 'sort' => 0);
+                }
+                $builder->title(($aId == 0 ? '新增' : '编辑').'积分分类')->keyId()->keyText('title', '名称')
+                    ->keyText('unit', '单位')
+                    ->keySelect('status', '状态', null,  array(-1 => '删除', 0 => '禁用', 1 => '启用'))
+                    ->data($type)
+                    ->buttonSubmit(U('editScoreType'))->buttonBack()->display();
+            }
+    }
+
 
 }

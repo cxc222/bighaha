@@ -1,0 +1,2 @@
+ALTER TABLE  `ocenter_member` CHANGE  `nickname`  `nickname` CHAR( 32 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT  '' COMMENT  '昵称';
+ALTER TABLE  `ocenter_ucenter_member` CHANGE  `username`  `username` CHAR( 32 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT  '用户名';

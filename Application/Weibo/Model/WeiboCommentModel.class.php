@@ -10,6 +10,8 @@ namespace Weibo\Model;
 
 use Think\Model;
 
+require_once('./Application/Weibo/Common/function.php');
+
 class WeiboCommentModel extends Model
 {
     protected $_validate = array(
@@ -55,109 +57,70 @@ class WeiboCommentModel extends Model
         S('weibo_' . $weibo_id, null);
         //返回成功结果
         return true;
-//
-//
-//        $content = htmlspecialchars($content);
-//        $self = query_user(array('username')); //超找自己
-//        $user_math = match_users($content);
-//
-//
-//        //将评论内容写入数据库
-//        $data = array('uid' => $uid, 'weibo_id' => $weibo_id, 'content' => $content, 'comment_id' => $comment_id);
-//
-//        $data = $this->create($data);
-//
-//        if (!$data) return false;
-//        $result = $this->add($data);
-//
-//        action_log('add_weibo_comment', 'WeiboComment', $result, is_login());
-//
-//        if ($result) {
-//            $data['id'] = $result;
-//            $data['content']= $this->sendAllAtMessages($content, $user_math, $self, $weibo_id);
-//            $this->save($data);
-//        }
-//
-//
-//        $this->sendCommentMessage($uid, $weibo_id, $content);
-//        if ($comment_id != 0) {
-//            $this->sendCommentReplyMessage($uid, $comment_id, $content);
-//        }
-//
-//        //增加微博的评论数量
-//        D('Weibo')->where(array('id' => $weibo_id))->setInc('comment_count');
-//
-//        //返回评论编号
-//        return $result;
     }
-//
-//    /**
-//     * @param $uid
-//     * @param $weibo_id
-//     * @param $content
-//     */
-//    private function sendCommentMessage($uid, $weibo_id, $content)
-//    {
-////
-////        $user = query_user(array('username', 'space_url'), $uid);
-////
-////        $title = $user['username'] . '评论了您的微博。';
-////        $content = '评论内容：' . $content;
-////
-////        $weibo = D('Weibo')->find($weibo_id);
-////        $url = U('Weibo/Index/weiboDetail', array('id' => $weibo_id));
-////        $from_uid = $uid;
-////        $type = 2;
-////        D('Message')->sendMessage($weibo['uid'], $content, $title, $url, $from_uid, $type);
-//    }
-//
-//    /**
-//     * @param $uid
-//     * @param $weibo_id
-//     * @param $content
-//     */
-//    private function sendCommentReplyMessage($uid, $comment_id, $content)
-//    {
-////
-////        $user = query_user(array('username', 'space_url'), $uid);
-////
-////        $title = $user['username'] . '回复了您的微博评论。';
-////        $content = '回复内容：' . $content;
-////
-////
-////        $comment = $this->find($comment_id);
-////        $url = U('Weibo/Index/weiboDetail', array('id' => $comment['weibo_id']));
-////        $from_uid = $uid;
-////        $type = 2;
-////        D('Message')->sendMessage($comment['uid'], $content, $title, $url, $from_uid, $type);
-//    }
-//
-//
-//    /**
-//     * @param $content
-//     * @param $user_math
-//     * @param $self
-//     * @return mixed
-//     */
-//    private function sendAllAtMessages($content, $user_math, $self, $weibo_id)
-//    {
-//        foreach ($user_math[1] as $match) {
-//            $map['username'] = $match;
-//            $user = D('ucenter_member')->where($map)->find();
-//            if ($user) {
-//                $query_user = query_user(array('username', 'space_url'), $user['id']);
-//                $content = str_replace('@' . $match . ' ', '<a ucard="' . $user['id'] . '" href="' . $query_user['space_url'] . '">@' . $match . ' </a>', $content);
-//            }
-//            /**
-//             * @param $to_uid 接受消息的用户ID
-//             * @param string $content 内容
-//             * @param string $title 标题，默认为  您有新的消息
-//             * @param $url 链接地址，不提供则默认进入消息中心
-//             * @param $int $from_uid 发起消息的用户，根据用户自动确定左侧图标，如果为用户，则左侧显示头像
-//             * @param int $type 消息类型，0系统，1用户，2应用
-//             */
-//            D('Message')->sendMessage($user['id'], '微博内容：' . $content, $title = $self['username'] . '在微博的评论中@了您', U('Weibo/Index/weiboDetail', array('id' => $weibo_id)), is_login(), 1);
-//        }
-//        return $content;
-//    }
+
+    public function getComment($id)
+    {
+        $comment = S('weibo_comment_' . $id);
+        if (!$comment) {
+            $comment = $this->find($id);
+            $comment['content'] = $this->parseComment($comment['content']);
+            $comment['user'] = query_user(array('uid', 'nickname', 'avatar32', 'avatar64', 'avatar128', 'avatar256', 'avatar512', 'space_url', 'icons_html', 'rank_link', 'score', 'title', 'weibocount', 'fans', 'following'), $comment['uid']);
+            S('weibo_comment_' . $id, $comment);
+        }
+        $comment['can_delete'] = check_auth('Weibo/Index/doDelComment', $comment['uid']);
+        return $comment;
+
+    }
+
+    public function parseComment($content)
+    {
+        $content = shorten_white_space($content);
+        $content = op_t($content, false);
+        $content = parse_url_link($content);
+
+        $content = parse_expression($content);
+        $content = parse_at_users($content,true);
+
+//        $content = parseWeiboContent($content);
+        return $content;
+    }
+
+
+    public function getAllComment($weibo_id)
+    {
+
+        $order = modC('COMMENT_ORDER', 0, 'WEIBO') == 1 ? 'create_time asc' : 'create_time desc';
+        $comment = $this->where(array('weibo_id' => $weibo_id, 'status' => 1))->order($order)->field('id')->select();
+        $ids = getSubByKey($comment, 'id');
+        $list = array();
+        foreach ($ids as $v) {
+            $list[$v] = $this->getComment($v);
+        }
+        return $list;
+
+    }
+
+
+    public function getCommentList($weibo_id, $page = 1, $show_more = 0)
+    {
+
+        $order = modC('COMMENT_ORDER', 0, 'WEIBO') == 1 ? 'create_time asc' : 'create_time desc';
+        $comment = $this->where(array('weibo_id' => $weibo_id, 'status' => 1))->order($order)->page($page, 10)->field('id')->select();
+        /*        if($page == 1){
+                    $t = array_chunk($comment,5);
+                    if($show_more ){
+                        $comment = $t[1];
+                    }else{
+                        $comment = $t[0];
+                    }
+                }*/
+        $ids = getSubByKey($comment, 'id');
+        $list = array();
+        foreach ($ids as $v) {
+            $list[$v] = $this->getComment($v);
+        }
+        return $list;
+
+    }
 }

@@ -1,0 +1,61 @@
+<extend name="Public/base"/>
+<block name="body">
+    <div class="main-title">
+        <h2>模块打包向导
+            <small>（适用于v2.1.0以上版本OS）</small>
+        </h2>
+    </div>
+
+    <div class="with-padding">
+        <p class="lead">欢迎使用本工具。本工具将会通过引导来快速生成一个模块安装引导脚本。</p>
+
+        <p>使用本工具打包的程序必须是在OpenSNS 2.1.0版本或OpenCenter 1.5.0 以上方可安装。更低版本的OpenSNS及1.0.0版的OpenCenter均无法兼容。</p>
+
+        <form action="{:U('module1')}" method="post">
+            <div class="clearfix">
+                <div class="col-xs-2">
+                    <h4>选择您要打包的模块</h4>
+
+                    <div>
+                        <select name="module" size="15" class="form-control">
+                            <volist name="modules" id="vo">
+                                <option id="m_{$vo.name}" type="radio" value="{$vo.name}">{$vo.alias}：{$vo.name}
+                                </option>
+                                &nbsp; &nbsp;
+                            </volist>
+                        </select>
+
+                        <script>
+                            $('#m_{$modules.0.name}').attr('selected', 'selected');
+                        </script>
+                    </div>
+                </div>
+                <div class="col-xs-4">
+                    <h3>
+                        打包流程
+                    </h3>
+                    <blockquote>
+                        <ol>
+                            <li>第一步.导出后台菜单</li>
+                            <li>第二步.导出权限节点</li>
+                            <li>第三步.导出用户行为</li>
+                            <li>第四步.导出相关数据表</li>
+                        </ol>
+                    </blockquote>
+                    <p>特别申明：打包前强烈建议备份数据库，以免造成不必要的损失。</p>
+                </div>
+
+
+            </div>
+            <div class="clearfix">
+                <div class="col-xs-6 with-padding ">
+                    <input class="btn btn-default btn-success btn-block" type="submit" value="我同意，开始打包向导">
+
+                    </input>
+                </div>
+            </div>
+        </form>
+
+
+    </div>
+</block>

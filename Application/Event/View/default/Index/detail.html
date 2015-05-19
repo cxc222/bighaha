@@ -4,11 +4,12 @@
     <link href="__CSS__/event.css" rel="stylesheet" type="text/css"/>
     <link type="text/css" rel="stylesheet" href="__PUBLIC__/Core/js/ext/magnific/magnific-popup.css"/>
 </block>
-
+<block name="header">
+    <include file="_nav"/>
+</block>
 <block name="body">
 
 <!--导航-->
-<include file="_nav"/>
 
 
 
@@ -152,7 +153,7 @@
 
             <div class="clearfix"></div>
             <div style="padding: 5px 20px 50px 20px;">
-                {:hook('localComment', array('path'=>"Event/event/$content[id]", 'uid'=>$content['uid']))}
+                {:hook('localComment', array('path'=>"Event/event/$content[id]", 'uid'=>$content['uid'],'count_model'=>'event','count_field'=>'reply_count'))}
             </div>
 
         </div>
@@ -184,7 +185,7 @@
             });
 
 
-            bindSupport();
+
             /**
              * 取消报名
              * */

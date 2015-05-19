@@ -9,6 +9,7 @@
 namespace Forum\Controller;
 
 use Think\Controller;
+use Think\View;
 use Weibo\Api\WeiboApi;
 
 define('TOP_ALL', 2);
@@ -17,6 +18,9 @@ define('TOP_FORUM', 1);
 class IndexController extends Controller
 {
 
+    protected $forumModel = null;
+
+    protected $forumPostModel = null;
 
     public function _initialize()
     {
@@ -31,102 +35,270 @@ class IndexController extends Controller
         $this->assign('myInfo', $myInfo);
         //赋予论坛列表
         $this->assign('forum_list', $forum_list);
-
+        $types = D('Forum')->getAllForumsSortByTypes();
+        $this->forumModel = D("Forum");
+        $this->forumPostModel = D('ForumPost');
+        $this->assign('types', $types);
 
     }
 
+    public function index()
+    {   //参数获取
+        $aId = I('id', 0, 'intval');
+        $aPage = I('page', 0, 'intval');
+        $aOrder = I('order', 'reply', 'text');
 
-    public function index($page = 1)
-    {
-        $block_size = modC('FORUM_BLOCK_SIZE', 4, 'forum');
-        $types=D('Forum')->getAllForumsSortByTypes();
-        $this->assign('types',$types);
+        $count = S('forum_count' . $aId);
+        //模型初始化
+        $forumPostModel = D('ForumPost');
 
-        $this->assign('block_size', $block_size);
-        $this->display();
-        // redirect(U('forum', array('page' => intval($page))));
-    }
-
-    /**某个版块的帖子列表
-     * @param int    $id 版块ID
-     * @param int    $page 分页
-     * @param string $order 回复排序方式
-     * @auth 陈一枭
-     */
-    public function forum($id = 0, $page = 1, $order = 'reply')
-    {
-        $id = intval($id);
-        $page = intval($page);
-        $order = op_t($order);
-
-        $count = S('forum_count' . $id);
+        //统计论坛帖子数
         if (empty($count)) {
-
             $map['status'] = 1;
             $count['forum'] = D('Forum')->where($map)->count();
-            $count['post'] = D('ForumPost')->where($map)->count();
+            $count['post'] = $forumPostModel->where($map)->count();
             $count['all'] = $count['post'] + D('ForumPostReply')->where($map)->count() + D('ForumLzlReply')->where($map)->count();
             S('forum_count', $count, 60);
         }
         $this->assign('count', $count);
-        $id = intval($id);
-        if ($order == 'ctime') {
-            $order = 'create_time desc';
-        } else if ($order == 'reply') {
-            $order = 'last_reply_time desc';
+        //取到帖子排序
+        if ($aOrder == 'ctime') {
+            $aOrder = 'create_time desc';
+        } else if ($aOrder == 'reply') {
+            $aOrder = 'last_reply_time desc';
         } else {
-            $order = 'last_reply_time desc';//默认的
+            $aOrder = 'last_reply_time desc';//默认的
         }
-        $this->requireForumAllowView($id);
+
+        $this->requireForumAllowView($aId);
+
+
+        if ($aOrder == 'ctime') {
+            $this->assign('order', 1);
+        } else {
+            $this->assign('order', 0);
+        }
+
+        //读取置顶列表
+        if ($aId == 0) {
+            $map = array('status' => 1);
+            $list_top = $forumPostModel->where(' status=1 AND is_top=' . TOP_ALL)->order($aOrder)->select();
+        } else {
+            $map = array('forum_id' => $aId, 'status' => 1);
+            $list_top = $forumPostModel->where('status=1 AND (is_top=' . TOP_ALL . ') OR (is_top=' . TOP_FORUM . ' AND forum_id=' . intval($aId) . ' and status=1)')->order($aOrder)->select();
+        }
+
+        $list_top = $this->forumPostModel->assignForumInfo($list_top);
+        //读取帖子列表
+
+        $this->assign('list_top', $list_top);
+
+
+        $list = D('ForumPost')->where($map)->order($aOrder)->page($aPage, 5)->select();
+        $totalCount = D('ForumPost')->where($map)->count();
+        $list = $this->forumPostModel->assignForumInfo($list);
+
+        $this->assignSuggestionTopics();
+
+
+        //关联版块数据
+        $this->assignForumInfo($aId);
+
+
+        $this->assignHotForum();
+
+        $this->assignRecommandForums();
+
+
+        $active_user = S('forum_active_user');
+        if ($active_user === false) {
+            $active_user = M('ForumPost')->field('uid,count(id) as post_count')->group('uid')->order('post_count desc')->select();
+            foreach ($active_user as &$u) {
+                $u['user'] = query_user(array('nickname', 'space_url', 'avatar64'), $u['uid']);
+            }
+            S('forum_active_user', $active_user, 600);
+        }
+        $this->assign('active_user', $active_user);
+
+        $this->assign('list', $list);
+        $this->assign('forum_id', $aId);
+        $this->assignAllowPublish();
+
+        // dump($list_top);exit;
+        $this->assign('totalCount', $totalCount);
+
+        $this->assign('tab', 'index');
+        $this->display();
+    }
+
+    public function assignSuggestionTopics()
+    {
+        $posts = S('forum_suggestion_posts');
+        if ($posts === false) {
+            $suggestion_topics = modC('SUGGESTION_POSTS', '23,24,25,26,27');
+            $suggestion_topics = explode('|', $suggestion_topics);
+            foreach ($suggestion_topics as $s) {
+                $post = M('ForumPost')->find($s);
+                $post['cover'] = $this->get_pic($post['content']);
+                $post['summary'] = mb_substr(text($post['content']), 0, 80, 'utf8') . '...';
+                $posts[] = $post;
+                S('forum_suggestion_posts', $posts, 60);
+            }
+        }
+
+        $this->assign('suggestionPosts', $posts);
+        return $posts;
+    }
+
+    /**正则表达式获取html中首张图片
+     * @param $str_img
+     * @return mixed
+     */
+    function get_pic($str_img)
+    {
+        preg_match_all("/<img.*\>/isU", $str_img, $ereg); //正则表达式把图片的整个都获取出来了
+        $img = $ereg[0][0]; //图片
+        $p = "#src=('|\")(.*)('|\")#isU"; //正则表达式
+        preg_match_all($p, $img, $img1);
+        $img_path = $img1[2][0]; //获取第一张图片路径
+        return $img_path;
+    }
+
+    public function lists($page = 1)
+    {
+        $block_size = modC('FORUM_BLOCK_SIZE', 4, 'forum');
+
+        $followed = D('Forum')->getFollowForums(is_login());
+        $followed_id = getSubByKey($followed, 'id');
+        $this->assign('block_size', $block_size);
+        $types = $this->get('types');
+        foreach ($types as $k => $t) {
+            foreach ($t['forums'] as $key => $forum) {
+
+                if (in_array($forum['id'], $followed_id)) {
+                    $types[$k]['forums'][$key]['hasFollowed'] = true;
+                }
+            }
+
+        }
+        // dump($types);exit;
+        $this->assign('types', $types);
+        $this->assign('tab', 'lists');
+        $this->display();
+        // redirect(U('forum', array('page' => intval($page))));
+    }
+
+    public function assignForumInfo($forum_id)
+    {
+        $forums = D('Forum')->getForumList();
+        $forum_key_value = array();
+        foreach ($forums as $f) {
+            $forum_key_value[$f['id']] = $f;
+        }
+        if ($forum_id != 0) {
+            $forum = $forum_key_value[$forum_id];
+            $hasFollowed = D('Forum')->checkFollowed($forum['id'], is_login());
+            $this->assign('hasFollowed', $hasFollowed);
+        } else {
+            $forum = array('title' => '论坛 Forum');
+        }
+        $this->assign('forum', $forum);
+        return $forum;
+    }
+
+    /**某个版块的帖子列表
+     * @param int $aId 版块ID
+     * @param int $aPage 分页
+     * @param string $aOrder 回复排序方式
+     * @auth 陈一枭
+     */
+    public function forum()
+    {
+        //参数获取
+        $aId = I('id', 0, 'intval');
+        $aPage = I('page', 0, 'intval');
+        $aOrder = I('order', 'reply', 'text');
+
+        $count = S('forum_count' . $aId);
+        //模型初始化
+        $forumPostModel = D('ForumPost');
+
+        //统计论坛帖子数
+        if (empty($count)) {
+            $map['status'] = 1;
+            $count['forum'] = D('Forum')->where($map)->count();
+            $count['post'] = $forumPostModel->where($map)->count();
+            $count['all'] = $count['post'] + D('ForumPostReply')->where($map)->count() + D('ForumLzlReply')->where($map)->count();
+            S('forum_count', $count, 60);
+        }
+        $this->assign('count', $count);
+        //取到帖子排序
+        if ($aOrder == 'ctime') {
+            $aOrder = 'create_time desc';
+        } else if ($aOrder == 'reply') {
+            $aOrder = 'last_reply_time desc';
+        } else {
+            $aOrder = 'last_reply_time desc';//默认的
+        }
+
+        $this->requireForumAllowView($aId);
         $forums = D('Forum')->getForumList();
         $forum_key_value = array();
         foreach ($forums as $f) {
             $forum_key_value[$f['id']] = $f;
         }
 
-
-        //读取帖子列表
-        if ($id == 0) {
-            $map = array('status' => 1);
-            $list_top = D('ForumPost')->where(' status=1 AND is_top=' . TOP_ALL)->order($order)->select();
+        if ($aOrder == 'ctime') {
+            $this->assign('order', 1);
         } else {
-            $map = array('forum_id' => $id, 'status' => 1);
-            $list_top = D('ForumPost')->where('status=1 AND (is_top=' . TOP_ALL . ') OR (is_top=' . TOP_FORUM . ' AND forum_id=' . intval($id) . ' and status=1)')->order($order)->select();
+            $this->assign('order', 0);
         }
 
+        //读取置顶列表
+        if ($aId == 0) {
+            $map = array('status' => 1);
+            $list_top = $forumPostModel->where(' status=1 AND is_top=' . TOP_ALL)->order($aOrder)->select();
+        } else {
+            $map = array('forum_id' => $aId, 'status' => 1);
+            $list_top = $forumPostModel->where('status=1 AND (is_top=' . TOP_ALL . ') OR (is_top=' . TOP_FORUM . ' AND forum_id=' . intval($aId) . ' and status=1)')->order($aOrder)->select();
+        }
+
+        //读取帖子列表
         foreach ($list_top as &$v) {
             $v['forum'] = $forum_key_value[$v['forum_id']];
         }
         unset($v);
-        $list = D('ForumPost')->where($map)->order($order)->page($page, 10)->select();
+        $this->assign('list_top', $list_top);
+
+        $list = D('ForumPost')->where($map)->order($aOrder)->page($aPage, 10)->select();
         $totalCount = D('ForumPost')->where($map)->count();
         foreach ($list as &$v) {
             $v['forum'] = $forum_key_value[$v['forum_id']];
         }
         unset($v);
-        //读取置顶列表
 
-        //显示页面
-        $this->assign('forum_id', $id);
-
-        if ($id != 0) {
-            $forum = $forum_key_value[$id];
-            $this->assign('forum', $forum);
-        } else {
-            $this->assign('forum', array('title' => '论坛 Forum'));
-        }
-
-
-        $this->assignAllowPublish();
+        //关联版块数据
+        $this->assignForumInfo($aId);
         $this->assign('list', $list);
-        $this->assign('list_top', $list_top);
+        $this->assign('forum_id', $aId);
+        $this->assignAllowPublish();
+
+        $this->assign('tab','lists');
         $this->assign('totalCount', $totalCount);
-        if (op_t($_GET['order']) == 'ctime') {
-            $this->assign('order', 1);
-        } else {
-            $this->assign('order', 0);
-        }
+
         $this->display();
+    }
+
+    public function doFollowing()
+    {
+        $aId = I('id', 0, 'intval');
+        $forumModel = D('Forum');
+        list ($result, $follow) = D('Forum')->following($aId);
+        if ($result) {
+            $this->ajaxReturn(array('status' => 1, 'info' => $follow == 1 ? '关注成功。' : '取消关注成功。', 'follow' => $follow));
+        } else {
+            $this->error($forumModel->getError());
+        }
     }
 
     public function forums()
@@ -139,9 +311,9 @@ class IndexController extends Controller
      * sr与sp仅作用于楼中楼消息来访，sp指代消息中某楼层的ID，sp指代该消息所在的分页
      *
      * @param      $id
-     * @param int  $page
+     * @param int $page
      * @param null $sr 楼中楼回复消息中某楼层的ID
-     * @param int  $sp 楼中楼回复消息中的分页ID
+     * @param int $sp 楼中楼回复消息中的分页ID
      * @auth 陈一枭
      */
     public function detail($id, $page = 1, $sr = null, $sp = 1)
@@ -184,7 +356,7 @@ class IndexController extends Controller
         $isBookmark = D('ForumBookmark')->exists(is_login(), $id);
         //显示页面
         $post['forum']['background'] = $post['forum']['background'] ? getThumbImageById($post['forum']['background'], 800, 'auto') : C('TMPL_PARSE_STRING.__IMG__') . '/default_bg.jpg';
-        $this->assign('forum',$post['forum']);
+        $this->assign('forum', $post['forum']);
         $this->assign('forum_id', $post['forum_id']);
         $this->assignAllowPublish();
         $this->assign('isBookmark', $isBookmark);
@@ -198,6 +370,7 @@ class IndexController extends Controller
         $this->assign('replyList', $replyList);
         $this->assign('replyTotalCount', $replyTotalCount);
         $this->assign('showMainPost', $showMainPost);
+        $this->assignForumInfo($post['forum_id']);
         $this->display();
     }
 
@@ -291,6 +464,7 @@ class IndexController extends Controller
         $this->assignAllowPublish();
         $this->assign('post', $post);
         $this->assign('isEdit', $isEdit);
+        $this->assign('tab','lists');
         $this->display();
     }
 
@@ -298,8 +472,10 @@ class IndexController extends Controller
     {
         $post_id = intval($post_id);
         $forum_id = intval($forum_id);
-        $title = op_t($title);
-        $content = op_h($content);
+        $title = text($title);
+        $aSendWeibo = I('sendWeibo', 0, 'intval');
+
+        $content = $content;//op_h($content);
 
 
         //判断是不是编辑模式
@@ -326,9 +502,9 @@ class IndexController extends Controller
         }
 
 
-        $content = filterBase64($content);
+        //   $content = filterBase64($content);
         //检测图片src是否为图片并进行过滤
-        $content = filterImage($content);
+        //  $content = filterImage($content);
 
         //写入帖子的内容
         $model = D('ForumPost');
@@ -342,20 +518,18 @@ class IndexController extends Controller
             $data = array('uid' => is_login(), 'title' => $title, 'content' => $content, 'parse' => 0, 'forum_id' => $forum_id);
 
             $before = getMyScore();
-            $tox_money_before = getMyToxMoney();
             $result = $model->createPost($data);
             $after = getMyScore();
-            $tox_money_after = getMyToxMoney();
             if (!$result) {
                 $this->error('发表失败：' . $model->getError());
             }
             $post_id = $result;
         }
 
-        //发布帖子成功，发送一条微博消息
-        $postUrl = "http://$_SERVER[HTTP_HOST]" . U('Forum/Index/detail', array('id' => $post_id));
-        $weiboApi = new WeiboApi();
-        $weiboApi->resetLastSendTime();
+        /*   //发布帖子成功，发送一条微博消息
+           $postUrl = "http://$_SERVER[HTTP_HOST]" . U('Forum/Index/detail', array('id' => $post_id));
+           $weiboApi = new WeiboApi();
+           $weiboApi->resetLastSendTime();*/
 
 
         //实现发布帖子发布图片微博(公共内容)
@@ -390,16 +564,18 @@ class IndexController extends Controller
 
         $feed_data['attach_ids'] != false && $type = "image";
 
-        //开始发布微博
-        if ($isEdit) {
-            $weiboApi->sendWeibo("我更新了帖子【" . $title . "】：" . $postUrl, $type, $feed_data);
-        } else {
-            $weiboApi->sendWeibo("我发表了一个新的帖子【" . $title . "】：" . $postUrl, $type, $feed_data);
+        if ($aSendWeibo) {
+            //开始发布微博
+            if ($isEdit) {
+                D('Weibo/Weibo')->addWeibo(is_login(), "我更新了帖子【" . $title . "】：" . U('detail', array('id' => $post_id), null, true), $type, $feed_data);
+            } else {
+                D('Weibo/Weibo')->addWeibo(is_login(), "我发表了一个新的帖子【" . $title . "】：" . U('detail', array('id' => $post_id), null, true), $type, $feed_data);
+            }
         }
 
 
         //显示成功消息
-        $message = $isEdit ? '编辑成功。' : '发表成功。' . getScoreTip($before, $after) . getToxMoneyTip($tox_money_before, $tox_money_after);
+        $message = $isEdit ? '编辑成功。' : '发表成功。' . getScoreTip($before, $after);
         $this->success($message, U('Forum/Index/detail', array('id' => $post_id)));
     }
 
@@ -422,15 +598,13 @@ class IndexController extends Controller
             //添加到数据库
             $model = D('ForumPostReply');
             $before = getMyScore();
-            $tox_money_before = getMyToxMoney();
             $result = $model->addReply($post_id, $content);
             $after = getMyScore();
-            $tox_money_after = getMyToxMoney();
             if (!$result) {
                 $this->error('回复失败：' . $model->getError());
             }
             //显示成功消息
-            $this->success('回复成功。' . getScoreTip($before, $after) . getToxMoneyTip($tox_money_before, $tox_money_after), 'refresh');
+            $this->success('回复成功。' . getScoreTip($before, $after), 'refresh');
         } else {
             $this->error('请10秒之后再回复');
 
@@ -463,6 +637,28 @@ class IndexController extends Controller
         } else {
             $this->success('取消成功');
         }
+    }
+
+    /**
+     * 随便看看
+     */
+    public function look()
+    {
+
+        $prefix = C('DB_PREFIX');
+        $post = M('')->query("select * from {$prefix}forum_post order by rand()");
+        $post = $this->forumPostModel->assignForumInfo($post);
+        if (IS_POST) {
+            $view = new View();
+            $view->assign('posts', $post);
+            $view->display(T('Forum@Index/_look'));
+            exit;
+        }
+        $this->assign('tab','look');
+        $this->assign('posts', $post);
+        $this->display();
+        //dump(D()->getLastSql());
+        // dump($post);exit;
     }
 
     private function assignAllowPublish()
@@ -708,5 +904,45 @@ class IndexController extends Controller
         $reply = D('ForumPostReply')->find(intval($reply_id));
         $has_permission = $reply['uid'] == is_login() || is_administrator();
         return $has_permission;
+    }
+
+    /**
+     * @param $forumModel
+     * @return mixed
+     */
+    public function assignRecommandForums()
+    {
+        $forums_recommand = S('forum_recommand_forum');
+        if ($forums_recommand === false) {
+            $forums_recommand_id = modC('RECOMMAND_FORUM', '1,2,3');
+            $forums_recommand = $this->forumModel->where(array('id' => array('in', explode(',', $forums_recommand_id))))->order('post_count desc')->select();
+            S('forum_recommand_forum', $forums_recommand);
+        }
+        foreach ($forums_recommand as &$v) {
+            $v['hasFollowed'] = $this->forumModel->checkFollowed($v['id'], is_login());
+        }
+        $this->assign('forums_recommand', $forums_recommand);
+        return $forums_recommand;
+    }
+
+    /**
+     * @return \Model
+     */
+    public function assignHotForum()
+    {
+        $forums_hot = S('forum_hot_forum');
+        if ($forums_hot === false) {
+            $forumModel = M('Forum');
+            $forums_hot_id = modC('HOT_FORUM', '1,2,3');
+            $forums_hot = $forumModel->where(array('id' => array('in', explode(',', $forums_hot_id))))->order('post_count desc')->select();
+
+            S('forum_hot_forum', $forums_hot);
+        }
+        foreach ($forums_hot as &$v) {
+            $v['hasFollowed'] = $this->forumModel->checkFollowed($v['id'], is_login());
+        }
+
+        $this->assign('forums_hot', $forums_hot);
+        return $forums_hot;
     }
 }

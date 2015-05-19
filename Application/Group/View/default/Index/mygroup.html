@@ -9,45 +9,51 @@
 <!-- 头部 -->
 <include file="Public/header"/>
 <!-- /头部 -->
-<include file="Public/nav"/>
+
+
+
 <!-- 主体 -->
-<div class="container clearfix">
+<div  id="main-container" class="container clearfix">
+
+    <include file="Public/nav"/>
+
+
     <div class="row">
         <div class="col-md-12">
+
             <div>
                 <div class="">
-                       <section class="group_lists">
-                            <if condition="!$mygroup">
-                                <div class="row">
-                                    <div class="col-xs-12">
-                                        <p class="text-muted" style="text-align: center; font-size: 3em;">
-                                            <br/><br/>
-                                            暂时没有群组～
-                                            <br/><br/><br/>
-                                        </p>
-                                    </div>
+                    <section class="group_lists">
+                        <if condition="!$mygroup">
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <p class="text-muted" style="text-align: center; font-size: 3em;">
+                                        <br/><br/>
+                                        暂时没有群组～
+                                        <br/><br/><br/>
+                                    </p>
                                 </div>
-                            </if>
-
-                            <volist name="mygroup" id="group">
-                                <include file="Public/group-item"/>
-                            </volist>
-
-
-
-                            <div class="clearfix pull-right">
-                                {:getPagination($totalCount,$r)}
                             </div>
-                        </section>
-                    </div>
+                        </if>
+                        <volist name="mygroup" id="vo">
+                                {:W('Group/Detail/group',array('group_id'=>$vo))}
+                        </volist>
+
+                        <div class=" clearfix pull-right">
+                            {:getPagination($totalCount,$r)}
+                        </div>
+                    </section>
+                </div>
             </div>
-
         </div>
-
     </div>
 
 </div>
 <!-- /主体 -->
+
+
+
+
 
 <!-- 底部 -->
 <include file="Public/footer"/>

@@ -1,59 +1,78 @@
-<extend name="Public/forum"/>
+<!DOCTYPE HTML>
+<html>
+<head>
+    <include file="Public/head"/>
+    <script type="text/javascript" src="__JS__/common.js"></script>
+</head>
+<body>
+<!-- 头部 -->
+<include file="Public/header"/>
+<include file="Public/_nav"/>
+<!-- /头部 -->
+<link type="text/css" rel="stylesheet" href="__CSS__/forum.css"/>
+<!-- 主体 -->
+<div id="main-container" class="">
+    <div id="body-container" class="container  common-block">
+        <div class="col-md-9">
 
-<block name="body">
-    <div class="row">
+            <div class="container">
+                <block name="body">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="fourm-top common_block_border"
+                                 style="padding: 15px 20px;margin: -15px;margin-top: 0;margin-bottom: 15px">
+                                <h4>
+                                    <if condition="$isEdit">
+                                        编辑帖子
+                                        <else/>
+                                        发表新帖
+                                    </if>
+                                </h4>
+                                <hr/>
+                                <section id="contents">
+                                    <form action="{:U('Forum/Index/doEdit')}" method="post" id="edit-article-form">
+                                        <input type="hidden" name="post_id" value="{$post.id}"/>
 
-        <div class="col-xs-12">
-            <div class="fourm-top common_block_border" style="padding: 15px 20px;margin: -15px;margin-top: 0;margin-bottom: 15px">
-                <h4>
-                    <if condition="$isEdit">
-                        编辑帖子
-                        <else/>
-                        发表新帖
-                    </if>
-                </h4>
-                <hr/>
-                <section id="contents">
-                    <form action="{:U('Forum/Index/doEdit')}" method="post" id="edit-article-form">
-                        <input type="hidden" name="post_id" value="{$post.id}"/>
+                                        <div class="row">
+                                            <!-- 帖子分类 -->
+                                            <div class="col-sm-3 col-xs-12">
+                                                <p>
+                                                    <select class="form-control" name="forum_id">
+                                                        <volist name="forum_list" id="each_forum">
+                                                            <if condition="$each_forum['allow_publish']">
+                                                                <php>
+                                                                    $selected = $each_forum['id'] == $forum_id ?
+                                                                    'selected' : '';
+                                                                </php>
+                                                                <option value="{$each_forum.id}"
+                                                                        {$selected}>{$each_forum.title|op_t}
+                                                                </option>
+                                                            </if>
+                                                        </volist>
+                                                    </select>
+                                                </p>
+                                            </div>
+                                            <div class="col-sm-9 col-xs-12">
+                                                <p>
+                                                    <input id="title" type="text" name="title" placeholder="标题"
+                                                           value="{$post.title}"
+                                                           class="form-control"/>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <p>
 
-                        <div class="row">
-                            <!-- 帖子分类 -->
-                            <div class="col-sm-3 col-xs-12">
-                                <p>
-                                    <select class="form-control" name="forum_id">
-                                        <volist name="forum_list" id="each_forum">
-                                            <if condition="$each_forum['allow_publish']">
-                                                <php>
-                                                    $selected = $each_forum['id'] == $forum_id ? 'selected' : '';
-                                                </php>
-                                                <option value="{$each_forum.id}"
-                                                {$selected}>{$each_forum.title|op_t}</option>
-                                            </if>
-                                        </volist>
-                                    </select>
-                                </p>
-                            </div>
-                            <div class="col-sm-9 col-xs-12">
-                                <p>
-                                    <input id="title" type="text" name="title" placeholder="标题" value="{$post.title}"
-                                           class="form-control"/>
-                                </p>
-                            </div>
-                        </div>
-                        <p>
+                                            <php>$config="toolbars:[['source','|','bold','italic','underline','fontsize','forecolor','fontfamily','backcolor','|','link','emotion','scrawl','attachment','insertvideo','insertimage','insertcode']]";</php>
 
-                            <php>$config='';</php>
+                                            {:W('Common/Ueditor/editor',array('myeditor','content',$post['content'],'100%','350px',$config))}
 
-                            {:W('UeditorMini/editor',array('contentEditor','content',$post['content'],'100%','250px',$config))}
+                                        </p>
 
-                        </p>
+                                        <p>&nbsp;</p>
 
-                        <p>&nbsp;</p>
-
-                        <p class="pull-right">
-                            <button type="submit" class="btn btn-large btn-primary" id="submit-button">
-                                <span class="glyphicon glyphicon-edit"></span>
+                                        <p class="pull-right">
+                                            <button type="submit" class="btn btn-large btn-primary" id="submit-button">
+                                                <span class="glyphicon glyphicon-edit"></span>
                             <span id="submit-content">
                                 <if condition="$isEdit">
                                     编辑帖子 Ctrl+Enter
@@ -61,30 +80,79 @@
                                     发表帖子 Ctrl+Enter
                                 </if>
                             </span>
-                            </button>
-                            <input type="hidden" id="isEdit" value="{$isEdit}">
-                        </p>
-                        <p>
-                            <a class="btn btn-large btn-primary" onclick="history.go(-1)">
-                                <span class="glyphicon glyphicon-home"></span>
-                                返回帖子列表
-                            </a>
-                        </p>
-                    </form>
-                </section>
+                                            </button>
+                                            <input type="hidden" id="isEdit" value="{$isEdit}">
+                                        </p>
+                                        <p>
+                                            <php>$hasWeibo=D('Module')->checkInstalled('Weibo');</php>
+                                            <eq name="hasWeibo" value="1">
+                                                <label>
+                                                    <input type="checkbox" name="sendWeibo" value="1" checked> 同步到微博
+                                                </label>
+                                            </eq>
+
+                                        </p>
+                                    </form>
+                                </section>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-9">
+                        </div>
+                        <div class="col-xs-3">
+
+                        </div>
+                    </div>
+                </block>
             </div>
         </div>
+        <div class="col-md-3">
+            <block name="side"></block>
+            <block name="side">
+                <div>
+                    <h1>发帖须知</h1>
 
+                    <p>
+                        请严格遵守法律法规，对所发表的内容负责。
+                    </p>
+
+                </div>
+            </block>
+
+        </div>
     </div>
 
-    <div class="row">
-        <div class="col-xs-9">
-        </div>
-        <div class="col-xs-3">
+    <block name="header"></block>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-9 col-xs-12">
 
+            </div>
+            <div class="col-sm-3 col-xs-12">
+
+
+            </div>
         </div>
     </div>
-</block>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $(window).resize(function () {
+            $("#main-container").css("min-height", $(window).height() - 343);
+        }).resize();
+    });
+</script>
+<!-- /主体 -->
+
+<!-- 底部 -->
+<include file="Public/footer"/>
+<!-- /底部 -->
+</body>
+</html>
+
 
 <block name="script">
     <script type="text/javascript" src="__PUBLIC__/Core/js/ext/atwho/atwho.js"></script>
@@ -99,7 +167,7 @@
                 }
             });
 
-           var $inputor = $('#contentEditor').atwho(atwho_config);
+            var $inputor = $('#contentEditor').atwho(atwho_config);
 
             var submitCount = 0;
             $('#edit-article-form').submit(function (e) {

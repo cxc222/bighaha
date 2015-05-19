@@ -1,102 +1,48 @@
 <extend name="Base/common"/>
 
-<block name="side">
-
+<block name="header">
+    <include file="Public/_nav"/>
 </block>
 <block name="body">
+    <div class="common-block usercenter margin-bottom-15">
+        <include file="_top"/>
+    </div>
+    <link href="__CSS__/weibo.css" type="text/css" rel="stylesheet"/>
+    <div class="row">
+        <div class="col-xs-7 ">
+            <div class="common-block ">
+                <header class="clearfix ">
+                    <div class="pull-left bottom-line">微博详情</div>
+                </header>
+                <section>
+                    <div id="weibo_list">
+                        <div class="row" id="weibo_{$weibo.id}">
+                            <div class="col-xs-12">
+                                <div style="padding-left: 16px;">
+                                    {$weibo.fetchContent}
 
-    <php>
-        query_user(array('avatar128','nickname','uid'));
-    </php>
-    <div class="col-xs-12 ">
-        <div class="row">
-            <div class="col-md-9 col-sm-8 col-xs-12 common_block_border">
-                <div class="row ">
-                    <if condition="is_login()">
-                        <div class="hot_post" style="margin-top: 0;padding-bottom: 10px;padding:20px">
-                            <div class="row">
-                                <div class="col-xs-2">
-                                    <script>
-                                        $(function () {
-                                            $inputor = $('#weibo_content').atwho(atwho_config);
-                                        })
+                                    <div>
 
-                                    </script>
-                                    <php>
-                                        $weibo['user']['space_url'] = U('UserCenter/Index/index',
-                                        array('uid'=>$weibo['user']['uid']));
-                                    </php>
-                                    <a href="{$weibo.user.space_url}">
-                                        <img src="{$weibo.user.avatar128}" class="avatar-img"/>
-                                    </a>
-                                </div>
+                                        <span class="text-primary">{$weibo.create_time|friendlyDate}</span>
 
-                                <div class="col-xs-6">
-                                    <a style="font-size: 1.2em;width: 100%" title="{$weibo.user.nickname}"
-                                       class="text-more"
-                                       href="{$weibo.user.space_url}">{$weibo.user.nickname}</a>&nbsp;{$weibo.user.icons_html}
-                                    <br/>头衔：
-                                    <if condition="$weibo['user']['rank_link'][0]['num']">
-                                        <volist name="weibo['user']['rank_link']" id="vl">
-                                            <if condition="$vl['is_show']">
-                                                <img src="{$vl.logo_url}" title="{$vl.title}" alt="{$vl.title}"
-                                                     style="width: 18px;height: 18px;vertical-align: middle;margin-left: 2px;"/>
-                                            </if>
-                                        </volist>
-                                        <else/>
-                                        无
-                                    </if>
-                                    <br/>积分：{$weibo.user.score}
-                                    <br/>等级：{$weibo.user.title|op_t}
-                                </div>
+                                        <div class="pull-right operation" style="margin-bottom: .5em;width: 50%">
+                                            <php>
+                                                $weiboCommentTotalCount = $weibo['comment_count'];
+                                            </php>
 
-
-                                <div class="col-xs-4 row">
-                                    <div style="margin: 10px;text-align: center">
-                                        <div class="col-xs-4">
-                                            微博<br/>{$weibo.user.weibocount}
-                                        </div>
-                                        <div class="col-xs-4">
-                                            粉丝<br/>{$weibo.user.fans}
-                                        </div>
-                                        <div class="col-xs-4">
-                                            关注<br/>{$weibo.user.following}
+                                            <include file="_operation"/>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
+                                    <hr/>
 
-                        </div>
-                    </if>
-                </div>
+                                    <div class="row weibo-comment-list"
+                                         data-weibo-id="{$weibo.id}">
+                                        <div class="col-xs-12">
+                                            <div class="light-jumbotron weibo-comment-block" style="padding: 1em 2em;">
+                                                <div class="weibo-comment-container">
 
-
-                <hr>
-                <div id="weibo_list">
-                    <div class="row" id="weibo_{$weibo.id}">
-                        <div class="col-xs-12">
-                            <div style="padding-left: 16px;">
-
-                                {$weibo.fetchContent}
-
-                                <div>
-
-                                    <span class="text-primary">{$weibo.create_time|friendlyDate}</span>
-
-                                    <div class="pull-right operation" style="margin-bottom: .5em">
-                                        <php>
-                                            $weiboCommentTotalCount = $weibo['comment_count'];
-                                        </php>
-
-                                        <include file="_operation"/>
-                                    </div>
-                                </div>
-
-                                <div class="row weibo-comment-list" style="display: none;"
-                                     data-weibo-id="{$weibo.id}">
-                                    <div class="col-xs-12">
-                                        <div class="light-jumbotron" style="padding: 1em 2em;">
-                                            <div class="weibo-comment-container">
+                                                    {:W('Comment/someComment',array('weibo_id'=>$weibo['id']))}
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -104,53 +50,58 @@
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="col-md-3 col-sm-4 col-xs-12">
+                </section>
 
-                <div>
-                    {:W('UserList/lists',array('forum_id'=>$forum_id))}
-                </div>
             </div>
 
         </div>
+        <div class="col-xs-5">
+            <div class="common-block ">
+                <header class="clearfix md">
+                    <div class="pull-left bottom-line">这些人赞过</div>
+                    <div class="pull-right bottom-line " style="border-bottom: none">{$supported.count} <span
+                            class="text-muted">人</span></div>
+                </header>
+
+                <section>
+                    <empty name="supported.data">
+                        <div style="width: 210px;margin: auto" class="alert with-icon">
+                            <i class="icon-inbox"></i>
+
+                            <div class="content">暂时没有人赞过哦。</div>
+                        </div>
+                    </empty>
+                    <ul class="supported-users clearfix">
+                        <volist name="supported.data" id="vo">
+                            <li class="text-center text-ellipsis col-xs-3">
+                                <a href="{$vo.user.space_url}" target="_blank" ucard="{$vo.uid}"><img
+                                        style="width:64px;" class="avatar-img" src="{$vo.user.avatar128}"></a>
+                                <br/>
+                                {$vo.user.space_link}
+                            </li>
+                        </volist>
+                    </ul>
+                    <div class="text-center">
+                        {$supported.html}
+                    </div>
+                </section>
+
+            </div>
+
+        </div>
+
     </div>
 </block>
 
 <block name="script">
-    <script type="text/javascript" src="__PUBLIC__/Core/js/ext/atwho/atwho.js"></script>
-    <link type="text/css" rel="stylesheet" href="__PUBLIC__/Core/js/ext/atwho//atwho.css"/>
+
     <script type="text/javascript" src="__PUBLIC__/Core/js/ext/magnific/jquery.magnific-popup.min.js"></script>
     <link type="text/css" rel="stylesheet" href="__PUBLIC__/Core/js/ext/magnific/magnific-popup.css"/>
     <script src="__JS__/weibo.js"></script>
     <script>
-        var SUPPORT_URL="{:addons_url('Support://Support/doSupport')}";
-
+        var SUPPORT_URL = "{:addons_url('Support://Support/doSupport')}";
         var auto_open_detail = 1;
+        weibo_bind();
 
-
-        $(document).ready(function() {
-
-            $('.popup-gallery').each(function() { // the containers for all your galleries
-                $(this).magnificPopup({
-                    delegate: 'a',
-                    type: 'image',
-                    tLoading: 'Loading image #%curr%...',
-                    mainClass: 'mfp-img-mobile',
-                    gallery: {
-                        enabled: true,
-                        navigateByImgClick: true,
-                        preload: [0,1] // Will preload 0 - before current, and 1 after the current image
-                    },
-                    image: {
-                        tError: '<a href="%url%">The image #%curr%</a> could not be loaded.',
-                        titleSrc: function(item) {
-                            /*           return item.el.attr('title') + '<small>by Marsel Van Oosten</small>';*/
-                            return '';
-                        }
-                    }
-                });
-            });
-        });
     </script>
 </block>

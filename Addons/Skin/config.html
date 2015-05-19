@@ -28,25 +28,28 @@
     <input type="hidden" value="{$data.config.defaultSkin.value}" name="config[defaultSkin]" id="default"/>
     <dl class="lineD">
         <dt>优先执行默认皮肤：</dt>
-        <dd><input type="radio" name="config[mandatory]" value="1"
+        <dd><label><input type="radio" name="config[mandatory]" value="1"
             <eq name="data.config.mandatory.value" value="1">checked=checked</eq>
-            >是 <input type="radio" name="config[mandatory]" value="0"
+            >是 &nbsp;&nbsp;&nbsp;&nbsp;</label><label><input type="radio" name="config[mandatory]" value="0"
             <eq name="data.config.mandatory.value" value="0">checked=checked</eq>
-            >否 <br/>
+            >否</label> <br/>
 
             <p>默认不开启，开启后优先执行默认皮肤，即管理员设置的皮肤。</p>
         </dd>
     </dl>
     <dl class="lineD">
         <dt>用户是否可以设置皮肤：</dt>
-        <dd><input type="radio" name="config[canSet]" value="1"
+        <dd><label><input type="radio" name="config[canSet]" value="1"
             <eq name="data.config.canSet.value" value="1">checked=checked</eq>
-            >是 <input type="radio" name="config[canSet]" value="0"
+            >是</label> &nbsp;&nbsp;&nbsp;&nbsp;<label><input type="radio" name="config[canSet]" value="0"
             <eq name="data.config.canSet.value" value="0">checked=checked</eq>
-            >否 <br/>
+            >否</label> <br/>
 
             <p>默认可以设置，即用户可换肤。</p>
         </dd>
+    </dl>
+    <dl class="lineD" style="display: hidden;">
+        <dd><input type="hidden" name="config[addons_cache]" value="SKIN_ADDON_CONFIG"/></dd>
     </dl>
 
 </div>

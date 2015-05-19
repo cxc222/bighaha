@@ -1,9 +1,12 @@
 <extend name="Base/common"/>
 <block name="style">
-    <link href="__PUBLIC__/Weibo/css/topic.css" rel="stylesheet"/>
-    <link href="__PUBLIC__/Weibo/css/weibo.css" rel="stylesheet"/>
+    <link href="__CSS__/topic.css" rel="stylesheet"/>
+    <link href="__CSS__/weibo.css" rel="stylesheet"/>
 </block>
 
+<block name="header">
+    <include file="Public/_nav"/>
+</block>
 
 <block name="body">
 <div class="topics">
@@ -79,11 +82,10 @@
                             </if>
                         </div>
                         <if condition="is_login() && $host['uid'] != get_uid()">
-                            <php>$host['is_following'] =
-                                D('Follow')->where(array('who_follow'=>get_uid(),'follow_who'=>$host['uid']))->find();
-                            </php>
                             <p class="text-right">
-                                {:W('Common/Ufollow/render',array('is_following'=>$host['is_following'],'uid'=>$host['uid']))}</p>
+                                {:W('Common/Follow/follow',array('follow_who'=>$host['uid']))}
+                            </p>
+
                             <else/>
                             <if condition="$host['uid'] == get_uid()">
                                 <p class="text-right"><a class="btn btn-primary" disabled="disabled">自己</a></p>
@@ -105,7 +107,7 @@
 
                         <div>
                             <p>
-                                <if condition="check_auth('beTopicAdmin') OR is_administrator()">
+                                <if condition="check_auth('Weibo/Topic/beAdmin')">
                                     <button class="btn btn-danger" onclick="to_be_number_one({$topic['id']})">抢先主持
                                     </button>
                                 </if>
@@ -129,7 +131,7 @@
             </div>
         </div>
     </if>
-    <if condition="check_auth('manageTopic') OR $topic['uadmin'] eq get_uid()">
+    <if condition="check_auth('Weibo/Index/editTopic')">
         <div class="common_block_border">
             <h4 class="common_block_title">管理面板</h4>
 
@@ -172,7 +174,7 @@
                             <label for="intro">话题导语</label>
                             <textarea class="form-control" id="intro" name="intro" placeholder="输入话题导语">{$topic['intro']}</textarea>
                         </div>
-                        <if condition="check_auth('manageTopic')">
+                        <if condition="check_auth('Weibo/Index/editTopic')">
                             <div class="margin_bottom_10">管理员设置项(以下选项仅管理员可设置)</div>
                             <div class="form-group">
                                 <label for="intro">主持人UID</label>
@@ -202,60 +204,23 @@
     </if>
 </div>
 <div class="public-right coghgf ">
-    <div class="batem margin_bottom_10">导语：{$topic.intro|default=推荐话题！}</div>
+    <div class="batem margin_bottom_10">导语：{$topic.intro|default='推荐话题！'}</div>
 
-
-    <volist name="list" id="weibo">
-        <eq name="weibo.topic_top" value="1">
-            <div class="border qwer" id="weibo_{$weibo.id}">
-                <div style="padding:15px;position: relative;">
-                    <div class="ribbion-green"></div>
-                    <div style="color:#333;font-weight: 700; margin-bottom:10px">主持人推荐</div>
-                    <div class="leftgh"><img src="{$weibo.user.avatar64}" width="64" height="64"></div>
-                    <div class="rightjk">
-                        <div class="name"><a
-                                href="{$weibo.user.space_url}">{$weibo.user.nickname|htmlspecialchars}</a></div>
-                        <div class="conner">{$weibo.fetchContent|parse_topic}</div>
-
-                        <div class="row weibo-comment-list" style="display: none;" data-weibo-id="{$weibo.id}">
-                            <div class="col-xs-12">
-                                <div class="light-jumbotron" style="padding: 1em 2em;">
-                                    <div class="weibo-comment-container">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="weibo_content_bottom row" style="margin:5px 0px;font-size: 12px;">
-                            <div class="col-md-4">
-                                    <span class="text-primary"><a
-                                            href="{:U('Weibo/Index/weiboDetail',array('id'=>$weibo['id']))}">{$weibo.create_time|friendlyDate}</a></span>
-                            </div>
-                            <div class="col-md-8">
-                      <span class="pull-right" data-weibo-id="{$weibo.id}">
-                      <php>$weiboCommentTotalCount = $weibo['comment_count'];</php>
-                      <include file="_operation"/>   </span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="public-clear"></div>
-                </div>
-            </div>
-        </eq>
-    </volist>
     <div class="row">
         <if condition="is_login()">
-
             <include file="_quickweibo"/>
-
         </if>
-
-        <div id="weibo_list">
+        <div id="weibo_list" style="padding:0 10px;">
             <include file="loadweibo"/>
         </div>
-        <div id="load_more" class="text-center text-muted" <if condition="$page neq 1">style="display:none"</if>>
-        <p id="load_more_text">载入更多</p>
-    </div>
+
+
+
+        <div class="text-right">
+            {:getPagination($total_count,30)}
+        </div>
+
+
     </div>
 
 
@@ -268,36 +233,10 @@
     <script src="__JS__/weibo.js"></script>
     <script>
         var SUPPORT_URL = "{:addons_url('Support://Support/doSupport')}";
-        var noMoreNextPage = false;
-        var isLoadingWeibo = false;
-        var currentPage = '{$page}';
-        var loadCount = 1;
-        var lastId = '{$lastId}';
-        var url = "{$loadMoreUrl}";
+
         $(function () {
-            //当屏幕滚动到底部时
-
-            if (currentPage == 1) {
-                $(window).on('scroll', function () {
-                    if (noMoreNextPage) {
-                        return;
-                    }
-                    if (isLoadingWeibo) {
-                        return;
-                    }
-                    if (isLoadMoreVisible()) {
-                        loadNextPage();
-                    }
-                });
-                $(window).trigger('scroll');
-            }
-
-
+             weibo_bind();
         });
-        function to_be_number_one(tid) {
-            $.post(U('weibo/topic/beadmin'),{tid:tid},function(msg){
-                handleAjax(msg);
-            })
-        }
+
     </script>
 </block>

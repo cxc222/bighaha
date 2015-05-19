@@ -33,4 +33,8 @@ return array(
         'value'=>'1',
         'tip'=>'默认可以设置，即用户可换肤。'
     ),
+    'addons_cache'=>array(
+        'type'=>'hidden',
+        'value'=>'SKIN_ADDON_CONFIG',
+    )
 );

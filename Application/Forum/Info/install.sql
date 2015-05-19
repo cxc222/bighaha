@@ -1,7 +1,7 @@
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
-CREATE TABLE IF NOT EXISTS `opensns_forum` (
+CREATE TABLE IF NOT EXISTS `ocenter_forum` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` text NOT NULL,
   `create_time` int(11) NOT NULL,
@@ -18,11 +18,11 @@ CREATE TABLE IF NOT EXISTS `opensns_forum` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
-INSERT INTO `opensns_forum` (`id`, `title`, `create_time`, `post_count`, `status`, `allow_user_group`, `sort`, `logo`, `background`, `description`, `admin`, `type_id`, `last_reply_time`) VALUES
+INSERT INTO `ocenter_forum` (`id`, `title`, `create_time`, `post_count`, `status`, `allow_user_group`, `sort`, `logo`, `background`, `description`, `admin`, `type_id`, `last_reply_time`) VALUES
 (1, '默认版块', 1407114174, 12, 1, '1', 0, 133, 123, '1231', '', 1, 0),
 (2, '官方公告', 1417424922, 0, 1, '1', 0, 134, 117, '官方公告发布区', '', 2, 0);
 
-CREATE TABLE IF NOT EXISTS `opensns_forum_bookmark` (
+CREATE TABLE IF NOT EXISTS `ocenter_forum_bookmark` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `uid` int(11) NOT NULL,
   `post_id` int(11) NOT NULL,
@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS `opensns_forum_bookmark` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
-CREATE TABLE IF NOT EXISTS `opensns_forum_lzl_reply` (
+CREATE TABLE IF NOT EXISTS `ocenter_forum_lzl_reply` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `post_id` int(11) NOT NULL,
   `to_f_reply_id` int(11) NOT NULL,
@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS `opensns_forum_lzl_reply` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=84 ;
 
-CREATE TABLE IF NOT EXISTS `opensns_forum_post` (
+CREATE TABLE IF NOT EXISTS `ocenter_forum_post` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `uid` int(11) NOT NULL,
   `forum_id` int(11) NOT NULL,
@@ -60,7 +60,14 @@ CREATE TABLE IF NOT EXISTS `opensns_forum_post` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=23 ;
 
-CREATE TABLE IF NOT EXISTS `opensns_forum_post_reply` (
+CREATE TABLE IF NOT EXISTS `ocenter_forum_follow` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `uid` int(11) NOT NULL,
+  `forum_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='版块关注' AUTO_INCREMENT=57 ;
+
+CREATE TABLE IF NOT EXISTS `ocenter_forum_post_reply` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `uid` int(11) NOT NULL,
   `post_id` int(11) NOT NULL,
@@ -72,7 +79,7 @@ CREATE TABLE IF NOT EXISTS `opensns_forum_post_reply` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
 
-CREATE TABLE IF NOT EXISTS `opensns_forum_type` (
+CREATE TABLE IF NOT EXISTS `ocenter_forum_type` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(100) NOT NULL COMMENT '标题',
   `status` tinyint(4) NOT NULL DEFAULT '1',
@@ -82,7 +89,7 @@ CREATE TABLE IF NOT EXISTS `opensns_forum_type` (
   UNIQUE KEY `id` (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='论坛分类表' AUTO_INCREMENT=3 ;
 
-INSERT INTO `opensns_forum_type` (`id`, `title`, `status`, `sort`, `pid`) VALUES
+INSERT INTO `ocenter_forum_type` (`id`, `title`, `status`, `sort`, `pid`) VALUES
 (1, '默认分类', 1, 0, 0),
 (2, '官方板块', 1, 1, 0);
 
@@ -91,13 +98,13 @@ INSERT INTO `opensns_forum_type` (`id`, `title`, `status`, `sort`, `pid`) VALUES
 
 /* menu 插入 */
 
-INSERT INTO `opensns_menu` (`title`, `pid`, `sort`, `url`, `hide`, `tip`, `group`, `is_dev`) VALUES
-( '论坛', 0, 22, 'Forum/index', 0, '', '', 0);
+INSERT INTO `ocenter_menu` (`title`, `pid`, `sort`, `url`, `hide`, `tip`, `group`, `is_dev`) VALUES
+( '论坛', 0, 22, 'Forum/index', 1, '', '', 0);
 
 set @tmp_id=0;
-select @tmp_id:= id from `opensns_menu` where title = '论坛';
+select @tmp_id:= id from `ocenter_menu` where title = '论坛';
 
-INSERT INTO `opensns_menu` ( `title`, `pid`, `sort`, `url`, `hide`, `tip`, `group`, `is_dev`) VALUES
+INSERT INTO `ocenter_menu` ( `title`, `pid`, `sort`, `url`, `hide`, `tip`, `group`, `is_dev`) VALUES
 ( '板块管理', @tmp_id, 1, 'Forum/forum', 0, '', '板块', 0),
 ( '帖子管理', @tmp_id, 3, 'Forum/post', 0, '', '帖子', 0),
 ( '编辑／创建板块', @tmp_id, 0, 'Forum/editForum', 1, '', '', 0),

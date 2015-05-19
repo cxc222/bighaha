@@ -83,19 +83,15 @@ class MessageModel extends Model
      * @param        $url 链接地址，不提供则默认进入消息中心
      * @param int    $from_uid 发起消息的用户，根据用户自动确定左侧图标，如果为用户，则左侧显示头像
      * @param int    $type 消息类型，0系统，1用户，2应用
-     * @param string $appname 应用名，默认不需填写，如果填写了就必须实现对应的消息处理模型，例如贴吧里面可以基于某个回复开启聊天
-     * @param string $apptype 同上，应用里面的一个标识符
-     * @param int    $source_id 来源ID，通过来源ID获取基于XX聊天的来源信息
-     * @param int    $find_id 查找ID，通过查找ID获得标识ID
      * @return int
      * @auth 陈一枭
      */
-    public function sendMessage($to_uid, $content = '', $title = '您有新的消息', $url, $from_uid = 0, $type = 0, $appname = '', $apptype = '', $source_id = 0, $find_id = 0)
+    public function sendMessage($to_uid, $content = '', $title = '您有新的消息', $url, $from_uid = 0, $type = 0)
     {
         if ($to_uid == is_login()) {
             return 0;
         }
-        $this->sendMessageWithoutCheckSelf($to_uid, $content, $title, $url, $from_uid, $type, $appname, $apptype, $source_id, $find_id);
+        $this->sendMessageWithoutCheckSelf($to_uid, $content, $title, $url, $from_uid, $type);
     }
 
     /**
@@ -106,7 +102,7 @@ class MessageModel extends Model
      * @param $int $from_uid 发起消息的用户，根据用户自动确定左侧图标，如果为用户，则左侧显示头像
      * @param int $type 消息类型，0系统，1用户，2应用
      */
-    public function sendMessageWithoutCheckSelf($to_uid, $content = '', $title = '您有新的消息', $url, $from_uid = 0, $type = 0, $appname = '', $apptype = '', $source_id = 0, $find_id = 0)
+    public function sendMessageWithoutCheckSelf($to_uid, $content = '', $title = '您有新的消息', $url='', $from_uid = 0, $type = 0)
     {
         $message['to_uid'] = $to_uid;
         $message['content'] = op_t($content);
@@ -115,11 +111,6 @@ class MessageModel extends Model
         $message['from_uid'] = $from_uid;
         $message['type'] = $type;
         $message['create_time'] = time();
-        $message['appname'] = $appname == '' ? strtolower(MODULE_NAME) : $appname;
-        $message['source_id'] = $source_id;
-        $message['apptype'] = $apptype;
-        $message['find_id'] = $find_id;
-
         $rs = $this->add($message);
         return $rs;
     }

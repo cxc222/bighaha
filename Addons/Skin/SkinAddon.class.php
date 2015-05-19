@@ -30,17 +30,6 @@ class SkinAddon extends Addon
         $model = D();
         $sql = "REPLACE INTO `{$prefix}hooks` (`name`, `description`, `type`, `update_time`, `addons`) VALUES('setSkin', '设置个人皮肤', 2, 1425265259, 'Skin');";
         $model->execute($sql);
-        $sql1="CREATE TABLE IF NOT EXISTS `{$prefix}user_config` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `uid` int(11) NOT NULL,
-  `name` varchar(30) NOT NULL,
-  `role_id` int(11) NOT NULL DEFAULT '0',
-  `model` varchar(30) NOT NULL,
-  `value` varchar(100) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='用户配置信息表' AUTO_INCREMENT=1 ;";
-        $model->execute($sql1);
-
         return true;
     }
 
@@ -49,8 +38,6 @@ class SkinAddon extends Addon
         $prefix = C("DB_PREFIX");
         $sql = "DELETE FROM `{$prefix}hooks` WHERE `name`='setSkin';";
         D('')->execute($sql);
-        $sql1="DELETE FROM `{$prefix}hooks` WHERE `name`='{$prefix}user_config';";
-        D('')->execute($sql1);
         return true;
     }
 

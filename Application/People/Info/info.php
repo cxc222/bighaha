@@ -25,6 +25,11 @@ return array(
     //开发者网站
     'website' => 'http://www.ourstu.com',
     //前台入口，可用U函数
-    'entry' => 'People/index/index'
+    'entry' => 'People/index/index',
 
+    'admin_entry' => 'People/config',
+
+    'icon' => 'group',
+
+    'can_uninstall' => 1
 );

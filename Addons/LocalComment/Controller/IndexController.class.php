@@ -12,92 +12,150 @@ use Think\Controller;
 
 class IndexController extends Controller
 {
+    protected $commentModel = '';
+    public function _initialize(){
+        $this->commentModel = D('Addons://LocalComment/LocalComment');
+    }
     public function addComment()
     {
 
-        $config = get_addon_config('LocalComment');
-        $can_guest_comment = $config['can_guest_comment'];
-        if (!$can_guest_comment) {//不允许游客评论
+
+        $aPath = I('post.path','','urldecode');
+        $aPath = explode('/', $aPath);
+        $aApp = $aPath[0];
+        $aMod = $aPath[1];
+        $aRowId = $aPath[2];
+        $can_guest = modC($aMod.'_LOCAL_COMMENT_CAN_GUEST',1,$aApp);
+        if(!$can_guest){
             if (!is_login()) {
                 $this->error('请登录后评论。');
             }
         }
 
-        //获取参数
-        $app = strval($_REQUEST['app']);
-        $mod = strval($_REQUEST['mod']);
-        $row_id = intval($_REQUEST['row_id']);
-        $content = strval($_REQUEST['content']);
-        $uid = intval($_REQUEST['uid']);
+        $aCountModel =  I('get.count_model','','text');
+        $aCountField =  I('get.count_field','','text');
 
-        //调用API接口，添加新评论
-        $data = array('app' => $app, 'mod' => $mod, 'row_id' => $row_id, 'content' => $content, 'uid' => is_login());
-        D($app . '/' . $mod)->where(array('id' => $row_id))->setInc('reply_count');
-        $commentModel = D('Addons://LocalComment/LocalComment');
-        $data = $commentModel->create($data);
-        if (!$data) {
-            $this->error('评论失败：' . $commentModel->getError());
+        $aContent = I('content','','text');
+        $aUid = I('get.uid','','intval');
+        if(empty($aContent)){
+            $this->error('评论内容不能为空');
         }
-        $commentModel->add($data);
-        if (!is_login())//游客逻辑直接跳过@环节
-        {
-            if ($uid) {
-                $title = '游客' . '评论了您';
-                $message = '评论内容：' . $content;
-                $url = $_SERVER['HTTP_REFERER'];
-                D('Common/Message')->sendMessage($uid, $message, $title, $url, 0, 0, $app);
-            }
-            //返回结果
-            $this->success('评论成功', 'refresh');
-        } else {
-            //给评论对象发送消息
-            if ($uid) {
-                $user = D('Member')->find(get_uid());
-                $title = $user['nickname'] . '评论了您';
-                $message = '评论内容：' . $content;
-                $url = $_SERVER['HTTP_REFERER'];
-                D('Common/Message')->sendMessage($uid, $message, $title, $url, get_uid(), 0, $app);
-            }
-        }
+       $commentModel = $this->commentModel;
+       $lookup = get_ip_lookup();
+       $data = array('app' => $aApp, 'mod' => $aMod, 'row_id' => $aRowId, 'content' => $aContent, 'uid' => is_login(),'ip'=>get_client_ip(1),'area'=>$lookup['province'].$lookup['city']);
+      $res = $commentModel->addComment($data);
+      if($res){
+
+          D($aCountModel)->where(array('id'=>$aRowId))->setInc($aCountField);
+
+          $class = get_addon_class('LocalComment');
+          $object = new $class;
+          $html = $object->getCommentHtml($res);
+
+          if(!is_login()){
+              if ($aUid) {
+                  $title = '游客' . '评论了您';
+                  $message = '评论内容：' . $aContent;
+                  $url = $_SERVER['HTTP_REFERER'];
+                  D('Common/Message')->sendMessage($aUid, $message, $title, $url, 0);
+              }
+              $result['status'] = 1;
+              $result['data'] = $html;
+              $result['info'] = '评论成功';
+              $this->ajaxReturn($result);
+          }
 
 
-        //通知被@到的人
-        $uids = get_at_uids($content);
-        $uids = array_unique($uids);
-        $uids = array_subtract($uids, array($uid));
-        foreach ($uids as $uid) {
-            $user = D('Member')->find(get_uid());
-            $title = $user['nickname'] . '@了您';
-            $message = '评论内容：' . $content;
-            $url = $_SERVER['HTTP_REFERER'];
-            D('Common/Message')->sendMessage($uid, $message, $title, $url, get_uid(), 0, $app);
-        }
+          if ($aUid) {
+              $user = query_user(array('nickname','uid'),is_login());
+              $title = $user['nickname'] . '评论了您';
+              $message = '评论内容：' . $aContent;
+              $url = $_SERVER['HTTP_REFERER'];
+              D('Common/Message')->sendMessage($aUid, $message, $title, $url, get_uid());
+         }
 
-        //返回结果
-        $this->success('评论成功', 'refresh');
+
+          //通知被@到的人
+          $uids = get_at_uids($aContent);
+          $uids = array_unique($uids);
+          $uids = array_subtract($uids, array($aUid));
+          foreach ($uids as $uid) {
+              $user = query_user(array('nickname','uid'),is_login());
+              $title = $user['nickname'] . '@了您';
+              $message = '评论内容：' . $aContent;
+              $url = $_SERVER['HTTP_REFERER'];
+              D('Common/Message')->sendMessage($uid, $message, $title, $url, get_uid());
+          }
+          $result['status'] = 1;
+          $result['data'] = $html;
+          $result['info'] = '评论成功';
+          $this->ajaxReturn($result);
+
+      }else{
+          $result['status'] =0;
+          $result['data'] = '';
+          $result['info'] = '评论失败';
+          $this->ajaxReturn($result);
+      }
     }
+
+
+    public function getCommentList(){
+        $aApp = I('post.app','','text');
+        $aMod = I('post.mod','','text');
+        $aRowId = I('post.row_id','','intval');
+        $aPage = I('post.page','','intval');
+        $count = modC($aMod.'_LOCAL_COMMENT_COUNT',10,$aApp);
+        $commentModel = $this->commentModel;
+
+        $param['where'] = array('app' => $aApp, 'mod' => $aMod, 'row_id' => $aRowId, 'status' => 1);
+        $param['page'] = $aPage;
+        $param['count'] = $count;
+        $sort = modC($aMod.'_LOCAL_COMMENT_ORDER',0,$aApp) == 0 ? 'desc':'asc';
+        $param['order'] = 'create_time '.$sort;
+        $param['field'] = 'id';
+        $list = $commentModel->getList($param);
+        $html = '';
+        $class = get_addon_class('LocalComment');
+        $object = new $class;
+        foreach ($list as $v) {
+             $html .= $object->getCommentHtml($v);
+        }
+        $total_count = $object->getCommentCount($aApp,$aMod,$aRowId);
+        $pageCount = ceil($total_count / $count);
+        $html.='<div class="pager">'.getPageHtml('local_comment_page',$pageCount,array('app'=>$aApp,'mod'=>$aMod, 'row_id'=>$aRowId),$aPage).'</div>';
+        $this->ajaxReturn(array('html'=>$html));
+
+    }
+
 
     public function deleteComment()
     {
-        $aCid = I('post.id', 0, 'intval');
-        if ($aCid <= 0) {
+        $aId = I('post.id', 0, 'intval');
+        $aCountModel =  I('get.count_model','','text');
+        $aCountField =  I('get.count_field','','text');
+
+        $commentModel = $this->commentModel;
+        $comment = $commentModel->getComment($aId);
+        if(empty($comment) || $aId <= 0){
             $this->error('删除评论失败。评论不存在。');
         }
-        //检查权限
-        $canDelete = check_auth('deleteLocalComment') || is_administrator();
-        $commentModel = D('Addons://LocalComment/LocalComment');
-        $comment = $commentModel->find($aCid);
-        $isOnwer = ($comment['uid'] == is_login() and is_login() != 0);
-        if ($canDelete || $isOnwer) {
-            $result = $commentModel->where(array('id' => $aCid))->delete();
-            if ($result) {
-                $this->success('删除评论成功。', 'refresh');
-            } else {
-                $this->error('删除评论失败。' . $commentModel->getError());
-            }
-        } else {
-            $this->error('删除评论失败。' . '权限不足');
+        if(!is_login()){
+           $this->error('请登陆后再操作！');
         }
+        if(!check_auth('deleteLocalComment',$comment['uid'])){
+            $this->error('删除评论失败！权限不足');
+        }
+
+        $result = $commentModel->deleteComment($aId);
+        if ($result) {
+            D($aCountModel)->where(array('id'=>$comment['row_id']))->setDec($aCountField);
+            $this->success('删除评论成功。', 'refresh');
+        } else {
+            $this->error('删除评论失败。' . $commentModel->getError());
+        }
+
+
 
     }
 }

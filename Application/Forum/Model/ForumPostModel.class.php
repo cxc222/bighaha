@@ -112,4 +112,19 @@ class ForumPostModel extends Model {
         //返回结果
         return $content;
     }
+
+
+    /**关联帖子列表的版块信息
+     * @param $list
+     * @return mixed
+     */
+    public function assignForumInfo($list)
+    {
+        $forum_key_value = D('Forum')->getForumKeyValue();
+        foreach ($list as &$v) {
+            $v['forum'] = $forum_key_value[$v['forum_id']];
+        }
+        unset($v);
+        return $list;
+    }
 }

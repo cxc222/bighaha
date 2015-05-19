@@ -1,7 +1,7 @@
 <?php
 /**
  * 所属项目 110.
- * 开发者: 陈一枭
+ * 开发者: 郑钟良
  * 创建日期: 2014-11-18
  * 创建时间: 10:14
  * 版权所有 想天软件工作室(www.ourstu.com)
@@ -25,6 +25,11 @@ return array(
     //开发者网站
     'website' => 'http://www.ourstu.com',
     //前台入口，可用U函数
-    'entry' => 'Shop/index/index'
+    'entry' => 'Shop/index/index',
 
+    'admin_entry' => 'Admin/Shop/shopCategory',
+
+    'icon' => 'shopping-cart',
+
+    'can_uninstall' => 1
 );
