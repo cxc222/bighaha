@@ -67,8 +67,10 @@
                         <a class="btn btn-primary " target="_blank" href="{$content.url}" ><i class="glyphicon glyphicon-cloud"></i>&nbsp;访问</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</neq>
                         <if condition="($content['uid'] eq is_login()) OR check_auth('editIssueContent')">
 
-                            <a class="btn btn-primary " href="{:U('edit',array('id'=>$content['id']))}" ><i class="glyphicon glyphicon-pencil"></i>&nbsp;编辑</a>
+                            <a class="btn btn-primary " href="{:U('edit',array('id'=>$content['id']))}" style="margin-right: 25px;" ><i class="glyphicon glyphicon-pencil"></i>&nbsp;编辑</a>
                         </if>
+
+                       {:W('Weibo/Share/shareBtn',array('param'=>array('app'=>'Issue','model'=>'IssueContent','method'=>'find','id'=>$content['id'],'img'=>get_cover($content['cover_id'],'path'),'from'=>'专辑','site_link'=>U('issue/index/issuecontentdetail',array('id'=>$content['id']))),'text'=>'分享','css'=>array('class'=>'btn btn-primary')))}
 
 
 

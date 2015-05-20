@@ -42,6 +42,7 @@ var weibo = {
         //通过服务器载入微博列表
         this.isLoadingWeibo = true;
         $('#load_more_text').text('正在载入...');
+        toast.showLoading();
         $.get(this.url, {page: this.page, lastId: this.lastId,type:this.type,loadCount:this.loadCount}, function (a) {
             if (a.status == 0) {
                 weibo.noMoreNextPage = true;
@@ -52,6 +53,7 @@ var weibo = {
             weibo.isLoadingWeibo = false;
             weibo_bind();
             bind_atwho();
+            toast.hideLoading();
         });
     },
     clearWeiboList: function () {
@@ -79,7 +81,7 @@ var bind_weibo_popup = function () {
                 titleSrc: function (item) {
                     return '';
                 },
-                verticalFit: false
+                verticalFit: true
             }
         });
     });

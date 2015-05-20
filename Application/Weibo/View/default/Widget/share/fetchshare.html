@@ -1,6 +1,8 @@
 <php>if($weibo){</php>
 <p class="word-wrap">{$weibo.content}</p>
 <php>}</php>
+
+<a class="" target="_blank" title="{$show.title}"  href="{$show.site_link}">
 <div class="clearfix">
     <div style="border: 1px solid #e8e8e8;padding: 10px;margin-bottom: 20px; background: #f1f1f1;float: left;clear: both;width: 100%">
         <div class="show_share">
@@ -9,13 +11,13 @@
                 <img src="{$show.img}">
             </div>
             <php>}</php>
-            <div class="pull-left right"><a class="text-more" target="_blank" title="{$show.title}"
-                                            href="{$show.site_link}">{$show.title}</a>
+            <div class="pull-left right "><div class="text-more" style="width: 100%">{$show.title}</div>
                 <div class="des">{$show.content|text|getShortSp=40}</div>
             </div>
         </div>
     </div>
 </div>
+</a>
 <style>
     .show_share {
         height: 100%;
@@ -39,15 +41,16 @@
         width: 300px;
     }
 
-    .show_share .right a {
+    .show_share .right {
         font-size: 16px;
         font-weight: 700;
-        width: 100%;
     }
 
     .show_share .right .des {
         color: #999;
         line-height: 20px;
+        font-size: 13px;
+        font-weight: normal;
     }
 
 </style>

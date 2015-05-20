@@ -26,8 +26,8 @@ class IndexController extends Controller
 
     /**
      * 活动首页
-     * @param int    $page
-     * @param int    $type_id
+     * @param int $page
+     * @param int $type_id
      * @param string $norh
      * autor:xjw129xjt
      */
@@ -74,14 +74,12 @@ class IndexController extends Controller
         unset($v);
 
         $this->assign('rec_event', $rec_event);
-
-
     }
 
     /**
      * 我的活动页面
-     * @param int    $page
-     * @param int    $type_id
+     * @param int $page
+     * @param int $type_id
      * @param string $norh
      * autor:xjw129xjt
      */
@@ -110,8 +108,6 @@ class IndexController extends Controller
             $v['type'] = $this->getType($v['type_id']);
 
             $v['check_isSign'] = D('event_attend')->where(array('uid' => is_login(), 'event_id' => $v['id']))->select();
-
-
         }
         unset($v);
         $this->assign('type_id', $type_id);
@@ -138,14 +134,14 @@ class IndexController extends Controller
 
     /**
      * 发布活动
-     * @param int    $id
-     * @param int    $cover_id
+     * @param int $id
+     * @param int $cover_id
      * @param string $title
      * @param string $explain
      * @param string $sTime
      * @param string $eTime
      * @param string $address
-     * @param int    $limitCount
+     * @param int $limitCount
      * @param string $deadline
      * autor:xjw129xjt
      */
@@ -187,12 +183,12 @@ class IndexController extends Controller
         $content['type_id'] = intval($type_id);
         if ($id) {
             $content_temp = D('Event')->find($id);
-            $this->checkAuth('Event/Index/edit',$content_temp['uid'],'您无该活动编辑权限。');
+            $this->checkAuth('Event/Index/edit', $content_temp['uid'], '您无该活动编辑权限。');
             $content['uid'] = $content_temp['uid']; //权限矫正，防止被改为管理员
             $rs = D('Event')->save($content);
-            if(D('Common/Module')->isInstalled('Weibo')){//安装了微博模块
+            if (D('Common/Module')->isInstalled('Weibo')) { //安装了微博模块
                 $postUrl = "http://$_SERVER[HTTP_HOST]" . U('Event/Index/detail', array('id' => $id));
-                $weiboModel=D('Weibo/Weibo');
+                $weiboModel = D('Weibo/Weibo');
                 $weiboModel->addWeibo("我修改了活动【" . $title . "】：" . $postUrl);
             }
             if ($rs) {
@@ -202,8 +198,8 @@ class IndexController extends Controller
             }
         } else {
             $this->checkActionLimit('add_event', 'event', 0, is_login(), true);
-            $this->checkAuth('Event/Index/add',-1,'您无活动发布权限。');
-            if (modC('NEED_VERIFY',0) && !is_administrator()) //需要审核且不是管理员
+            $this->checkAuth('Event/Index/add', -1, '您无活动发布权限。');
+            if (modC('NEED_VERIFY', 0) && !is_administrator()) //需要审核且不是管理员
             {
                 $content['status'] = 0;
                 $tip = '但需管理员审核通过后才会显示在列表中，请耐心等待。';
@@ -211,11 +207,11 @@ class IndexController extends Controller
                 D('Common/Message')->sendMessage(C('USER_ADMINISTRATOR'), "{$user['nickname']}发布了一个活动，请到后台审核。", $title = '活动发布提醒', U('Admin/Event/verify'), is_login(), 2);
             }
             $rs = D('Event')->add($content);
-            if(D('Common/Module')->isInstalled('Weibo')){//安装了微博模块
+            if (D('Common/Module')->isInstalled('Weibo')) { //安装了微博模块
                 //同步到微博
                 $postUrl = "http://$_SERVER[HTTP_HOST]" . U('Event/Index/detail', array('id' => $rs));
 
-                $weiboModel=D('Weibo/Weibo');
+                $weiboModel = D('Weibo/Weibo');
                 $weiboModel->addWeibo("我发布了一个新的活动【" . $title . "】：" . $postUrl);
             }
 
@@ -264,7 +260,7 @@ class IndexController extends Controller
 
     /**
      * 活动成员
-     * @param int    $id
+     * @param int $id
      * @param string $tip
      * autor:xjw129xjt
      */
@@ -315,7 +311,7 @@ class IndexController extends Controller
         if (!$event_content) {
             $this->error('404 not found');
         }
-        $this->checkAuth('Event/Index/edit',$event_content['uid'],'您无该活动编辑权限。');
+        $this->checkAuth('Event/Index/edit', $event_content['uid'], '您无该活动编辑权限。');
         $event_content['user'] = query_user(array('id', 'username', 'nickname', 'space_url', 'space_link', 'avatar64', 'rank_html', 'signature'), $event_content['uid']);
         $this->assign('content', $event_content);
         $this->setTitle('编辑活动' . '——活动');
@@ -325,7 +321,7 @@ class IndexController extends Controller
 
     public function add()
     {
-        $this->checkAuth('Event/Index/add',-1,'您无活动发布权限。');
+        $this->checkAuth('Event/Index/add', -1, '您无活动发布权限。');
         $this->setTitle('添加活动' . '——活动');
         $this->setKeywords('添加' . ',活动');
         $this->display();
@@ -354,6 +350,8 @@ class IndexController extends Controller
         }
         $check = D('event_attend')->where(array('uid' => is_login(), 'event_id' => $event_id))->select();
         $event_content = D('Event')->where(array('status' => 1, 'id' => $event_id))->find();
+        $this->checkAuth('Event/Index/doSign', $event_content['uid'], '你没有报名参加活动的权限！');
+        $this->checkActionLimit('event_do_sign', 'event', $event_id, is_login());
         if (!$event_content) {
             $this->error('活动不存在！');
         }
@@ -375,6 +373,7 @@ class IndexController extends Controller
                 D('Message')->sendMessageWithoutCheckSelf($event_content['uid'], query_user('nickname', is_login()) . '报名参加了活动]' . $event_content['title'] . ']，请速去审核！', '报名通知', U('Event/Index/member', array('id' => $event_id)), is_login());
 
                 D('Event')->where(array('id' => $event_id))->setInc('signCount');
+                action_log('event_do_sign', 'event', $event_id, is_login());
                 $this->success('报名成功。', 'refresh');
             } else {
                 $this->error('报名失败。', '');
@@ -394,31 +393,28 @@ class IndexController extends Controller
     public function shenhe($uid, $event_id, $tip)
     {
         $event_content = D('Event')->where(array('status' => 1, 'id' => $event_id))->find();
-        if (!$event_content||$event_content['deadline']<time()) {
+        if (!$event_content || $event_content['deadline'] < time()) {
             $this->error('活动不存在或活动已结束！');
         }
-        if ($event_content['uid'] == is_login()) {
-            $res = D('event_attend')->where(array('uid' => $uid, 'event_id' => $event_id))->setField('status', $tip);
-            if ($tip) {
-                if($event_content['attentionCount']+1==$event_content['limitCount']){
-                    $data['deadline']=time();
-                    $data['attentionCount']=$event_content['limitCount'];
-                    D('Event')->where(array('id' => $event_id))->setField($data);
-                }else{
-                    D('Event')->where(array('id' => $event_id))->setInc('attentionCount');
-                }
-                D('Message')->sendMessageWithoutCheckSelf($uid, query_user('nickname', is_login()) . '已经通过了您对活动' . $event_content['title'] . '的报名请求', '审核通知', U('Event/Index/detail', array('id' => $event_id)), is_login());
+        $this->checkAuth('Event/Index/shenhe', $event_content['uid'], '你没有审核的权限！');
+        $res = D('event_attend')->where(array('uid' => $uid, 'event_id' => $event_id))->setField('status', $tip);
+        if ($tip) {
+            if ($event_content['attentionCount'] + 1 == $event_content['limitCount']) {
+                $data['deadline'] = time();
+                $data['attentionCount'] = $event_content['limitCount'];
+                D('Event')->where(array('id' => $event_id))->setField($data);
             } else {
-                D('Event')->where(array('id' => $event_id))->setDec('attentionCount');
-                D('Message')->sendMessageWithoutCheckSelf($uid, query_user('nickname', is_login()) . '取消了您对活动[' . $event_content['title'] . ']的报名请求', '取消审核通知', U('Event/Index/member', array('id' => $event_id)), is_login());
+                D('Event')->where(array('id' => $event_id))->setInc('attentionCount');
             }
-            if ($res) {
-                $this->success('操作成功');
-            } else {
-                $this->error('操作失败！');
-            }
+            D('Message')->sendMessageWithoutCheckSelf($uid, query_user('nickname', is_login()) . '已经通过了您对活动' . $event_content['title'] . '的报名请求', '审核通知', U('Event/Index/detail', array('id' => $event_id)), is_login());
         } else {
-            $this->error('操作失败，非活动发起者操作！');
+            D('Event')->where(array('id' => $event_id))->setDec('attentionCount');
+            D('Message')->sendMessageWithoutCheckSelf($uid, query_user('nickname', is_login()) . '取消了您对活动[' . $event_content['title'] . ']的报名请求', '取消审核通知', U('Event/Index/member', array('id' => $event_id)), is_login());
+        }
+        if ($res) {
+            $this->success('操作成功');
+        } else {
+            $this->error('操作失败！');
         }
     }
 
@@ -464,7 +460,7 @@ class IndexController extends Controller
         if (!$event_content) {
             $this->error('活动不存在！');
         }
-
+        $this->checkAuth('Event/Index/doSign', $event_content['uid'], '你没有报名参加活动的权限！');
         D('Event')->where(array('id' => $event_id))->setInc('view_count');
         $event_content['user'] = query_user(array('id', 'username', 'nickname', 'space_url', 'space_link', 'avatar64', 'rank_html', 'signature'), $event_content['uid']);
         $event_content['type'] = $this->getType($event_content['type_id']);
@@ -491,17 +487,13 @@ class IndexController extends Controller
         if (!$event_content) {
             $this->error('活动不存在！');
         }
-        if ($event_content['uid'] == is_login() || is_administrator(is_login())) {
-            $res = D('Event')->where(array('status' => 1, 'id' => $event_id))->setField('status', 0);
-            if ($res) {
-                $this->success('删除成功！', U('Event/Index/index'));
-            } else {
-                $this->error('操作失败！');
-            }
+        $this->checkAuth('Event/Index/doDelEvent', $event_content['uid'], '你没有删除活动的权限！');
+        $res = D('Event')->where(array('status' => 1, 'id' => $event_id))->setField('status', 0);
+        if ($res) {
+            $this->success('删除成功！', U('Event/Index/index'));
         } else {
-            $this->error('非活动发起者操作！');
+            $this->error('操作失败！');
         }
-
     }
 
     /**
@@ -516,17 +508,14 @@ class IndexController extends Controller
         if (!$event_content) {
             $this->error('活动不存在！');
         }
-        if ($event_content['uid'] == is_login() || is_administrator(is_login())) {
-            $data['eTime']=time();
-            $data['deadline']=time();
-            $res = D('Event')->where(array('status' => 1, 'id' => $event_id))->setField($data);
-            if ($res) {
-                $this->success('操作成功！');
-            } else {
-                $this->error('操作失败！');
-            }
+        $this->checkAuth('Event/Index/doEndEvent', $event_content['uid'], '你没有结束活动的权限！');
+        $data['eTime'] = time();
+        $data['deadline'] = time();
+        $res = D('Event')->where(array('status' => 1, 'id' => $event_id))->setField($data);
+        if ($res) {
+            $this->success('操作成功！');
         } else {
-            $this->error('非活动发起者操作！');
+            $this->error('操作失败！');
         }
 
     }

@@ -1,7 +1,8 @@
-<a href="{:U('Weibo/Share/shareBox',array('query'=>$query))}" data-role="share_box" class="share_btn" >{$text}</a>
 
+<php>if (D('Module')->checkInstalled('Weibo')) {</php>
+
+<a href="{:U('Weibo/Share/shareBox',array('query'=>$query))}" data-role="share_box" class="share_btn {$css.class}" style="{$css['style']}" >{$text}</a>
 <script>
-
 $(function(){
     $('[data-role="share_box"]').magnificPopup({
         type: 'ajax',
@@ -19,5 +20,6 @@ $(function(){
         }
     });
 })
-
 </script>
+
+        <php>}</php>

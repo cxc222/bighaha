@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS `ocenter_group` (
   `member_count` int(11) NOT NULL,
   `member_alias` varchar(10) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 
 -- -----------------------------
@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS `ocenter_group_bookmark` (
   `post_id` int(11) NOT NULL,
   `create_time` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 
 -- -----------------------------
@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS `ocenter_group_dynamic` (
   `row_id` int(11) NOT NULL,
   `create_time` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=130 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 
 -- -----------------------------
@@ -62,7 +62,7 @@ CREATE TABLE IF NOT EXISTS `ocenter_group_lzl_reply` (
   `create_time` int(11) NOT NULL,
   `status` tinyint(4) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 
 -- -----------------------------
@@ -79,7 +79,7 @@ CREATE TABLE IF NOT EXISTS `ocenter_group_member` (
   `last_view` int(11) NOT NULL,
   `position` tinyint(4) NOT NULL DEFAULT '1' COMMENT '1为普通成员，2为管理员，3为创建者',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 
 -- -----------------------------
@@ -116,7 +116,7 @@ CREATE TABLE IF NOT EXISTS `ocenter_group_post` (
   `summary` varchar(250) NOT NULL,
   `cover` varchar(200) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 
 -- -----------------------------
@@ -130,7 +130,7 @@ CREATE TABLE IF NOT EXISTS `ocenter_group_post_category` (
   `status` tinyint(4) NOT NULL,
   `sort` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 
 -- -----------------------------
@@ -146,7 +146,7 @@ CREATE TABLE IF NOT EXISTS `ocenter_group_post_reply` (
   `update_time` int(11) NOT NULL,
   `status` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=49 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 
 -- -----------------------------
@@ -160,9 +160,9 @@ CREATE TABLE IF NOT EXISTS `ocenter_group_type` (
   `pid` int(11) NOT NULL,
   `create_time` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='圈子的分类表';
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='圈子的分类表';
 
--- -----------------------------
--- 表内记录 `ocenter_group_type`
--- -----------------------------
+
+
+
 INSERT INTO `ocenter_group_type` VALUES ('1', ' 分类一', '1', '0', '0', '0');

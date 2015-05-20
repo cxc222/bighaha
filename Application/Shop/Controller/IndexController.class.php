@@ -230,6 +230,8 @@ class IndexController extends Controller
         if (!is_login()) {
             $this->error('请先登录！');
         }
+        $this->checkAuth('Shop/Index/goodsBuy',-1,'你没有购买、兑换商品的权限！');
+        $this->checkActionLimit('shop_goods_buy','shop',$id,is_login());
         $goods = D('shop')->where('id=' . $id)->find();
         if ($goods) {
             if($num<=0){
@@ -303,6 +305,8 @@ class IndexController extends Controller
                 $shop_log['uid'] = is_login();
                 $shop_log['create_time'] = $data['createtime'];
                 D('shop_log')->add($shop_log);
+
+                action_log('shop_goods_buy','shop',$id,is_login());
 
                 $this->success('购买成功！花费了' . $money_need . $money_type['title'], $_SERVER['HTTP_REFERER']);
             } else {

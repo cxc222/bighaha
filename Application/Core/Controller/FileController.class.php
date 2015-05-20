@@ -63,7 +63,7 @@ class FileController extends Controller
     {
         $return = array('status' => 1, 'info' => '上传成功', 'data' => '');
         /* 调用文件上传组件上传文件 */
-        $File = D('File');
+        $File = D('Admin/File');
         $file_driver = C('DOWNLOAD_UPLOAD_DRIVER');
         $info = $File->upload(
             $_FILES,
@@ -104,7 +104,8 @@ class FileController extends Controller
             C('PICTURE_UPLOAD'),
             C('PICTURE_UPLOAD_DRIVER'),
             C("UPLOAD_{$pic_driver}_CONFIG")
-        ); //TODO:上传到远程服务器
+        );
+        //TODO:上传到远程服务器
 
         /* 记录图片信息 */
         if ($info) {
@@ -116,8 +117,8 @@ class FileController extends Controller
                 $return = array_merge($info['download'], $return);
             }
             /*适用于自动表单的图片上传方式*/
-            if ($info['file']) {
-                $return['data']['file'] = $info['file'];
+            if ($info['file'] || $info['files']) {
+                $return['data']['file'] = $info['file']?$info['file']:$info['files'];
             }
             /*适用于自动表单的图片上传方式end*/
             $aWidth=intval($_GET['width']);
@@ -137,6 +138,7 @@ class FileController extends Controller
         /* 返回JSON数据 */
         $this->ajaxReturn($return);
     }
+
 
     /**用于兼容UM编辑器的图片上传方法
      * @auth 陈一枭

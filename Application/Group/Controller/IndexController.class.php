@@ -364,8 +364,8 @@ class IndexController extends BaseController
 
 
         $post['group'] = D('Group')->getGroup($post['group_id']);
-        $post['content'] =D('ContentHandler')->displayHtmlContent($post['content']);
-        $post['content']=limit_picture_count($post['content']);
+        $post['content'] = D('ContentHandler')->displayHtmlContent($post['content']);
+        $post['content'] = limit_picture_count($post['content']);
 
         $this->assignNotice($post['group_id']);
         //检测群组、帖子是否存在
@@ -400,9 +400,6 @@ class IndexController extends BaseController
         $isEdit = $aPostId ? true : false;
         //如果是编辑模式的话，读取帖子，并判断是否有权限编辑
 
-        if(is_joined($aGroupId) != 1 ){
-            $this->error('您无编辑帖子权限');
-        }
 
         if ($isEdit) {
             $this->requireLogin();
@@ -410,6 +407,9 @@ class IndexController extends BaseController
             $this->checkAuth('Group/Index/edit', get_post_admin($aPostId), '您无编辑帖子权限');
             $post = D('GroupPost')->getPost($aPostId);
         } else {
+            if (is_joined($aGroupId) != 1) {
+                $this->error('您还未加入群组无法发帖。');
+            }
             $this->checkAuth('Group/Index/addPost', -1, '您无添加帖子权限');
             $post = array('group_id' => $aGroupId);
         }
@@ -434,7 +434,7 @@ class IndexController extends BaseController
         $aContent = I('post.content', '', '');
         $aCategory = I('post.category', 0, 'intval');
 
-        if(is_joined($aGroupId) != 1 ){
+        if (is_joined($aGroupId) != 1) {
             $this->error('您无编辑帖子权限');
         }
 
@@ -466,8 +466,7 @@ class IndexController extends BaseController
         }
 
 
-        $aContent=D('ContentHandler')->filterHtmlContent($aContent);
-
+        $aContent = D('ContentHandler')->filterHtmlContent($aContent);
 
 
         $model = D('GroupPost');
@@ -527,15 +526,15 @@ class IndexController extends BaseController
             preg_match_all("/<[img|IMG].*?src=[\'|\"](.*?(?:[\.gif|\.jpg|\.png]))[\'|\"].*?[\/]?>/", $post['content'], $arr); //匹配所有的图片
             if (!empty($arr[0])) {
                 $feed_data['attach_ids'] = '';
-                $dm = "http://$_SERVER[HTTP_HOST]" . __ROOT__; //前缀图片多余截取
-                $max = count($arr['1']) > 9 ? 9 : count($arr['1']);
+                $dm = __ROOT__; //前缀图片多余截取
+                $max = count($arr[1]) > 9 ? 9 : count($arr[1]);
                 for ($i = 0; $i < $max; $i++) {
-                    $tmparray = strpos($arr['1'][$i], $dm);
+                    $tmparray = strpos($arr[1][$i], $dm);
                     if (!is_bool($tmparray)) {
-                        $path = mb_substr($arr['1'][$i], strlen($dm), strlen($arr['1'][$i]) - strlen($dm));
+                        $path = mb_substr($arr[1][$i], strlen($dm), strlen($arr[1][$i]) - strlen($dm));
                         $result_id = D('Home/Picture')->where(array('path' => $path))->getField('id');
                     } else {
-                        $path = $arr['1'][$i];
+                        $path = $arr[1][$i];
                         $result_id = D('Home/Picture')->where(array('path' => $path))->getField('id');
                         if (!$result_id) {
                             $result_id = D('Home/Picture')->add(array('path' => $path, 'url' => $path, 'status' => 1, 'create_time' => time()));
@@ -547,10 +546,10 @@ class IndexController extends BaseController
             }
             $feed_data['attach_ids'] != false && $type = "image";
             if ($isEdit && check_is_in_config('edit_group_post', modC('GROUP_POST_SEND_WEIBO', 'add_group_post,edit_group_post', 'GROUP'))) {
-                D('Weibo/Weibo')->addWeibo(is_login(), "我在群组【{$group[title]}】里更新了帖子【" . $post['title'] . "】：" . $postUrl, $type, $feed_data);
+                D('Weibo/Weibo')->addWeibo(is_login(), "我在群组【{$group['title']}】里更新了帖子【" . $post['title'] . "】：" . $postUrl, $type, $feed_data);
             }
             if (!$isEdit && check_is_in_config('add_group_post', modC('GROUP_POST_SEND_WEIBO', 'add_group_post,edit_group_post', 'GROUP'))) {
-                D('Weibo/Weibo')->addWeibo(is_login(), "我在群组【{$group[title]}】里发表了一个新的帖子【" . $post['title'] . "】：" . $postUrl, $type, $feed_data);
+                D('Weibo/Weibo')->addWeibo(is_login(), "我在群组【{$group['title']}】里发表了一个新的帖子【" . $post['title'] . "】：" . $postUrl, $type, $feed_data);
             }
         }
     }

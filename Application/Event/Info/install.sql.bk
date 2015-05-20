@@ -58,4 +58,4 @@ CREATE TABLE IF NOT EXISTS `ocenter_event_type` (
 -- -----------------------------
 -- 表内记录 `ocenter_event_type`
 -- -----------------------------
-INSERT INTO `ocenter_event_type` VALUES ('1', '默认分类', '1403859500', '1403859485', '1', '0', '0', '0');
+INSERT INTO `ocenter_event_type` VALUES ('1', '慈善活动', '1403859500', '1403859485', '1', '0', '0', '0');

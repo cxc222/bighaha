@@ -73,7 +73,14 @@
             </volist>
         </div>
         <div id="weibo_list">
+            <php>
+                if($page != 1){
+            </php>
             <include file="loadweibo"/>
+            <php>
+                }
+            </php>
+
         </div>
         <div id="load_more" class="text-center text-muted"
         <if condition="$page neq 1">style="display:none"</if>
@@ -204,8 +211,8 @@
     <script>
         var SUPPORT_URL = "{:addons_url('Support://Support/doSupport')}";
         weibo.page = '{$page}';
-        weibo.loadCount = 1;
-        weibo.lastId = '{$list|end}';
+        weibo.loadCount = 0;
+        weibo.lastId = parseInt('{$list|reset}')+1;
         weibo.url = "{$loadMoreUrl}";
         weibo.type = "{$type}";
         $(function () {

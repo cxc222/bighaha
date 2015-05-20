@@ -14,11 +14,12 @@ use Think\Controller;
 
 class ShareWidget extends Controller
 {
-    public function shareBtn($param,$text ='分享'){
+    public function shareBtn($param,$text ='分享',$css=array()){
 
         $this->assign('param',$param);
         $this->assign('query',http_build_query($param));
         $this->assign('text',$text);
+        $this->assign('css',$css);
         $this->display(T('Weibo@default/Widget/share/sharebtn'));
     }
 

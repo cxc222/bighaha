@@ -185,7 +185,9 @@ function thinkox_hash($message, $salt = "ThinkOX")
 function modC($key, $default = '', $module = '')
 {
     $mod = $module ? $module : MODULE_NAME;
-
+    if(MODULE_NAME=="Install"&&$key=="NOW_THEME"){
+        return $default;
+    }
     $result = S('conf_' . strtoupper($mod) . '_' . strtoupper($key));
     if (empty($result)) {
         $config = D('Config')->where(array('name' => '_' . strtoupper($mod) . '_' . strtoupper($key)))->find();
