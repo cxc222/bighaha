@@ -22,10 +22,10 @@ function bindAtlasEvent() {
 	$(document).on('click','.dolove, .notlove',function(){
 		var $this = $(this), $type=1;
 		if (MID == 0) {
-			toast.error('请在登陆后再点顶。即将跳转到登陆页。', '温馨提示');
+			/*toast.error('请在登陆后再点顶。即将跳转到登陆页。', '温馨提示');
             setTimeout(function () {
-                location.href = U('Home/User/Login');
-            }, 1500);
+                location.href = U('ucenter/member/login');
+            }, 1500);*/
             return;
         }
 		$postid = $(this).attr('data-postid');
