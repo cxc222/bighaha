@@ -1,38 +1,41 @@
 <?php
-
-namespace Atlas\Model;
-
-use Admin\Model;
+/**
+ * picture 处理类
+ * 
+ */
+namespace Atlas\Lib;
 use Think\Upload;
 use Think\Upload\Driver\Qiniu\QiniuStorage;
-use Admin\Model\PictureModel;
-
-class PictureModel extends PictureModel {
+class Picture{
 	/**
 	 * 移动文件上传
 	 */
 	public function moveUpload($files, $setting, $driver = 'Qiniu', $config = null) {
-		$qiniuConfig = C ( 'QINIU_CONFIG' );
+		$Picture = D('Picture');
+		
+		$qiniuConfig = C ( 'PICTURE_UPLOAD_DRIVER' );
 		/*
 		 * $qiniuConfig = array( 'accessKey'=>'WPWs-mQSibJXZd7m_kL_cM0hwTIMCyFjzvgTFeRq', 'secrectKey'=>'TTUZUuWL8jug5LzxtQGwCPuVmN8-9DXMeFSrDzBa', 'bucket'=>'bighaha', 'domain'=>'7xih3v.com1.z0.glb.clouddn.com' );
-		 */
-		
+		*/
+		print_r($qiniuConfig);
+		die();
 		$qiniuStorage = new QiniuStorage ( $qiniuConfig );
-		
 		$savepath = 'Uploads/atlas/';
-		
+	
 		$file = array (
 				'name' => 'file',
 				'fileName' => $savepath . basename ( $files ['name'] ),
-				'fileBody' => file_get_contents ( iconv ( 'UTF-8', 'GB2312', $files ['tmp_name'] ) ) 
+				'fileBody' => file_get_contents ( iconv ( 'UTF-8', 'GB2312', $files ['tmp_name'] ) )
 		);
-		
+	
 		// $config = array();
 		$info = $qiniuStorage->upload ( $config, $file );
+		print_r($info);
+		die();
 		if ($info ['key']) {
 			$value ['md5'] = md5_file ( $file ['tmp_name'] );
 			$value ['sha1'] = sha1_file ( $file ['tmp_name'] );
-			
+				
 			/* 记录文件信息 */
 			if (strtolower ( $driver ) == 'sae') {
 				$value ['path'] = $config ['rootPath'] . 'Picture/' . $savepath . basename ( $files ['name'] ); // 在模板里的url路径
@@ -44,8 +47,8 @@ class PictureModel extends PictureModel {
 				}
 			}
 			$value ['type'] = strtolower ( $driver );
-			
-			if ($this->create ( $value ) && ($id = $this->add ())) {
+				
+			if ($Picture->create ( $value ) && ($id = $Picture->add ())) {
 				$info ['id'] = $id;
 			} else {
 				// TODO: 文件上传成功，但是记录文件信息失败，需记录日志

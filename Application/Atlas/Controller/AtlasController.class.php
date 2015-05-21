@@ -11,6 +11,8 @@ use Think\Upload\Driver\Qiniu\QiniuStorage;
 use Admin\Builder\AdminConfigBuilder;
 use Admin\Builder\AdminListBuilder;
 use Admin\Builder\AdminTreeListBuilder;
+use Atlas\Lib;
+use Atlas\Lib\Picture;
 
 
 class AtlasController extends AdminController
@@ -91,6 +93,7 @@ class AtlasController extends AdminController
 		$page_suffix = '{page}';
 		$page_Count = 2;	//页码
 		 
+		$PictureClass = new Picture();
 		//保存Model
 		$atlas_configModel = D('atlas_config');
 		$Picture = D('Picture');
@@ -115,7 +118,7 @@ class AtlasController extends AdminController
 		$url = $url.$page_suffix;
 		 
 		$zindex = 1;	//总共采集多少条,
-		 
+		
 		//循环读取页面
 		for ($i = 1; $i<$page_Count; $i++){
 			$siteUrl = str_replace('{page}',$i,$url);
@@ -132,7 +135,7 @@ class AtlasController extends AdminController
 					$src = $img->src;
 					$alt = $img->alt;
 					$id = str_replace('pic-',' ',$img->id);
-	
+
 					//开始下载
 					//$file = 'Uploads/atlas/' . basename($instance->url);
 					$file = $diskPath . basename($src);
@@ -162,13 +165,16 @@ class AtlasController extends AdminController
 						$fileInfo['tmp_name'] = $fileGBK;
 							
 						//执行文件移动
-						$info = $Picture->moveUpload(
+						$info = $PictureClass->moveUpload(
 								$fileInfo,
 								C('PICTURE_UPLOAD'),
 								C('PICTURE_UPLOAD_DRIVER'),
 								C("UPLOAD_{$pic_driver}_CONFIG")
 						); //TODO:上传到远程服务器
-							
+						
+						print_r($info);
+						die();
+						
 						if(!$info){
 							//$this->error[] = '';
 						}else{
