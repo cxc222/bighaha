@@ -104,8 +104,17 @@ return array(
 				'callback' => false  // 检测文件是否存在回调函数，如果存在返回文件信息数组
 				), // 图片上传相关配置（文件上传类配置）
 		
-		'PICTURE_UPLOAD_DRIVER' => 'local',
-		'DOWNLOAD_UPLOAD_DRIVER' => 'local',
+		'PICTURE_UPLOAD_DRIVER' => 'qiniu',
+		'DOWNLOAD_UPLOAD_DRIVER' => 'qiniu',
+		
+		/* 七牛上传相关配置 */
+		'QINIU_CONFIG' => array (
+		    'accessKey' => 'WPWs-mQSibJXZd7m_kL_cM0hwTIMCyFjzvgTFeRq', // 七牛 accessKey
+		    'secrectKey' => 'TTUZUuWL8jug5LzxtQGwCPuVmN8-9DXMeFSrDzBa', // 七牛 secrectKey
+		    'bucket' => 'wedding', // 七牛 空间名
+		    'domain' => '7xi9zc.com1.z0.glb.clouddn.com'  // 七牛资源域名
+		),
+		
 		// 本地上传文件驱动配置
 		'UPLOAD_LOCAL_CONFIG' => array (),
 		

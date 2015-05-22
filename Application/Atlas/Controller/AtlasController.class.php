@@ -163,7 +163,7 @@ class AtlasController extends AdminController
 						$fileInfo['error'] = 0;
 						$fileInfo['type'] = mime_content_type($fileGBK);
 						$fileInfo['tmp_name'] = $fileGBK;
-							
+						
 						//执行文件移动
 						$info = $PictureClass->moveUpload(
 								$fileInfo,
@@ -171,9 +171,6 @@ class AtlasController extends AdminController
 								C('PICTURE_UPLOAD_DRIVER'),
 								C("UPLOAD_{$pic_driver}_CONFIG")
 						); //TODO:上传到远程服务器
-						
-						print_r($info);
-						die();
 						
 						if(!$info){
 							//$this->error[] = '';

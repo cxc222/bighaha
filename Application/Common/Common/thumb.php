@@ -210,12 +210,14 @@ function getThumbImageById($cover_id, $width = 100, $height = 'auto', $type = 0,
     switch ($picture['type']) {
         case 'qiniu':
             $height=$height=='auto'?100:$height;
+            $qiniuConfig = C('QINIU_CONFIG');
             if(stripos($picture['path'],'imageMogr2') !== false){
                 $picture['path'] = $picture['path'] . '/thumbnail/' . $width . 'x' . $height;
             }else{
-                $picture['path'] = $picture['path'] . '?imageView/1/w/' . $width . '/h/' . $height;
+                $picture['path'] = $picture['path'] . '?imageView/2/w/' . $width . '/h/' . $height;
             }
-            return $picture['path'];
+            return 'http://'.$qiniuConfig['domain'].'/'.$picture['path'];
+            //return $picture['path'];
             break;
         case 'local':
             $attach = getThumbImage($picture['path'], $width, $height, $type, $replace);

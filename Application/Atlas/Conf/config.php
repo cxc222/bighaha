@@ -15,17 +15,6 @@ return array(
      // 预先加载的标签库
     'TAGLIB_PRE_LOAD' => 'OT\\TagLib\\Article,OT\\TagLib\\Think',	
 	
-	'PICTURE_UPLOAD_DRIVER' => 'qiniu',
-	'DOWNLOAD_UPLOAD_DRIVER' => 'qiniu',
-
-	/* 七牛上传相关配置 */
-	/* 'QINIU_CONFIG' => array (
-			'accessKey' => 'WPWs-mQSibJXZd7m_kL_cM0hwTIMCyFjzvgTFeRq', // 七牛 accessKey
-			'secrectKey' => 'TTUZUuWL8jug5LzxtQGwCPuVmN8-9DXMeFSrDzBa', // 七牛 secrectKey
-			'bucket' => 'wedding', // 七牛 空间名
-			'domain' => '7xi9zc.com1.z0.glb.clouddn.com'  // 七牛资源域名
-	), */
-	
      /* 图片上传相关配置 */
     'PICTURE_UPLOAD' => array(
         'mimes'    => '', //允许上传的文件MiMe类型
