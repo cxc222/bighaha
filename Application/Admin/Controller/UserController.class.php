@@ -186,6 +186,7 @@ class UserController extends AdminController
             $map['status'] = array('egt', 0);
             $member = M('Member')->where($map)->find();
             $member['id'] = $member['uid'];
+            $member['username']=query_user('username',$uid);
             //扩展信息查询
             $map_profile['status'] = 1;
             $field_group = D('field_group')->where($map_profile)->select();
@@ -207,8 +208,8 @@ class UserController extends AdminController
             $builder = new AdminConfigBuilder();
             $builder->title("用户扩展资料详情");
             $builder->meta_title = '用户扩展资料详情';
-            $builder->keyId()->keyReadOnly('nickname', "用户名称");
-            $field_key = array('id','nickname');
+            $builder->keyId()->keyReadOnly('username', "用户名称")->keyReadOnly('nickname','昵称');
+            $field_key = array('id','username','nickname');
             foreach ($fields_list as $vt) {
                 $field_key[] = $vt['field_name'];
                 $builder->keyReadOnly($vt['field_name'], $vt['field_name']);

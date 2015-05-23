@@ -38,6 +38,19 @@ class IndexController extends Controller
         $enter = modC('ENTER_URL', '', 'Home');
         $this->assign('enter', get_nav_url($enter));
 
+
+
+
+            $sub_menu['left']= array(array('tab' => 'home', 'title' => "广场", 'href' =>  U('index'))//,array('tab'=>'rank','title'=>'排行','href'=>U('rank'))
+
+            );
+
+
+        $this->assign('sub_menu', $sub_menu);
+        $this->assign('current', 'home');
+
+
+
         $this->display();
     }
 

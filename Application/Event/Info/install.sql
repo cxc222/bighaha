@@ -53,7 +53,7 @@ CREATE TABLE IF NOT EXISTS `ocenter_event_type` (
   `pid` int(11) NOT NULL,
   `sort` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 -- -----------------------------
 -- 表内记录 `ocenter_event_type`

@@ -52,7 +52,7 @@
     <p class="jump">
         页面自动 <a id="href" style="color: green" href="<?php echo($jumpUrl); ?>">跳转</a> 等待时间： <b id="wait"><?php echo($waitSecond); ?></b>。
 
-        或 <a href="__ROOT__" style="color: green">返回首页</a>
+        或 <a href="http://{$_SERVER['HTTP_HOST']}__ROOT__" style="color: green">返回首页</a>
     </p>
 
 

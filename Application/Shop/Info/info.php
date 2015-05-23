@@ -29,7 +29,7 @@ return array(
 
     'admin_entry' => 'Admin/Shop/shopCategory',
 
-    'icon' => 'shopping-cart',
+    'icon' => 'gift',
 
     'can_uninstall' => 1
 );

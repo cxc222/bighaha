@@ -68,7 +68,7 @@
                             </dl>
                             <dl class="dl-horizontal">
                                 <dt>个性签名：</dt>
-                                <dd>{$user.signature|htmlspecialchars}</dd>
+                                <dd><eq name="user.signature" value="">还没想好O(∩_∩)O<else/>{$user.signature|htmlspecialchars}</eq></dd>
                             </dl>
                         </div>
                         <volist name="profile_group_list" id="group_vl">
@@ -77,7 +77,7 @@
                                     <volist name="group_vl['info_list']" id="info_vl">
                                         <dl class="dl-horizontal">
                                             <dt>{$info_vl.field_name}：</dt>
-                                            <dd>{$info_vl.field_data}</dd>
+                                            <dd>{$info_vl.field_data|default='还未设置'}</dd>
                                         </dl>
                                     </volist>
                                     <if condition="count($group_vl['info_list']) eq 0"><p class="text-muted"

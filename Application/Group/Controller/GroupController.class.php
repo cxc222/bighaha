@@ -280,7 +280,7 @@ class GroupController extends AdminController
             foreach ($ids as $v) {
                 $postUrl = "http://$_SERVER[HTTP_HOST]" . U('Group/Index/group', array('id' => $v));
                 $title = D('Group/Group')->where(array('id' => $v))->field('title')->find();
-                if(class_exists(parse_res_name('Weibo/weibo','Model'))) {
+                if (D('Common/Module')->isInstalled('Weibo')) { //安装了微博模块
                     D('Weibo/weibo')->addWeibo(is_login(),"管理员通过了群组【" . $title['title'] . "】的审核：" . $postUrl);
                 }
             }

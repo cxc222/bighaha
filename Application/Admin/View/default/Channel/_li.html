@@ -19,7 +19,13 @@
 
     </div>
     <div class='pull-left icon-chose' title="选择icon">
-        <select name="nav[1][icon][]" title="选择icon" class="chosen-icons" data-value="icon-{$nav['icon']|default=''}"></select>
+        <php>
+            $icon = 'icon-'.$nav['icon'];
+            if(empty($nav['icon'])){
+            $icon = '';
+            }
+        </php>
+        <select name="nav[1][icon][]" title="选择icon" class="chosen-icons" data-value="{$icon}"></select>
     </div>
     <div class='pull-left color-chose' title="选择图标背景色">
         <input name="nav[1][color][]" class='simple_color_callback' value="{$nav['color']|default='#000000'}"/>

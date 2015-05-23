@@ -26,7 +26,7 @@ body {
   top: 50px;
   left: 0;
   width: 100px;
-  bottom: 67px;
+  bottom: 0;
   overflow: auto;
   background: #e7e8e9;
   z-index: 13;

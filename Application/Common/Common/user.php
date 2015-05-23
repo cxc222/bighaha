@@ -137,6 +137,19 @@ function set_user_status($uid,$status){
 }
 
 /**
+ * set_users_status   批量设置用户状态
+ * @param $map
+ * @param $status
+ * @return bool
+ * @author 郑钟良<zzl@ourstu.com>
+ */
+function set_users_status($map,$status){
+    D('Member')->where($map)->setField('status',$status);
+    UCenterMember()->where($map)->setField('status',$status);
+    return true;
+}
+
+/**
  * check_step_can_skip  判断注册步骤是否可跳过
  * @author:xjw129xjt(肖骏涛) xjt@ourstu.com
  */

@@ -15,6 +15,7 @@ if($now_theme!='default'){
         /* 模板相关配置 */
         'TMPL_PARSE_STRING' => array(
             '__THEME__'=>__ROOT__.'/Theme/'.$now_theme,
+            '__THEME_COMMON_STATIC__'=>__ROOT__.'/Theme/'.$now_theme.'/Common/Static',
             '__THEME_STATIC__'=>__ROOT__.'/Theme/'.$now_theme.'/'.MODULE_NAME.'/Static',
             '__THEME_CSS__'=>__ROOT__.'/Theme/'.$now_theme.'/'.MODULE_NAME.'/Static/css',
             '__THEME_JS__'=>__ROOT__.'/Theme/'.$now_theme.'/'.MODULE_NAME.'/Static/js',

@@ -73,7 +73,7 @@ class InviteBuyLogModel extends Model
         $inviteTypeModel=D('Ucenter/InviteType');
         foreach($list as &$val){
             $inviteType=$inviteTypeModel->getSimpleData(array('id'=>$val['invite_type']));
-            $val['invite_type_title']=$inviteType['title'];
+            $val['invite_type_title']=$inviteType['title']?$inviteType['title']:'[已删除类型]';
             $val['user']=query_user('nickname',$val['uid']);
             $val['user']='['.$val['uid'].']'.$val['user'];
         }

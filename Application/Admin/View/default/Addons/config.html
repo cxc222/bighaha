@@ -19,12 +19,12 @@
     <switch name="form.type">
     <case value="text">
         <div class="controls">
-            <input type="text" name="config[{$o_key}]" class="text input-large" value="{$form.value}">
+            <input type="text" name="config[{$o_key}]" class="form-control text form-input-width" value="{$form.value}">
         </div>
     </case>
     <case value="password">
         <div class="controls">
-            <input type="password" name="config[{$o_key}]" class="text input-large" value="{$form.value}">
+            <input type="password" name="config[{$o_key}]" class="form-control text input-large form-input-width" value="{$form.value}">
         </div>
     </case>
     <case value="hidden">
@@ -273,9 +273,15 @@
         {$custom_config}
     </present>
     </empty>
-    <input type="hidden" name="id" value="{:I('id')}" readonly>
-    <button type="submit" class="btn submit-btn ajax-post" target-form="form-horizontal">确 定</button>
-    <button class="btn btn-return" onclick="javascript:history.back(-1);return false;">返 回</button>
+
+    <div style="margin-top: 10px">
+
+        <input type="hidden" name="id" value="{:I('id')}" readonly>
+        <button type="submit" class="btn submit-btn ajax-post" target-form="form-horizontal">确 定</button>
+        <button class="btn btn-return" onclick="javascript:history.back(-1);return false;">返 回</button>
+        </div>
+    </div>
+
     </form>
     </div>
 

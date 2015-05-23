@@ -563,16 +563,16 @@ class IndexController extends Controller
         }
 
         $feed_data['attach_ids'] != false && $type = "image";
-
-        if ($aSendWeibo) {
-            //开始发布微博
-            if ($isEdit) {
-                D('Weibo/Weibo')->addWeibo(is_login(), "我更新了帖子【" . $title . "】：" . U('detail', array('id' => $post_id), null, true), $type, $feed_data);
-            } else {
-                D('Weibo/Weibo')->addWeibo(is_login(), "我发表了一个新的帖子【" . $title . "】：" . U('detail', array('id' => $post_id), null, true), $type, $feed_data);
+        if (D('Common/Module')->isInstalled('Weibo')) { //安装了微博模块
+            if ($aSendWeibo) {
+                //开始发布微博
+                if ($isEdit) {
+                    D('Weibo/Weibo')->addWeibo(is_login(), "我更新了帖子【" . $title . "】：" . U('detail', array('id' => $post_id), null, true), $type, $feed_data);
+                } else {
+                    D('Weibo/Weibo')->addWeibo(is_login(), "我发表了一个新的帖子【" . $title . "】：" . U('detail', array('id' => $post_id), null, true), $type, $feed_data);
+                }
             }
         }
-
 
         //显示成功消息
         $message = $isEdit ? '编辑成功。' : '发表成功。' . getScoreTip($before, $after);

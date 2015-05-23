@@ -38,7 +38,7 @@ class IndexController extends Controller{
         }
 
         // 写入安装锁定文件
-        Storage::put('Conf/install.lock', 'lock');
+        Storage::put('./Conf/install.lock', 'lock');
         if(!session('update')){
             //创建配置文件
             $this->assign('info',session('config_file'));

@@ -115,4 +115,6 @@ class CheckInController extends AddonsController
         $this->assign('order', $aOrder);
         $this->display(T('Addons://CheckIn@CheckIn/ranking'));
     }
+
+
 }

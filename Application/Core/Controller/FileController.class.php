@@ -168,9 +168,13 @@ class FileController extends Controller
         /* 调用文件上传组件上传文件 */
         $Picture = D('Admin/Picture');
         $pic_driver = C('PICTURE_UPLOAD_DRIVER');
+
+        $setting = C('EDITOR_UPLOAD');
+        $setting['rootPath']='./Uploads/Editor/Picture/';
+
         $info = $Picture->upload(
             $_FILES,
-            C('PICTURE_UPLOAD'),
+            $setting,
             C('PICTURE_UPLOAD_DRIVER'),
             C("UPLOAD_{$pic_driver}_CONFIG")
         ); //TODO:上传到远程服务器
@@ -205,6 +209,70 @@ class FileController extends Controller
         $this->ajaxReturn($return);
     }
 
+
+    public function uploadFileUE(){
+        $return = array('status' => 1, 'info' => '上传成功', 'data' => '');
+
+        //实际有用的数据只有name和state，这边伪造一堆数据保证格式正确
+        $originalName = 'u=2830036734,2219770442&fm=21&gp=0.jpg';
+        $newFilename = '14035912861705.jpg';
+        $filePath = 'upload\/20140624\/14035912861705.jpg';
+        $size = '7446';
+        $type = '.jpg';
+        $status = 'success';
+        $rs = array(
+            'name' => $newFilename,
+            'url' => $filePath,
+            'size' => $size,
+            'type' => $type,
+            'state' => $status
+        );
+
+        /* 调用文件上传组件上传文件 */
+        $File = D('Admin/File');
+        $file_driver = C('DOWNLOAD_UPLOAD_DRIVER');
+
+        $setting = C('EDITOR_UPLOAD');
+        $setting['rootPath']='./Uploads/Editor/File/';
+
+
+        $setting['exts'] = 'jpg,gif,png,jpeg,zip,rar,tar,gz,7z,doc,docx,txt,xml';
+        $info = $File->upload(
+            $_FILES,
+            $setting,
+            C('DOWNLOAD_UPLOAD_DRIVER'),
+            C("UPLOAD_{$file_driver}_CONFIG")
+        );
+
+        /* 记录附件信息 */
+        if ($info) {
+            $return['data'] = $info;
+
+            $rs['original'] = $info['upfile']['name'];
+            $rs['state'] = 'SUCCESS';
+            $rs['url'] = __ROOT__.$info['upfile']['savepath'].$info['upfile']['savename'];
+            $rs['size'] = $info['upfile']['size'];
+            $rs['title'] = $info['upfile']['savename'];
+
+
+            if ($type == 'ajax') {
+                echo json_encode($rs);
+                exit;
+            } else {
+                echo json_encode($rs);
+                exit;
+            }
+
+
+
+        } else {
+            $return['status'] = 0;
+            $return['info'] = $File->getError();
+        }
+
+        /* 返回JSON数据 */
+        $this->ajaxReturn($return);
+    }
 
 
     public function uploadAvatar(){

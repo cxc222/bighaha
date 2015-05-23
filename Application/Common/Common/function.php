@@ -1617,3 +1617,44 @@ function get_ip_lookup($ip=null){
     }
     return $json;
 }
+
+/**
+ * cut_str  截取字符串
+ * @param $search
+ * @param $str
+ * @param string $place
+ * @return mixed
+ * @author:xjw129xjt(肖骏涛) xjt@ourstu.com
+ */
+function cut_str($search,$str,$place=''){
+    switch($place){
+        case 'l':
+            $result = preg_replace('/.*?'.addcslashes(quotemeta($search),'/').'/','',$str);
+            break;
+        case 'r':
+            $result = preg_replace('/'.addcslashes(quotemeta($search),'/').'.*/','',$str);
+            break;
+        default:
+            $result =  preg_replace('/'.addcslashes(quotemeta($search),'/').'/','',$str);
+    }
+    return $result;
+}
+
+
+/**
+ * array_search_key 搜索数组中某个键为某个值的数组
+ * @param $array
+ * @param $key
+ * @param $value
+ * @return bool
+ * @author:xjw129xjt(肖骏涛) xjt@ourstu.com
+ */
+function array_search_key($array, $key, $value)
+{
+    foreach ($array as $k => $v) {
+        if ($v[$key] == $value) {
+            return $array[$k];
+        }
+    }
+    return false;
+}

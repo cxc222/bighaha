@@ -9,16 +9,16 @@
 
 namespace Common\Widget;
 
-use Think\Action;
+use Think\Controller;
 
 /**通用二级子菜单组件
  * Class SubMenuWidget
  * @package Common\Widget
  * @auth 陈一枭
  */
-class SubMenuWidget extends Action
+class SubMenuWidget extends Controller
 {
-    public function render($menu_list, $current, $brand, $id)
+    public function render($menu_list, $current, $brand=null, $id)
     {
         //tpl仅作为例子
 
@@ -48,10 +48,15 @@ class SubMenuWidget extends Action
         );
         $this->assign('current', $current);
         $this->assign('menu_list', $menu_list);
-        if(!is_array($brand)){
-            $brand['title']=$brand;
+        $brand=$brand==null?$this->MODULE_NAME:$brand;
+        if(is_string($brand)){
+            $new_brand['title']=$brand;
+        }else{
+            $new_brand=$brand;
         }
-        $this->assign('brand', $brand);
+
+
+        $this->assign('brand', $new_brand);
         $this->display(T('Application://Common@Widget/menu'));
     }
 }

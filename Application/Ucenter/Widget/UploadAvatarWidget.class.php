@@ -19,7 +19,7 @@ class UploadAvatarWidget extends Controller
 
     public function render($uid = 0)
     {
-        $this->assign('user', query_user(array('avatar256', 'avatar128', 'avatar64'), $uid));
+        $this->assign('user', query_user(array('avatar256', 'avatar128', 'avatar64','avatar32','avatar512'), $uid));
         $this->assign('uid', $uid);
         $this->display(T('Application://Ucenter@Widget/uploadavatar'));
     }
@@ -49,10 +49,10 @@ class UploadAvatarWidget extends Controller
         }
     }
 
-    private function getImageUrlByPath($path, $size)
+    private function getImageUrlByPath($path, $size,$isReplace = true)
     {
         //TODO 重新开启缩略
-        $thumb = getThumbImage($path, $size, $size, 0, true);
+        $thumb = getThumbImage($path, $size, $size, 0, $isReplace);
         // $thumb['src']=$path;
         $thumb = $thumb['src'];
         if (!is_sae()) {
@@ -85,7 +85,7 @@ class UploadAvatarWidget extends Controller
         }else{//角色没有默认
             if ($size != 0) {
                 $default_avatar = "Public/images/default_avatar.jpg";
-                $path=$this->getImageUrlByPath($default_avatar, $size);
+                $path=$this->getImageUrlByPath($default_avatar, $size, false);
             } else {
                 $path=getRootUrl() . "Public/images/default_avatar.jpg";
             }

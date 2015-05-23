@@ -32,7 +32,7 @@ class IndexController extends BaseController
         $weiboModel = D('Weibo');
         $param['field'] = 'id';
         if ($aPage == 1) {
-            $param['limit'] = 1;
+            $param['limit'] = 10;
         } else {
             $param['page'] = $aPage;
             $param['count'] = 30;

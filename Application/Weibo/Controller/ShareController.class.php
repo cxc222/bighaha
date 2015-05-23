@@ -34,7 +34,7 @@ class ShareController extends  Controller{
         D('Common/Message')->sendMessage($toUid, $user['nickname'] . '分享了您的内容！', '分享提醒', U('Weibo/Index/weiboDetail', array('id' => $new_id)), is_login(), 1);
 
 
-        $result['url'] ='refresh';
+        $result['url'] ='';
         //返回成功结果
         $result['status'] = 1;
         $result['info'] = '分享成功！' . cookie('score_tip');;

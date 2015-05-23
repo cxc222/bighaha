@@ -303,7 +303,7 @@ class Uploader
     private function getFilePath()
     {
         $fullname = $this->fullName;
-        $rootPath = $_SERVER['DOCUMENT_ROOT'];
+        $rootPath = str_replace('/Public/static/ueditor/php/controller.php','', $_SERVER['SCRIPT_FILENAME']);
 
         if (substr($fullname, 0, 1) != '/') {
             $fullname = '/' . $fullname;
@@ -336,9 +336,11 @@ class Uploader
      */
     public function getFileInfo()
     {
+
+        $rootPath = str_replace('/Public/static/ueditor/php/controller.php','', $_SERVER['PHP_SELF']);
         return array(
             "state" => $this->stateInfo,
-            "url" => $this->fullName,
+            "url" => $rootPath.$this->fullName,
             "title" => $this->fileName,
             "original" => $this->oriName,
             "type" => $this->fileType,

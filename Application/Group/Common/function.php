@@ -104,16 +104,3 @@ function limit_picture_count($content){
 
 
 
-function cut_str($search,$str,$place=''){
-   switch($place){
-       case 'l':
-           $result = preg_replace('/.*?'.addcslashes(quotemeta($search),'/').'/','',$str);
-           break;
-       case 'r':
-           $result = preg_replace('/'.addcslashes(quotemeta($search),'/').'.*/','',$str);
-           break;
-       default:
-           $result =  preg_replace('/'.addcslashes(quotemeta($search),'/').'/','',$str);
-   }
-    return $result;
-}

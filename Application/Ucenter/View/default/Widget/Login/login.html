@@ -13,9 +13,9 @@
                     <div class="col-xs-12">
 
                         <input type="text" id="inputEmail" class="form-control" placeholder="请输入{$ph}"
-                               ajaxurl="/member/checkUserNameUnique.html" errormsg="请填写1-16位用户名"
+                               ajaxurl="/member/checkUserNameUnique.html" errormsg="请填写4-32位用户名"
                                nullmsg="请填写用户名"
-                               datatype="*1-16" value="" name="username" autocomplete="off">
+                               datatype="*4-32" value="" name="username" autocomplete="off">
                     </div>
                     <div class="clearfix"></div>
                 </div>
@@ -26,7 +26,7 @@
                         <div id="password_block" class="input-group">
                             <input type="password" id="inputPassword" class="form-control"
                                    placeholder="请输入密码"
-                                   errormsg="密码为6-20位" nullmsg="请填写密码" datatype="*6-20" name="password">
+                                   errormsg="密码为6-30位" nullmsg="请填写密码" datatype="*6-30" name="password">
 
                             <div class="input-group-addon"><a style="width: 100%;height: 100%"
                                                               href="javascript:void(0);"
@@ -67,6 +67,7 @@
                     </div>
                 </div>
             </div>
+            <input name="from" type="hidden" value="<php>echo $_SERVER['HTTP_REFERER']</php>">
 
 
             <div class="form-group">
@@ -138,12 +139,12 @@
     function change_show(obj) {
         if ($(obj).text().trim() == 'show') {
             var value = $('#inputPassword').val().trim();
-            var html = '<input type="text" value="' + value + '" id="inputPassword" class="form-control" placeholder="请输入密码" errormsg="密码为6-20位" nullmsg="请填写密码" datatype="*6-20" name="password">' +
+            var html = '<input type="text" value="' + value + '" id="inputPassword" class="form-control" placeholder="请输入密码" errormsg="密码为6-30位" nullmsg="请填写密码" datatype="*6-30" name="password">' +
                     '<div class="input-group-addon"><a style="width: 100%;height: 100%" href="javascript:void(0);" onclick="change_show(this)">hide</a></div>';
             $('#password_block').html(html);
         } else {
             var value = $('#inputPassword').val().trim();
-            var html = '<input type="password" value="' + value + '" id="inputPassword" class="form-control" placeholder="请输入密码" errormsg="密码为6-20位" nullmsg="请填写密码" datatype="*6-20" name="password">' +
+            var html = '<input type="password" value="' + value + '" id="inputPassword" class="form-control" placeholder="请输入密码" errormsg="密码为6-30位" nullmsg="请填写密码" datatype="*6-30" name="password">' +
                     '<div class="input-group-addon"><a style="width: 100%;height: 100%" href="javascript:void(0);" onclick="change_show(this)">show</a></div>';
             $('#password_block').html(html);
         }

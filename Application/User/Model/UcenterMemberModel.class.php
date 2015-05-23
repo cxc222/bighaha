@@ -64,13 +64,22 @@ class UcenterMemberModel extends Model
     );
 
     /**
-     * 检测用户名是不是被禁止注册
+     * 检测用户名是不是被禁止注册(保留用户名)
      * @param  string $username 用户名
      * @return boolean          ture - 未禁用，false - 禁止注册
      */
     protected function checkDenyMember($username)
     {
-        return true; //TODO: 暂不限制，下一个版本完善
+        $denyName=M("Config")->where(array('name' => 'USER_NAME_BAOLIU'))->getField('value');
+        if($denyName!=''){
+            $denyName=explode(',',$denyName);
+            foreach($denyName as $val){
+                if(!is_bool(strpos($username,$val))){
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     /**

@@ -57,7 +57,16 @@ class MemberModel extends Model
      */
     protected function checkDenyNickname($nickname)
     {
-        return true; //TODO: 暂不限制，下一个版本完善
+        $denyName=M("Config")->where(array('name' => 'USER_NAME_BAOLIU'))->getField('value');
+        if($denyName!=''){
+            $denyName=explode(',',$denyName);
+            foreach($denyName as $val){
+                if(!is_bool(strpos($nickname,$val))){
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     protected function checkNickname($nickname)

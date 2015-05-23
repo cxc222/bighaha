@@ -13,7 +13,7 @@ class UserModel
     {
         //默认赋值
         if ($fields === null) {
-            $fields = array('nickname', 'space_url', 'avatar64', 'avatar128', 'uid');
+            $fields = array('nickname', 'space_url', 'avatar32','avatar64', 'avatar128', 'uid');
         }
         //如果fields不是数组，直接返回需要的值
         if (!is_array($fields)) {

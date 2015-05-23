@@ -266,7 +266,7 @@ class ConfigController extends BaseController
         $length = mb_strlen($nickname, 'utf8');
         if ($length == 0) {
             $this->error('请输入昵称。');
-        } else if ($length >32) {
+        } else if ($length > 32) {
             $this->error('昵称不能超过32个字。');
         } else if ($length < 4) {
             $this->error('昵称不能少于4个字。');
@@ -321,7 +321,7 @@ class ConfigController extends BaseController
 
     /**显示某一扩展分组信息
      * @param null $profile_group_id
-     * @return null $uid
+     * @param null $uid
      * @author 郑钟良<zzl@ourstu.com>
      */
     public function _getExpandInfo($profile_group_id = null)

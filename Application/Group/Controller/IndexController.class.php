@@ -200,9 +200,11 @@ class IndexController extends BaseController
 
     public function discover()
     {
-
-        $posts = D('GroupPost')->where(array('status' => 1))->order('create_time desc')->findPage();
         $groupModel = D('Group');
+        $group_ids = $groupModel->where(array('status' => 1))->field('id')->select();
+        $group_ids = getSubByKey($group_ids, 'id');
+        $posts = D('GroupPost')->where(array('status' => 1, 'group_id' => array('in', $group_ids)))->order('create_time desc')->findPage();
+
         $supportModel = D('Common/Support');
         foreach ($posts['data'] as &$v) {
             $v['group'] = $groupModel->getGroup($v['group_id']);
@@ -525,31 +527,42 @@ class IndexController extends BaseController
             $arr = array();
             preg_match_all("/<[img|IMG].*?src=[\'|\"](.*?(?:[\.gif|\.jpg|\.png]))[\'|\"].*?[\/]?>/", $post['content'], $arr); //匹配所有的图片
             if (!empty($arr[0])) {
-                $feed_data['attach_ids'] = '';
+                $feed_data['attach_ids'] = array();
                 $dm = __ROOT__; //前缀图片多余截取
+
                 $max = count($arr[1]) > 9 ? 9 : count($arr[1]);
                 for ($i = 0; $i < $max; $i++) {
                     $tmparray = strpos($arr[1][$i], $dm);
-                    if (!is_bool($tmparray)) {
-                        $path = mb_substr($arr[1][$i], strlen($dm), strlen($arr[1][$i]) - strlen($dm));
+                    $is_local = !is_bool($tmparray);
+                    if ($is_local) {
+                        $path = cut_str($dm, $arr[1][$i], 'l');
                         $result_id = D('Home/Picture')->where(array('path' => $path))->getField('id');
                     } else {
                         $path = $arr[1][$i];
                         $result_id = D('Home/Picture')->where(array('path' => $path))->getField('id');
-                        if (!$result_id) {
-                            $result_id = D('Home/Picture')->add(array('path' => $path, 'url' => $path, 'status' => 1, 'create_time' => time()));
-                        }
                     }
-                    $feed_data['attach_ids'] = $feed_data['attach_ids'] . ',' . $result_id;
+
+                    if (!$result_id) {
+                        $dr = '';
+                        if (is_bool(strpos($path, 'http://'))) {
+                            $dr = 'local';
+                        }
+                        $result_id = D('Home/Picture')->add(array('type' => $dr, 'path' => $path, 'url' => $path, 'status' => 1, 'create_time' => time()));
+                    }
+
+                    $feed_data['attach_ids'][] = $result_id;
                 }
-                $feed_data['attach_ids'] = substr($feed_data['attach_ids'], 1);
+                $feed_data['attach_ids'] = implode(',', $feed_data['attach_ids']);
             }
+
             $feed_data['attach_ids'] != false && $type = "image";
-            if ($isEdit && check_is_in_config('edit_group_post', modC('GROUP_POST_SEND_WEIBO', 'add_group_post,edit_group_post', 'GROUP'))) {
-                D('Weibo/Weibo')->addWeibo(is_login(), "我在群组【{$group['title']}】里更新了帖子【" . $post['title'] . "】：" . $postUrl, $type, $feed_data);
-            }
-            if (!$isEdit && check_is_in_config('add_group_post', modC('GROUP_POST_SEND_WEIBO', 'add_group_post,edit_group_post', 'GROUP'))) {
-                D('Weibo/Weibo')->addWeibo(is_login(), "我在群组【{$group['title']}】里发表了一个新的帖子【" . $post['title'] . "】：" . $postUrl, $type, $feed_data);
+            if (D('Common/Module')->isInstalled('Weibo')) { //安装了微博模块
+                if ($isEdit && check_is_in_config('edit_group_post', modC('GROUP_POST_SEND_WEIBO', 'add_group_post,edit_group_post', 'GROUP'))) {
+                    D('Weibo/Weibo')->addWeibo(is_login(), "我在群组【{$group['title']}】里更新了帖子【" . $post['title'] . "】：" . $postUrl, $type, $feed_data);
+                }
+                if (!$isEdit && check_is_in_config('add_group_post', modC('GROUP_POST_SEND_WEIBO', 'add_group_post,edit_group_post', 'GROUP'))) {
+                    D('Weibo/Weibo')->addWeibo(is_login(), "我在群组【{$group['title']}】里发表了一个新的帖子【" . $post['title'] . "】：" . $postUrl, $type, $feed_data);
+                }
             }
         }
     }

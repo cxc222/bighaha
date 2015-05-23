@@ -230,7 +230,7 @@ class MemberController extends Controller
         if (IS_POST) {
             $result = A('Ucenter/Login', 'Widget')->doLogin();
             if ($result['status']) {
-                $this->success($result['info'], get_nav_url(C('AFTER_LOGIN_JUMP_URL')));
+                $this->success($result['info'],I('post.from',U('Home/index/index'),'text'));
             } else {
                 $this->error($result['info']);
             }
@@ -428,7 +428,7 @@ class MemberController extends Controller
                 $error = '昵称只能由数字、字母、汉字和"_"组成！';
                 break;
             case -33:
-                $error = '昵称不能少于两个字！';
+                $error = '昵称不能少于四个字！';
                 break;
             default:
                 $error = '未知错误24';
@@ -619,7 +619,7 @@ class MemberController extends Controller
         if (!$res) {
             M('avatar')->add(array('uid' => $aUid, 'status' => 1, 'is_temp' => 0, 'path' => "/" . $aUid . "/crop." . $aExt, 'create_time' => time()));
         }
-        clean_query_user_cache($aUid, array('avatar256', 'avatar128', 'avatar64'));
+        clean_query_user_cache($aUid, array('avatar256', 'avatar128', 'avatar64','avatar32','avatar512'));
         $this->success('头像更新成功！', session('temp_login_uid') ? U('Ucenter/member/step', array('step' => get_next_step('change_avatar'))) : 'refresh');
 
     }

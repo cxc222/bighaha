@@ -14,40 +14,44 @@ use Think\Controller;
 
 class ShareWidget extends Controller
 {
-    public function shareBtn($param,$text ='分享',$css=array()){
+    public function shareBtn($param, $text = '分享', $css = array())
+    {
 
-        $this->assign('param',$param);
-        $this->assign('query',http_build_query($param));
-        $this->assign('text',$text);
-        $this->assign('css',$css);
+        $this->assign('param', $param);
+        $this->assign('query', http_build_query($param));
+        $this->assign('text', $text);
+        $this->assign('css', $css);
         $this->display(T('Weibo@default/Widget/share/sharebtn'));
     }
 
-    public function fetchShare($param,$weibo = null){
-        $this->assginFetch($param,$weibo = null);
+    public function fetchShare($param, $weibo = null)
+    {
+        $this->assginFetch($param, $weibo = null);
         $this->display(T('Weibo@default/Widget/share/fetchshare'));
     }
 
-    private function assginFetch($param,$weibo = null){
-        if($weibo){
-            $this->assign('weibo',$weibo);
+    private function assginFetch($param, $weibo = null)
+    {
+        if ($weibo) {
+            $this->assign('weibo', $weibo);
         }
         $show = D('Weibo/Share')->getInfo($param);
-        $this->assign('show',array_merge($show,$param));
+        $this->assign('show', array_merge($show, $param));
     }
 
-    public function getFetchHtml($param,$weibo = null){
+    public function getFetchHtml($param, $weibo = null)
+    {
         $html = '';
-        if($class = A($param['app'].'/Share','Widget')){
-            if(method_exists($class,$param['model'])){
-                $html = R($param['app'].'/Share/'.$param['model'],array('param'=>$param,'weibo'=>$weibo),'Widget');
+        if ((!empty($param['app']) && !empty($param['model']))) {
+            if ($class = A($param['app'] . '/Share', 'Widget')) {
+                if (method_exists($class, $param['model'])) {
+                    $html = R($param['app'] . '/Share/' . $param['model'], array('param' => $param, 'weibo' => $weibo), 'Widget');
+                    return $html;
+                }
             }
-        }else{
-            $this->assginFetch($param,$weibo);
-            $html= $this->fetch(T('Weibo@default/Widget/share/fetchshare'));
         }
-
-
+        $this->assginFetch($param, $weibo);
+        $html = $this->fetch(T('Weibo@default/Widget/share/fetchshare'));
         return $html;
     }
 }

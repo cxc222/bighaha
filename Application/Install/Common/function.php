@@ -160,7 +160,9 @@ function write_config($config, $auth){
 		}else{
 			if(file_put_contents('./Conf/common.php', $conf) &&
 			   file_put_contents('./Conf/user.php', $user)){
-				show_msg('配置文件写入成功');
+                chmod('./Conf/common.php',0777);
+                chmod('./Conf/user.php',0777);
+                show_msg('配置文件写入成功');
 			} else {
 				show_msg('配置文件写入失败！', 'error');
 				session('error', true);

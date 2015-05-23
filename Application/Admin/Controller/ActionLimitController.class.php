@@ -85,8 +85,11 @@ class ActionLimitController extends AdminController
             } else {
                 $res = $model->addActionLimit($data);
             }
-            $this->success(($aId == 0 ? '添加' : '编辑') . '成功', $aId == 0 ? U('', array('id' => $res)) : '');
-
+            if($res){
+                $this->success(($aId == 0 ? '添加' : '编辑') . '成功', $aId == 0 ? U('', array('id' => $res)) : '');
+            }else{
+                $this->error($aId == 0 ? '操作失败，请添加正确信息！' : '操作失败，请确保修改了信息并且信息正确！');
+            }
         } else {
             $builder = new AdminConfigBuilder();
 

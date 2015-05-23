@@ -37,7 +37,9 @@
 				                    <span class="pull-left">
                                         <span class="author"><a href="{$author.space_url}" ucard="{$author.uid}">{$author.nickname}</a></span>
 					                    <span> 发表于 {$info.create_time|date='Y-m-d H:i',###}</span>
-				                    </span>
+                                                 </span>
+                                    <span class="pull-right" style="margin-right: 10px">{:W('Weibo/Share/shareBtn',array('param'=>array('title'=>$info['title'],'content'=>$info['description'],'img'=>getThumbImageById($info['cover'],160,160),'from'=>$MODULE_ALIAS,'site_link'=>U('news/index/detail',array('id'=>$info['id']))),'text'=>'分享'))}</span>
+
                                 </p>
                                 <div style="color: #999;font-size: 14px;">{$info.description}</div>
                             </div>
@@ -53,9 +55,11 @@
                                         </span>
 					                    <span> 发表于 {$info.create_time|date='Y-m-d H:i',###}</span>
 				                    </span>
-                                </p>
+                            <span class="pull-right" style="margin-right: 10px">{:W('Weibo/Share/shareBtn',array('param'=>array('title'=>$info['title'],'content'=>$info['description'],'img'=>getThumbImageById($info['cover'],160,160),'from'=>$MODULE_ALIAS,'site_link'=>U('news/index/detail',array('id'=>$info['id']))),'text'=>'分享'))}</span>
+
+                            </p>
                             <div style="color: #999;font-size: 14px;">{$info.description}</div>
-                        </if>
+                                             </if>
                     </div>
                     <hr/>
                     <section id="contents">
