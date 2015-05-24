@@ -18,6 +18,7 @@ use Atlas\Lib\Picture;
 class AtlasController extends AdminController
 {
 	protected $atlasModel;
+	protected $atlasCollectionModel;
 	protected $qiniu;
 	public $error;
 	
@@ -25,7 +26,8 @@ class AtlasController extends AdminController
 	{
 		$this->meta_title = '图集管理';
 		$this->atlasModel = D('Atlas/Atlas');
-	
+		$this->atlasCollectionModel = D('Atlas/Atlas_collection');
+		
 		$config = array(
 				'accessKey'=>'WPWs-mQSibJXZd7m_kL_cM0hwTIMCyFjzvgTFeRq',
 				'secrectKey'=>'TTUZUuWL8jug5LzxtQGwCPuVmN8-9DXMeFSrDzBa',
@@ -69,29 +71,120 @@ class AtlasController extends AdminController
 		->display();
 	}
 	
-	/* public function config()
-	 {
-	$admin_config = new AdminConfigBuilder();
-	$data = $admin_config->handleConfig();
+	public function config(){
+	    $builder = new AdminConfigBuilder();
+        $data = $builder->handleConfig();
+        
+	    $builder->title('采集设置');
+	    
+	    $builder->display();
+	}
 	
-	$admin_config->title('图集基本设置')
-	->keyBool('NEED_VERIFY', '创建活动是否需要审核','默认无需审核')
-	->buttonSubmit('', '保存')->data($data);
-	$admin_config->display();
-	} */
+	/**
+	 * 采集列表
+	 * 
+	 */
+	function collectionList($page = 1, $r = 10){
+	    //读取列表
+	    $model = $this->atlasCollectionModel;
+	    $list = $model->order('id desc')->page($page, $r)->select();
+	    unset($li);
+	    $totalCount = $model->count();
+	    
+	    //显示页面
+	    $builder = new AdminListBuilder();
+	    
+	    $attr['class'] = 'btn ajax-post';
+	    $attr['target-form'] = 'ids';
+	    
+	    $builder->title('内容管理')
+	    ->buttonNew(U('Atlas/editCollection'))
+	    ->buttonDelete()
+	    ->keyId()->keyText('name', '名称')    
+	    ->keyText('start_id','上次采集开始id')
+	    ->keyText('end_id','上次采集结束id')
+	    ->keyCreateTime('addtime')
+	    ->keyDoActionEdit('Atlas/editCollection?id=###')
+	    ->keyDoActionEdit('Atlas/collection?id=###','采集')
+	    ->data($list)
+	    ->pagination($totalCount, $r)
+	    ->display();
+	}
 	
+	/**
+	 * 增加采集点
+	 * 
+	 */
+	function editCollection(){
+	    $aId=I('id',0,'intval');
+	    $title=$aId?"编辑":"新增";
+	    if(IS_POST){
+	        $aId&&$data['id']=$aId;
+            $data['name']=I('post.name','','op_t');
+            $data['url']=I('post.url','','op_t');
+            $data['page']=I('post.page',1,'intval');
+            
+            $data['start_id']=I('post.start_id',0,'intval');
+            $data['end_id']=I('post.end_id',0,'intval');
+            $this->_checkOk($data);
+            
+            if($data['id']){
+                $result = $this->atlasCollectionModel->save($data);
+            }else{
+                $data['addtime']=time();
+                $result = $this->atlasCollectionModel->add($data);
+                action_log('add_atlas_collection', 'Atlas', $res, is_login());
+            }
+            
+            //$result=$this->atlasCollectionModel->editData($data);
+            
+            if($result){
+                $aId=$aId?$aId:$result;
+                $this->success($title.'成功！',U('Atlas/editCollection',array('id'=>$aId)));
+            }else{
+                $this->error($title.'失败！',$this->atlasCollectionModel->getError());
+            }
+	    }else{
+	        if($aId){
+	            $data=$this->atlasCollectionModel->find($aId);
+	        }
+	        $builder=new AdminConfigBuilder();
+	        $builder->title($title.'采集项目')
+	        ->data($data)
+	        ->keyId()
+	        ->keyText('name','名称')
+	        ->keyText('url','采集URL')
+	        ->keyText('page','采集页数')
+	        ->keyText('start_id','上次采集开始id')
+	        ->keyText('end_id','上次采集结束id')
+	        ->buttonSubmit()->buttonBack()
+	        ->display();
+	    }
+	}
 	
+	private function _checkOk($data=array()){
+	    if(!mb_strlen($data['name'],'utf-8')){
+	        $this->error('名称不能为空！');
+	    }
+	    if(!mb_strlen($data['url'],'utf-8')){
+	        $this->error('采集URL不能为空！');
+	    }
+	    return true;
+	}
 	
 	/**
 	 * 采集临时数据库里面的数据
 	 *
 	 */
 	function collection(){
+	    $aId=I('id',0,'intval');
+	    
+	    $atlasCollection = $this->atlasCollectionModel->find($aId);
 		set_time_limit(0);
-		 
-		$url = 'http://www.budejie.com/';
+		
+		$url = $atlasCollection['url'];
 		$page_suffix = '{page}';
-		$page_Count = 2;	//页码
+		$page_Count = $atlasCollection['page'];	//页码
 		 
 		$PictureClass = new Picture();
 		//保存Model
@@ -118,24 +211,32 @@ class AtlasController extends AdminController
 		$url = $url.$page_suffix;
 		 
 		$zindex = 1;	//总共采集多少条,
-		
+
 		//循环读取页面
-		for ($i = 1; $i<$page_Count; $i++){
-			$siteUrl = str_replace('{page}',$i,$url);
+		for ($i = 1; $i<=$page_Count; $i++){
+			$siteUrl = str_replace($page_suffix,$i,$url);
 			$snoopy->fetch($siteUrl); //获取所有内容
 			$results = $snoopy->results;
 			$html = str_get_html($results);
 			foreach ($html->find('.web_left') as $webLeft){
 				foreach ($webLeft->find('.post-body') as $postbody){
-					if($i == 1 && $zindex == 1){
-						//首次采集, 记录ID号
-							
-					}
+					
 					$img = $postbody->find('img',0);
 					$src = $img->src;
 					$alt = $img->alt;
 					$id = str_replace('pic-',' ',$img->id);
+					
 
+					//判断是否结束
+					if($id == $atlasCollection['end_id']){
+					    $this->success('采集成功, 成功数: '.$zindex,U('admin/atlas/index'));
+					}
+
+					if($i == 1 && $zindex == 1){
+					    //首次采集, 记录ID号
+					    $this->atlasCollectionModel->where(array('id'=>$aId))->setField('start_id',$id);
+					}
+					
 					//开始下载
 					//$file = 'Uploads/atlas/' . basename($instance->url);
 					$file = $diskPath . basename($src);
@@ -182,15 +283,16 @@ class AtlasController extends AdminController
 							$_data['image_id'] = $info['id'];
 							$_data['addtime'] = time();
 							$_data['status'] = 1;
-							if($this->atlasModel->create($_data) && ($id = $this->atlasModel->add())){
+							if($this->atlasModel->create($_data) && ( $this->atlasModel->add())){
 								$zindex++;
 							}
 						}
 					}
 				}
 			}
-			$html->clear();	//清理
 		}
+		$html->clear();	//清理
+		$this->atlasCollectionModel->where(array('id'=>$aId))->setField('end_id',$id);
 		/* ------------------------------------------------------------------------------------------------------------- */
 		/* $CollectionModel = D('Collection');
 		 $CollectionConfigModel = D('CollectionConfig');
