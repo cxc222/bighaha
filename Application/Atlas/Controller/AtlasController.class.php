@@ -228,7 +228,7 @@ class AtlasController extends AdminController
 					
 
 					//判断是否结束
-					if($id == $atlasCollection['end_id']){
+					if($id == $atlasCollection['start_id']){
 					    $this->success('采集成功, 成功数: '.$zindex,U('admin/atlas/index'));
 					}
 
