@@ -13,7 +13,7 @@ class Picture{
 	public function moveUpload($files, $setting, $driver = 'Qiniu', $config = null) {
 	    
 		$Picture = D('Picture');
-		$qiniuConfig = C ( 'QINIU_CONFIG' );
+		$qiniuConfig = C ( 'UPLOAD_QINIU_CONFIG' );
 		$qiniuStorage = new QiniuStorage ( $qiniuConfig );
 		$savepath = 'Uploads/atlas/';
 	

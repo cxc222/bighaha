@@ -104,11 +104,11 @@ return array(
 				'callback' => false  // 检测文件是否存在回调函数，如果存在返回文件信息数组
 				), // 图片上传相关配置（文件上传类配置）
 		
-		'PICTURE_UPLOAD_DRIVER' => 'qiniu',
-		'DOWNLOAD_UPLOAD_DRIVER' => 'qiniu',
+		'PICTURE_UPLOAD_DRIVER' => 'local',
+		'DOWNLOAD_UPLOAD_DRIVER' => 'local',
 		
 		/* 七牛上传相关配置 */
-		'QINIU_CONFIG' => array (
+		'UPLOAD_QINIU_CONFIG' => array (
 		    'accessKey' => 'WPWs-mQSibJXZd7m_kL_cM0hwTIMCyFjzvgTFeRq', // 七牛 accessKey
 		    'secrectKey' => 'TTUZUuWL8jug5LzxtQGwCPuVmN8-9DXMeFSrDzBa', // 七牛 secrectKey
 		    'bucket' => 'wedding', // 七牛 空间名

@@ -269,8 +269,9 @@ class AtlasController extends AdminController
 						$info = $PictureClass->moveUpload(
 								$fileInfo,
 								C('PICTURE_UPLOAD'),
-								C('PICTURE_UPLOAD_DRIVER'),
-								C("UPLOAD_{$pic_driver}_CONFIG")
+								//C('PICTURE_UPLOAD_DRIVER'),
+								'qiniu',
+								C("UPLOAD_QINIU_CONFIG")
 						); //TODO:上传到远程服务器
 						
 						if(!$info){

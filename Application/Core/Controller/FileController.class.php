@@ -286,6 +286,7 @@ class FileController extends Controller
         $setting  = C('PICTURE_UPLOAD');
         $driver =  C('PICTURE_UPLOAD_DRIVER');
         $config = C("UPLOAD_{$pic_driver}_CONFIG");
+        
         /* 上传文件 */
         $setting['rootPath'] = './Uploads/Avatar/';
         $setting['saveName'] = '/'.$aUid.'/original';
@@ -313,7 +314,7 @@ class FileController extends Controller
         }else{
             $Upload = new \Think\Upload($setting, $driver, $config);
             $info = $Upload->upload($files);
-             }
+        }
         if ($info) { //文件上传成功，不记录文件
             $return['status'] = 1;
             if ($info['Filedata']) {
