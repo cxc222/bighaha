@@ -62,6 +62,15 @@ class IndexController extends FrontBaseController {
 	}
 	
 	/**
+	 * 发布图集
+	 * 
+	 */
+	function publish(){
+	    
+	    $this->display();
+	}
+	
+	/**
 	 * 测试2
 	 */
 	function test2(){
