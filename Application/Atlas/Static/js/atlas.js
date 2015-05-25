@@ -1,5 +1,7 @@
 $(function () {
     bindAtlasEvent();
+    
+    $("img.lazy").lazyload();
 });
 
 function bindAtlasEvent() {

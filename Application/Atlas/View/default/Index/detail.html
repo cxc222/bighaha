@@ -28,7 +28,10 @@
 					<p id="title-{$detail.id}" class="web_size">{$detail.content|parseWeiboContent}</p>
 					<p>
 						<img id="pic-{$detail.id}"
-							src="{$detail.image_id|getThumbImageById=600,5000}">
+							data-original="{$detail.image_id|getAtlasThumbImageById=720}" class="img-responsive lazy">
+							<noscript>
+								<img src="{$detail.image_id|getAtlasThumbImageById=720}" class="img-responsive">
+							</noscript>
 					</p>
 				</div>
 
