@@ -31,8 +31,8 @@
                             <div class="col-xs-8">
                                 <h2>{$info.title}</h2>
                                 <p class="clearfix">
-                                    <if condition="$info['status'] neq 1">
-                                        <a title="编辑" href="{:U('News/index/edit',array('id'=>$info['id']))}" style="float: right"><i class="icon-edit" style="font-size: 16px;"></i></a>
+                                    <if condition="check_auth('News/Index/edit',$info['uid'])&&($info['status'] neq 1)">
+                                        <a title="编辑" href="{:U('News/index/edit',array('id'=>$info['id']))}" style="float: right"><i class="icon-edit" style="font-size: 16px;">编辑</i></a>
                                     </if>
 				                    <span class="pull-left">
                                         <span class="author"><a href="{$author.space_url}" ucard="{$author.uid}">{$author.nickname}</a></span>
@@ -47,7 +47,7 @@
                                 <h2>{$info.title}</h2>
                                 <p class="clearfix">
                                     <if condition="check_auth('News/Index/edit',$info['uid'])&&($info['status'] neq 1)">
-                                        <a title="编辑" href="{:U('News/index/edit',array('id'=>$info['id']))}" style="float: right"><i class="icon-edit" style="font-size: 16px;"></i></a>
+                                        <a title="编辑" href="{:U('News/index/edit',array('id'=>$info['id']))}" style="float: right"><i class="icon-edit" style="font-size: 16px;">编辑</i></a>
                                     </if>
 				                    <span class="pull-left">
                                         <span class="author">

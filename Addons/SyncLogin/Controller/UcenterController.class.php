@@ -28,7 +28,6 @@ class UcenterController extends AddonsController
         unset($v);
 
         $this->assign('list', $arr);
-
         $this->assign('addon_config', $addon_config);
         $this->assign('tabHash', 'bind');
         $this->display(T('Addons://SyncLogin@Ucenter/bind'));
@@ -42,13 +41,15 @@ class UcenterController extends AddonsController
         }
         return false;
     }
+
+
     public function unbind(){
         $aType = I('post.type','','op_t');
         if(empty($aType)){
             $this->error('参数错误');
         }
         if(!is_login()){
-            $this->error('请登录！');
+            $this->error('请登陆！');
         }
         $uid = is_login();
         $res=  D('sync_login')->where(array('uid' => $uid, 'type' => $aType))->delete();

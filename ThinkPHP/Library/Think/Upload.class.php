@@ -191,7 +191,7 @@ class Upload{
                 continue;
             } else {
                 $file['savename'] = $savename;
-                $file['name'] = $savename;
+                //$file['name'] = $savename;
             }
 
             /* 检测并创建子目录 */

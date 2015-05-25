@@ -21,10 +21,10 @@
                 $('#type_{$type}').addClass('active');
             </script>
         </ul>
-        <div class="cards plugin-list">
+        <div class="cards plugin-list" style="padding: 15px">
             <notempty name="_list">
                 <volist name="_list" id="vo">
-                    <div class="col-xs-2">
+                    <div class="pull-left" style="width: 240px;margin-right: 15px">
                         <div class="card">
                             <div class="media-wrapper"><a href="{:U('config',array('id'=>$vo['id']))}"><img src="__IMG__/plugin.png" alt=""></a></div>
                             <span class="caption">{$vo.name}</span>
@@ -42,7 +42,7 @@
                             <div class="card-actions">
                                 <div class="text-mute">
 
-                                  开发者：{$vo.author}
+                                  {$vo.author}
 
                                 </div>
                             </div>

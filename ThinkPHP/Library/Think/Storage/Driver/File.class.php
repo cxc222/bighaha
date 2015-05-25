@@ -42,10 +42,11 @@ class File extends Storage{
     public function put($filename,$content,$type=''){
         $dir         =  dirname($filename);
         if(!is_dir($dir))
-            mkdir($dir,0755,true);
+            mkdir($dir,0777,true);
         if(false === file_put_contents($filename,$content)){
             E(L('_STORAGE_WRITE_ERROR_').':'.$filename);
         }else{
+            chmod($filename,0777);
             $this->contents[$filename]=$content;
             return true;
         }

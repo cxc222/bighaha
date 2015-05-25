@@ -168,11 +168,11 @@ class View
          * 增加模板地址解析机制 start
          * @author 郑钟良<zzl@ourstu.com>
          */
-        $TO_LOOK_THEME = cookie('TO_LOOK_THEME','',array('prefix'=>'OSV2'));
+        $TO_LOOK_THEME = cookie('TO_LOOK_THEME', '', array('prefix' => 'OSV2'));
         if ($TO_LOOK_THEME) {
             if ($TO_LOOK_THEME != 'default') {
                 if (!defined('NOW_THEME_PATH')) {
-                    $tmplPath = OS_THEME_PATH. $TO_LOOK_THEME . '/' . $module . '/' . C('DEFAULT_V_LAYER') . '/';
+                    $tmplPath = OS_THEME_PATH . $TO_LOOK_THEME . '/' . $module . '/' . C('DEFAULT_V_LAYER') . '/';
                     define('NOW_THEME_PATH', $tmplPath);
                 }
                 $file = NOW_THEME_PATH . $template . C('TMPL_TEMPLATE_SUFFIX');
@@ -181,32 +181,33 @@ class View
             $now_theme = modC('NOW_THEME', 'default', 'Theme');
             if ($now_theme != 'default') {
                 if (!defined('NOW_THEME_PATH')) {
-                    $tmplPath =OS_THEME_PATH. $now_theme . '/' . $module . '/' . C('DEFAULT_V_LAYER') . '/';
+                    $tmplPath = OS_THEME_PATH . $now_theme . '/' . $module . '/' . C('DEFAULT_V_LAYER') . '/';
                     define('NOW_THEME_PATH', $tmplPath);
                 }
                 $file = NOW_THEME_PATH . $template . C('TMPL_TEMPLATE_SUFFIX');
             }
+        }
+        if (isset($file) && is_file($file)) {
+            return $file;
         }
         /**
          * 2015-5-14 9:35
          * 增加模板地址解析机制 end
          * @author 郑钟良<zzl@ourstu.com>
          */
-        if (!is_file($file)) {
-            // 获取当前主题的模版路径
-            if (!defined('THEME_PATH')) {
-                if (C('VIEW_PATH')) { // 模块设置独立的视图目录
-                    $tmplPath = C('VIEW_PATH');
-                } else { // 定义TMPL_PATH 改变全局的视图目录到模块之外
-                    $tmplPath = defined('TMPL_PATH') ? TMPL_PATH . $module . '/' : APP_PATH . $module . '/' . C('DEFAULT_V_LAYER') . '/';
-                }
-                // 获取当前主题名称
-                $theme = $this->getTemplateTheme();
-                define('THEME_PATH', $tmplPath . $theme);
+        // 获取当前主题的模版路径
+        if (!defined('THEME_PATH')) {
+            if (C('VIEW_PATH')) { // 模块设置独立的视图目录
+                $tmplPath = C('VIEW_PATH');
+            } else { // 定义TMPL_PATH 改变全局的视图目录到模块之外
+                $tmplPath = defined('TMPL_PATH') ? TMPL_PATH . $module . '/' : APP_PATH . $module . '/' . C('DEFAULT_V_LAYER') . '/';
             }
-            // 分析模板文件规则
-            $file = THEME_PATH . $template . C('TMPL_TEMPLATE_SUFFIX');
+            // 获取当前主题名称
+            $theme = $this->getTemplateTheme();
+            define('THEME_PATH', $tmplPath . $theme);
         }
+        // 分析模板文件规则
+        $file = THEME_PATH . $template . C('TMPL_TEMPLATE_SUFFIX');
         if (C('TMPL_LOAD_DEFAULTTHEME') && THEME_NAME != C('DEFAULT_THEME') && !is_file($file)) {
             // 找不到当前主题模板的时候定位默认主题中的模板
             $file = dirname(THEME_PATH) . '/' . C('DEFAULT_THEME') . '/' . $template . C('TMPL_TEMPLATE_SUFFIX');
@@ -224,11 +225,6 @@ class View
     {
         $this->theme = $theme;
         return $this;
-    }
-
-    private function _parseTmplate()
-    {
-
     }
 
     /**

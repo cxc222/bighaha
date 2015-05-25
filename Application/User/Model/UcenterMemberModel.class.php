@@ -136,7 +136,7 @@ class UcenterMemberModel extends Model
      * @param  string $mobile 用户手机号码
      * @return integer          注册成功-用户信息，注册失败-错误编号
      */
-    public function register($username, $nickname, $password, $email, $mobile, $type=1)
+    public function register($username, $nickname, $password, $email='', $mobile='', $type=1)
     {
 
         $data = array(
@@ -501,47 +501,7 @@ class UcenterMemberModel extends Model
     }
 
 
-    public function addSyncData()
-    {
 
-        $data['username'] = $this->rand_username();
-        $data['email'] = $this->rand_email();
-        $data['password'] = $this->create_rand(10);
-        $data1 = $this->create($data);
-
-        $uid = $this->add($data1);
-        return $uid;
-    }
-
-    public function rand_email()
-    {
-        $email = $this->create_rand(10) . '@ocenter.com';
-        if ($this->where(array('email' => $email))->select()) {
-            $this->rand_email();
-        } else {
-            return $email;
-        }
-    }
-
-    public function rand_username()
-    {
-        $username = $this->create_rand(10);
-        if ($this->where(array('username' => $username))->select()) {
-            $this->rand_username();
-        } else {
-            return $username;
-        }
-    }
-
-    function create_rand($length = 8)
-    {
-        $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-        $password = '';
-        for ($i = 0; $i < $length; $i++) {
-            $password .= $chars[mt_rand(0, strlen($chars) - 1)];
-        }
-        return $password;
-    }
 
     /**修改密码
      * @param $old_password
@@ -633,4 +593,38 @@ class UcenterMemberModel extends Model
         }
         return $error;
     }
+
+
+    /**
+     * addSyncData
+     * @return mixed
+     * @author:xjw129xjt(肖骏涛) xjt@ourstu.com
+     */
+    public function addSyncData()
+    {
+
+        $data['email'] = $this->rand_email();
+        $data['password'] = create_rand(10);
+        $data['type'] = 2;  // 视作用邮箱注册
+        $data = $this->create($data);
+        $uid = $this->add($data);
+        return $uid;
+    }
+
+    protected  function rand_email()
+    {
+        $email = create_rand(10) . '@ocenter.com';
+        if ($this->where(array('email' => $email))->select()) {
+            $this->rand_email();
+        } else {
+            return $email;
+        }
+    }
+
+
+
+
+
+
+
 }

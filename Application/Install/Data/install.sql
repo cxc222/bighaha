@@ -883,10 +883,10 @@ INSERT INTO `ocenter_menu` (`id`, `title`, `pid`, `sort`, `url`, `hide`, `tip`, 
 (102, 'SEO规则回收站', 74, 0, 'SEO/ruleTrash', 0, '', 'SEO规则', 0, ''),
 (103, '全部补丁', 74, 0, 'Admin/Update/quick', 0, '', '升级补丁', 0, ''),
 (104, '新增补丁', 74, 0, 'Admin/Update/addpack', 1, '', '升级补丁', 0, ''),
-(105, '云市场', 0, 5, 'Cloud/index', 1, '', '', 0, 'cloud'),
-(106, '模块安装', 105, 0, 'module/install', 1, '', '云市场', 0, ''),
-(107, '模块管理', 105, 0, 'module/lists', 0, '', '云市场', 0, ''),
-(108, '卸载模块', 105, 0, 'module/uninstall', 1, '', '云市场', 0, ''),
+(105, '云市场', 0, 10, 'Cloud/index', 0, '', '', 0, 'cloud'),
+(106, '模块安装', 105, 0, 'module/install', 1, '', '本地', 0, ''),
+(107, '模块管理', 105, 2, 'module/lists', 0, '', '本地', 0, ''),
+(108, '卸载模块', 105, 0, 'module/uninstall', 1, '', '本地', 0, ''),
 (109, '授权', 0, 3, 'authorize/ssoSetting', 0, '', '', 0, 'lock'),
 (110, '单点登录配置', 109, 0, 'Authorize/ssoSetting', 0, '', '单点登录', 0, ''),
 (111, '应用列表', 109, 0, 'Authorize/ssolist', 0, '', '单点登录', 0, ''),
@@ -950,13 +950,17 @@ INSERT INTO `ocenter_menu` (`id`, `title`, `pid`, `sort`, `url`, `hide`, `tip`, 
 (169, '可拥有标签配置', 116, 0, 'role/configusertag', 1, '', '', 0, ''),
 (170, '编辑模块', 107, 0, 'Module/edit', 1, '', '模块管理', 0, ''),
 (171, '网站信息', 74, 0, 'Config/website', 0, '', '系统设置', 0, ''),
-(156, '主题管理', 105, 0, 'Theme/tpls', 0, '', '云市场', 0, ''),
-(157, '使用主题', 105, 0, 'Theme/setTheme', 1, '', '云市场', 0, ''),
-(158, '查看主题', 105, 0, 'Theme/lookTheme', 1, '', '云市场', 0, ''),
-(159, '主题打包下载', 105, 0, 'Theme/packageDownload', 1, '', '云市场', 0, ''),
-(160, '卸载删除主题', 105, 0, 'Theme/delete', 1, '', '云市场', 0, ''),
-(161, '上传安装主题', 105, 0, 'Theme/add', 1, '', '云市场', 0, '');
+(172, '主题管理', 105, 3, 'Theme/tpls', 0, '', '本地', 0, ''),
+(173, '使用主题', 105, 0, 'Theme/setTheme', 1, '', '本地', 0, ''),
+(174, '查看主题', 105, 0, 'Theme/lookTheme', 1, '', '本地', 0, ''),
+(175, '主题打包下载', 105, 0, 'Theme/packageDownload', 1, '', '本地', 0, ''),
+(176, '卸载删除主题', 105, 0, 'Theme/delete', 1, '', '本地', 0, ''),
+(177, '上传安装主题', 105, 0, 'Theme/add', 1, '', '本地', 0, ''),
+(178, '云市场', 105, 1, 'Cloud/index', 0, '', '云市场', 0, '');
 
+INSERT INTO `ocenter_menu` (`id`, `title`, `pid`, `sort`, `url`, `hide`, `tip`, `group`, `is_dev`, `icon`, `module`) VALUES
+(179, '网站主页', 0, 0, 'Home/config', 1, '', '', 0, 'home', 'Home'),
+(180, '基本设置', 179, 0, 'Home/config', 0, '', '设置', 0, '', 'Home');
 
 DROP TABLE  IF EXISTS `ocenter_message`;
 CREATE TABLE IF NOT EXISTS `ocenter_message` (
@@ -996,6 +1000,10 @@ CREATE TABLE IF NOT EXISTS `ocenter_module` (
   UNIQUE KEY `name` (`name`),
   KEY `name_2` (`name`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='模块管理表' AUTO_INCREMENT=1 ;
+
+INSERT INTO `ocenter_module` (`id`, `name`, `alias`, `version`, `is_com`, `show_nav`, `summary`, `developer`, `website`, `entry`, `is_setup`, `sort`, `icon`, `can_uninstall`, `admin_entry`) VALUES
+(1, 'Home', '网站主页', '2.0.0', 0, 1, '首页模块，主要用于展示网站内容', '嘉兴想天信息科技有限公司', 'http://www.ourstu.com', 'Home/index/index', 1, 0, 'home', 1, 'Admin/Home/config'),
+(2, 'Ucenter', '用户中心', '2.0.0', 0, 1, '用户中心模块，系统核心模块', '嘉兴想天信息科技有限公司', 'http://www.ourstu.com', 'Ucenter/index/index', 1, 0, 'user', 0, 'Admin/User/index');
 
 
 DROP TABLE  IF EXISTS `ocenter_picture`;

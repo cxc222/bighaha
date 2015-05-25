@@ -87,13 +87,18 @@ class IndexController extends Controller{
         /* 获取当前分类下资讯列表 */
         list($list,$totalCount) = $this->newsModel->getListByPage($map,$page,'update_time desc','*',$r);
         foreach($list as &$val){
-            if($val['status']==1){
-                $val['audit_status']='<span style="color: green;">审核通过</span>';
-            }elseif($val['status']==2){
-                $val['audit_status']='<span style="color:#4D9EFF;">待审核</span>';
-            }elseif($val['status']==-1){
-                $val['audit_status']='<span style="color: #b5b5b5;">审核失败</span>';
+            if($val['dead_line']<=time()){
+                $val['audit_status']= '<span style="color: #7f7b80;">已过期</span>';
+            }else{
+                if($val['status']==1){
+                    $val['audit_status']='<span style="color: green;">审核通过</span>';
+                }elseif($val['status']==2){
+                    $val['audit_status']='<span style="color:#4D9EFF;">待审核</span>';
+                }elseif($val['status']==-1){
+                    $val['audit_status']='<span style="color: #b5b5b5;">审核失败</span>';
+                }
             }
+
         }
         unset($val);
         /* 模板赋值并渲染模板 */

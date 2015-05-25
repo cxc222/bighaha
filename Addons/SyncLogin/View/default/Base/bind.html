@@ -15,43 +15,39 @@
     </div>
 
   <div class="col-xs-4" style="margin-top: 30px;">
+
+
+
+
+
+
+
 <php>  if($tip =='new'){</php>
     <form action="{:addons_url('SyncLogin://Base/newAccount')}" method="post">
         <div class="form-group">
             <label for="username" class=".sr-only col-xs-12" style="display: none"></label>
-            <input type="text" id="username" onblur="setNickname(this);" class="form-control" placeholder="请输入用户名"
-                   ajaxurl="/member/checkUserNameUnique.html" errormsg="请填写1-16位用户名"
-                   nullmsg="请填写用户名"
-                   datatype="*1-16" value="" name="username">
-
+            <input type="text" id="username" onblur="setNickname(this);" class="form-control form_check"  check-type="Username"  placeholder="请输入用户名" check-url="{:U('ucenter/member/checkAccount')}"  value="" name="username">
+            <span class="help-block">输入用户名，只允许字母和数字和下划线</span>
             <div class="clearfix"></div>
         </div>
         <div class="form-group">
             <label for="nickname" class=".sr-only col-xs-12" style="display: none"></label>
-            <input type="text" id="nickname" class="form-control" placeholder="请输入昵称"
-                   ajaxurl="/member/checkNickNameUnique.html" errormsg="请填写1-16位昵称"
-                   nullmsg="请填写昵称"
-                   datatype="*1-16" value="" name="nickname">
-
+            <input type="text" id="nickname" class="form-control form_check" check-type="Nickname"  check-url="{:U('ucenter/member/checkNickname')}"  placeholder="请输入昵称"  value="" name="nickname">
+            <span class="help-block">输入昵称，只允许中文、字母和数字和下划线</span>
             <div class="clearfix"></div>
         </div>
-        <div class="form-group">
-            <label for="inputEmail" class=".sr-only col-xs-12" style="display: none"></label>
-            <input type="text" id="inputEmail" class="form-control" placeholder="请输入电子邮件"
-                   ajaxurl="/member/checkUserEmailUnique.html" errormsg="请填写正确格式的邮箱" nullmsg="请填写邮箱"
-                   datatype="e" value="" name="email">
 
-            <div class="clearfix"></div>
-        </div>
-        <div class="form-group">
-            <div id="password_block" class="input-group">
-                <input type="password" id="inputPassword" class="form-control" placeholder="请输入密码"
-                       errormsg="密码为6-20位" nullmsg="请填写密码" datatype="*6-20" name="password">
 
-                <div class="input-group-addon"><a style="width: 100%;height: 100%"
-                                                  href="javascript:void(0);"
-                                                  onclick="change_show(this)">show</a></div>
+        <div class="form-group">
+            <div id="password_block" class="input-group password_block" >
+                <input type="password" id="inputPassword" class="form-control" placeholder="请输入密码" check-length="6,30" name="password">
+
+                <div class="input-group-addon">
+                    <a style="width: 100%;height: 100%" href="javascript:void(0);"  onclick="change_show(this)">show</a>
+                </div>
+
             </div>
+            <span class="help-block">请输入密码</span>
             <div class="clearfix"></div>
         </div>
 
@@ -60,16 +56,18 @@
         <a href="{:addons_url('SyncLogin://Base/unbind')}" class="btn btn-success ">我不想绑定，直接跳过</a>
     </form>
       <php>}</php>
+
+
+
+
+
       <php>if($tip == 'exist'){</php>
       <form action="{:addons_url('SyncLogin://Base/existLogin')}" method="post"  >
           <div class="form-group">
-              <label for="inputEmail" class=".sr-only col-xs-12"></label>
+              <label for="" class=".sr-only col-xs-12"></label>
 
               <div class=" ">
-                  <input type="text" id="inputEmail" class="form-control" placeholder="请输入用户名"
-                         ajaxurl="/member/checkUserNameUnique.html" errormsg="请填写1-16位用户名"
-                         nullmsg="请填写用户名"
-                         datatype="*1-16" value="" name="username">
+                  <input type="text" id="" class="form-control" placeholder="请输入用户名" value="" name="username">
               </div>
               <div class="clearfix"></div>
           </div>
@@ -77,23 +75,20 @@
               <label for="inputPassword" class=".sr-only col-xs-12"></label>
 
               <div class="">
-                  <div id="password_block" class="input-group">
-                      <input type="password" id="inputPassword" class="form-control" placeholder="请输入密码"
-                             errormsg="密码为6-20位" nullmsg="请填写密码" datatype="*6-20" name="password">
-
+                  <div id="password_block" class="input-group" style="position: relative;display: table;border-collapse: separate;">
+                      <input type="password" id="inputPassword" class="form-control" placeholder="请输入密码" name="password">
                       <div class="input-group-addon"><a style="width: 100%;height: 100%" href="javascript:void(0);" onclick="change_show(this)">show</a></div>
                   </div>
               </div>
-
               <div class="clearfix"></div>
           </div>
 
           <div class="checkbox lg_lf_fm_checkbox">
               <label>
-                  <input type="checkbox" name="remember" style="cursor:pointer;"> 记住登录
+                  <input type="checkbox" name="remember" value="1" style="cursor:pointer;"> 记住登陆
               </label>
           </div>
-          <button type="submit" class="btn btn-primary">登 录</button>
+          <button type="submit" class="btn btn-primary">绑定并登陆</button>
           <div class="clearfix"></div>
       </form>
       <php>}</php>
@@ -151,6 +146,43 @@
 
     }
 </script>
+
+
+    <link href="__ROOT__/Application/Core/Static/css/form_check.css" rel="stylesheet" type="text/css">
+    <script src='__ROOT__/Application/Core/Static/js/form_check.js'></script>
+    <script>
+        // 验证密码长度
+        $(function(){
+            $('#inputPassword').after('<div class=" show_info" style="margin-top: 32px;" ></div>');
+            $('#inputPassword').blur(function(){
+
+                var obj =$('#inputPassword');
+                var str =  obj.val().replace(/\s+/g, "");
+                var html = '';
+                if (str.length == 0) {
+                    html = '<div class="send red"><div class="arrow"></div>不能为空</div>';
+                } else {
+                    if (typeof (obj.attr('check-length')) != 'undefined') {
+                        var strs = new Array(); //定义一数组
+                        strs = obj.attr('check-length').split(","); //字符分割
+                        if (strs[1]) {
+                            if (strs[1] < str.length || str.length < strs[0]) {
+                                html = '<div class="send red"><div class="arrow"></div>长度不符合要求</div>';
+                            }
+                        }
+                        else {
+                            if (strs[0] < str.length) {
+                                html = '<div class="send red"><div class="arrow"></div>长度不符合要求</div>';
+                            }
+                        }
+                    }
+                    obj.parent().find('.show_info').html(html);
+                }
+            })
+        })
+    </script>
+
+
 </block>
 
 

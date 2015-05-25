@@ -2,7 +2,7 @@
 
 return array(
     'type'=>array(
-        'title'=>'开启同步登录：',
+        'title'=>'开启同步登陆：',
         'type'=>'checkbox',
         'options'=>array(
             'Qq'=>'Qq',
@@ -33,13 +33,13 @@ return array(
                 'title'=>'QQ配置',
                 'options'=>array(
                     'QqKEY'=>array(
-                        'title'=>'QQ互联KEY：',
+                        'title'=>'QQ互联APP ID：',
                         'type'=>'text',
                         'value'=>'',
                         'tip'=>'申请地址：http://connect.qq.com',
                     ),
                     'QqSecret'=>array(
-                        'title'=>'QQ互联密匙：',
+                        'title'=>'QQ互联APP KEY：',
                         'type'=>'text',
                         'value'=>'',
                         'tip'=>'申请地址：http://connect.qq.com',
@@ -51,16 +51,36 @@ return array(
                 'options'=>array(
 
                     'SinaKEY'=>array(
-                        'title'=>'新浪KEY：',
+                        'title'=>'新浪App Key：',
                         'type'=>'text',
                         'value'=>'',
                         'tip'=>'申请地址：http://open.weibo.com/',
                     ),
                     'SinaSecret'=>array(
-                        'title'=>'新浪密匙：',
+                        'title'=>'新浪App Sercet：',
                         'type'=>'text',
                         'value'=>'',
                         'tip'=>'申请地址：http://open.weibo.com/',
+                    )
+
+                ),
+
+            ),
+            'Weixin'=>array(
+                'title'=>'微信配置',
+                'options'=>array(
+
+                    'WeixinKEY'=>array(
+                        'title'=>'微信App Key：',
+                        'type'=>'text',
+                        'value'=>'',
+                        'tip'=>'申请地址：https://open.weixin.qq.com/',
+                    ),
+                    'WeixinSecret'=>array(
+                        'title'=>'微信App Sercet：',
+                        'type'=>'text',
+                        'value'=>'',
+                        'tip'=>'申请地址：https://open.weixin.qq.com/',
                     )
 
                 ),

@@ -1,7 +1,5 @@
 <php>if(!empty($config['type'])){</php>
 
-
-
 <div id="center_weibo">
     <div class="row">
         <div class="col-xs-12">
@@ -21,68 +19,38 @@
                         <div class="row">
                             <div class="col-xs-6">  <a href="javascript:" class="other_login other_login_{$vo['name']}"></a></div>
                             <div class="col-xs-6 text-right">
-                                <if condition="$vo['is_bind']"><a href="javascript:" class="btn btn-danger unbind" data-type="{$vo.name}"  data-url="{:addons_url('SyncLogin://Ucenter/unbind')}"><if condition="$vo['is_bind']">已绑定 &nbsp; [<a href="{$vo.info.profile_url}" target="_blank">{$vo.info.nick}</a>]<else/>未绑定</if>，取消绑定</a>
+                                <if condition="$vo['is_bind']">
+
+
+                                    <a href="javascript:" class="btn btn-info" data-role="unbind" data-type="{$vo.name}"  data-url="{:addons_url('SyncLogin://Ucenter/unbind')}">
+                                       已绑定 &nbsp; [{$vo.info.nick}]，取消绑定
+                                    </a>
+
+
                                     <else/>
-                                    <a href="{:addons_url('SyncLogin://Base/login',array('type'=>$vo['name']))}" class="btn btn-default "><if condition="$vo['is_bind']">已绑定 &nbsp; [<a href="{$vo.info.profile_url}" target="_blank">{$vo.info.nick}</a>]<else/>未绑定</if>，点击绑定</a></if>
+
+                                    <a href="{:addons_url('SyncLogin://Base/login',array('type'=>$vo['name']))}" class="btn btn-default ">
+                                      未绑定，点击绑定
+                                    </a>
+
+
+                                </if>
                             </div>
                         </div>
 
                     </volist>
-
                 </div>
-
             </div>
-
         </div>
-
-
-
-
 
 
     </div>
 </div>
 
-<!--<li>
-    <a href="{:addons_url('SyncLogin://Ucenter/bind')}" >
-        绑定微博
-    </a>
-</li>-->
-
-
-
 <script>
     $(function () {
-        var $sidebar = $('#usercenter-sidebar-td');
-        var $sidebar_xs = $('#usercenter-sidebar-xs');
-        var $sidebar_sm = $('#usercenter-sidebar-sm');
-        var $content = $('#usercenter-content-td');
-
-        function trigger_resp() {
-            var width = $(window).width();
-            if (width < 768) {
-                on_xs();
-            } else {
-                on_sm();
-            }
-        }
-
-        function on_xs() {
-            $sidebar_xs.append($sidebar);
-            $content.css({'padding-left': 0, 'padding-right': 0});
-        }
-
-        function on_sm() {
-            $sidebar_sm.prepend($sidebar);
-            $content.css({'padding-left': 0, 'padding-right': 0});
-        }
-
-        trigger_resp();
-
-        $(window).resize(function () {
-            trigger_resp();
-        })
-        $('.unbind').click(function(){
+        $('[data-role="unbind"]').unbind('click');
+        $('[data-role="unbind"]').click(function(){
             if(confirm('确定要取消绑定么？')){
                 var obj = $(this);
                 var type =obj.attr('data-type');
@@ -91,10 +59,7 @@
                     handleAjax(res);
                 })
             }
-
         })
-
-
     })
 </script>
 <php>}</php>

@@ -655,6 +655,10 @@ ul {
 .chat_panel #scrollArea_chat {
   padding-bottom: 20px;
 }
+.container {
+  width: 1140px;
+  max-width: 1140px;
+}
 a {
   color: #333;
 }
@@ -679,10 +683,12 @@ body {
 }
 .user-at.hl {
   background: #eee;
+  border-radius: 16px;
+  padding-right: 10px;
 }
 .user-at img {
+  border-radius: 16px;
   vertical-align: top;
-  border-radius: 3px;
   margin-right: 5px;
   width: 26px;
   height: 26px;
