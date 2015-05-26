@@ -14,7 +14,10 @@
 return array(
      // 预先加载的标签库
     'TAGLIB_PRE_LOAD' => 'OT\\TagLib\\Article,OT\\TagLib\\Think',	
-	
+
+    'PICTURE_UPLOAD_DRIVER' => 'qiniu',
+    'DOWNLOAD_UPLOAD_DRIVER' => 'qiniu',
+    
      /* 图片上传相关配置 */
     'PICTURE_UPLOAD' => array(
         'mimes'    => '', //允许上传的文件MiMe类型
@@ -22,7 +25,7 @@ return array(
         'exts'     => 'jpg,gif,png,jpeg', //允许上传的文件后缀
         'autoSub'  => true, //自动子目录保存文件
         'subName'  => array('date', 'Y-m-d'), //子目录创建方式，[0]-函数名，[1]-参数，多个参数使用数组
-        'rootPath' => './Uploads/Picture/', //保存根路径
+        'rootPath' => './Uploads/Atlas/', //保存根路径
         'savePath' => '', //保存路径
         'saveName' => array('uniqid', ''), //上传文件命名规则，[0]-函数名，[1]-参数，多个参数使用数组
         'saveExt'  => '', //文件保存后缀，空则使用原后缀
@@ -33,7 +36,6 @@ return array(
     
     /* 主题设置 */
     'DEFAULT_THEME' => 'default', // 默认模板主题名称
-
 
     /* 模板相关配置 */
     'TMPL_PARSE_STRING' => array(
