@@ -17,7 +17,7 @@ use Think\Model;
  */
 class AtlasModel extends Model{
     protected $_validate = array(
-    	array('uid', 'require', '缺少发布者', self::MUST_VALIDATE ),
+    	array('uid', 'require', '缺少发布者', self::EXISTS_VALIDATE ),
     	array('image_id', 'require', '缺少图片', self::MUST_VALIDATE ),
         array('content', '1,200', '内容长度1-200字', self::EXISTS_VALIDATE, 'length'),
     );

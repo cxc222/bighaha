@@ -24,8 +24,8 @@ class IndexController extends FrontBaseController {
 	
 	public function _initialize(){
 		$this->atlasModel = D('Atlas');
-		
 		$this->atlasApi = new AtlasApi();
+		parent::_initialize();
 	}
 	
 	public function index($page = 1) {
@@ -38,6 +38,7 @@ class IndexController extends FrontBaseController {
 		$atlas_list = $this->getAtlasByIds($list_ids);
 		$this->assign('atlas_list', $atlas_list);
 		$this->assign('totalCount', $totalCount);
+		$this->assign('current','new');
 		$this->display ();
 	}
 	
@@ -67,8 +68,8 @@ class IndexController extends FrontBaseController {
 	 */
 	function publish(){
 	    $this->checkAuth('Atlas/Index/publish', -1, '您无图文发布权限。');
-        $this->setTitle('发表图文 ' . '——图集');
-        $this->setKeywords('发布' . ',图集');
+        $this->setTitle('投稿尿点 ' . '——图集');
+        $this->setKeywords('投稿' . ',图集');
 	    $this->display();
 	}
 	
@@ -81,18 +82,32 @@ class IndexController extends FrontBaseController {
 	 */
 	public function doPost($id = 0, $image_id = 0, $content = ''){
 	    if (!is_login()) {
-	        $this->error('请登陆后再投稿。');
+	        $this->error('请登陆后再投稿。',U('Atlas\Index\publish'));
 	    }
 	    if (!$image_id) {
-	        $this->error('请上传糗图。');
+	        $this->error('请上传糗图。',U('Atlas\Index\publish'));
 	    }
 	    if (trim(op_t($content)) == '') {
-	        $this->error('请输入内容。');
+	        $this->error('请输入内容。',U('Atlas\Index\publish'));
 	    }
 	    $item = D('Atlas')->create();
 	    if ($id) {
 	        //编辑
-	        
+	    	$content_temp = D('Atlas')->find($id);
+	    	!$content_temp && $this->error('内容已经不存在。',U('Atlas\Index'));
+	    	$this->checkAuth('Atlas/Index/publish', $content_temp['uid'], '您无该活动编辑权限。');
+	    	$item['uid'] = $content_temp['uid']; //权限矫正，防止被改为管理员
+	    	$rs = D('Atlas')->save($item);
+	    	if (D('Common/Module')->isInstalled('Weibo')) { //安装了微博模块
+	    		$postUrl = "http://$_SERVER[HTTP_HOST]" . U('Atlas/Index/detail', array('id' => $id));
+	    		$weiboModel = D('Weibo/Weibo');
+	    		$weiboModel->addWeibo("我修改了尿点图【" . $title . "】：" . $postUrl);
+	    	}
+	    	if ($rs) {
+	    		$this->success('编辑成功。', U('detail', array('id' => $item['id'])));
+	    	} else {
+	    		$this->success('编辑失败。', '');
+	    	}
 	   } else {
 	       $this->checkActionLimit('add_atlas', 'atlas', 0, is_login(), true);
 	       $this->checkAuth('Atlas/Index/publish', -1, '您无图文发布权限。');
@@ -106,10 +121,10 @@ class IndexController extends FrontBaseController {
 	           //同步到微博
 	           $postUrl = "http://$_SERVER[HTTP_HOST]" . U('Atlas/Index/detail', array('id' => $rs));
 	           $weiboModel = D('Weibo/Weibo');
-	           $weiboModel->addWeibo("我发布了一个新的糗图【" . $content . "】：" . $postUrl);
+	           $weiboModel->addWeibo("我发布了一个新的尿点图【" . $content . "】：" . $postUrl);
 	       }
 	       if ($rs) {
-	           $this->success('发布成功。' . $tip, U('index'));
+	           $this->success('发布成功。' . $tip, U('Atlas/Index/detail',array('id'=>$rs)));
 	       } else {
 	           $this->success('发布失败。', '');
 	       }

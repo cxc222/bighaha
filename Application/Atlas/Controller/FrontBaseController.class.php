@@ -29,6 +29,18 @@ class FrontBaseController extends Controller{
 		if (!C('WEB_SITE_CLOSE')) {
 			$this->error('站点已经关闭，请稍后访问~');
 		}
+		$sub_menu =
+		array(
+				'left' =>
+				array(
+						array('tab' => 'new', 'title' => '最新', 'href' => U('Atlas/Index/index')),
+				),
+				'right' =>
+				array(
+						array('tab'=>'create','title' => '<i class="icon-edit"></i> 投稿', 'href' =>is_login()?U('Atlas/Index/publish'):"javascript:toast.error('登录后才能操作')")
+				)
+		);
+		$this->assign('sub_menu', $sub_menu);
 		$this->setTitle('图集');
 	}
 	
