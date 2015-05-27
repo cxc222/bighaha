@@ -47,3 +47,11 @@ function getAtlasThumbImageById($cover_id, $width = 100, $height = 'auto', $type
 	}
 
 }
+
+/**
+ * 生成
+ * 
+ */
+function getSaveName($type){
+	
+}

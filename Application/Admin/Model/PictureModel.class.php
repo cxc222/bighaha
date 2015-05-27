@@ -60,7 +60,10 @@ class PictureModel extends Model{
                 if(strtolower($driver)=='sae'){
                     $value['path'] = $config['rootPath'].'Picture/'.$value['savepath'].$value['savename']; //在模板里的url路径
                 }else{
-                    if(strtolower($driver) != 'local'){
+                	if(strtolower($driver) == 'qiniu'){
+                		$value['path'] = (substr($setting['rootPath'], 1).$value['savepath'].$value['savename']);
+                	}
+                    elseif(strtolower($driver) != 'local'){
                         $value['path'] =$value['url'];
                     }
                     else{
