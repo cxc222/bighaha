@@ -30,8 +30,7 @@ class IndexController extends Controller
             $menu_list = array(
                 'left' =>
                     array(
-                        array('tab' => 'home', 'title' => '首页', 'href' => U('shop/index/index')),
-                        array('tab' => 'all', 'title' => '所有商品', 'href' => U('shop/index/goods')),
+                        array('tab' => 'all', 'title' => '全部', 'href' => U('shop/index/goods')),
                     ),
                 'right' =>
                     array(
@@ -43,8 +42,7 @@ class IndexController extends Controller
             $menu_list = array(
                 'left' =>
                     array(
-                        array('tab' => 'home', 'title' => '首页', 'href' => U('shop/index/index')),
-                        array('tab' => 'all', 'title' => '所有商品', 'href' => U('shop/index/goods')),
+                        array('tab' => 'all', 'title' => '全部', 'href' => U('shop/index/goods')),
                     ),
                 'right' =>
                     array(

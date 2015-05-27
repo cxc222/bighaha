@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>{:L('weibo')} | {:modC('WEB_SITE_NAME','OpenSNS')}</title>
+    <include file="head/head"/>
+    <script src="__JS__/weibo.js"></script>
+</head>
+
+
+<body class="weibo-body">
+
+<header data-am-widget="header" class="am-header am-header-default am-header-fixed am-cf">
+    <div class="am-header-left am-header-nav">
+        <a href="{:U('weibo/index')}" class="am-fl">
+            <i class="am-header-icon am-icon-home"></i>
+        </a>
+    </div>
+    <h1 class="am-header-title">
+        微博
+    </h1>
+
+    <div class="am-header-right am-header-nav">
+        <a href="{:U('weibo/addweibo')}" class="am-fl">
+            <i class="am-header-icon am-icon-pencil"></i>
+        </a>
+        <a href="#nav-link" class="">
+            <i class="am-menu-toggle-icon am-icon-bars"></i>
+        </a>
+    </div>
+
+</header>
+{:W('Mob/UserMenu/index')}
+
+
+<div class="weibo-container ">
+
+    <ul class="weibo-list list ulclass" id="article_list_ul">
+
+        <notempty name="weibo">
+            <volist name="weibo" id="vl">
+                <include file="_weibolist"/>
+            </volist>
+            <else/>
+            <div class="am-text-center" style="background-color:#FFFFFF;margin-top: -15px"><img src="__IMG__/tip.png"
+                                                                                                style="width: 100%;height: 100%">
+            </div>
+        </notempty>
+
+    </ul>
+    <if condition="$pid.is_myfocus eq 0">
+        <div class="am-list-news-ft look-more">
+            <a id="getmore" data-url="{:U('Mob/Weibo/addMoreWeibo')}"
+               >查看更多 &raquo;</a>
+        </div>
+    </if>
+    <if condition="$pid.is_myfocus eq 1">
+        <div class="am-list-news-ft look-more">
+            <a  id="getmorefocus" data-url="{:U('Mob/Weibo/addMoreMyFocus')}"
+               >查看更多 &raquo;</a>
+        </div>
+    </if>
+</div>
+
+<div data-am-widget="navbar" class="am-navbar am-navbar-default am-cf " id="">
+    <if condition="$pid.is_myfocus eq 1">
+        <ul class="am-navbar-nav am-cf am-avg-sm-4" style="padding: 0px;">
+            <li style="background: #32b1f1">
+                <a style="color: white" href="{:U('Mob/Weibo/index')}">
+                    全站动态
+                </a>
+            </li>
+            <li style="background:#0f9ae0">
+                <a style="color: white" href="{:U('Mob/Weibo/myFocus')}">
+                    我的关注
+                </a>
+            </li>
+        </ul>
+    </if>
+    <if condition="$pid.is_myfocus eq 0">
+        <ul class="am-navbar-nav am-cf am-avg-sm-4" style="padding: 0px;">
+            <li style="background: #0f9ae0">
+                <a style="color: white" href="{:U('Mob/Weibo/index')}">
+                    全站动态
+                </a>
+            </li>
+            <li style="background: #32b1f1;">
+                <a style="color: white" href="{:U('Mob/Weibo/myFocus')}">
+                    我的关注
+                </a>
+            </li>
+        </ul>
+    </if>
+</div>
+</body>
+</html>

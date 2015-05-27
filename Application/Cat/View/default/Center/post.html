@@ -1,0 +1,93 @@
+<extend name="Base/common"/>
+
+<block name="body">
+
+    <include file="Public/_cat_header"/>
+    <include file="Public/_navbar"/>
+    <div class="container">
+
+        <div class="col-xs-12 common_block_border">
+
+            <div class="col-xs-2 " style="height: 700px;border-right: 1px solid #ddd">
+
+                <include file="Center/_left"/>
+
+
+            </div>
+
+
+            <div class="col-xs-10" style="padding-top: 15px">
+                <ul class="nav nav-pills ">
+                    <li>
+                        <a href="{:U('cat/Center/rec')}">收到的信息</a>
+                    </li>
+                    <li><a href="{:U('cat/Center/send')}">发送的信息</a></li>
+                    <li class="splitter"></li>
+                    <li class="active"><a href="{:U('cat/Center/post')}">发送信息</a></li>
+                </ul>
+
+                <div class="clearfix"></div>
+                <div class="underline_x"></div>
+                <div class=" mb10">
+                    <form id="frm_main" action="{:U('cat/Center/doSendInfo')}" method="post">
+                        <div class="mg30">
+                            <h2>选择接收者</h2>
+
+                            <div>
+                                <div><textarea id="receiver" name="receiver" class="form-control"
+                                               placeholder="输入对方昵称，用空格分隔，使用@提示"></textarea></div>
+                                <script>
+                                    $(function () {
+                                        atwho_config = {
+                                            at: "@",
+                                            data: U('Core/Public/atWhoJson'),
+                                            tpl: "<li data-value='@${nickname}'><img class='avatar-img' style='width:2em;margin-right: 0.6em' src='${avatar32}'/>${nickname}</li>",
+                                            show_the_at: true,
+                                            search_key: 'search_key',
+                                            start_with_space: false
+                                        };
+                                        $('#receiver').atwho(atwho_config);
+                                    });
+                                </script>
+                            </div>
+                            <div class="clearfix mb10"></div>
+                            <h2>选择信息</h2>
+
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <ul class="nav nav-pills nav-stacked">
+                                        <volist name="entitys" id="vo">
+                                            <li
+                                            <if condition="$i eq 1">class="active"</if>
+                                            ><a onclick="get_Infos(this,{$vo.id})">{$vo.alias}</a></li>
+                                        </volist>
+                                    </ul>
+                                </div>
+                                <div class="col-xs-9">
+                                    <ul id="c_ul_s_infos" class="list-group">
+                                        <volist name="first_infos" id="vo">
+                                            <a class="list-group-item"
+                                               onclick="set_selected(this,{$vo.id})">{$vo.title} </a>
+                                        </volist>
+                                    </ul>
+                                </div>
+                                <div class="clearfix mb10"></div>
+                            </div>
+                            <input id="hd_info_id" name="info_id" type="hidden" value="0">
+
+                            <h2>输入附言</h2>
+
+                            <div class="mb10">
+                                <textarea class="form-control" name="content" placeholder="顺便说几句吧"></textarea>
+                            </div>
+                            <div style="padding: 10px"></div>
+                            <div class=""><a onclick="post_info()" class="btn-primary btn">发送</a></div>
+                        </div>
+
+                    </form>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+</block>

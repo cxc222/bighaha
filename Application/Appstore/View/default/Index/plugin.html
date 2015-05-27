@@ -1,0 +1,136 @@
+<extend name="Base/common"/>
+<block name="header">
+    <include file="Public/nav"/>
+</block>
+<block name="body">
+    <!--推荐模板部分-->
+    <div class="container common-block templet">
+        <section>
+            <header>
+                <h1>插件</h1>
+            </header>
+
+            <div class="row">
+
+                <div class="col-xs-12">
+                    <ul class="nav nav-secondary">
+                        <volist name="types" id="vo">
+                            <li id="type_{$vo.id}"><a href="{:U('plugin?tid='.$vo['id'])}">{$vo.title} （{$vo.count}）</a>
+                            </li>
+                        </volist>
+
+                    </ul>
+                </div>
+                <script>
+                    $("#type_{$current_type}").addClass('active');
+                </script>
+            </div>
+            <div style="padding:10px">
+
+            </div>
+            <div class="up_search row">
+                <div class="col-xs-9">
+                    <a href="{:U('Admin/addplugin')}" class="btn btn-primary">发布插件</a>
+
+                </div>
+                <div class="col-xs-3 text-right">
+                    <form action="__SELF__" method="post">
+                        <div class="search_input">
+                            <div class="input-group">
+
+                                <input name="keywords" type="text" class="form-control" placeholder="输入插件名称"
+                                       value="{$keywords}">
+      <span class="input-group-btn">
+        <button class="btn btn-default" type="submit">搜索</button>
+      </span>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!--搜素框-->
+                <!--搜素框-->
+            </div>
+
+            <div class="clearfix"></div>
+
+            <!-- 插件列表部分-->
+
+                <empty name="plugins.data">
+                    <div class="with-padding">
+                        <div style="width: 50%;margin: auto">
+                            <div class="alert  with-icon">
+                                <i class="icon-inbox"></i>
+
+                                <div class="content">
+
+                                    <p style="font-size: 16px">暂时没有插件。赶紧 <a class="text-success" href="{:U('Admin/addplugin')}">发布</a> 一款，成为第一个商品。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <else/>
+                    <table width="100%" class="margin-top-15 table">
+                        <colgroup>
+                            <col width="105">
+                            <col width="420">
+                            <col width="100">
+                            <col width="100">
+                            <col width="150">
+                        </colgroup>
+                        <thead>
+                        <tr class="first_tr">
+                            <th>共{$plugins.count}条</th>
+                            <th>插件说明</th>
+                            <th>价格</th>
+                            <th>下载次数</th>
+                            <th>最后更新</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                    <volist name="plugins.data" id="vo">
+
+                        <tr>
+                            <td><a href="{:U('pluginDetail',array('id'=>$vo['id']))}"
+                                   class="app_icon"><b></b>
+                                {$vo.cover|display_cover}
+
+                            </a></td>
+                            <td>
+                                <h3 class="margin-top-0"><a href="{:U('pluginDetail',array('id'=>$vo['id']))}">{$vo.title}</a></h3>
+
+                                <p class="disrip">{$vo.summary|text|mb_substr=0,20,'utf-8'}</p>
+
+                                <p class="data">版本：{$vo.latest_version|display_version=true} 作者：
+                                    <empty name="vo.author">
+                                        <a
+                                                href="{$vo.user.space_url}">{$vo.user.nickname}</a><else/>
+                                        {$vo.author}
+                                    </empty>
+                                </p>
+                            </td>
+                            <td>
+                                {$vo.versions.0.fee|display_fee}
+                            </td>
+                            <td><span class="count">{$vo.total_download_count|display_download_times}</span></td>
+                            <td>{$vo.update_time|date='Y-m-d H:i:s',###}</td>
+                            <td><a href="{:U('pluginDetail',array('id'=>$vo['id']))}" class="btn btn-primary">查看详情</a>
+                            </td>
+                        </tr>
+
+                    </volist>
+
+                        </tbody>
+                    </table>
+                </empty>
+
+            <!-- 插件列表部分-->
+
+            <div class="pull-right"> {$plugins.html}</div>
+        </section>
+
+    </div>
+
+</block>

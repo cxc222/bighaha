@@ -2,7 +2,7 @@
 
 <eq name="type" value="personal">
     <div class="form-group">
-        <label for="expand_{$field_id}" class="col-sm-2 control-label" style="text-align: right;">
+        <label for="expand_{$field_id}" class="col-xs-2 control-label" style="text-align: right;">
             <eq name="required" value="1"><span style="color: #FF0047;vertical-align: middle;">*&nbsp;&nbsp;</span></eq>{$field_name}
         </label>
         <php>
@@ -12,8 +12,8 @@
             $field_data = date("Y-m-d");
             }
         </php>
-        <div class="col-sm-6">
-            <input class="time form-control input-group date form_datetime col-md-5" id="expand_{$field_id}" name="expand_{$field_id}" size="16" style="position: relative;display: block;" type="text" value="{$field_data}"  placeholder="请选择时间" readonly>
+        <div class="col-xs-6">
+            <input class="time form-control input-group date form_datetime col-xs-5" id="expand_{$field_id}" name="expand_{$field_id}" size="16" style="position: relative;display: block;" type="text" value="{$field_data}"  placeholder="请选择时间" readonly>
             <neq name="input_tips" value=""> <span class="help-block">{$input_tips}</span></neq>
         </div>
     </div>

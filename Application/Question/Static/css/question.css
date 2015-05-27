@@ -1,0 +1,180 @@
+.boxShadowBorder {
+  background: #fff;
+  padding-top: 20px;
+}
+.aline {
+  border-bottom: 1px solid white;
+  border-top: 1px solid #ccc;
+}
+.common_block_border {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+.common_block_title {
+  margin-top: 0;
+}
+.question_list .one_question {
+  position: relative;
+  padding: 0;
+  outline: 0;
+  margin: 6px 0 0;
+  border-bottom: 1px solid #eee;
+  margin-bottom: 10px;
+}
+.question_list .one_question a {
+  color: #259;
+  text-decoration: none;
+}
+.question_list .one_question .q_title {
+  margin: 0 30px 3px 0;
+  padding-left: 0;
+}
+.question_list .one_question .q_title .q_icon {
+  float: left;
+}
+.question_list .one_question .q_title .title {
+  width: 80%;
+  line-height: 32px;
+  margin-left: 8px;
+}
+.question_list .one_question .q_black_info {
+  position: relative;
+  margin-bottom: 5px;
+  color: #999;
+}
+.question_list .one_question .q_detail {
+  border-left: 3px solid #DDD;
+  padding: 5px 10px;
+  margin: 5px 0;
+}
+.question_list .one_question .q_detail ins {
+  text-decoration: none;
+  padding: 3px 0;
+  background: #EAF0DD;
+  color: #5B7918;
+  line-height: 25px;
+}
+.question_list .one_question .best_answer .a_title {
+  margin: 23px 0 13px;
+}
+.question_list .one_question .best_answer .a_content {
+  line-height: 24px;
+  background: #F9F9F9;
+  padding: 2px 10px;
+  margin-bottom: 10px;
+}
+.question_list .one_question .best_answer .a_content ins {
+  text-decoration: initial;
+  color: #7E7E7E;
+}
+.question_detail .question {
+  position: relative;
+  padding: 0;
+  outline: 0;
+  margin: 6px 0 0;
+  border-bottom: 1px solid #eee;
+  margin-bottom: 10px;
+}
+.question_detail .question a {
+  color: #259;
+  text-decoration: none;
+}
+.question_detail .question .q_title {
+  margin: 0 30px 3px 0;
+  padding-left: 0;
+}
+.question_detail .question .q_black_info {
+  position: relative;
+  margin-bottom: 5px;
+  color: #999;
+}
+.question_detail .question .q_detail {
+  border-left: 3px solid #DDD;
+  padding: 5px 10px;
+  margin: 5px 0;
+}
+.question_detail .question .q_detail ins {
+  text-decoration: none;
+  padding: 3px 0;
+  background: #EAF0DD;
+  color: #5B7918;
+  line-height: 25px;
+}
+.question_detail .question .best_answer .a_title {
+  margin: 23px 0 13px;
+}
+.question_detail .question .best_answer .a_content {
+  line-height: 24px;
+  background: #F9F9F9;
+  padding: 2px 10px;
+  margin-bottom: 10px;
+}
+.question_detail .question .best_answer .a_content ins {
+  text-decoration: initial;
+  color: #7E7E7E;
+}
+.question_detail .answer .one_answer {
+  position: relative;
+  margin: 6px 0 0 0;
+  border-bottom: 1px solid #eee;
+  margin-bottom: 10px;
+  padding: 5px 74px;
+}
+.question_detail .answer .one_answer .support_block {
+  float: left;
+  margin-left: -66px;
+}
+.question_detail .answer .one_answer .support_block .butt {
+  display: block;
+  color: #A8C9F4;
+  line-height: 17px;
+  width: 45px;
+  border-radius: 3px;
+  border: 0;
+  cursor: pointer;
+  background: #eff6fa;
+  font-weight: 500;
+  position: relative;
+  text-align: center;
+  margin-bottom: 5px;
+  padding: 5px 0;
+}
+.question_detail .answer .one_answer .support_block .butt.can_do:hover,
+.question_detail .answer .one_answer .support_block .butt.already_do {
+  background: #A8C9F4;
+  color: #fff;
+}
+.question_detail .answer .one_answer .support_block .butt .icon {
+  font-size: 17px;
+}
+.question_detail .answer .one_answer .a_info .answer_user {
+  font-size: 20px;
+}
+.question_detail .answer .one_answer .a_info .a_content {
+  padding: 10px 0;
+}
+.question_detail .answer .one_answer .a_info .q_black_info {
+  position: relative;
+  margin-bottom: 5px;
+  color: #999;
+}
+.question_detail .answer .one_answer .a_info .q_black_info a {
+  color: #999;
+}
+.questions .common_block_border {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+.questions .tags a {
+  margin-right: 10px;
+  display: inline-block;
+  margin-bottom: 5px;
+  border: none;
+  background: #efefef;
+  border-radius: 4px;
+  padding: 2px 10px;
+}
+.questions .tags a.active {
+  background: #666;
+  color: #fff !important;
+}

@@ -1,0 +1,28 @@
+<if condition="$info_id neq 0">
+    <input name="{$field.name}" type="text" class="text time_d form-control" id="{$field.name}"
+           value="{$field_value|date='Y-m-d',###}"
+    <if condition="$field.args neq ''"> event-node="input_date" event-args="{$field.args}"</if>
+    readonly="readonly">
+
+    <else/>
+    <input name="{$field.name}" type="text" class="text time_d form-control" id="{$field.name}"
+           value="{$field.default_value}"
+    <if condition="$field.args neq ''"> event-node="input_date" event-args="{$field.args}"</if>
+    readonly="readonly">
+</if>
+<script>
+    $(function () {
+        $('.time_d').datetimepicker({
+            language: 'zh-CN',
+            weekStart: 1,
+            todayBtn: 1,
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 2,
+            minView: 2,
+            forceParse: 0,
+            format: 'yyyy-mm-dd'
+        });
+    })
+
+</script>

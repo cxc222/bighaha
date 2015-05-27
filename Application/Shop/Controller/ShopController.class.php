@@ -321,9 +321,11 @@ class ShopController extends AdminController
         foreach($score_types as $val){
             $score_type_options[$val['id']]=$val['title'];
         }
-        $builder->title('邀请注册信息配置')
+        $builder->title('商城配置')
             ->keySelect('SHOP_SCORE_TYPE', '商城兑换使用的积分类型', '',$score_type_options)
             ->keyInteger('SHOP_HOT_SELL_NUM','商城热销阀值','销量超过该值时，商品为热销商品')
+            ->group('基础配置','SHOP_SCORE_TYPE,SHOP_HOT_SELL_NUM')
+            ->groupLocalComment('本地评论配置','goodsDetail')
             ->data($data)
             ->buttonSubmit()
             ->buttonBack()

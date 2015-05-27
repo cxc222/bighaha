@@ -847,6 +847,49 @@ class RoleController extends AdminController
     }
 
     /**
+     * 用户可拥有标签配置
+     * @author 郑钟良<zzl@ourstu.com>
+     */
+    public function configUserTag()
+    {
+        $aRoleId = I('id', 0, 'intval');
+        if (!$aRoleId) {
+            $this->error('请选择角色！');
+        }
+
+        $map = getRoleConfigMap('user_tag', $aRoleId);
+        if(IS_POST){
+            $data['value'] = '';
+            if (isset($_POST['tags'])) {
+                sort($_POST['tags']);
+                $data['value'] = implode(',', array_unique($_POST['tags']));
+            }
+            if ($this->roleConfigModel->where($map)->find()) {
+                $result = $this->roleConfigModel->saveData($map, $data);
+            } else {
+                $data = array_merge($map, $data);
+                $result = $this->roleConfigModel->addData($data);
+            }
+            if ($result === false) {
+                $this->error('操作失败' . $this->roleConfigModel->getError());
+            } else {
+                clear_role_cache($aRoleId);
+                $this->success('操作成功!');
+            }
+        }else{
+            $mRole_list = $this->roleModel->field('id,title')->select();
+            $fields = $this->roleConfigModel->where($map)->getField('value');
+            $tag_list=D('Ucenter/UserTag')->getTreeList();
+            $this->assign('tag_list',$tag_list);
+            $this->assign('role_list', $mRole_list);
+            $this->assign('this_role', array('id' => $aRoleId, 'fields' => $fields));
+            $this->assign('tab', 'userTag');
+            $this->display('usertag');
+        }
+
+    }
+
+    /**
      * 角色扩展资料配置 及 注册时要填写的资料配置
      * @author 郑钟良<zzl@ourstu.com>
      */

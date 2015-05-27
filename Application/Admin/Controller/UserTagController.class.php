@@ -36,6 +36,7 @@ class UserTagController extends AdminController
         $tree = $this->userTagModel->getTree(0, 'id,title,sort,pid,status');
 
         $builder->title('用户标签管理')
+            ->suggest('新增标签后要到“角色列表》默认信息配置》可拥有标签配置”中操作后才会在前台显示吆')
             ->buttonNew(U('UserTag/add'))->button('回收站',array('href'=>U('UserTag/TagTrash')))
             ->data($tree)
             ->display();

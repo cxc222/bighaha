@@ -106,14 +106,27 @@ class InviteModel extends Model
      * @return array|null
      * @author 郑钟良<zzl@ourstu.com>
      */
-    public function getList($map = array(), $page = 1,$r = 20, $order = 'id desc')
+    public function getList($map = array(), $page = 1, $r = 20, $order = 'id desc')
     {
         $totalCount = $this->where($map)->count();
         if ($totalCount) {
             $dataList = $this->where($map)->page($page, $r)->order($order)->select();
-            return array($this->_initSelectData($dataList),$totalCount);
+            return array($this->_initSelectData($dataList), $totalCount);
         }
-        return array(null,0);
+        return array(null, 0);
+    }
+
+    /**
+     * 获取邀请码列表
+     * @param array $map
+     * @param string $order
+     * @return array|null
+     * @author 郑钟良<zzl@ourstu.com>
+     */
+    public function getListAll($map = array(), $order = 'id desc')
+    {
+        $dataList = $this->where($map)->order($order)->select();
+        return $this->_initSelectData($dataList);
     }
 
     /**

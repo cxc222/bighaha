@@ -1,0 +1,257 @@
+<extend name="Center/base"/>
+<block name="main_content">
+<link href="__CSS__/center.css" type="text/css" rel="stylesheet">
+<div class="common_block_border" style="min-height: 600px">
+    <h2 class="common_block_title">已买到的</h2>
+
+    <div>
+        <if condition="$orders['count'] eq 0">
+            <div class=" pd10 text-center" style="font-size: 16px;">暂无任何消费记录。</div>
+        </if>
+        <div style="padding: 0 15px 0 15px">
+            <table class="sold_table">
+                <volist name="orders.data" id="vo">
+                    <tr class="title_info">
+                        <td colspan="2">编号：{$vo.id}
+                            <switch name="vo['condition']">
+                                <case value="0" break="1">
+                                    <a onclick="close_order({$vo.id})">【取消】</a>
+                                </case>
+                                <case value="2" break="1">
+
+                                </case>
+                            </switch>
+                            <script>
+                                function close_order(id) {
+                                    var ok = confirm('确定取消该订单？');
+                                    var url = "{:U('center/closeOrder')}";
+                                    if (ok) {
+                                        $.post(url, {id: id}, function (msg) {
+                                            if (msg.status) {
+                                                toast.success('取消成功。', '温馨提示');
+                                                setTimeout("location.reload()", 1500);
+                                            } else {
+                                                toast.error(msg.info, '温馨提示');
+                                            }
+                                        });
+                                    }
+                                }
+                            </script>
+                        </td>
+                        <td colspan="2">下单日期：{$vo.create_time|friendlyDate}</td>
+                        <td colspan="2">卖家：{$vo.s_user.nickname}</td>
+                    </tr>
+                    <tr class="detail_info">
+                        <td><img
+                                src="{$vo.goods.0.item.h_pic|getThumbImageById=32,32}"
+                                style="width: 32px;height: 32px">
+                            <a target="_blank"
+                               href="{:U('store/Center/order',array('id'=>$vo['id']))}">{$vo.goods.0.item.h_name}</a>
+                        </td>
+                        <td>商品数量：{$vo.total_count} 件</td>
+                        <td>总价：{$vo.total_cny|number_format=2} 元&nbsp;&nbsp;&nbsp;
+                        </td>
+
+                        <td>调价：{$vo.adj_cny}元</td>
+                        <td>最终价格：
+                            {$vo|getFinalPrice|number_format=2}
+                            元 <br/>
+                        </td>
+                        <td>
+                            <switch name="vo['condition']">
+                                <case value="-1" break="1">
+                                    <b class="c_m_o_con cgrey">已取消</b>
+                                </case>
+                                <case value="0" break="1">
+                                    <a href="{:U('payorder',array('id'=>$vo['id']))}"  class="btn btn-primary">付款</a>
+                                </case>
+                                <case value="1" break="1">
+                                    <b class="c_m_o_con cgreen">等待卖家发货</b>
+                                </case>
+                                <case value="2" break="1">
+                                    <b class=" c_m_o_con cdeepskyblue" style="color: #00bfff">等待确认收货</b>
+                                </case>
+                                <case value="3" break="1">
+                                    <b class="c_m_o_con cgreen">交易完成</b>
+                                </case>
+                                <case value="5">
+                                    <b class="c_m_o_con cgrey">超时取消</b>
+                                </case>
+                            </switch>
+
+                        </td>
+
+                    </tr>
+
+                    <if condition="($vo['condition'] eq 3)">
+                        <php>
+                            $lasts=modC('COMMENT_TIME',604800,'store');
+                            $has_comment_out=(time()-$vo['response_time'])<$lasts;
+                            if($has_comment_out || ($vo['response_time'] == 0))
+                            {
+                        </php>
+                        <tr class="c_ddbox order_response">
+                            <form action="{:U('store/Center/doresponse')}" method="post">
+                                <input type="hidden" name="order_id" value="{$vo.id}">
+                                <td colspan="2">
+                                    亲，请根据具体情况评分哦！
+                                </td>
+                                <td>
+                                    <input id="r_good{$vo.order_id}" name="response" value="good" type="radio"
+                                    <equal name="vo['response'] " value="1">
+                                        checked
+                                    </equal>
+                                    ><label
+                                        for="r_good{$vo.order_id}" class="mr5">好评</label>&nbsp;&nbsp;&nbsp;
+
+
+
+                                    <input id="r_normal{$vo.order_id}" name="response" value="normal" type="radio"
+                                    <equal name="vo['response'] " value="0">checked</equal>
+                                    ><label
+                                        for="r_normal{$vo.order_id}" class="mr5">中评</label>&nbsp;&nbsp;&nbsp;
+
+
+
+                                    <input id="r_bad{$vo.order_id}" name="response" value="bad" type="radio"
+                                    <equal name="vo['response'] " value="-1">checked</equal>
+                                    ><label for="r_bad{$vo.order_id}"
+                                            class="mr5">差评</label>
+
+
+                                </td>
+                                <td class="mb10">评语：</td>
+                                <td>
+                                    <textarea name="content" class="form-control" style="width: 215px">东西不错。</textarea>
+                                </td>
+                                <td style="text-align: right">
+                                    <input class="btn btn-primary"
+                                           type="submit" value="确认评价"/>
+                                </td>
+                            </form>
+                        </tr>
+                        <php>}</php>
+                    </if>
+
+
+                    <if condition="$vo['condition'] eq 2">
+                        <tr class="c_ddbox boxShadow order_send_info">
+
+                            <td>
+                                快递名称：
+                            </td>
+                            <td>
+                                <input name="trans_name" readonly value="{$vo.trans_name}" class="pd5"
+                                       type="text">
+                            </td>
+                            <td>发货时间：
+                                <b class="corange">{$vo.trans_time|friendlyDate}</b>
+                            </td>
+
+                            <td>
+                                快递单号：
+                            </td>
+                            <td>
+                                <input name="trans_code" readonly value="{$vo.trans_code}" class="pd5"
+                                       type="text" style="width: 200px">
+                            </td>
+                            <td><a class="btn btn-primary" onclick="postMkSure({$vo.id})" >确认收货</a></td>
+
+                        </tr>
+                    </if>
+
+                    <tr class="splitter_info">
+                        <td>&nbsp;</td>
+                    </tr>
+                </volist>
+            </table>
+        </div>
+
+    </div>
+</div>
+
+<div id="frm-post-popup" class="white-popup mfp-hide" style="max-width: 745px">
+    <h2>投稿</h2>
+
+    <div class="aline" style="margin-bottom: 10px"></div>
+
+
+</div>
+
+
+<div class="clearfix"></div>
+<div class="page">
+    {$orders.html}
+</div>
+<style>
+    .tb_detail {
+        font-size: 14px;
+        line-height: 28px;
+        margin-bottom: 10px;
+        width: 680px;
+
+    }
+
+    .tb_detail td {
+        padding: 10px;
+        border: solid 1px #ffca00;
+        text-align: center;
+    }
+
+    .tb_detail th {
+        padding: 5px 10px;
+        background: #ffca00;
+        border: solid 1px #ffca00;
+        color: white;
+    }
+
+    .c_pop_menu {
+        font-size: 14px;
+        line-height: 28px
+    }
+</style>
+<script>
+    function copyurl(str) {
+        if (!+[1, ]) {
+            window.clipboardData.setData('text', str);
+            toast.success('已将此链接地址复制到剪贴板。');
+        } else {
+
+            toast.error('非IE浏览器请用Ctrl+C复制。');
+        }
+    }
+
+    function postMkSure(order_id) {
+        //mag.show('<div style="padding: 20px;font-size: 16px;">正在确认中，请稍等。。。。。。</div>', '系统提示');
+        $.post(U('store/Center/buyer_mksure_order'), {order_id:order_id}, function (msg) {
+            if (msg.status) {
+                toast.success(msg.info);
+                setTimeout("location.reload()", 1000);
+            }
+            else {
+                toast.error(msg.info);
+            }
+        }, 'json')
+
+    }
+    $(function () {
+        setInterval(function () {
+            $('.counter').each(function () {
+                var time = parseInt($(this).text());
+                if (time <= 0) {
+                    return;
+                }
+                time--;
+                if (time <= 0) {
+                    $(this).parent().parent().text('此订单已经过期。');
+                    return;
+                }
+                $(this).text(time);
+            })
+        }, 1000);
+
+    });
+</script>
+<script src="__JS__/module.js"></script>
+<script src="__JS__/store.js"></script>
+</block>

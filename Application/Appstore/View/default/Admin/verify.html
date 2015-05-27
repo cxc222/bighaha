@@ -1,0 +1,116 @@
+<extend name="Base/common"/>
+<block name="header">
+    <include file="Public/nav"/>
+</block>
+<block name="body">
+    <!--模板详情-->
+    <div class="container templet">
+        <ol class="breadcrumb">
+            <li><a href="{:U('index/index')}">首页</a></li>
+            <li><a href="{:U('my')}">开发者中心</a></li>
+            <li class="active">控制面板</li>
+        </ol>
+        <include file="Admin/_info"/>
+        <div class="col-md-2">
+
+            <include file="_side"/>
+        </div>
+
+
+        <div class="col-md-10">
+            <div class="col-md-12">
+                <div id="tip"></div>
+                <div class="panel panel-default">
+                    <!-- Default panel contents -->
+
+                    <div class="panel-heading">开发者资料</div>
+                    <form id="form" action="__SELF__" method="post">
+                        <table class="table">
+                            <tbody>
+                            <tr>
+                                <td>真实姓名</td>
+                                <td><input class="form-control" name="name" placeholder="请输入真实姓名" type="text"
+                                           value="{$dev.name}"></td>
+                            </tr>
+                            <tr>
+                                <td>qq</td>
+                                <td><input class="form-control" name="qq" placeholder="请输入QQ号" type="text"
+                                           value="{$dev.qq}"></td>
+                            </tr>
+                            <tr>
+                                <td>电话</td>
+                                <td><input class="form-control" name="phone" placeholder="请输入联系电话" type="text"
+                                           value="{$dev.phone}"></td>
+                            </tr>
+
+                            <tr>
+                                <td>擅长</td>
+                                <td><input class="form-control" name="goodat" placeholder="请输入擅长技能" type="text"
+                                           value="{$dev.goodat}"></td>
+                            </tr>
+                            <tr>
+                                <td>自我介绍</td>
+                                <td><textarea class="form-control" name="des"
+                                              placeholder="请输入自我介绍">{$dev.des}</textarea></td>
+                            </tr>
+
+                            <tr>
+                                <td>认证说明</td>
+                                <td>
+                                    <div class="alert  alert-info" style="margin-bottom: 0">
+                                        <i class="icon-info-sign"></i>
+                                        <div class="content"> 信息在备审核后将无法再更改，请谨慎填写。<br/><strong>金牌开发者</strong>将被授予<strong>OpenSNS官方授权</strong>。</div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>&nbsp;</td>
+                                <td>
+                                    <div class="col-md-6">
+                                        <button type="button" data-loading-text="发送请求中" id="btn_submit"
+                                                class="form-control btn btn-primary">保存资料
+                                        </button>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <button type="button" disabled="disabled" data-loading-text="发送请求中"
+                                                id="btn_submit"
+                                                class="form-control btn btn-success">确认无误，提交认证
+                                        </button>
+                                    </div>
+
+                                </td>
+                            </tr>
+                            </tbody>
+                            <script>
+                                $(function () {
+                                    $('#btn_submit').click(function () {
+                                        var d = $('#form').serialize();
+                                        toast.showLoading();
+                                        $.post($('#form').attr('action'), d, function (msg) {
+                                            toast.hideLoading();
+                                            if (msg.status) {
+                                                var tpl = msg.info;
+                                                $('#tip').html(tpl);
+                                            } else {
+                                                var tpl = msg.info;
+                                                $('#tip').html(tpl);
+                                            }
+                                        });
+                                    })
+                                })
+                            </script>
+                        </table>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <style>
+        .cover {
+            width: 60px;
+            height: 60px;
+            min-width: 60px;
+        }
+    </style>
+</block>

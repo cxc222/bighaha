@@ -2,6 +2,7 @@
 namespace Weibo\Controller;
 
 use Think\Controller;
+use Think\Hook;
 
 class IndexController extends BaseController
 {
@@ -137,11 +138,22 @@ class IndexController extends BaseController
         $aType = I('post.type', 'feed', 'op_t');
         $aAttachIds = I('post.attach_ids', '', 'op_t');
         $aExtra = I('post.extra', array(), 'convert_url_query');
-        if (!empty($aExtra)) {
-            foreach ($aExtra as $v) {
-                if ($v == '' || $v == null) {
-                    $this->error('参数错误发布失败！');
+
+        $types = array('repost', 'feed', 'image', 'share');
+        if (!in_array($aType, $types)) {
+            $class_str = 'Addons\\Insert' . ucfirst($aType) . '\\Insert' . ucfirst($aType) . 'Addon';
+            $class_exists = class_exists($class_str);
+            if(!$class_exists){
+                $this->error('无法发表该类型的微博');
+            }else{
+                $class = new $class_str();
+                if(method_exists($class,'parseExtra')){
+                    $aExtra = Hook::exec('Addons\\Insert' . ucfirst($aType) . '\\Insert' . ucfirst($aType) . 'Addon', 'parseExtra', $aExtra);
+                    if(!$aExtra){
+                        $this->error('参数错误');
+                    }
                 }
+
             }
         }
 
@@ -152,8 +164,12 @@ class IndexController extends BaseController
         if ($return && !$return['state']) {
             $this->error($return['info']);
         }
+
         $feed_data = array();
-        $feed_data['attach_ids'] = $aAttachIds;
+        if (!empty($aAttachIds)) {
+            $feed_data['attach_ids'] = $aAttachIds;
+        }
+
         if (!empty($aExtra)) $feed_data = array_merge($feed_data, $aExtra);
 
         // 执行发布，写入数据库
@@ -220,7 +236,7 @@ class IndexController extends BaseController
             $this->error($return['info']);
         }
 
-        if(empty($aContent)){
+        if (empty($aContent)) {
             $this->error('内容不能为空');
         }
 
@@ -440,7 +456,7 @@ class IndexController extends BaseController
         //读取微博详情
 
         $weibo = D('Weibo')->getWeiboDetail($id);
-        if($weibo===null){
+        if ($weibo === null) {
             $this->error('404，不存在。');
         }
         $weibo['user'] = query_user(array('space_url', 'avatar128', 'nickname', 'title'), $weibo['uid']);
@@ -452,7 +468,7 @@ class IndexController extends BaseController
 
         $this->userInfo($weibo['uid']);
 
-        $supported = D('Weibo')->getSupportedPeople($weibo['id'],array('nickname', 'space_url', 'avatar128', 'space_link'),12);
+        $supported = D('Weibo')->getSupportedPeople($weibo['id'], array('nickname', 'space_url', 'avatar128', 'space_link'), 12);
         $this->assign('supported', $supported);
         $this->setTitle('{$weibo.content|op_t}——微博详情');
 

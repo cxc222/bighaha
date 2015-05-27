@@ -18,13 +18,13 @@
             </php>
             <li id="friends_li_{$friend.id}">
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-xs-6">
                         <a target="_blank" uid="{$friend.uid}" title=" {$friend.nickname|op_t}"
                            onclick="talker.start_talk({$friend.uid})">
                             <img src="{$friend.avatar64}" class="avatar-img" style="width: 45px;">
                         </a>
                     </div>
-                    <div class="col-md-6" style="padding-left: 0">
+                    <div class="col-xs-6" style="padding-left: 0">
                         <div>
                             <a style="width: 100%" target="_blank"
                                title=" {$friend.nickname|op_t}"

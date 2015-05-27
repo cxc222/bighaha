@@ -1,0 +1,57 @@
+<extend name="Center/base"/>
+<block name="main_content">
+    <div class=" pd10 common_block_border" style="min-height: 600px">
+        <div>
+            <div class="left">
+                <h2 class="common_block_title">账户详情</h2>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="pd10 clearfix">
+            <div class="col-xs-2">
+                <img class="avatar-img" src="{$self.avatar128}"/>
+            </div>
+            <div class="col-xs-5">
+                <a href="{$self.space_url}" ucard="{$self.uid}">{$self.nickname}</a>
+                <br/>
+                <p>{:modC('CENTER_WORDS','出任CEO，迎娶白富美，走上人生巅峰。','store')}</p>
+            </div>
+            <div class="col-xs-5">
+                <div class="mb10">账户余额：&nbsp;&nbsp;<span style="font-size: 32px;font-weight: 700;color: orange" >{$self.currency|default='0'|number_format=2}</span> 元</div>
+                <div><a href="{:U('usercenter/recharge/recharge')}" class="btn btn-default mr20">充值</a> <a href="{:U('usercenter/recharge/withdraw')}" class="btn btn-default">提现</a></div>
+                <div> </div>
+            </div>
+        </div>
+        <div>
+            <h2 class="common_block_title">我的订单</h2>
+            <div class="clearfix pd10" style="border: 1px solid #ddd">
+                <div class="col-xs-3 text-center">
+                    等待付款<br/>
+                    <a href="{:U('center/orders')}" class="f16px">
+                        {$order.waiting|default='0'}
+                    </a>
+                </div>
+                <div class="col-xs-3 text-center">
+                    等待收货<br/>
+                    <a href="{:U('center/orders')}" class="f16px">
+                        {$order.payed|default='0'}
+                    </a>
+                </div>
+                <div class="col-xs-3 text-center">
+                    等待评价<br/>
+                    <a href="{:U('center/orders')}" class="f16px">
+                        {$order.response|default='0'}
+                    </a>
+                </div>
+                <div class="col-xs-3 text-center">
+                    已完成<br/>
+                    <a href="{:U('center/orders')}" class="f16px">
+                        {$order.completed|default='0'}
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</block>
+

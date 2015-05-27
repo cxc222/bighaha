@@ -1,0 +1,10 @@
+<extend name="Center/base"/>
+<block name="main_content">
+    <div class="common_block_border clearfix">
+        <h2 class="common_block_title pull-left">出售中的商品</h2>
+        <if condition="checkShopHasGoods(is_login()) eq 0">
+            <div class="left pd10 clearfix text-center" style="font-size: 16px;min-height: 600px">小店铺暂无任何商品。</div>
+            <else/>{:W('InfoList/render',array(array('shop_id'=>$shop['id'],'order'=>'create_time desc','type'=>'list','num'=>12)))}
+        </if>
+    </div>
+</block>

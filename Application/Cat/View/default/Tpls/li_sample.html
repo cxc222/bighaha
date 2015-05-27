@@ -1,0 +1,57 @@
+<volist name="infos.data" id="info">
+    <div class="mb10 pd10 ">
+        <div class="c_panel  lh28 f14px">
+            <h1>便捷函数</h1>
+
+            <p class="pd10">此例程仅仅是展示了最简单的字段调用，非专业人员可能较难理解，如需定制模板，可直接找我们定制，价格也较为便宜。<a href="http://www.ourstu.com"
+                                                                                     target="_blank">传送门</a></p>
+
+            <div class="c_panel  mg10">
+                <h1 class="w560px">函数1：&nbsp;&nbsp;&nbsp; rField($info,'reward')</h1>
+
+                <p class="pd10">
+                    $info,为调用的信息变量，例如在volist name="$infos.data" id="info"标签中，其中id的值就是这里的info参数
+                    <br/>
+                    'reward',第二个字段为自定义字段名，将会自动根据字段类型进行解析，比如文本类的字段，将会自动解析为文本。
+                </p>
+
+                <div class="c_panel pd10 mg10">
+                    例如调用此实体的title字段值，请在后台新增title字段
+                    <br/>
+                    title={:rField($info,'title')}
+                </div>
+            </div>
+            <div class="mb10"></div>
+            <div class="c_panel  mg10">
+                <h1 class="w560px">函数2：&nbsp;&nbsp;&nbsp; rUser($info,'avatar_small')</h1>
+
+                <p class="pd10">
+                    $info,为调用的信息变量，例如在volist name="$infos.data" id="info"标签中，其中id的值就是这里的info参数
+                    <br/>
+                    'avatar_small',第二个字段为用户信息自定义字段名，此方法只是快速调用user信息，值遵守TS系统默认规则。
+                </p>
+
+                <div class="c_panel pd10 mg10">
+                    例如调用此实体的发布者的小头像图片地址
+                    <br/>
+                    avatar_small={:rUser($info,'avatar_small')}
+                    显示成图片形式
+                    <br/>
+                    <img src="{:rUser($info,'avatar_small')}"/>
+                </div>
+            </div>
+            <div class="mb10"></div>
+
+
+        </div>
+        <div class="mb10"></div>
+        <div class="c_panel mb10">
+            <h1 class="w560px">可以调用信息字段变量</h1>
+            <php>dump($info['data'])</php>
+        </div>
+        <div class="c_panel ">
+            <h1 class="w560px">可以调用用户变量</h1>
+            <php>dump($info['user'])</php>
+        </div>
+    </div>
+</volist>

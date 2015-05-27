@@ -1,0 +1,23 @@
+<div id="send_info" class="white-popup mfp-hide">
+    <div class="row">
+        <div class="col-xs-3">
+            <ul class="nav nav-pills nav-stacked">
+                <volist name="send_entitys" id="vo">
+                    <li
+                    <if condition="$i eq 1">class="active"</if>
+                    ><a onclick="get_s_Infos(this,{$vo.id},{$info.uid},{$info.id})">{$vo.alias}</a></li>
+                </volist>
+            </ul>
+        </div>
+        <div class="col-xs-9">
+            <ul id="c_ul_s_infos" class="list-group">
+                <volist name="first_entity_info.data" id="vo">
+                        <a class="list-group-item" onclick="send_info({$info.uid},{$vo.id},{$info.id})">{$vo.title} </a>
+                </volist>
+            </ul>
+        </div>
+
+    </div>
+</div>
+<a class="btn btn-info send_info" event-node="send_info" href="#send_info"
+   event-args="id={$info.id}"><i class="glyphicon glyphicon-envelope"></i> 发送</a>

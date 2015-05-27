@@ -36,6 +36,7 @@ function getThumbImage($filename, $width = 100, $height = 'auto', $type = 0, $re
     $oldFile = $info['dirname'] . DIRECTORY_SEPARATOR . $info['filename'] . '.' . $info['extension'];
     $thumbFile = $info['dirname'] . DIRECTORY_SEPARATOR . $info['filename'] . '_' . $width . '_' . $height . '.' . $info['extension'];
 
+
     $oldFile = str_replace('\\', '/', $oldFile);
     $thumbFile = str_replace('\\', '/', $thumbFile);
 
@@ -203,12 +204,12 @@ function getThumbImageById($cover_id, $width = 100, $height = 'auto', $type = 0,
         $picture = M('Picture')->where(array('status' => 1))->getById($cover_id);
         S('picture_'.$cover_id,$picture);
     }
-
     if (empty($picture)) {
         return getRootUrl() . 'Public/images/nopic.png';
     }
     switch ($picture['type']) {
         case 'qiniu':
+
             $height=$height=='auto'?100:$height;
             if(stripos($picture['path'],'imageMogr2') !== false){
                 $picture['path'] = $picture['path'] . '/thumbnail/' . $width . 'x' . $height;

@@ -1,0 +1,28 @@
+<div class="forum-post-box" style="padding: 2px;">
+
+    <div class="post-subject am-cf" style="border: solid 1px #F2F2F2;padding: 10px;">
+        <div class="post-info am-g ">
+            [{$vo.plate.title}]  <a href="{:U('forum/postdetail',array('id'=>$vo['id']))}" >{$vo.title}</a>
+        </div><br>
+
+        <div class="am-fl ">
+                 <span class=" self-info " style="font-size: 13px">
+                   <span class="avatar-img ">
+                        <img class="avatar-img" style="width: 32px" src="{$vo.user.avatar32}">
+                   </span>
+                 <a href="##">{$vo.user.nickname}</a>
+                 <span >{$vo.create_time|friendlyDate}</span>
+                 </span>
+        </div>
+        <div class="icon-btn am-fr"style="width: 90px">
+                <span class="am-text-left"><i class=" am-icon-eye"></i>
+                {$vo.view_count}</span>
+
+                <span class="am-text-left"style="margin-left: 5px"><i class=" am-icon-comment-o"></i>
+                    {$vo.reply_count}</span>
+
+        </div>
+
+    </div>
+
+</div>

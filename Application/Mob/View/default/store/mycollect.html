@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>{:L('store')} | {:modC('WEB_SITE_NAME','OpenSNS')}</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel="alternate icon" type="image/png" href="assets/i/favicon.png">
+    <link rel="stylesheet" href="__CSS__/amazeui.min.css"/>
+    <link rel="stylesheet" href="__CSS__/store.css"/>
+    <link rel="stylesheet" href="__CSS__/app.css"/>
+    <style>
+        .header {
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 200%;
+            color: #333;
+            margin-bottom: 0px;
+        }
+
+        .header p {
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<header data-am-widget="header" class="am-header am-header-default am-header-fixed">
+
+
+    <div class="am-header-left am-header-nav">
+        <a href="javascript:history.go(-1);"><span class="am-icon-chevron-left"></span></a>
+        <a href="#phone-link" class="">
+            <i class="am-header-icon am-icon-bell-o"></i>
+        </a>
+    </div>
+    <h1 class="am-header-title">
+        我的收藏
+    </h1>
+
+    <div class="am-header-right am-header-nav">
+
+        <a href="#nav-link" class="">
+            <i class="am-menu-toggle-icon am-icon-bars"></i>
+        </a>
+    </div>
+</header>
+
+<div class="mycollect-container ">
+
+    <div class="am-panel am-panel-default">
+        <div class="am-tabs" id="doc-my-tabs">
+            <ul class="am-tabs-nav am-nav am-nav-tabs am-nav-justify">
+                <li class="am-active"><a href="">我收藏的商品</a></li>
+                <li><a href="">我收藏的店铺</a></li>
+
+            </ul>
+            <div class="am-tabs-bd">
+                <div class="am-tab-panel am-active">
+
+                    <div class="goods-list-box">
+                        <ul class="am-avg-sm-2 am-avg-md-4">
+                            <php>for($i=1;$i<5;$i++){</php>
+                            <li class="goods-list am-text-center" style="padding: 10px">
+                                <div class="goods-box">
+                                    <div class="goods-info">
+                                        <div class="am-text-center cover">
+                                            <a href="{:U('store/goodsdetail')}">
+                                                <img src="Application/Mob/Static/test/551931edeecf0.jpg"
+                                                     style="width:100%;height:100%"></a>
+                                        </div>
+                                        <div class="content am-text-left">
+                                            <a href="{:U('store/goodsdetail')}" class="title">商品名</a>
+                                        </div>
+
+                                        <div class="title am-g">
+                                            <div  class="price am-u-sm-6">
+                                                <b>￥</b><span>1,500.00</span>
+                                            </div>
+
+                                            <i class="am-icon-trash am-u-sm-6"></i>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </li>
+                            <php>}</php>
+                        </ul>
+                    </div>
+                </div>
+
+
+                <div class="am-tab-panel">
+                    <ul class="shop-list">
+                        <php>for($y=1;$y<8;$y++){</php>
+                        <li class="shop-info am-g">
+                            <div class="am-g">
+                                <div class="shop-avatar am-u-sm-6">
+                                    <img class="am-img-thumbnail am-radius"
+                                         src="Application/Mob/Static/test/551931edeecf0.jpg">
+
+                                </div>
+                                <div class="shop-content am-u-sm-6 am-text-center">
+                                    <p><a class="shop-name">野外商店</a></p>
+
+                                    <p class="manager">掌柜:
+                                        <a href=""><img class="am-img-thumbnail avatar-img am-circle manager-avater"
+                                                        src="Application/Mob/Static/test/551931edeecf0.jpg">风声</a>
+                                    </p>
+
+                                    <p>所在地：江苏镇江</p>
+
+                                    <p>创店于：2015.04.13</p>
+
+                                </div>
+                            </div>
+
+                            <div class="c-btn-box am-g">
+                                <div class="c-btn-enter  am-u-sm-6 am-text-center">
+                                    <a> <i class="am-icon-flag"></i>进入店铺</a>
+                                </div>
+                                <div class="c-btn-collect am-u-sm-6 am-text-center">
+                                    <div class="d-btn am-text-center"><i class="am-icon-trash"></i>删除</div>
+                                    <span class="am-cf"></span>
+                                </div>
+
+                            </div>
+                        </li>
+                        <php>}</php>
+                    </ul>
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+
+<script src="__JS__/jquery.min.js"></script>
+<script src="__JS__/amazeui.min.js"></script>
+<script>
+    $(function () {
+        $('#doc-my-tabs').tabs();
+    })
+    /**/
+</script>
+</body>
+</html>

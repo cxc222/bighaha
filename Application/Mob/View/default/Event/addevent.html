@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+
+    <title>{:L('event')} | {:modC('WEB_SITE_NAME','OpenSNS')}</title>
+
+    <title>{:L('weibo')} | {:modC('WEB_SITE_NAME','OpenSNS')}</title>
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel="alternate icon" type="image/png" href="assets/i/favicon.png">
+    <link rel="stylesheet" href="__CSS__/amazeui.min.css"/>
+    <link rel="stylesheet" href="__CSS__/forum.css"/>
+    <link rel="stylesheet" href="__CSS__/app.css"/>
+    <style>
+        .header h1 {
+            font-size: 200%;
+            color: #333;
+            margin-top: 30px;
+        }
+
+        .header p {
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<header data-am-widget="header" class="am-header am-header-default am-header-fixed">
+    <div class="am-header-left am-header-nav">
+        <a href="javascript:history.go(-1);"><span class="am-icon-chevron-left"></span></a>
+    </div>
+    <h1 class="am-header-title">
+        发布活动
+    </h1>
+
+    <div class="am-header-right am-header-nav">
+
+    </div>
+</header>
+<<<<<<< HEAD
+
+<div class="addevent" id="article-post">
+    <div class="am-form-group am-form-file">
+        <label for="doc-ipt-file-2">封面上传</label>
+        <div>
+            <button type="button" class="am-btn am-btn-default am-btn-sm">
+                <i class="am-icon-cloud-upload"></i> 选择要上传的封面文件</button>
+        </div>
+        <input type="file" id="doc-ipt-file-2">
+=======
+<div id="demo-view" class="" data-backend-compiled="" style="z-index: 1040">
+    <nav data-am-widget="menu" class="am-menu am-menu-offcanvas1 am-no-layout" data-am-menu-offcanvas=""><a
+            href="javascript: void(0)" class="am-menu-toggle"><i class="am-menu-toggle-icon am-icon-bars"></i></a>
+
+        <div class="am-offcanvas "
+             style="touch-action: pan-y; -webkit-user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
+            <div class="am-offcanvas-bar am-offcanvas-bar-flip">
+                <div class="am-text-center">
+                    <img class="avatar-img" style="width:64px;" src="Public/images/default_avatar_128_128.jpg">
+
+                    <div class="am-text-center">
+                        <a href="http://mob.com/index.php?s=/mob/weibo/index.html">李小龙</a>
+                    </div>
+                </div>
+                <ul class="am-menu-nav am-avg-sm-1">
+                    <li class=""><a href="{:U('weibo/index')}" class="">微博</a></li>
+                    <li class=""><a href="{:U('issue/index')}" class="">专辑</a></li>
+                    <li class=""><a href="##" class="">资讯</a></li>
+                    <li class=""><a href="{:U('forum/index')}" class="">论坛</a></li>
+                    <li class=""><a href="{:U('group/index')}" class="">群组</a></li>
+                    <li class=""><a href="{:U('event/index')}" class="">活动</a></li>
+                    <li class=""><a href="##" class="">签到</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</div>
+<div class="addevent" id="article-post">
+    <div class="am-form-group" style="padding-left: 10px">
+        <label for="file">上传图片</label>
+        <input type="file" id="file">
+
+        <p class="am-form-help">请选择要上传的封面文件...</p>
+
+        <div class="add-picture iconf iconf_compose_picadd"
+             style="font-size: 124px;display: inline-block;position: relative;text-align: center;vertical-align: bottom;visibility: hidden;margin: 0 0 10px 10px">
+            <input disabled="true" name="pic" type="file" accept="image/*" style="width: 124px; height: 124px;">
+        </div>
+>>>>>>> b3f2df37912128fcba677d88755e1d60636fed57
+    </div>
+    <form action="" class="am-form" data-am-validator>
+        <fieldset>
+            <div class="am-form-group">
+                <label for="title">标题：</label>
+                <input type="text" id="title" minlength="3" placeholder="" required/>
+            </div>
+
+            <div class="am-form-group am-form-inline">
+                <label for="doc-select-1">分类</label>
+                <select id="doc-select-1">
+                    <option value="1">选项一...</option>
+                    <option value="2">选项二.....</option>
+                    <option value="3">选项三........</option>
+                </select>
+                <span class="am-form-caret"></span>
+            </div>
+            <div class="am-form-group am-form-inline">
+                <label for="doc-select-1">时间</label>
+
+                <div class="am-g">
+                    <div class="am-u-sm-6">
+                        <p><input type="text" class="am-form-field" placeholder="" id="my-start-2"
+                                  data-am-datepicker="{theme: 'success'}"/></p>
+                    </div>
+                    <div class="am-u-sm-6">
+                        <p><input type="text" class="am-form-field" id="my-end-2"
+                                  data-am-datepicker="{theme: 'warning'}"/></p>
+                    </div>
+                </div>
+            </div>
+            <div class="am-form-group">
+                <label for="address">地址：</label>
+                <input type="text" id="address" minlength="3" placeholder="" required/>
+            </div>
+            <div class="am-form-group">
+                <label for="limitCount">人数：</label>
+                <input id="limitCount" name="limitCount" class="form-control form_check" type="text" value=""
+                       placeholder="人数" required="">
+            </div>
+
+            <div class="am-g">
+                <p>截止<input type="text" class="am-form-field" placeholder="" data-am-datepicker="{theme: 'danger'}"
+                            readonly/></p>
+            </div>
+            <div class="am-form-group">
+                <label>介绍：</label>
+                <textarea data-role="content" type="text" name="content" placeholder=""
+                          style="width: 100%;height:150px;padding: 5px"> </textarea>
+            </div>
+        </fieldset>
+    </form>
+
+
+    <button type="button" class="am-btn am-btn-primary am-btn-block">发表</button>
+</div>
+
+<script src="__JS__/jquery.min.js"></script>
+<script src="__JS__/amazeui.min.js"></script>
+
+<script>
+    $(function () {
+        var nowTemp = new Date();
+        var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+        var $myStart2 = $('#my-start-2');
+
+        var checkin = $myStart2.datepicker({
+            onRender: function (date) {
+                return date.valueOf() < now.valueOf() ? 'am-disabled' : '';
+            }
+        }).on('changeDate.datepicker.amui', function (ev) {
+            if (ev.date.valueOf() > checkout.date.valueOf()) {
+                var newDate = new Date(ev.date)
+                newDate.setDate(newDate.getDate() + 1);
+                checkout.setValue(newDate);
+            }
+            checkin.close();
+            $('#my-end-2')[0].focus();
+        }).data('amui.datepicker');
+
+        var checkout = $('#my-end-2').datepicker({
+            onRender: function (date) {
+                return date.valueOf() <= checkin.date.valueOf() ? 'am-disabled' : '';
+            }
+        }).on('changeDate.datepicker.amui', function (ev) {
+            checkout.close();
+        }).data('amui.datepicker');
+
+    })
+
+</script>
+</body>
+</html>

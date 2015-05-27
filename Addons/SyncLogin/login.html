@@ -13,5 +13,9 @@
     <php>if(in_array('RenRen',$config['type'])){</php>
     <a href="{:addons_url('SyncLogin://Base/login',array('type'=>'renren'))}" class="other_login other_login_renren"></a>
     <php>}</php>
+
+    <php>if(in_array('Weixin',$config['type'])){</php>
+    <a href="{:addons_url('SyncLogin://Base/login',array('type'=>'weixin'))}" class="other_login other_login_qq"></a>
+    <php>}</php>
 </div>
 <php>}</php>

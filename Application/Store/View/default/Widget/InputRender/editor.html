@@ -1,0 +1,10 @@
+<if condition="$info_id neq 0">
+    <div id="{$field.name}" class="store_editor mb10">
+        {:W('Common/UeditorMini/editor',array('contentEditor',$field['name'],$field_value))}
+    </div>
+    <else/>
+    <div id="{$field.name}" class="store_editor mb10">
+        {:W('Common/UeditorMini/editor',array('contentEditor',$field['name']))}
+    </div>
+
+</if>

@@ -235,6 +235,9 @@ class IndexController extends BaseController
             $aType = I('post.type', 0, 'intval');
             $aBackground = I('post.background', 0, 'intval');
             $aMemberAlias = I('post.member_alias', '成员', 'text');
+
+
+
             if (empty($aTitle)) {
                 $this->error('请填写群组名称');
             }

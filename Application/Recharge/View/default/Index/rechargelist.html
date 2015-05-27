@@ -1,0 +1,61 @@
+<extend name="Base/common"/>
+
+<block name="style">
+    <link href="__CSS__/recharge.css" rel="stylesheet" type="text/css"/>
+</block>
+<block name="header">
+    <include file="Public/_nav"/>
+</block>
+<block name="body">
+    <div class="row">
+        <div class="col-xs-12">
+            <p>&nbsp;</p>
+            <h4>充值中心</h4>
+            <hr class="oneuser-title-hr"/>
+        </div>
+    </div>
+    <include file="_menu"/>
+    <div style="margin-bottom: 50px">
+        <h3 style="font-size: 16px;font-weight: bold">所有订单</h3>
+
+        <ul class="nav nav-secondary">
+            <li class="{$payOk_all}"><a href="{:U('rechargeList')}">全部</a></li>
+            <li class="{$payOk_0}"><a href="{:U('rechargeList',array('payOk'=>0))}">未支付</a></li>
+            <li class="{$payOk_1}"><a href="{:U('rechargeList',array('payOk'=>1))}">已支付</a></li>
+        </ul>
+
+        <hr/>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>订单号</th>
+                <th>充值数额</th>
+                <th>充值类型</th>
+                <th>支付方式</th>
+                <th>订单状态</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <volist name="list" id="vo">
+                <tr>
+                    <td>{$vo.id}</td>
+                    <td>{$vo.amount|number_format=2}</td>
+                    <td>{$vo.score_type.title}</td>
+                    <td>{$vo.pay_method}</td>
+                    <td>{:get_order_status_cn($vo['id'])}</td>
+                    <td><a href="{:U('recharge/index/order',array('id'=>$vo['id']))}" class="btn btn-primary">查看订单</a></td>
+                </tr>
+            </volist>
+
+
+        </table>
+        <div class="pull-left">
+            {:getPagination($totalCount,$r)}
+        </div>
+    </div>
+
+
+</block>
+
+
+

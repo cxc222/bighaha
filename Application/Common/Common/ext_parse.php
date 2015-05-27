@@ -73,7 +73,16 @@ function parse_weibo_content($content)
     $content = parseWeiboContent($content);
     return $content;
 }
-
+function parse_weibo_mobile_content($content)
+{
+    $content = shorten_white_space($content);
+    $content = op_t($content,false);
+    $content = parse_expression($content);
+    $content = parse_at_users($content);
+    $content = parse_url_mobile_link($content);
+    $content = parseWeiboContent($content);
+    return $content;
+}
 function shorten_white_space($content)
 {
     $content = preg_replace('/\s+/', ' ', $content);
@@ -84,6 +93,14 @@ function parse_url_link($content)
 {
     $content = preg_replace("#((http|https|ftp)://(\S*?\.\S*?))(\s|\;|\)|\]|\[|\{|\}|,|\"|'|:|\<|$|\.\s)#ie",
         "'<a class=\"label label-badge\" href=\"$1\" target=\"_blank\"><i class=\"icon-link\" title=\"$1\"></i></a>$4'", $content
+    );
+    return $content;
+}
+
+function parse_url_mobile_link($content)
+{
+    $content = preg_replace("#((http|https|ftp)://(\S*?\.\S*?))(\s|\;|\)|\]|\[|\{|\}|,|\"|'|:|\<|$|\.\s)#ie",
+        "'<a class=\"label label-badge\" href=\"$1\" target=\"_blank\"><i class=\"am-icon-link\" title=\"$1\"></i></a>$4'", $content
     );
     return $content;
 }

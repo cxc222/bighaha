@@ -1,0 +1,84 @@
+<extend name="Base/common"/>
+<block name="header">
+    <include file="Public/nav"/>
+</block>
+<block name="body">
+    <link type="text/css" rel="stylesheet" href="__CSS__/question.css"/>
+    <div class="container" style="min-height: 400px">
+        <div class="row">
+            <div class="col-xs-8">
+                <div class="common_block_border clearfix">
+                    <div class="col-xs-12">
+                        <h4 style="padding:15px 0 0;font-size: 18px;">编辑回答</h4>
+                        <hr/>
+                    </div>
+                    <div class="col-xs-2">
+                        <p class="text-center">
+                            <a href="{$user.space_url}" ucard="{$user.uid}">
+                                <img src="{$user.avatar128}" width="48px" class="avatar-img"/>
+                            </a>
+                        </p>
+                    </div>
+                    <div class="col-xs-10">
+                        <div id="answer_block">
+                            <form id="answer_form" action="{:U('Question/answer/edit')}" method="post" class="ajax-form">
+                                <input type="hidden" name="question_id" value="{$answer['question_id']}"/>
+                                <input type="hidden" name="answer_id" value="{$answer['id']}"/>
+                                <p>
+                                    <php>
+                                        $config="toolbars:[['source','|','bold','italic','underline','fontsize','forecolor','justifyleft','fontfamily','|','map','emotion','insertimage','insertcode']]";
+                                    </php>
+                                    {:W('Common/Ueditor/editor',array('myeditor_edit','content',$answer['content'],'100%','250px',$config))}
+                                </p>
+                                <p class="pull-right">
+                                    <input type="button" data-role="reply_button" class="btn btn-primary" value="编辑 Ctrl+Enter"/>
+                                </p>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-4">
+                <div class="common_block_border" style="padding: 10px;margin-bottom: 20px;">
+                    <if condition="$question['best_answer']">
+                        <div style="padding: 10px 0;font-size: 18px;">最佳答案</div>
+                        <else/>
+                        <div style="padding: 10px 0;font-size: 18px;">支持最多的回答(排除该答案)</div>
+                    </if>
+                    <notempty name="best_answer">
+                        <div class="clearfix">{$best_answer.content}</div>
+                    </notempty>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    </div>
+</block>
+<block name="script">
+    <script type="text/javascript" src="__JS__/question.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.popup-gallery').each(function () { // the containers for all your galleries
+                $(this).magnificPopup({
+                    delegate: '.popup',
+                    type: 'image',
+                    tLoading: 'Loading image #%curr%...',
+                    mainClass: 'mfp-img-mobile',
+                    gallery: {
+                        enabled: true,
+                        navigateByImgClick: true,
+                        preload: [0, 1] // Will preload 0 - before current, and 1 after the current image
+                    },
+                    image: {
+                        tError: '<a href="%url%">The image #%curr%</a> could not be loaded.',
+                        titleSrc: function (item) {
+                            /*           return item.el.attr('title') + '<small>by Marsel Van Oosten</small>';*/
+                            return '';
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</block>

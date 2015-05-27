@@ -1,54 +1,63 @@
 .check_recommend {
-  background-color: white;
-  border-bottom-left-radius: 3px;
-  border-bottom-right-radius: 3px;
-  border-right: 1px solid #ddd;
-  border-left: 1px solid #ddd;
-  border-color: white;
-  line-height: 42px;
+    background-color: #fff;
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
+    border-right: 1px solid #ddd;
+    border-left: 1px solid #ddd;
+    border-color: #fff;
+    line-height: 42px
 }
+
 .check_recommend span {
-  float: left;
-  margin-right: 10px;
+    float: left;
+    margin-right: 10px
 }
+
 .check_recommend .check_recommend_list {
-  padding: 0 15px;
-  display: block;
+    padding: 0 15px;
+    display: block
 }
+
 .check_recommend .check_recommend_list li {
-  list-style: none;
+    list-style: none
 }
+
 .check_recommend a {
-  color: #000000;
+    color: #000
 }
+
 .biaoti {
-  font-size: 1.2em;
-  color: #000000;
-  padding-left: 15px;
-  margin-top: 7px;
+    font-size: 1.2em;
+    color: #000;
+    padding-left: 15px;
+    margin-top: 7px
 }
+
 .pad6 {
-  padding: 0px 10px;
-  white-space: nowrap;
-  display: inline-block;
-  border-radius: 2px;
-  height: 24px;
-  line-height: 25px;
-  text-decoration: none;
-  font-size: 12px;
-  min-width: 40px;
-  text-align: center;
-  outline: medium none;
+    padding: 0 10px;
+    white-space: nowrap;
+    display: inline-block;
+    border-radius: 2px;
+    height: 24px;
+    line-height: 25px;
+    text-decoration: none;
+    font-size: 12px;
+    min-width: 40px;
+    text-align: center;
+    outline: 0
 }
+
 .pad0 {
-  padding: 0px;
+    padding: 0
 }
+
 .margintop15 {
-  margin: 15px 0px;
+    margin: 15px 0
 }
+
 .seemore {
-  border-top: 1px #ccc solid;
-  text-align: center;
-  height: 36px;
-  padding: 6px;
+    border-top: 1px #ccc solid;
+    text-align: center;
+    height: 36px;
+    padding: 6px
 }

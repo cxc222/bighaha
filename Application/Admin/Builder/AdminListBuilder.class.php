@@ -385,10 +385,6 @@ class AdminListBuilder extends AdminBuilder
     {
         return $this->key($name, $title, 'uid');
     }
-    public function keyNickname($name='uid', $title, $subtitle = null)
-    {
-        return $this->key($name, $title, $subtitle, 'nickname');
-    }
 
     public function keyTitle($name = 'title', $title = '标题')
     {
@@ -530,12 +526,6 @@ class AdminListBuilder extends AdminBuilder
         //uid转换成text
         $this->convertKey('uid', 'text', function ($value) {
             $value = query_user(array('nickname', 'uid', 'space_url'), $value);
-            return "<a href='" . $value['space_url'] . "' target='_blank'>[{$value[uid]}]" . $value['nickname'] . '</a>';
-        });
-
-        //nickname转换成text
-        $this->convertKey('nickname', 'text', function ($value) {
-            $value = query_user(array('nickname', 'uid', 'space_url'), $value);exit;
             return "<a href='" . $value['space_url'] . "' target='_blank'>[{$value[uid]}]" . $value['nickname'] . '</a>';
         });
 

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>{:L('issue')} | {:modC('WEB_SITE_NAME','OpenSNS')}</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="renderer" content="webkit">
+    <script src="__JS__/jquery.min.js"></script>
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel="alternate icon" type="image/png" href="assets/i/favicon.png">
+    <link rel="stylesheet" href="__CSS__/amazeui.min.css"/>
+    <link rel="stylesheet" href="__CSS__/issue.css"/>
+    <link rel="stylesheet" href="__CSS__/app.css"/>
+    <style>
+        .header h1 {
+            font-size: 200%;
+            color: #333;
+            margin-top: 30px;
+        }
+
+        .header p {
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<header data-am-widget="header" class="am-header am-header-default am-header-fixed am-cf">
+    <div class="am-header-left am-header-nav">
+        <a class="am-fl" href="javascript:history.go(-1);"><span class="am-icon-chevron-left"></span></a>
+        <a href="#phone-link" class="am-fl" >
+            <i class="am-header-icon am-icon-bell-o"></i>
+        </a>
+    </div>
+    <h1 class="am-header-title">资讯分类
+    </h1>
+
+    <div class="am-header-right am-header-nav">
+        <a href="#nav-link" class="am-fr">
+            <i class="am-menu-toggle-icon am-icon-bars"></i>
+        </a>
+    </div>
+</header>
+{:W('Mob/UserMenu/index')}
+<div class="issue-type-list" style="padding: 10px;">
+    <div class="am-panel-group" id="accordion">
+
+        <volist name="blog_top" id="vo">
+            <div class="am-panel am-panel-default type-list" style="border-bottom: none">
+                <div class="am-panel-hd">
+                    <h4 class="am-panel-title" href="#do-not-say-{$vo.id}" data-am-collapse="{parent: '#accordion'}">
+                        {$vo.title}
+                    </h4>
+                    <span>专辑数：{$vo.count}</span>
+                </div>
+
+                <div id="do-not-say-{$vo.id}" class="am-panel-collapse am-collapse am-in">
+                    <volist name="vo['lever_two']" id="vl">
+                        <ul class="issue-type">
+                            <a href="{:U('Mob/Issue/issueLeverDetail',array('id'=>$vl['id']))}" class="">
+                                <li class="type">{$vl.title}</br>
+                                    <span>专辑数：{$vl.count_content}</span>
+                                </li>
+                            </a>
+                        </ul>
+                    </volist>
+                </div>
+            </div>
+        </volist>
+    </div>
+</div>
+
+
+<script src="__JS__/amazeui.min.js"></script>
+
+</body>
+</html>

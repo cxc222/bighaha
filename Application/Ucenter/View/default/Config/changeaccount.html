@@ -4,9 +4,9 @@
             <form class="form-horizontal center_info ajax-form" role="form"
                   action="{:U('ucenter/config/checkVerify')}" method="post">
                 <div class="form-group">
-                    <label for="account" class="col-sm-2 control-label">请输入{$cName}</label>
+                    <label for="account" class="col-xs-2 control-label">请输入{$cName}</label>
 
-                    <div class="col-sm-10">
+                    <div class="col-xs-10">
                         <input type="text" class="form-control pull-left" id="account" name="account"
                                placeholder="{$cName}">
                         <a class="pull-left lh32 " data-role="getVerify" style="margin-left: 10px">获取验证码</a>
@@ -14,9 +14,9 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="verify" class="col-sm-2 control-label">验证码</label>
+                    <label for="verify" class="col-xs-2 control-label">验证码</label>
 
-                    <div class="col-sm-10">
+                    <div class="col-xs-10">
                         <input type="text" class="form-control" id="verify" placeholder="验证码" name="verify">
                     </div>
                 </div>
@@ -25,7 +25,7 @@
                 <input type="hidden" class="form-control" name="uid" value="{:is_login()}">
 
                 <div class="form-group">
-                    <div class="col-sm-offset-2 col-sm-10">
+                    <div class="col-xs-offset-2 col-xs-10">
                         <button type="submit" data-role="submit" class="btn btn-primary">提交</button>
                     </div>
                 </div>

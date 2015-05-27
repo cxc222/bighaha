@@ -1,0 +1,121 @@
+<extend name="Center/base"/>
+<block name="main_content">
+    <!--导航栏end-->
+    <div class="mb10 clearfix ">
+        <php>
+            $info=D('Shop')->getShopByUid(is_login());
+
+        </php>
+        <include file="../Public/_left"/>
+
+        <div class="left bgwhite  common_block_border">
+            <h1 class="common_block_title">店铺设置</h1>
+
+            <div style="margin: 10px;">
+
+                <if condition="checkHasCreatedShop(is_login())">
+                    <php>
+                        $condition=D('Shop')->getMyShopCondition(is_login());
+                    </php>
+                    <if condition="$condition">
+                        <else/>
+                        <div class="pd10">
+                            <div class="alert alert-warning alert-dismissible" role="alert">
+                                <button type="button" class="close" data-dismiss="alert"><span
+                                        aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                                您的店铺还未审核，请耐心等待管理员的审核。
+                            </div>
+                        </div>
+
+                    </if>
+                </if>
+
+                <div class="pd10">
+                    <form id="frm_post" action="__SELF__" method="POST" model-node="cat_form"
+                          class="form-horizontal">
+                        <if condition="isset($shop)">
+                            <input type="hidden" name="id" value="{$shop['id']}">
+                        </if>
+                        <div class="store_tpl_input" style="font-size: 14px;color: #333">
+                            <div class="form-group has-feedback ">
+                                <label for="title" class="col-xs-2 control-label"><span
+                                        class="c_empty">*</span>店名</label>
+
+                                <div class="col-xs-5">
+                                        <input id="title" name="title" event-node="input_text"
+                                               event-args="min=1&max=20&error=长度不合法" value="{$shop.title}"
+                                               class="form-control" type="text">
+
+
+                                    <span class="help-block">必须输入店铺名称，不超过40个字&nbsp;</span>
+                                </div>
+                            </div>
+                            <div class="form-group has-feedback ">
+                                <label for="title" class="col-xs-2 control-label"><span
+                                        class="c_empty">*</span>图标</label>
+
+                                <div class="col-xs-5">
+                                    {:W('Common/UploadImage/render',array(array('id'=>'logo','name'=>'logo','args'=>'need=1&error=必须上传店铺图标','value'=>$shop['logo'])))}
+                                    <style>
+                                        .web_uploader_picture_list img{
+                                            width: 100px;
+                                            height: 100px;
+                                            margin-top: 10px;
+                                        }
+                                    </style>
+                                    <span class="help-block">建议100*100&nbsp;</span>
+                                </div>
+                            </div>
+                            <div class="form-group has-feedback ">
+                                <label for="title" class="col-xs-2 control-label"><span
+                                        class="c_empty">*</span>简介</label>
+
+                                <div class="col-xs-5">
+                                    <textarea name="summary" event-node="textarea" event-args="min=1&max=200&error=最多不超过200个字"
+                                              class=" form-control">{$shop.summary}</textarea>
+                                    <span class="help-block">必须输入店铺名称&nbsp;</span>
+                                </div>
+                            </div>
+                            <div class="form-group has-feedback ">
+                                <label for="title" class="col-xs-2 control-label"><span
+                                        class="c_empty">*</span>店铺所在地</label>
+
+                                <div class="col-xs-5">
+                                    <input id="position" name="position" event-node="input_text"
+                                           event-args="min=1&max=20&error=长度不合法" value="{$shop.position}"
+                                           class="form-control" type="text">
+
+
+                                    <span class="help-block">如浙江嘉兴&nbsp;</span>
+                                </div>
+                            </div>
+
+                            <div class="form-group clearfix">
+                                <div class="col-xs-offset-2 col-xs-10">
+                                    <input type="submit"
+                                           class="btn btn-primary" value="发布{$entity.alias}">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+
+
+        <style>
+
+
+            .store_over_hidden {
+                color: #008000;
+
+            }
+
+
+        </style>
+    </div>
+    <script src="__JS__/module.js"></script>
+    <script src="__JS__/cat_form.js"></script>
+    <script src="__JS__/jquery.chained.remote.min.js"></script>
+</block>

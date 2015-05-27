@@ -1,0 +1,177 @@
+<extend name="Base/common"/>
+<block name="header">
+    <include file="Public/nav"/>
+</block>
+<block name="body">
+    <!--模板详情-->
+    <div class="container">
+        <div class="clearfix">
+
+            <div class="clearfix">
+                <div class="col-xs-9">
+                    <div class="common-block">
+                        <div class="col-xs-3 text-center">
+                            {$data.cover|display_cover=160,160,'-detail'}
+                        </div>
+                        <div class="col-xs-9">
+                            <article class="article">
+                                <header>
+                                    <h1 class="text-center">{$data.title|text} —— {$data.latest_version|display_version}<div class="pull-right">{:W('Weibo/Share/shareBtn',array('param'=>array('title'=>$data['title'],'content'=>mb_substr(text($data['summary']),0,50,'utf-8'),'img'=>getThumbImageById($data['cover'],160,160),'from'=>$MODULE_ALIAS,'site_link'=>U('appstore/index/moduledetail',array('id'=>$data['id']))),'text'=>'<span class="share-btn"><i class="icon-share"></i> </span>'))}</div>
+                                    </h1>
+                                    <dl class="dl-inline">
+                                        <dt>上架时间：</dt>
+                                        <dd>{$data.update_time|date='Y-m-d',###}</dd>
+
+                                        <dt></dt>
+                                        <dd class="pull-right"><span class="label label-success">版本：</span>
+                                            <span class="label label-danger"> 下载次数： {$data.total_download_count}</span>
+                                        </dd>
+                                    </dl>
+
+                                    <section class="abstract">
+                                        <strong>兼容版本</strong>： {$data.compat|decode_compat_by_str}
+                                        <neq name="data.rely" value=""><span class="label label-danger" ><strong>依赖模块</strong>： {$data.rely}</span></neq>
+                                          </section>
+                                    <dl class="dl-inline" style="position: relative">
+                                        <dt>开发者：</dt>
+                                        <dd>
+                                            <eq name="data.author" value=""><a href="{$data.user.space_url}">{$data.user.nickname}</a>
+                                                <else/>
+                                                {$data.author}
+                                            </eq>
+                                        </dd>
+                                        <dt>
+                                            上传者
+                                        </dt>
+                                        <dd>
+                                            <a href="{$data.user.space_url}">{$data.user.nickname}</a>
+                                        </dd>
+
+                                        <div style="width: 200px;position: absolute;right: 0;bottom: 0">
+                                            <div class="with-padding" style="font-size: 16px"> 售价：{$versions[0]['fee']|display_fee}
+                                            </div>
+                                            <div class="with-padding">
+                                                {$data.versions.0.id|display_download='btn
+                                                btn-block btn-primary'}
+                                            </div>
+                                        </div>
+
+                                    </dl>
+                                    <if condition="check_auth('Appstore/Admin/manage') OR $data['uid'] eq is_login()">
+                                        <div class="pull-right" ><a href="{:U('admin/addmodule',array('id'=>$data['id']))}">编辑</a></div>
+                                    </if>
+                                </header>
+                                <div class="article-content">
+                                    <!--详情图片和简略信息-->
+                                    <div class=" tem_line_1 plug_item">
+                                        <div class="">
+
+                                        </div>
+
+
+                                    </div>
+                                </div>
+
+                            </article>
+                        </div>
+
+                        <article>
+                            <section>
+                                <ul id="myTab" class="nav nav-tabs">
+                                    <li class="active">
+                                        <a href="#tab1" data-toggle="tab">商品详情</a>
+                                    </li>
+                                    <li class="">
+                                        <a href="#tab2" data-toggle="tab">使用说明</a>
+                                    </li>
+                                    <li class="dropdown">
+                                        <a href="#tab3" data-toggle="tab">版本下载</a>
+                                    </li>
+                                </ul>
+
+                                <div class="tab-content">
+                                    <div class="tab-pane active" id="tab1">
+                                        <p class="with-padding">
+                                            {$data.summary}
+                                        </p>
+                                    </div>
+                                    <div class="tab-pane" id="tab2">
+                                        <p class="with-padding">
+                                            {$data.instruction}</p>
+                                    </div>
+
+                                    <div class="tab-pane" id="tab3">
+                                        <table class="mb10 col-md-12 table" style="text-align: center">
+                                            <colgroup>
+                                                <col width="200">
+                                                <col width="400">
+                                                <col width="200">
+                                                <col width="220">
+                                                <col width="150">
+                                            </colgroup>
+                                            <thead>
+                                            <tr class="first_tr">
+
+                                                <th>版本号</th>
+                                                <th>更新日志</th>
+                                                <th>售价</th>
+                                                <th>更新时间</th>
+                                                <th>下载</th>
+                                            </tr>
+                                            </thead>
+
+                                            <tbody>
+                                            <if condition="$data['uid'] eq is_login()">
+                                                <tr>
+                                                    <td colspan="5">
+
+                                                        <a class="btn btn-success"
+                                                           href="{:U('admin/addversion',array('id'=>$data['id']))}"
+                                                           style="width: 100%">上传新版本</a>
+
+                                                    </td>
+                                                </tr>
+                                            </if>
+                                            <volist name="versions" id="vo">
+                                                <tr>
+
+                                                    <td class="text-left">
+                                                        {$vo.title}
+                                                    </td>
+                                                    <td>{$vo.log|nl2br}</td>
+
+                                                    <td>{$vo.fee|display_fee}</td>
+                                                    <td>{$vo.update_time|date='m-d H:i',###}</td>
+                                                    <td>{$vo.id|display_download}</td>
+                                                </tr>
+                                            </volist>
+                                        </table>
+                                    </div>
+
+                                </div>
+                                <div class="" style="margin-top: 20px;">
+                                    {:hook('localComment', array('path'=>"Appstore/goods/$data[id]",
+                                    'uid'=>$data['uid']))}
+                                </div>
+                            </section>
+
+                        </article>
+
+
+                    </div>
+                </div>
+
+
+                <div class="col-xs-3 ">
+                    <div class="common-block">
+                        <include file="Index/side"/>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+
+</block>

@@ -1,0 +1,102 @@
+<extend name="Public/base"/>
+<block name="body">
+    <script type="text/javascript" charset="utf-8" src="__EXT__/webuploader/js/webuploader.js"></script>
+    <link href="__EXT__/webuploader/css/webuploader.css" type="text/css" rel="stylesheet">
+    <input id="id_input" type="text" value="">
+
+    <php>$name='packs';</php>
+    <div class="container">
+        <div id="list" class="file_queue">
+            <div class="">
+                <h4 class="info"><i style="color: green" id="status_' + file.id + '"
+                                    class="glyphicon glyphicon-pause"></i>&nbsp;<a id="picker">选择文件</a>
+                    <button onclick="uploader.removeFile(' + file.id + ',true)" type="button" class="close"></button>
+                </h4>
+                <button onclick="uploader.upload()">adwaw</button>
+            </div>
+        </div>
+
+    </div>
+
+    <style>
+
+    </style>
+
+    <script>
+        alert(WebUploader.Uploader.support());
+        //挂载数组删除元素函数
+        Array.prototype.remove = function (dx) {
+            if (isNaN(dx) || dx > this.length) {
+                return false;
+            }
+            for (var i = 0, n = 0; i < this.length; i++) {
+                if (this[i] != this[dx]) {
+                    this[n++] = this[i]
+                }
+            }
+            this.length -= 1
+        }
+        /*创建uploader*/
+        var uploader = WebUploader.create({
+            // swf文件路径
+            swf: 'Uploader.swf',
+            // 文件接收服务端。
+            server: U('Home/File/uploadFile'),
+            fileNumLimit: 5,
+            // 选择文件的按钮。可选。
+            // 内部根据当前运行是创建，可能是input元素，也可能是flash.
+            pick: {'id': '#picker', 'multi': true}
+        });
+        $list = $('#list');
+        // 当有文件被添加进队列的时候
+        uploader.on('fileQueued', function (file) {
+            $list.append('<div id="' + file.id + '">' +
+                    '<h4 class="info"><i style="color: green" id="status_' + file.id + '" class="glyphicon glyphicon-pause"></i>&nbsp;' + file.name + '<button onclick="removeFile(\'' + file.id + '\',0)" type="button" class="close"><span aria-hidden="true">&times;</span><span class="sr-only">删除</span></button></h4>' +
+                    '</div>');
+            // uploader.upload();
+        });
+        uploader.attach_ids = new Array();
+
+
+        function removeFile(file_id, attach_id) {
+            if (attach_id != 0) {
+                uploader.attach_ids.remove(uploader.attach_ids.indexOf(attach_id));
+                $('#id_input').val(uploader.attach_ids.join(','));
+            } else {
+                uploader.removeFile(file_id);
+
+            }
+            $('#' + file_id).fadeOut();
+        }
+
+        // 文件上传过程中创建进度条实时显示。
+        uploader.on('uploadProgress', function (file, percentage) {
+            $('#status_' + file.id).removeClass().text(parseInt(percentage * 100) + '%');
+        });
+        /*上传成功*/
+        uploader.on('uploadSuccess', function (file, ret) {
+            if (ret.status == 0) {
+                $('#status_' + file.id).removeClass().addClass("glyphicon glyphicon-exclamation-sign").attr('style', 'color:red').attr('title', '上传失败。');
+            } else {
+                $('#status_' + file.id).removeClass().addClass("glyphicon glyphicon-ok");
+                $('#' + file.id).find('.close').attr('onclick', 'removeFile(\'' + file.id + '\',' + ret.data.file.id + ')');
+                //if (uploader.attach_ids.indexOf(ret.data.file.id) == -1) {
+                uploader.attach_ids.push(ret.data.file.id);
+                $('#id_input').val(uploader.attach_ids.join(','));
+                // }
+            }
+        });
+
+        /*上传出错*/
+        uploader.on('uploadError', function (file) {
+            $('#status_' + file.id).removeClass().addClass("lyphicon glyphicon-exclamation-sign").attr('style', 'color:red');
+        });
+
+        uploader.on('uploadComplete', function (file) {
+            $('#status_' + file.id).text('');
+
+        });
+
+
+    </script>
+</block>

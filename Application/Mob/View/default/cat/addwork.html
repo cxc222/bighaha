@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>{:L('cat')} | {:modC('WEB_SITE_NAME','OpenSNS')}</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel="alternate icon" type="image/png" href="assets/i/favicon.png">
+    <link rel="stylesheet" href="__CSS__/amazeui.min.css"/>
+    <link rel="stylesheet" href="__CSS__/cat.css"/>
+    <link rel="stylesheet" href="__CSS__/app.css"/>
+    <style>
+        .header {
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 200%;
+            color: #333;
+            margin-bottom: 0px;
+        }
+
+        .header p {
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<header data-am-widget="header" class="am-header am-header-default am-header-fixed">
+
+
+    <div class="am-header-left am-header-nav">
+        <a href="javascript:history.go(-1);"><span class="am-icon-chevron-left"></span></a>
+        <a href="#phone-link" class="">
+            <i class="am-header-icon am-icon-bell-o"></i>
+        </a>
+    </div>
+    <h1 class="am-header-title">
+        岗位
+    </h1>
+
+    <div class="am-header-right am-header-nav">
+        <a href="#nav-link" class="">
+            <i class=" am-icon-star"></i>
+        </a>
+        <a href="#nav-link" class="">
+            <i class="am-menu-toggle-icon am-icon-bars"></i>
+        </a>
+    </div>
+
+</header>
+
+
+<div class="addwork-container ">
+    <form action="" class="am-form" id="doc-vld-msg">
+        <fieldset>
+
+            <div class="am-form-group">
+                <label>标题</label>
+                <input type="text" minlength="3" placeholder="（至少 3 个字符）" required/>
+            </div>
+            <div class="am-form-group">
+                <label>岗位名</label>
+                <input type="text" minlength="3" placeholder="（至少 3 个字符）" required/>
+            </div>
+            <div class="am-form-group">
+                <label>公司名称</label>
+                <input type="text" minlength="3" placeholder="（至少 3 个字符）" required/>
+            </div>
+
+            <div class="am-form-group">
+                <label>待遇</label>
+                <select>
+                    <option value="">-=请选择一项=-</option>
+                    <option value="">1000-2000</option>
+                    <option value="">2000-5000</option>
+                    <option value="">5000-10000</option>
+                    <option value="">面议</option>
+                </select>
+                <span class="am-form-caret"></span>
+            </div>
+
+            <div class="am-form-group">
+                <label>地点</label>
+                <select>
+                    <option value="">-=请选择一项=-</option>
+                    <option value="">上海</option>
+                    <option value="">杭州</option>
+                    <option value="">北京</option>
+                    <option value="">广州</option>
+                    <option value="">深圳</option>
+                </select>
+                <span class="am-form-caret"></span>
+            </div>
+
+            <div class="am-form-group">
+                <label>小区名：</label>
+                <input type="text" placeholder="" required/>
+            </div>
+
+
+            <div class="am-form-group">
+                <label>联系方式</label>
+                <input type="text" placeholder="" required/>
+            </div>
+
+            <div class="am-form-group">
+                <label>Email</label>
+                <input type="text" placeholder="" required/>
+            </div>
+
+            <div class="am-form-group">
+                <label>招聘人数</label>
+                <input type="text" placeholder="" required/>
+            </div>
+
+
+            <div class="am-form-group">
+                <label>描述</label>
+                <textarea minlength="10" maxlength="100"></textarea>
+            </div>
+
+            <button class="am-btn am-btn-secondary am-btn-block" type="submit">发布岗位</button>
+
+        </fieldset>
+    </form>
+</div>
+
+
+<div data-am-widget="navbar" class="am-navbar am-cf am-navbar-default" id="">
+    <ul class="am-navbar-nav am-cf am-avg-sm-5" style="font-size: 12px">
+        <li>
+            <a href="{:U('')}" class="">
+
+            </a>
+        </li>
+
+        <li>
+            <a href="{:U('')}" class="">
+                发布
+            </a>
+        </li>
+        <li>
+            <a href="" class="am-icon-star">
+                个人中心
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+<script src="__JS__/jquery.min.js"></script>
+<script src="__JS__/amazeui.min.js"></script>
+<script>
+    $(function () {
+        $('#doc-vld-msg').validator({
+            onValid: function (validity) {
+                $(validity.field).closest('.am-form-group').find('.am-alert').hide();
+            },
+
+            onInValid: function (validity) {
+                var $field = $(validity.field);
+                var $group = $field.closest('.am-form-group');
+                var $alert = $group.find('.am-alert');
+                // 使用自定义的提示信息 或 插件内置的提示信息
+                var msg = $field.data('validationMessage') || this.getValidationMessage(validity);
+
+                if (!$alert.length) {
+                    $alert = $('<div class="am-alert am-alert-danger"></div>').hide().
+                            appendTo($group);
+                }
+                $alert.html(msg).show();
+            }
+        });
+    });
+
+</script>
+</body>
+</html>

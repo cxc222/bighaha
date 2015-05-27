@@ -1,0 +1,126 @@
+<extend name="Base/common"/>
+<block name="style">
+    <link href="__CSS__/store.css" type="text/css" rel="stylesheet">
+</block>
+<block name="header">
+    <include file="Public/nav"/>
+</block>
+<block name="body">
+    <div class="container">
+        <div class="row">
+            <!--导航栏end-->
+            <div class="mb10 clearfix ">
+                <script src="__JS__/raty.js"></script>
+                <style>
+
+                    .pic_size {
+                        width: 100px !important;
+                        height: 100px !important;
+
+                    }
+
+
+                </style>
+                <div class="col-xs-12">
+                    <div class="common_block_border" style="">
+                        <div class="pull-left">
+
+                            <a href="{:U('store/shop/detail',array('id'=>$shop['id']))}"
+                                                  style="font-size: 16px;padding: 15px;line-height: 42px">
+                                <img style="vertical-align: middle" class="img-rounded" src="{$shop.logo|getThumbImageById=30,30}"/>
+                                {$shop.title}</a>
+                        </div>
+                        <ul class="c_s_nav">
+                            <li class="cur"><a href="">店铺首页</a></li>
+                            <li><a href="{:U('store/shop/goods',array('id'=>$shop['id']))}">全部商品</a></li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+                <div class="col-xs-3">
+                    <div class="common_block_border mb10 ">
+                        <h2 class="common_block_title_right">{$shop.title}</h2>
+
+                        <div class="mb10">
+                            <div class="c_title">
+                                <h3 class="mb10"><span class="f16px mr10"></span> {:W('FavBtn',array('info'=>$info))}
+                                </h3>
+
+                                <div class="clearfix"></div>
+                                <div id="tab_info" class=" col-xs-5">
+                                    <div class="br5  ">
+                                        <img class="img-rounded" src="{:getThumbImageById($shop['logo'],80,80)}"
+                                             style="width: 80px;height: 80px"/>
+                                    </div>
+
+                                    <div class="mt10"></div>
+
+                                </div>
+                                <div class="f12px cgrey mb10  lh16 col-xs-7">
+                                    访问量：{$shop.visit_count}人<br/>
+                                    总销量：{$shop.order_count}单<br/>
+                                    创店：{$shop.create_time|date='Y.m.d',###} <br/>
+
+                                </div>
+                                <div class="col-xs-12">
+                                    <div class="br5 store_det f14px lh28 " style="width: 90%">
+                                        {$shop.summary}
+                                    </div>
+                                </div>
+
+                                <div class="clearfix"></div>
+
+                            </div>
+
+
+                        </div>
+                        <div class="clearfix"></div>
+
+                    </div>
+                    <div class="mr10 common_block_border mb10 ">
+                        <h2 class="common_block_title_right">店主信息</h2>
+
+                        <div class="clearfix mb10" style="padding-bottom:10px; ">
+                            <div class="col-xs-5">
+                                <a href="{$shop.user.space_url}" ucard="{$shop.uid}"> <img class="avatar-img"
+                                                                                      src="{$shop.user.avatar64}"/>
+                                </a>
+                            </div>
+                            <div class="col-xs-5">
+                                <div>
+                                    <a href="{$shop.user.space_url}" ucard="{$shop.uid}">
+                                        {$shop.user.nickname}
+                                    </a> <a class="btn btn-default btn-sm contact" onclick="talker.start_talk({$shop.uid})">在线咨询</a>
+                                </div>
+
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+
+                </div>
+                <div class="col-xs-9">
+                    <div class="common_block_border mb10 ">
+                        <h2 class="common_block_title">最热商品</h2>
+
+                        <div>
+                            {:W('InfoList/render',array(array('shop_id'=>$shop['id'],'order'=>'sell
+                            desc','num'=>9)))}
+                        </div>
+                    </div>
+                    <div class="common_block_border mb10 ">
+                        <h2 class="common_block_title">最新商品</h2>
+
+                        <div>
+                            {:W('InfoList/render',array(array('shop_id'=>$shop['id'],'num'=>9)))}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</block>

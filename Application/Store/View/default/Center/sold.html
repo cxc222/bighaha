@@ -1,0 +1,197 @@
+<extend name="Center/base"/>
+<block name="main_content">
+    <link href="__CSS__/center.css" type="text/css" rel="stylesheet">
+    <div class="common_block_border clearfix">
+        <h2 class="common_block_title">已卖出的</h2>
+
+        <div class="col-xs-12">
+
+            <if condition="$orders['count'] eq 0">
+                <div class=" c_board pd10 mb10">暂无任何消费记录。</div>
+            </if>
+            <table class="sold_table mb10">
+
+                <volist name="orders.data" id="vo">
+                    <tr class="title_info">
+                        <td colspan="2">编号：{$vo.id}
+                            <switch name="vo['condition']">
+                                <case value="0" break="1">
+                                    <a onclick="close_order({$vo.id})">【关闭】</a>
+                                </case>
+                            </switch>
+                        </td>
+                        <td colspan="2">成交时间：{$vo.create_time|friendlyDate}</td>
+                        <td colspan="2">买家：<a ucard="{$vo.uid}" href="{$vo.b_user.space_url}">{$vo.b_user.nickname|default=无此用户}</a>
+                        </td>
+                    </tr>
+                    <tr class="detail_info">
+                        <td>
+                            <img src="{$vo.goods.0.item.h_pic|getThumbImageById=32,32}"
+                                 style="width: 32px;height: 32px">
+                            <a target="_blank"
+                               href="{:U('store/Center/order',array('id'=>$vo['id']))}">{$vo.goods.0.item.h_name}</a>
+                        </td>
+                        <td>
+                            {$vo.total_count} 件
+                        </td>
+
+                        <td colspan="3">
+                            订单价格：{$vo|getFinalPrice|number_format=2} 元
+                        </td>
+                        <td>
+                            <switch name="vo['condition']">
+                                <case value="-1" break="1">
+                                    <b class="c_m_o_con cgrey">已取消</b>
+                                </case>
+                                <case value="0" break="1">
+                                    <b class="c_m_o_con cred">等待买家付款</b>
+                                </case>
+                                <case value="1" break="1">
+                                    <b class="c_m_o_con cgreen">等待卖家发货</b>
+                                </case>
+                                <case value="2" break="1">
+                                    <b class=" c_m_o_con cdeepskyblue" style="color: #00bfff">等待确认收货</b>
+                                </case>
+                                <case value="3" break="1">
+
+                                    <if condition="$vo['response'] eq 1">
+                                        <b class=" c_m_o_con cdeepskyblue" style="color: #008000">
+                                            【好评】+1
+                                        </b>
+                                    </if>
+                                    <if condition="$vo['response'] eq 0">
+                                        <b class=" c_m_o_con cdeepskyblue" style="color: #808080">【中评】+0</b>
+                                    </if>
+                                    <if condition="$vo['response'] eq -1">
+                                        <b class=" c_m_o_con cdeepskyblue" style="color: red">【差评】-1</b>
+                                    </if>
+
+                                </case>
+                                <case value="5" break="1">
+                                    <b class="c_m_o_con cgrey">超时取消</b>
+                                </case>
+                            </switch>
+                        </td>
+                    </tr>
+                    <tr class="splitter_info">
+                        <if condition="$vo['condition'] eq 0">
+                            <tr class="c_ddbox order_change{$vo.order_id}">
+                                <form action="{:U('store/Center/adjprice')}" method="post">
+                                    <td>
+                                        原价：<span class="original_price">{$vo.total_cny|number_format=2}</span>
+                                        <input type="hidden" name="order_id" value="{$vo.id}">
+                                    </td>
+
+                                    <td colspan="4">
+                                        调整价格（负为减）<br/><br/>
+                                        <input onchange="change()" name="adj_cny" value="{$vo.adj_cny}"
+                                               style="width: 300px"
+                                               class="pd5 form-control"
+                                               type="text">
+
+
+                                    <td>
+                                        <input type="submit" class="btn btn-primary" value="确认修改">
+                                        <!-- <a class="btn-grey-white"
+                                            onclick="$(this).parent().parent().fadeOut()">取消</a></td>-->
+                                </form>
+                            </tr>
+                        </if>
+                        <if condition="$vo['condition'] eq 1">
+
+                            <form action="{:U('store/Center/send')}" method="post">
+                                <tr class="c_ddbox">
+                                    <td>
+                                        收货人：
+                                        {$vo.r_name}
+                                    </td>
+                                    <td colspan="3">联系地址：{$vo.r_pos}</td>
+                                    <td>电话：{$vo.r_phone}</td>
+                                    <td>邮编：{$vo.r_code}</td>
+                                </tr>
+                                <tr class="c_ddbox  order_send">
+                                    <input type="hidden" name="order_id" value="{$vo.id}">
+                                    <td>快递名称</td>
+                                    <td colspan="4">快递单号[无需物流留空]</td>
+                                    <td>操作</td>
+                                </tr>
+
+                                <tr class="c_ddbox">
+                                    <td>
+                                        <select name="trans_name" class="form-control">
+                                            <optgroup label="常用">
+                                                <option>顺丰速运</option>
+                                                <option>圆通速递</option>
+                                                <option>中通速递</option>
+                                                <option>汇通速递</option>
+                                                <option>韵达快递</option>
+                                                <option>宅急送</option>
+                                                <option>EMS</option>
+                                            </optgroup>
+                                            <optgroup label="其他">
+                                                <option>其他物流</option>
+                                                <option>无需物流</option>
+                                            </optgroup>
+
+                                        </select>
+                                    </td>
+                                    <td colspan="4" class="mb10">
+                                        <input name="trans_code" class="form-control" type="text" style="width: 215px">
+                                    </td>
+                                    <td>
+                                        <input type="submit" class="btn btn-primary"
+                                               value="确认发货">
+                                    </td>
+                                </tr>
+
+                            </form>
+
+                        </if>
+
+
+                    </tr>
+                    <if condition="$vo['condition'] eq 2">
+                        <tr class="c_ddbox boxShadow  order_send_info">
+                            <form action="{:U('cat/Center/_send')}" method="post">
+                                <input type="hidden" name="order_id" value="{$vo.order_id}">
+                                <td colspan="6">
+                                    快递名称： {$vo.trans_name} | 单号：{$vo.trans_code} <span class="pull-right">发货于 <b
+                                        class="corange">{$vo.trans_time|friendlyDate}</b></span>
+                                </td>
+
+                            </form>
+                        </tr>
+                    </if>
+                    <tr class="splitter_info">
+                        <td>&nbsp;</td>
+                    </tr>
+
+
+                </volist>
+            </table>
+
+
+            <div class="clearfix"></div>
+            <div class="page text-right">
+                {$orders.html}
+            </div>
+        </div>
+    </div>
+    <script>
+        function close_order(id) {
+            var ok = confirm('确定关闭此订单？此操作不可恢复。');
+            if (ok) {
+                $.post("{:U('closeOrder')}", {id: id}, function (msg) {
+                    if (msg.status) {
+                        toast.success('关闭成功。');
+                        setTimeout('location.reload()', 1500);
+                    } else {
+                        toast.error(msg.info);
+                    }
+                });
+            }
+        }
+    </script>
+</block>
+
+<include file="__THEME__/public_footer"/>

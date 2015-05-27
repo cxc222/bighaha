@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>{:L('store')} | {:modC('WEB_SITE_NAME','OpenSNS')}</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel="alternate icon" type="image/png" href="assets/i/favicon.png">
+    <link rel="stylesheet" href="__CSS__/amazeui.min.css"/>
+    <link rel="stylesheet" href="__CSS__/store.css"/>
+    <link rel="stylesheet" href="__CSS__/app.css"/>
+    <style>
+        .header {
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 200%;
+            color: #333;
+            margin-bottom: 0px;
+        }
+
+        .header p {
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<header data-am-widget="header" class="am-header am-header-default am-header-fixed">
+
+
+    <div class="am-header-left am-header-nav">
+        <a href="javascript:history.go(-1);"><span class="am-icon-chevron-left"></span></a>
+        <a href="#phone-link" class="">
+            <i class="am-header-icon am-icon-bell-o"></i>
+        </a>
+    </div>
+    <h1 class="am-header-title">
+        商品详情
+    </h1>
+
+    <div class="am-header-right am-header-nav">
+
+        <a href="#nav-link" class="">
+            <i class="am-menu-toggle-icon am-icon-bars"></i>
+        </a>
+    </div>
+
+</header>
+
+
+<div class="goodsdetail-container ">
+    <div data-am-widget="slider" class="am-slider am-slider-default"
+         data-am-slider='{animation:slide,slideshow:false}'>
+        <ul class="am-slides">
+            <li>
+                <img src="Application/Mob/Static/test/551931edeecf0.jpg">
+
+                <div class="am-slider-desc">美女</div>
+            </li>
+            <li>
+                <img src="Application/Mob/Static/test/551931edeecf0.jpg">
+
+                <div class="am-slider-desc">美女</div>
+            </li>
+            <li>
+                <img src="Application/Mob/Static/test/551931edeecf0.jpg">
+
+                <div class="am-slider-desc">美女</div>
+            </li>
+            <li>
+                <img src="Application/Mob/Static/test/551931edeecf0.jpg">
+
+                <div class="am-slider-desc">美女</div>
+            </li>
+        </ul>
+    </div>
+    <div class="goodsdetail-box">
+        <div class="am-text-center">
+            <span class="">足球小将</span>
+        </div>
+
+        <div class="info">
+
+            <div class="am-g">
+                <span class="am-u-sm-6 am-text-center"> 浏览次数：44</span>
+                <span class="am-u-sm-6 am-text-center"> 收藏：0</span>
+            </div>
+            <div class="am-g">
+                <span class="am-u-sm-6 am-text-center">所在地：浙江杭州</span>
+                <span class="am-u-sm-6 am-text-center">发布日期：04月09日 13:34</span>
+            </div>
+        </div>
+
+        <div class="shop-info-box ">
+
+            <div class="shop am-g">
+                <ul>
+                    <li class="shop-avatar ">
+                        <img style="" src="Application/Mob/Static/test/551931edeecf0.jpg">
+                    </li>
+                    <li class="shop-info ">
+                        <h2 class="shop-name">野外商店</h2>
+                        <span>各种神器应有尽有</span></br>
+
+                        <div class="am-g">
+                            <span class="am-u-sm-6">访问量：10人</span>
+                            <span class="am-u-sm-6">总销量：20单</span>
+
+                        </div>
+                    </li>
+                </ul>
+
+            </div>
+
+            <p class="a-btn-box">
+                <a href="{:U('store/goodscate')}" class="a-btn"><span style="">查看宝贝分类</span></a>
+                <a href="{:U('store/shopdetail')}" class="a-btn"><span style="">进入店铺</span></a>
+            </p>
+        </div>
+    </div>
+
+
+    <div class="am-tabs" id="doc-my-tabs">
+        <ul class="am-tabs-nav am-nav am-nav-tabs am-nav-justify">
+            <li class="am-active"><a href="">图文详情</a></li>
+            <li><a href="">累计评价</a></li>
+            <li><a href="">同店推荐</a></li>
+        </ul>
+        <div class="am-tabs-bd">
+            <div class="am-tab-panel am-active">
+                <div class="am-text-center ">
+                    <ul class="am-avg-sm-1 am-avg-md-2 am-avg-lg-4">
+                        <li><img class="" src="Application/Mob/Static/test/5519324d9458e.jpg"></li>
+                        <li><img class="" src="Application/Mob/Static/test/5519323d2b61a.jpg"></li>
+
+                        <li><img class="" src="Application/Mob/Static/test/551932437ef75.jpg"></li>
+                        <li><img class="" src="Application/Mob/Static/test/551931edeecf0.jpg"></li>
+                    </ul>
+                </div>
+
+            </div>
+            <div class="am-tab-panel">
+                <div class="comment-list" style="margin-top: 20px">
+
+                    <php>for($i=1;$i<10;$i++){</php>
+                    <div class="comment-item"
+                         style="background-color: #ffffff;padding: 10px;margin-bottom: 5px;border: 1px solid #F2F2F2;">
+                        <div class="am-g avatar-img">
+                            <div class=" am-u-sm-6 avatar">
+                                <img class=" avatar-img" style="width: 32px"
+                                     src="Public/images/default_avatar_128_128.jpg">
+                                <span><a href="##">爱德华</a></span>
+                            </div>
+                            <div class=" am-u-sm-6 evaluate" style="font-size:13px; text-align: right">
+                                好评
+                            </div>
+
+                        </div>
+                        <div class="content" style="padding: 10px">
+                            你™的在逗我~！~！~
+                        </div>
+                        <div class="am-g" style="font-size:13px;">
+                            <div class="am-u-sm-6 am-text-center">
+                                <span>购买于：01月05日 16:42</span>
+                            </div>
+                            <div class="am-u-sm-6 am-text-center">
+                                <span>评价于：01月05日 16:44</span>
+                            </div>
+                        </div>
+                    </div>
+                    <php>}</php>
+
+                    <div class="am-form-group" style="padding: 10px">
+                        <h6>评论</h6>
+                        <textarea class="" rows="5" id="doc-ta-1" style="height: 8em; width: 100%;"></textarea>
+
+                        <p>
+                            <button type="submit" class="am-btn am-btn-default am-round">提交</button>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="am-tab-panel">
+                <div class="goods-list">
+                    <ul class="am-avg-sm-2 am-avg-md-4">
+                        <php>for($i=1;$i<5;$i++){</php>
+                        <li class="am-text-center">
+                            <div class="goods-box" style="padding: 5px">
+                                <div style="border:  1px solid #F2F2F2;padding: 10px">
+                                    <div class="am-text-center cover">
+                                        <a href="{:U('store/goodsdetail')}">
+                                            <img src="Application/Mob/Static/test/551931edeecf0.jpg"
+                                                 style="width: 150px;height: 150px"></a>
+                                    </div>
+                                    <div class="am-text-center content">
+                                        <a href="{:U('store/goodsdetail')}" class="title">商品名</a>
+                                    </div>
+                                    <div class="spliter "></div>
+                                    <div class="am-text-center">
+                                        <b class="f14px cgrey">￥</b>
+                                        <span class="">1,500.00</span>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </li>
+                        <php>}</php>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<div data-am-widget="navbar" class="am-navbar am-cf am-navbar-default" id="">
+    <ul class="am-navbar-nav am-cf am-avg-sm-2">
+
+
+        <li class="am-text-center">
+            <button class="am-btn am-btn-primary" data-am-modal="{target: '#my-actions'}">加入购物车</button>
+        </li>
+
+        <li>
+            <button class="am-btn  am-btn-primary" data-am-modal="{target: '#my-actions'}">立即购买</button>
+        </li>
+    </ul>
+</div>
+
+
+<div class="am-modal-actions" id="my-actions"style="background-color: #FFFFFF">
+    <div class="am-modal-actions-group"style="padding: 20px 10px">
+
+        <div id="tab" class="am-text-conter">
+                    <div><span>单价:</span><span class="price">3.95</span></div>
+                    <input class="min" name="" type="button" value="-"/>
+                    <input class="text_box" name="" type="text" value="1"/>
+                    <input class="add" name="" type="button" value="+"/>
+        </div>
+        <p>总价：<label id="total"></label></p>
+    </div>
+    <div class="am-modal-actions-group">
+        <ul class="am-navbar-nav am-cf am-avg-sm-2">
+            <li class="am-text-center">
+                <a class="am-btn am-btn-primary" data-am-modal="{target: '#my-actions'}">加入购物车</a>
+            </li>
+
+            <li>
+                <a href="" class="am-btn  am-btn-primary" data-am-modal="{target: '#my-actions'}">立即购买</a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<script src="__JS__/jquery.min.js"></script>
+<script src="__JS__/amazeui.min.js"></script>
+
+<script>
+    $(function () {
+        $('#doc-my-tabs').tabs();
+    })
+
+</script>
+<script>
+    $(function(){
+    $(".add").click(function(){
+        var t=$(this).parent().find('input[class*=text_box]');
+        t.val(parseInt(t.val())+1);
+        setTotal();
+    });
+    $(".min").click(function(){
+        var t=$(this).parent().find('input[class*=text_box]');
+        t.val(parseInt(t.val())-1);
+        if(parseInt(t.val())<1){
+            t.val(1);
+        }
+        setTotal();
+    });
+    function setTotal(){
+        var s=0;
+
+        $("#tab").each(function(){
+            s+=parseInt($(this).find('input[class*=text_box]').val())*parseFloat($(this).find('span[class*=price]').text());
+        });
+        $("#total").html(s.toFixed(2));
+    }
+    setTotal();
+
+})
+</script>
+
+
+
+</body>
+</html>

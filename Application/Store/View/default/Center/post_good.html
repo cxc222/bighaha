@@ -1,0 +1,331 @@
+<extend name="Center/base"/>
+<block name="style">
+    <style>
+        .web_uploader_picture_list {
+            margin-top: 10px;
+        }
+
+        .web_uploader_picture_list img {
+            width: 80px;
+            height: 80px;
+        }
+    </style>
+</block>
+<block name="main_content">
+<div style="background: none">
+<div class="common_block_border">
+    <h1 class="common_block_title mb10">发布{$entity.alias}</h1>
+    <if condition="I('get.name','','op_t') eq 'good'">
+        <php>
+            $condition=D('Shop')->getMyShopCondition(is_login());
+        </php>
+        <if condition="$condition">
+            <else/>
+            <div class="pd10">
+                <div class="alert alert-warning alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert"><span
+                            aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    您的店铺还未审核，请耐心等待管理员的审核。
+                </div>
+            </div>
+
+        </if>
+    </if>
+    <div class="pd10">
+        {:W('EntityProfile/render',array(array('name'=>op_t($_GET['name']),'entity_id'=>$_GET['entity_id'],'p_name'=>'des1')))}
+    </div>
+    <div class="pd10 ">
+        <form id="frm_post" action="{:U('Store/center/doAddInfo')}" method="POST" model-node="cat_form"
+              class="form-horizontal">
+            <input type="hidden" name="shop_id" value="{$myshop.id}">
+            <input type="hidden" name="entity_id" value="{$entity.id}">
+
+
+            <if condition="isset($_GET['info_id'])"><input type="hidden" name="info_id"
+                                                           value="{:I('get.info_id','intval')}"></if>
+            <div class="cat_tpl_input" style="font-size: 14px;color: #333">
+
+
+                <div class="form-group has-feedback ">
+
+
+                    <label for="title" class="col-xs-2 control-label"><span
+                            class="c_empty">*</span>商品名称</label>
+
+                    <div class="col-xs-5">
+                        <if condition="$info">
+                            <input id="title" name="title" event-node="input_text"
+                                   event-args="min=1&max=40&error=长度不合法" value="{$info.title}"
+                                   class=" form-control" type="text">
+                            <else/>
+                            <input id="title" name="title" event-node="input_text"
+                                   event-args="min=1&max=40&error=长度不合法" value=""
+                                   class=" form-control"
+                                   type="text">
+
+                        </if>
+                        <span class="help-block">必须输入&nbsp;</span>
+                    </div>
+                </div>
+                <div class="form-group has-feedback ">
+
+
+                    <label for="title" class="col-xs-2 control-label"><span
+                            class="c_empty">*</span>一级类目</label>
+
+                    <div class="col-xs-5">
+                        <select id="cat1" class="form-control" event-node="input_select" name="cat1"
+                                event-args="need=1&error=必须选择一级目录">
+                            <option value="-1">请选择一级目录</option>
+                            <volist name="cats" id="vo">
+                                <option value="{$vo.id}"
+                                <if condition="$vo['id'] eq $info['cat1']"> selected</if>
+                                >{$vo.title}</option>
+                            </volist>
+                        </select>
+                        <span class="help-block">顶级目录，必选&nbsp;</span>
+                    </div>
+                </div>
+                <div class="form-group has-feedback ">
+
+
+                    <label for="title" class="col-xs-2 control-label"><span
+                            class="c_empty">*</span>二级类目</label>
+
+                    <div class="col-xs-5">
+                        <select id="cat2" class="form-control" event-node="input_select" name="cat2"
+                                value="{$info.cat2}"
+                                event-args="need=1&error=必须选择二级目录">
+                            <option value="-1">选择分类</option>
+                        </select>
+                        <span class="help-block">二级目录，必须&nbsp;</span>
+                    </div>
+                </div>
+
+
+                <div class="form-group  has-feedback"><label class="col-xs-2 control-label"
+                                                             for="price"><span
+                        class="c_empty">*</span>价格</label>
+
+                    <div class="col-xs-5">
+                        <input id="price" name="price" event-node="input_text" style="width: 150px"
+                               event-args="need=1&amp;min=1&amp;error=必须输入价格" value="{$info.price}" class="form-control"
+                               type="text" data-original-title="" title="">
+                                 <span
+                                         class="help-block">*仅可输入数字</span></div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-xs-2 control-label"><span class="c_empty">*</span>主图</label>
+
+                    <div class="col-xs-5">
+                        <span id="web_uploader_wrapper_cover_id">请选择主图</span>
+
+                        <input id="web_uploader_input_cover_id" name="cover_id" type="hidden" value="{$info.cover_id}"
+                               event-args="need=1" event-node="uploadinput">
+
+                        <div id="web_uploader_picture_list_cover_id" class="web_uploader_picture_list">
+                            <img src="{$info.cover_id|getThumbImageById=340,340}"/>
+                        </div>
+                        <span class="help-block">*建议使用正方形的图片，大小不要小于340px*340px</span></div>
+                    <style>
+                        #web_uploader_picture_list_cover_id img {
+                            width: 340px;
+                            height: 340px;
+                            border: 1px solid #ddd;
+                        }
+                    </style>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-xs-2 control-label"><span class="c_empty">*</span>商品相册</label>
+
+                <div class="col-xs-5">
+                    <span id="web_uploader_wrapper_gallary">最多选择8张图</span>
+
+                    <input id="web_uploader_input_gallary" name="gallary" type="hidden" value=""
+                           event-node="uploadinput">
+
+                    <div id="web_uploader_picture_list_gallary" class="web_uploader_picture_list">
+                        <volist name="info.gallary_images" id="g">
+                            <img class="gallary_thumb" onclick="remove_file(this)" src="{$g.img}">
+                            <input type="hidden" name="gallary[]" value="{$g.id}"/>
+                        </volist>
+                    </div>
+                 <span
+                         class="help-block">*点击小图删除，删除后不能再上传</span>
+                </div>
+
+                <style>
+                    .gallary_thumb {
+                        border: 1px solid #ddd;
+                        padding: 2px;
+                        margin-right: 10px;
+                        margin-bottom: 10px;
+                    }
+                </style>
+            </div>
+
+
+            <div class="form-group">
+                <label class="col-xs-2 control-label"><span class="c_empty">*</span>商品描述</label>
+
+                <div class="col-xs-9">
+                    <div class="col-xs-10">
+
+                        <php>
+                            $config="toolbars:[['source','|','bold','italic','underline','fontsize','forecolor','justifyleft','fontfamily','|','map','emotion','insertimage','insertcode']]";
+                        </php>
+
+                        {:W('Common/Ueditor/editor',array('myeditor_edit','des',$info['des'],'100%','250px',$config))}
+                    </div>
+                </div>
+
+
+                <!--运费形式-->
+                <div class="form-group"><label class="col-xs-2 control-label"><span class="c_empty">*</span>运费形式</label>
+
+                    <div class="col-xs-5"><label for="trans_fee_buyer" class="radio-inline"><input
+                            name="trans_fee"
+                            class="store_radio "
+                            id="trans_fee_buyer"
+                            type="radio"
+                        <eq name="info.trans_fee" value="0">checked</eq>
+                        <eq name="info_id" value="0">checked</eq>
+                        value="0">买家承担</label><label
+                            for="trans_fee_seller" class="radio-inline"><input name="trans_fee"
+                                                                               class="store_radio "
+                                                                               id="trans_fee_seller"
+                                                                               type="radio"
+                        <eq name="info.trans_fee" value="1">checked</eq>
+                        value="1">卖家承担</label> <span
+                            class="help-block">*是否包邮</span></div>
+                </div>
+
+                <!--发布按钮-->
+                <div class="form-group clearfix">
+                    <div class="col-xs-offset-2 col-xs-10">
+                        <input type="submit"
+                               class="btn btn-primary" value="发布{$entity.alias}">
+                    </div>
+                </div>
+            </div>
+            {__TOKEN__}
+        </form>
+
+        <div class="clearfix"></div>
+    </div>
+    <div class="clearfix"></div>
+</div>
+<style>
+    .cat_over_hidden {
+        color: #008000;
+
+    }
+
+    .c_empty {
+        color: red;
+    }
+
+
+</style>
+</div>
+<script src="__JS__/module.js"></script>
+<script src="__JS__/cat_form.js"></script>
+<script src="__JS__/jquery.chained.remote.js"></script>
+
+
+<script type="text/javascript" charset="utf-8" src="__STATIC__/ueditor/third-party/webuploader/webuploader.js"></script>
+<link href="__STATIC__/ueditor/third-party/webuploader/webuploader.css" type="text/css" rel="stylesheet">
+<script type="text/javascript" src="__STATIC__/uploadify/jquery.uploadify.min.js"></script>
+<script>
+    $(function () {
+
+        $("#cat2").remoteChained("#cat1", U('store/index/get_cat'));
+
+        $("#cat3").remoteChained("#cat2", U('store/index/get_cat'));
+
+        $("#web_uploader_wrapper_cover_id").uploadify({
+            "height": 30,
+            "swf": "__STATIC__/uploadify/uploadify.swf",
+            "fileObjName": "download",
+            "buttonText": "上传封面",
+            "buttonClass": "uploadcover",
+            "uploader": "{:U('Core/File/uploadPicture',array('session_id'=>session_id()))}",
+            "width": 250,
+            'removeTimeout': 1,
+            'fileTypeExts': '*.jpg; *.png; *.gif;',
+            "onUploadSuccess": uploadPicturecover,
+            'overrideEvents': ['onUploadProgress', 'onUploadComplete', 'onUploadStart', 'onSelect'],
+            'onFallback': function () {
+                alert('未检测到兼容版本的Flash.');
+            }, 'onUploadProgress': function (file, bytesUploaded, bytesTotal, totalBytesUploaded, totalBytesTotal) {
+                $("#cover_id_cover").parent().find('.upload-img-box').html(totalBytesUploaded + ' bytes uploaded of ' + totalBytesTotal + ' bytes.');
+            }, 'onUploadComplete': function (file) {
+                //alert('The file ' + file.name + ' finished processing.');
+            }, 'onUploadStart': function (file) {
+                //alert('Starting to upload ' + file.name);
+            }, 'onQueueComplete': function (queueData) {
+                // alert(queueData.uploadsSuccessful + ' files were successfully uploaded.');
+            }
+        });
+        function uploadPicturecover(file, data) {
+            var data = $.parseJSON(data);
+            var src = '';
+            if (data.status) {
+                $("#web_uploader_input_cover_id").val(data.id);
+                src = data.url || data.path
+                $('#web_uploader_picture_list_cover_id').html(
+                        '<img src="' + src + '"/>'
+                );
+            } else {
+                toast.error('主图上传失败。', '温馨提示');
+            }
+        };
+
+        var gallary_num = "<php>echo count($info['gallary_images'])</php>";
+        var id = "#web_uploader_wrapper_gallary";
+        var uploader_gallary = WebUploader.create({
+            // swf文件路径
+            swf: 'Uploader.swf',
+            // 文件接收服务端。
+            server: "{:U('Core/File/uploadPicture',array('session_id'=>session_id()))}",
+            fileNumLimit: 8,
+            // 选择文件的按钮。可选。
+            // 内部根据当前运行是创建，可能是input元素，也可能是flash.
+            pick: {'id': id, 'multi': true}
+        });
+        uploader_gallary.on('beforeFileQueued', function (file) {
+            if (gallary_num >= 8) {
+                //toast.error('照片不能超过9张');
+                return false;
+            }
+        });
+        uploader_gallary.on('fileQueued', function (file) {
+            gallary_num = parseInt(gallary_num) + 1;
+
+            uploader_gallary.upload();
+            $("#web_uploader_file_name_gallary").text('正在上传...');
+        });
+
+        /*上传成功*/
+        uploader_gallary.on('uploadSuccess', function (file, ret) {
+            if (ret.status == 0) {
+                $("#web_uploader_file_name_gallary").text(ret.info);
+            } else {
+                $('#web_uploader_input_gallary').focus();
+                $('#web_uploader_input_gallary').val(ret.data.file.id);
+                $('#web_uploader_input_gallary').blur();
+                $("#web_uploader_picture_list_gallary").append('<img class="gallary_thumb" onclick="remove_file(this)" src="' + ret.data.file.path + '"/><input type="hidden" name="gallary[]" value="' + ret.data.file.id + '"/>');
+            }
+        });
+    });
+    function remove_file(obj) {
+        $(obj).next().remove();
+        $(obj).remove();
+        gallary_num = gallary_num - 1;
+    }
+</script>
+</block>
+

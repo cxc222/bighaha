@@ -95,6 +95,7 @@ class GroupMemberModel extends Model
 
     public function getGroupAdmin($group_id){
         $uids =$this->where(array('group_id'=>$group_id,'position'=>array('egt',2),'status'=>1))->field('uid')->order('position desc')->select();
+
         return getSubByKey($uids,'uid');
     }
 

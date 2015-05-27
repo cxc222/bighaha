@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>{:L('cat')} | {:modC('WEB_SITE_NAME','OpenSNS')}</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel="alternate icon" type="image/png" href="assets/i/favicon.png">
+    <link rel="stylesheet" href="__CSS__/amazeui.min.css"/>
+    <link rel="stylesheet" href="__CSS__/cat.css"/>
+    <link rel="stylesheet" href="__CSS__/app.css"/>
+    <script src="__JS__/jquery.min.js"></script>
+    <style>
+        header {
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 200%;
+            color: #333;
+            margin-bottom: 0px;
+        }
+
+        header p {
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body onload="initEvent()">
+
+<header data-am-widget="header" class="am-header am-header-default am-header-fixed">
+
+
+    <div class="am-header-left am-header-nav">
+        <a href="javascript:history.go(-1);"><span class="am-icon-chevron-left"></span></a>
+        <a href="#phone-link" class="">
+            <i class="am-header-icon am-icon-bell-o"></i>
+        </a>
+    </div>
+    <h1 class="am-header-title">
+        个人中心
+    </h1>
+
+    <div class="am-header-right am-header-nav">
+        <a href="#nav-link" class="">
+            <i class=" am-icon-star"></i>
+        </a>
+        <a href="#nav-link" class="">
+            <i class="am-menu-toggle-icon am-icon-bars"></i>
+        </a>
+    </div>
+</header>
+
+
+<div class="usercontent-container ">
+    <div class="user-info am-cf" >
+        <div class="avatar am-fl">
+            <img class="avatar-img"  src="Public/images/default_avatar_128_128.jpg">
+        </div>
+        <div class="info am-fl">
+            <span>
+                <a href="##">爱德华</a>
+            </span>
+            </br>
+            <span>
+                发布信息： 0 条
+            </span>
+            </br>
+             <span>
+                收藏信息： 0 条
+            </span>
+        </div>
+    </div>
+    <div class="center-info">
+        <ul class="am-avg-sm-2">
+            <li class="my-recruit am-text-center"><a href="{:U('cat/mymailbox')}" class="am-icon-star">我的信箱</a>
+            </li>
+            <li class="my-job am-text-center"><a href="{:U('cat/release')}" class="am-icon-star">发布的信息</a>
+            </li>
+            <li class="my-history am-text-center"><a href="{:U('cat/Collection')}" class="am-icon-star">收藏的信息</a>
+            </li>
+        </ul>
+    </div>
+
+    <button type="button" class="am-btn am-btn-primary am-btn-block">退出</button>
+
+</div>
+</div>
+
+
+<script src="__JS__/amazeui.min.js"></script>
+
+<script type="text/javascript">
+
+</script>
+</body>
+</html>

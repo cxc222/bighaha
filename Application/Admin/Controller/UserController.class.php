@@ -355,7 +355,7 @@ class UserController extends AdminController
      * @param $input_tips
      * @author 郑钟良<zzl@ourstu.com>
      */
-    public function editFieldSetting($id = 0, $profile_group_id = 0, $field_name = '', $child_form_type = 0, $visiable = 0, $required = 0, $form_type = 0, $form_default_value = '', $validation = 0, $input_tips = '')
+    public function editFieldSetting($id =  0, $profile_group_id = 0, $field_name = '', $child_form_type = 0, $visiable = 0, $required = 0, $form_type = 0, $form_default_value = '', $validation = 0, $input_tips = '')
     {
         if (IS_POST) {
             $data['field_name'] = $field_name;
@@ -394,15 +394,26 @@ class UserController extends AdminController
                 $data['sort'] = 0;
                 $res = D('field_setting')->add($data);
             }
-            if ($res) {
-                $this->success($id == '' ? "添加字段成功" : "编辑字段成功", U('field', array('id' => $profile_group_id)));
-            } else {
-                $this->error($id == '' ? "添加字段失败" : "编辑字段失败");
-            }
+            $role_ids=I('post.role_ids',array());
+            $this->_setFieldRole($role_ids,$res,$id);
+            $this->success($id == '' ? "添加字段成功" : "编辑字段成功", U('field', array('id' => $profile_group_id)));
         } else {
+            $roleOptions=D('Role')->selectByMap(array('status'=>array('gt',-1)),'id asc','id,title');
+
             $builder = new AdminConfigBuilder();
             if ($id != 0) {
                 $field_setting = D('field_setting')->where('id=' . $id)->find();
+
+                //所属角色
+                $roleConfigModel=D('RoleConfig');
+                $map = getRoleConfigMap('expend_field', 0);
+                unset($map['role_id']);
+                $map['value']=array('like',array('%,'.$id.',%',$id.',%','%,'.$id,$id),'or');
+                $already_role_id=$roleConfigModel->where($map)->field('role_id')->select();
+                $already_role_id=array_column($already_role_id,'role_id');
+                $field_setting['role_ids']=$already_role_id;
+                //所属角色 end
+
                 $builder->title("修改字段信息");
                 $builder->meta_title = '修改字段信息';
             } else {
@@ -428,11 +439,10 @@ class UserController extends AdminController
                 'join' => '关联字段',
                 'number' => '数字'
             );
-            $builder->keyReadOnly("id", "标识")->keyReadOnly('profile_group_id', '分组id')->keyText('field_name', "字段名称")->keySelect('form_type', "表单类型", '', $type_default)->keySelect('child_form_type', "二级表单类型", '', $child_type)->keyTextArea('form_default_value',"多个值用'|'分割开,格式【字符串：男|女，数组：1:男|2:女，关联数据表：字段名|表名】开")
+            $builder->keyReadOnly("id", "标识")->keyReadOnly('profile_group_id', '分组id')->keyText('field_name', "字段名称")->keyChosen('role_ids','拥有该字段的角色','详细设置请到“角色列表》默认信息配置》扩展资料配置”中操作',$roleOptions)->keySelect('form_type', "表单类型", '', $type_default)->keySelect('child_form_type', "二级表单类型", '', $child_type)->keyTextArea('form_default_value',"多个值用'|'分割开,格式【字符串：男|女，数组：1:男|2:女，关联数据表：字段名|表名】开")
                 ->keyText('validation', '表单验证规则', '例：min=5&max=10')->keyText('input_tips', '用户输入提示', '提示用户如何输入该字段信息')->keyBool('visiable', '是否公开')->keyBool('required', '是否必填');
             $builder->data($field_setting);
             $builder->buttonSubmit(U('editFieldSetting'), $id == 0 ? "添加" : "修改")->buttonBack();
-
             $builder->display();
         }
 
@@ -853,5 +863,69 @@ class UserController extends AdminController
             }
     }
 
+    /**
+     * 重新设置拥有字段的角色
+     * @param $role_ids 角色ids
+     * @param $add_id 新增字段时字段id
+     * @param $edit_id 编辑字段时字段id
+     * @author 郑钟良<zzl@ourstu.com>
+     */
+    private function _setFieldRole($role_ids,$add_id,$edit_id){
+        $type = 'expend_field';
+        $roleConfigModel=D('RoleConfig');
+        $map = getRoleConfigMap($type, 0);
+        if($edit_id){//编辑字段
+            unset($map['role_id']);
+            $map['value']=array('like',array('%,'.$edit_id.',%',$edit_id.',%','%,'.$edit_id,$edit_id),'or');
+            $already_role_id=$roleConfigModel->where($map)->select();
+            $already_role_id=array_column($already_role_id,'role_id');
 
+
+            unset($map['value']);
+            if(count($role_ids)&&count($already_role_id)){
+                $need_add_role_ids=array_diff($role_ids,$already_role_id);
+                $need_del_role_ids=array_diff($already_role_id,$role_ids);
+            }else if(count($role_ids)){
+                $need_add_role_ids=$role_ids;
+            }else{
+                $need_del_role_ids=$already_role_id;
+            }
+
+            foreach($need_add_role_ids as $val){
+                $map['role_id']=$val;
+                $data=$map;
+                $data['value'] = $edit_id;
+                $roleConfigModel->addData($data);
+            }
+
+
+            foreach($need_del_role_ids as $val){
+                $map['role_id']=$val;
+                $oldConfig=$roleConfigModel->where($map)->find();
+                if (count($oldConfig)) {
+                    $oldConfig['value']=implode(',',array_diff(explode(',',$oldConfig['value']),array($edit_id)));
+                    $roleConfigModel->saveData($map, $oldConfig);
+                } else {
+                    $data=$map;
+                    $data['value'] = $edit_id;
+                    $roleConfigModel->addData($data);
+                }
+            }
+
+        }else{//新增字段
+            foreach($role_ids as $val){
+                $map['role_id']=$val;
+                $oldConfig=$roleConfigModel->where($map)->find();
+                if (count($oldConfig)) {
+                    $oldConfig['value']=implode(',',array_unique(array_merge(explode(',',$oldConfig['value']),array($add_id))));
+                    $roleConfigModel->saveData($map, $oldConfig);
+                } else {
+                    $data=$map;
+                    $data['value'] = $add_id;
+                    $roleConfigModel->addData($data);
+                }
+            }
+        }
+        return true;
+    }
 }

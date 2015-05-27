@@ -167,7 +167,7 @@
 }
 .shop .not_nav_bar ul .current {
   color: #333333!important;
-  border-bottom: 3px solid #03ae87;
+  border-bottom: 3px solid #799CC5;
 }
 .shop .nav .open > a,
 .shop .nav .open > a:hover,
@@ -258,7 +258,7 @@
 }
 .shop .shop_navbar .current {
   color: #333333!important;
-  border-bottom: 3px solid #03ae87;
+  border-bottom: 3px solid #799CC5;
 }
 .shop .shop_navbar .dropdown-menu > li > a {
   display: block;

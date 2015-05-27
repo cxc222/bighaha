@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>{:L('store')} | {:modC('WEB_SITE_NAME','OpenSNS')}</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel="alternate icon" type="image/png" href="assets/i/favicon.png">
+    <link rel="stylesheet" href="__CSS__/amazeui.min.css"/>
+    <link rel="stylesheet" href="__CSS__/store.css"/>
+    <link rel="stylesheet" href="__CSS__/app.css"/>
+    <style>
+        .header {
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 200%;
+            color: #333;
+            margin-bottom: 0px;
+        }
+
+        .header p {
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<header data-am-widget="header" class="am-header am-header-default am-header-fixed">
+
+
+    <div class="am-header-left am-header-nav">
+        <a href="javascript:history.go(-1);"><span class="am-icon-chevron-left"></span></a>
+        <a href="#phone-link" class="">
+            <i class="am-header-icon am-icon-bell-o"></i>
+        </a>
+    </div>
+    <h1 class="am-header-title">
+        购物车
+    </h1>
+
+    <div class="am-header-right am-header-nav">
+
+        <a href="#nav-link" class="">
+            <i class="am-menu-toggle-icon am-icon-bars"></i>
+        </a>
+    </div>
+
+</header>
+
+
+<div class="car-container ">
+    <div class="goods-list ">
+        <ul>
+            <php>for($g=1;$g<3;$g++){</php>
+            <li class="goods-check">
+                <div class="am-panel am-panel-default">
+                    <div class="am-panel-hd">
+                        <div class="order-shop">
+                            <div class="title am-g">
+                                <div class="info am-u-sm-7 ">
+                                    <div class="shop shop-info ">
+                                        <div class="myscb">
+                                            <input type="checkbox" class="check shop-check" name="newslist"></div>
+                                        <a href="">
+                                            <h3>赛德斯旗舰店</h3>
+                                        </a>
+                                    </div>
+                                </div>
+                                <a class="am-icon-edit am-text-right am-u-sm-5">删除</a>
+                            </div>
+                        </div>
+                    </div>
+                    <ul class="order item-main">
+
+                        <li class="item item-list">
+                            <div class="item-box">
+                                <div class="myicb">
+                                    <input type="checkbox" class="check goods_check" name="newslist"></div>
+                                <div class="item-info">
+
+                                    <div class="itemInfo ">
+                                        <a href="" class="pic ">
+                                            <img class="lazy" src="Application/Mob/Static/test/551931edeecf0.jpg">
+                                        </a>
+                                        <a href="" class="fragment">
+                                            <h4>赛德斯lol英雄联盟有线牧马人</h4>
+                                        </a>
+                                    </div>
+
+                                    <div class="editor">
+                                        <div class="sku">
+                                            <p class="props"> 颜色分类:黑色+鼠标垫 </p>
+                                        </div>
+                                    </div>
+
+                                    <div class="sub-price">
+                                            <span class="itemPay ">
+                                                <span class="h">单价￥</span><span><label
+                                                    class="one-price">10</label></span>
+                                            </span>
+
+                                            <span class="quantity txt">
+                                                	 <input class="min" name="" data-price="10"
+                                                            style=" width:20px; height:18px;border:1px solid #ccc;"
+                                                            type="button" value="-"/>
+				                                     <input class="text_box" name="" type="text" value="1"
+                                                            style=" width:30px; text-align:center; border:1px solid #ccc;"/>
+				                                     <input class="add" name="" data-price="10"
+                                                            style=" width:20px; height:18px;border:1px solid #ccc;"
+                                                            type="button" value="+"/>
+                                                </span>
+
+                                    </div>
+                                    <div class="itemPay ">
+                                        <span class="c"
+                                              style="font-size: 12px;color: #999;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">
+                                            总价￥
+                                        </span>
+                                        <span>
+                                            <label class="price">10</label>
+                                    </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </li>
+
+                    </ul>
+                </div>
+            </li>
+            <php>}</php>
+        </ul>
+
+
+    </div>
+
+
+</div>
+
+
+<div data-am-widget="navbar" class="am-navbar am-cf " id="" style="background-color: orange;border: solid 1px #000">
+    <div class="am-navbar-nav am-cf am-g" style="padding:0px">
+
+        <div class="am-u-sm-8" style="padding: 0px;font-size: 13px;background-color: #F8F8F8">
+            <div class="am-g">
+                <div class="am-u-sm-4 am-text-center">
+                    <input id="invert" type="checkbox" onclick="selectAll()"/>全选
+                </div>
+                <div class="am-u-sm-8 " style="padding:0px">
+                    合计(不含运费):
+                    <span>￥</span>
+                <span style=" color:#ff5500;">
+                    <label id="totalAll" style="color:#ff5500;font-size:14px; font-weight:bold;">
+                        0
+                    </label>
+                </span>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="am-u-sm-4" style="padding: 0px">
+
+            <a class="" href="#" style="padding: 15px;background-color: #f37b1d">
+                结账
+            </a>
+
+        </div>
+    </div>
+</div>
+
+
+<script src="__JS__/jquery.min.js"></script>
+<script src="__JS__/amazeui.min.js"></script>
+<script src="__JS__/Calculation.js"></script>
+<script>
+
+    /*单个商品加减算总数*/
+    $(".add").click(function () {
+        var price = $(this).attr('data-price');
+        var t = $(this).parent('.quantity').find('input[class*=text_box]');
+        var value = parseInt(t.val()) + 1;
+        t.val(value);
+        var s = value * price;
+        $(this).parents('.item-info').find(".price").html(s.toFixed(2));
+        GetCount();
+    });
+    $(".min").click(function () {
+        var price = $(this).attr('data-price');
+        var t = $(this).parent('.quantity').find('input[class*=text_box]');
+        var value = parseInt(t.val()) - 1;
+        t.val(value);
+        var s = value * price;
+        $(this).parents('.item-info').find(".price").html(s.toFixed(2));
+        GetCount();
+    });
+
+
+    // 所有复选框点击事件
+    $(".goods-check input[class*=check]").click(function () {
+
+        GetCount()
+
+
+    });
+    $(".goods-check input[class*=shop-check]").click(function () {
+
+        GetCount()
+
+
+    });
+
+
+    function GetCount() {
+        var conts = 0;
+
+                $('.goods_check').each(function () {
+
+                if ($(this).is(":checked") == true) {
+                    conts += parseInt($(this).parents('.goods-check').find(".price").text());
+
+
+            }
+        });
+
+        $("#totall").html((conts).toFixed(2));
+        $("#totalAll").html((conts).toFixed(2));
+    }
+
+/*点击店铺店铺下的商品全选*/
+    function selectshop(){
+
+    }
+
+    /*全选*/
+    function selectAll() {
+
+        var a = document.getElementsByTagName("input");
+
+        if (a[0].checked) {
+
+            for (var i = 0; i < a.length; i++) {
+                if (a[i].type == "checkbox")
+                    a[i].checked = false;
+            }
+            $("#totalAll").text(0);
+        }
+        else {
+            for (var i = 0; i < a.length; i++) {
+                if (a[i].type == "checkbox")
+                    a[i].checked = true;
+
+            }
+            Total();
+        }
+
+    }
+
+    /*总价*/
+    function Total() {
+
+        var len = $(".price");
+        var num = 0;
+
+
+        for (var i = 0; i < len.length; i++) {
+            num = parseInt(num) + parseInt($(len[i]).text());
+        }
+
+        $("#totalAll").text(parseInt(num).toFixed(2));
+    }
+
+</script>
+
+
+</body>
+</html>

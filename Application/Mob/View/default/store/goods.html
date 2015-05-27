@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>{:L('store')} | {:modC('WEB_SITE_NAME','OpenSNS')}</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel="alternate icon" type="image/png" href="assets/i/favicon.png">
+    <link rel="stylesheet" href="__CSS__/amazeui.min.css"/>
+    <link rel="stylesheet" href="__CSS__/store.css"/>
+    <link rel="stylesheet" href="__CSS__/app.css"/>
+    <style>
+        header {
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 200%;
+            color: #333;
+            margin-bottom: 0px;
+        }
+
+        header p {
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<header data-am-widget="header" class="am-header am-header-default am-header-fixed">
+
+
+    <div class="am-header-left am-header-nav">
+        <a href="javascript:history.go(-1);"><span class="am-icon-chevron-left"></span></a>
+        <a href="#phone-link" class="">
+            <i class="am-header-icon am-icon-bell-o"></i>
+        </a>
+    </div>
+    <h1 class="am-header-title">
+        店铺详情
+    </h1>
+
+    <div class="am-header-right am-header-nav">
+
+        <a href="#nav-link" class="">
+            <i class="am-menu-toggle-icon am-icon-bars"></i>
+        </a>
+    </div>
+</header>
+
+<div class="goods-container ">
+    <div class="goods-list">
+        <div class="goods am-g">
+            <div class="hot-goods">
+                <div class="title">
+                    <p>掌柜热卖</p>
+                </div>
+                <div class="hot-goods-list">
+                    <ul class="goods-box am-avg-sm-2 am-avg-md-4 am-avg-lg-8">
+                        <php>for($i=1;$i<4;$i++){</php>
+                        <li>
+                            <div class="goods">
+                                <div class="am-text-center cover">
+                                    <a href="{:U('store/goodsdetail')}">
+                                        <img src="Application/Mob/Static/test/551931edeecf0.jpg"
+                                                ></a>
+                                </div>
+                                <div class="am-text-center content">
+                                    <a href="{:U('store/goodsdetail')}" class="title">商品名</a>
+                                </div>
+                                <div class="spliter "></div>
+                                <div class="am-gallery-title">
+                                    <b>￥</b><span class="">1,500.00</span>
+                                </div>
+                            </div>
+
+                        </li>
+                        <php>}</php>
+                    </ul>
+                </div>
+            </div>
+            <div class="goods-box">
+                <div class="goods-box-list">
+                    <div class="title">
+                        <p>宝贝</p>
+                    </div>
+                    <div class="goods-list-all">
+                        <ul class="goods-box am-avg-sm-2 am-avg-md-4 am-avg-lg-8">
+                            <php>for($v=1;$v<10;$v++){</php>
+                            <li>
+                                <div class="goods">
+                                    <div class="am-text-center cover">
+                                        <a href="{:U('store/goodsdetail')}">
+                                            <img src="Application/Mob/Static/test/551931edeecf0.jpg"
+                                                    ></a>
+                                    </div>
+                                    <div class="am-text-center content">
+                                        <a href="{:U('store/goodsdetail')}" class="title">商品名</a>
+                                    </div>
+                                    <div class="spliter "></div>
+                                    <div class="am-gallery-title">
+                                        <b>￥</b><span class="">1,500.00</span>
+                                    </div>
+                                </div>
+                            </li>
+                            <php>}</php>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+            <div class="am-list-news-ft">
+                <a class=" am-btn am-btn-secondary am-btn-block" href="###">查看更多 &raquo;</a>
+            </div>
+        </div>
+    </div>
+    <!-- <div data-am-widget="navbar" class="am-navbar am-cf am-navbar-default" id="">
+         <ul class="am-navbar-nav am-cf am-avg-sm-4">
+             <li>
+                 <a>
+                     全站动态
+                 </a>
+             </li>
+             <li>
+                 <a href="###" class="">
+                     我的关注
+                 </a>
+             </li>
+         </ul>
+     </div>-->
+</div>
+<script src="__JS__/jquery.min.js"></script>
+<script src="__JS__/amazeui.min.js"></script>
+
+</body>
+</html>

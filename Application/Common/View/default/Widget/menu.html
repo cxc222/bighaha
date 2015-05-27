@@ -15,7 +15,7 @@
                                         {$menu.title} <i class="icon-caret-down"></i>
                                     <ul class="dropdown-menu" role="menu">
                                         <volist name="menu.children" id="child">
-                                            <li><a href="{$child.href}">
+                                            <li><a href="{$child.href}" class="{$child.class}">
                                                 <neq name="child.icon" value=""><i
                                                         class="glyphicon glyphicon-{$child.icon}"></i></neq>
                                                 {$child.title}</a></li>
@@ -25,8 +25,8 @@
                                 </li>
                                 <else/>
                                 <!--一级菜单-->
-                                <li id="tab_{$menu.tab}"  class="{$class}"
-                                        ><a href="{$menu.href}">
+                                <li id="tab_{$menu.tab}"  class="{$menu.li_class}"
+                                        ><a href="{$menu.href}" class="{$menu.a_class}">
                                     <neq name="menu.icon" value=""><i class="glyphicon glyphicon-{$menu.icon}"></i>
                                     </neq>
                                     {$menu.title}</a></li>
@@ -40,7 +40,7 @@
                                 <php>$class=($current==$menu['tab']?'active':'');</php>
                                 <switch name="menu.type">
                                     <case value="button">
-                                        <a href="{$menu.href}" ><i class="icon-{$menu.icon}"></i>{$menu.html}</a>
+                                        <a href="{$menu.href}" class="{$menu.a_class}"><i class="icon-{$menu.icon}"></i>{$menu.html}</a>
                                     </case>
                                     <case value="search">
                                         <form class="navbar-form navbar-right" action="{$menu.action}"  method="{$menu.from_method}" role="search">
@@ -54,14 +54,14 @@
                                     <default/>
                                     <if condition="$menu['children']">
                                         <!--二级菜单-->
-                                        <li id="tab_{$menu.tab}" class="dropdown {$class}">
+                                        <li id="tab_{$menu.tab}" class="dropdown {$menu.class}">
                                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                                 <neq name="menu.icon" value=""><i class="icon-{$menu.icon}"></i>
                                                 </neq>
                                                 {$menu.title} <i class="icon-caret-down"></i>
                                                 <ul class="dropdown-menu" role="menu">
                                                     <volist name="menu.children" id="child">
-                                                        <li><a href="{$child.href}">
+                                                        <li><a href="{$child.href}" class="{$child.class}">
                                                             <neq name="child.icon" value=""><i
                                                                     class="glyphicon glyphicon-{$child.icon}"></i></neq>
                                                             {$child.title}</a></li>
@@ -71,8 +71,8 @@
                                         </li>
                                         <else/>
                                         <!--一级菜单-->
-                                        <li id="tab_{$menu.tab}"  class="{$class}"
-                                                ><a href="{$menu.href}">
+                                        <li id="tab_{$menu.tab}" class="{$menu.li_class}">
+                                            <a href="{$menu.href}" class="{$menu.a_class}">
                                             <neq name="menu.icon" value=""><i class="glyphicon glyphicon-{$menu.icon}"></i>
                                             </neq>
                                             {$menu.title}</a></li>

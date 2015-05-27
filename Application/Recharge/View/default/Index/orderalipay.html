@@ -1,0 +1,125 @@
+<extend name="Base/common"/>
+<block name="style">
+    <link href="__CSS__/recharge.css" rel="stylesheet" type="text/css"/>
+</block>
+<block name="header">
+    <include file="Public/_nav"/>
+</block>
+
+
+<block name="body">
+    <div class="row">
+        <div class="col-xs-12">
+            <p>&nbsp;</p>
+            <h4>订单确认</h4>
+            <hr class="oneuser-title-hr"/>
+        </div>
+    </div>
+    <include file="_menu"/>
+    <div style="margin-bottom: 50px">
+        <h3 style="font-size: 16px;font-weight: bold">订单信息</h3>
+        <hr/>
+        <blockquote>
+            <table class="table table-bordered">
+                <tr>
+                    <td>订单号</td>
+                    <td>{$order.id}</td>
+                </tr>
+                <tr>
+                    <td>充值类型</td>
+                    <td>{$order.score_type.title}</td>
+                </tr>
+                <tr>
+                    <td>充值金额</td>
+                    <td>{$order.amount} 元</td>
+                </tr>
+                <tr>
+                    <td>充值比例</td>
+
+                    <td>
+                        1 RMB = {$order.recharge_type.UNIT} {$order.score_type.unit} {$order.score_type.title}
+                    </td>
+                </tr>
+                <tr>
+                    <td>可获得{$order.score_type.title}</td>
+                    <td>
+
+                        <php>echo floor($order['recharge_type']['UNIT']*$order['amount']);</php>
+                        {$order.score_type.unit}【系统将自动舍弃掉小数位】
+                    </td>
+                </tr>
+                <tr>
+                    <td>充值方式</td>
+                    <td>{$order['pay_method']}</td>
+                </tr>
+                <tr>
+                    <td>订单状态</td>
+                    <td>{:get_order_status_cn($order['id'])}</td>
+                </tr>
+
+            </table>
+        </blockquote>
+
+        <php>if(get_order_status($order['id']) == 0 ){</php>
+        <div style="margin-bottom: 30px" class="clearfix">
+            <form action="__ROOT__/Application/Recharge/Lib/Alipay/alipayapi.php" method="post">
+                <input type="hidden" name="WIDout_trade_no" value="{$order.id}"/>
+                <input type="hidden" name="WIDsubject" value="账户充值"/>
+                <input type="hidden" name="WIDtotal_fee" value="{$order.amount}"/>
+                <input type="hidden" name="WIDbody" value="通过支付宝对站内账户进行充值。"/>
+                <input type="hidden" name="WIDshow_url" value=""/>
+                <button class="btn btn-primary pull-right" type="submit">立即支付</button>
+            </form>
+        </div>
+        <php>}</php>
+
+        <php>if($record){</php>
+        <h3 style="font-size: 16px;font-weight: bold">支付宝订单信息</h3>
+        <blockquote>
+            <table class="table table-bordered">
+                <tr>
+                    <td>支付宝订单号</td>
+                    <td>{$record.trade_no}</td>
+                </tr>
+                <tr>
+                    <td>付款人</td>
+                    <td>{$record.buyer_email}</td>
+                </tr>
+                <tr>
+                    <td>收款人</td>
+                    <td>{$record.seller_email} 元</td>
+                </tr>
+                <tr>
+                    <td>金额</td>
+                    <td>
+                       ￥ {$record.total_fee} 元
+                    </td>
+                </tr>
+                <tr>
+                    <td>订单状态</td>
+                    <td>
+
+                        <php>if($record['trade_status'] == 'TRADE_SUCCESS' || $record['trade_status'] == 'TRADE_FINISHED' ){
+                        $trade_status = '支付成功';
+                            }else{
+                            $trade_status = '支付失败';
+                            }
+
+                        </php>
+                        {$trade_status}
+                    </td>
+                </tr>
+                <tr>
+                    <td>时间</td>
+                    <td>   {$record.notify_time|date='Y-m-d H:i',###}</td>
+                </tr>
+            </table>
+
+
+        </blockquote>
+<php>}</php>
+
+    </div>
+
+
+</block>

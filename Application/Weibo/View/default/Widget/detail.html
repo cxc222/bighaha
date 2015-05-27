@@ -53,7 +53,8 @@
                     <span>
                         <a href="{:U('Weibo/Index/weiboDetail',array('id'=>$weibo['id']))}">{$weibo.create_time|friendlyDate}</a>
                     </span>
-                        &nbsp;&nbsp;<span>来自 <if condition="$weibo['from'] eq ''">网站端 <else/><strong>{$weibo.from}</strong></if></span>
+                        &nbsp;&nbsp;<span>来自 <if condition="$weibo['from'] eq ''">网站端 <else/>
+                        <strong>{$weibo.from}</strong></if></span>
                         {:hook('report',array('type'=>$MODULE_ALIAS.'/'.$MODULE_ALIAS,'url'=>"Weibo/Index/weiboDetail?id=$weibo[id]",'data'=>array('weibo-id'=>$weibo['id'])))}
                     </div>
                 </div>

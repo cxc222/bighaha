@@ -19,6 +19,53 @@ body {
   word-break: break-word;
   background: #f4f6f8;
 }
+.nav > li{
+  float: left;
+}
+.navbar-right{
+  float: right !important;
+  margin: 0;
+}
+.navbar-left{
+  float: left !important;
+  margin: 0;
+}
+.form-horizontal .control-label{
+  text-align: right;
+}
+.navbar-collapse.collapse{
+  display: block !important;
+  height: auto !important;
+  padding-bottom: 0;
+  overflow: visible !important;
+}
+.navbar-nav{
+  float: left;
+  margin: 0;
+}
+
+.navbar-form{
+  margin-top: 4px;
+  margin-bottom: 4px;
+  padding: 0;
+  border: none;
+}
+
+.navbar-nav .open .dropdown-menu{
+  position: absolute;
+  left: auto;
+  right: 0;
+  background-color: #fff;
+  margin: 2px 0 0;
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
+  border: 1px solid #cbcbcb;
+  border: 1px solid rgba(0, 0, 0, .15);
+  border-radius: 0;
+  -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
+}
+
 
 /*resetend*/
 
@@ -378,7 +425,7 @@ h2 {
 
 /* extended dropdowns */
 .notification {
-  width: 300px;
+  width: 300px!important;
   .header {
     border-bottom: 1px solid #ccc;
   }

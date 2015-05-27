@@ -41,7 +41,8 @@ class MemberController extends Controller
         }
 
 
-        if (IS_POST) { //注册用户
+        if (IS_POST) {
+        //注册用户
             $return = check_action_limit('reg', 'ucenter_member', 1, 1, true);
             if ($return && !$return['state']) {
                 $this->error($return['info'], $return['url']);
@@ -102,7 +103,8 @@ class MemberController extends Controller
             } else { //注册失败，显示错误信息
                 $this->error($this->showRegError($uid));
             }
-        } else { //显示注册表单
+        } else {
+         //显示注册表单
             if (is_login()) {
                 redirect(U(C('AFTER_LOGIN_JUMP_URL')));
             }
@@ -225,6 +227,7 @@ class MemberController extends Controller
     /* 登录页面 */
     public function login()
     {
+        //dump(11111);exit;
         $this->setTitle('用户登录');
 
         if (IS_POST) {
@@ -800,7 +803,8 @@ class MemberController extends Controller
             $user_role['status'] = 1;
         }
         $result = D('UserRole')->add($user_role);
-        if (!$role['audit']) { //该角色不需要审核
+        if (!$role['audit']) {
+        //该角色不需要审核
             $memberModel->initUserRoleInfo($role_id, $uid);
         }
         $memberModel->initDefaultShowRole($role_id, $uid);
@@ -886,7 +890,8 @@ class MemberController extends Controller
             } else {
                 $this->error("不存在该邀请码或邀请链接！");
             }
-        } else { //（开启邀请注册且无邀请码）或（只开启了普通注册）
+        } else {
+        //（开启邀请注册且无邀请码）或（只开启了普通注册）
             if (in_array('invite', $register_type)) {
                 $this->assign('open_invite_register', 1);
             }
@@ -897,7 +902,8 @@ class MemberController extends Controller
                 $map_role['invite'] = 0;
                 $roleList = D('Admin/Role')->selectByMap($map_role, 'sort asc', 'id,title');
                 //角色end
-            } else { //（只开启了邀请注册）
+            } else {
+             //（只开启了邀请注册）
                 $this->error("收到邀请的用户才能注册该网站！");
             }
         }

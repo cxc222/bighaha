@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>{:L('group')} | {:modC('WEB_SITE_NAME','OpenSNS')}</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel="alternate icon" type="image/png" href="assets/i/favicon.png">
+    <link rel="stylesheet" href="__CSS__/amazeui.min.css"/>
+    <link rel="stylesheet" href="__CSS__/group.css"/>
+    <link rel="stylesheet" href="__CSS__/app.css"/>
+    <style>
+        .header h1 {
+            font-size: 200%;
+            color: #333;
+            margin-top: 30px;
+        }
+
+        .header p {
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<header data-am-widget="header" class="am-header am-header-default am-header-fixed">
+    <div class="am-header-left am-header-nav">
+        <a href="javascript:history.go(-1);">
+            <span class="am-icon-chevron-left">
+            </span>
+        </a>
+
+    </div>
+    <h1 class="am-header-title">发表新帖
+    </h1>
+
+
+    <div class="am-header-right am-header-nav">
+        <a href="#msg" class="">
+            <i class="am-header-icon am-icon-bell-o"></i>
+        </a>
+    </div>
+</header>
+
+<div class="add-group" style="padding: 10px;">
+
+    <form action="" class="am-form" data-am-validator>
+        <div class="am-form-group">
+            <select id="doc-select-1" required>
+                <option value="option1">请选择分类</option>
+                <option value="option2">选项二.....</option>
+                <option value="option3">选项三........</option>
+            </select>
+            <span class="am-form-caret"></span>
+        </div>
+        <div class="am-form-group">
+            <input type="text" id="info" minlength="1" placeholder="标题（至少 3 个字符）" required/>
+        </div>
+        <textarea data-role="" type="text" placeholder="帖子内容"
+                  style="width: 100%;height:150px;padding: 5px;margin-bottom: 5px">
+
+        </textarea>
+
+        <div class="am-g">
+
+            <div class="am-u-sm-6"style="padding:2px">
+                <a href="{:U('group/postdetail')}" type="button" class="am-btn am-btn-primary am-btn-block am-u-sm-6"><i
+                        class="am-menu-toggle-icon am-icon-home"></i>返回帖子列表
+                </a>
+            </div>
+            <div class="am-u-sm-6"style="padding: 2px">
+                <a type="button" class="am-btn am-btn-primary am-btn-block "><i
+                        class="am-menu-toggle-icon am-icon-edit"></i>提交
+                </a>
+            </div>
+
+
+        </div>
+
+
+    </form>
+</div>
+<script src="__JS__/jquery.min.js"></script>
+<script src="__JS__/amazeui.min.js"></script>
+
+</body>
+</html>

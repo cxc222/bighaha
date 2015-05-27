@@ -1,0 +1,27 @@
+
+<ul class="blog-box">
+    <a href="{:U('Blog/blogdetail',array('id'=>$vl['id']))}">
+        <li class="blog am-g " style="">
+            <div class="info am-u-sm-9 ">
+                <h3>{$vl.title}</h3>
+
+                <div class="box-foot am-cf">
+                    <div class="name am-fl">
+                        <span> {$vl.user.nickname}</span>
+                        <span>{$vl.create_time|friendlyDate}</span>
+                    </div>
+                    <div class="hot am-fr">
+                        <i class="am-icon-fire"></i>{$vl.view}
+                        <i class="am-icon-comment-o"style="margin-left: 10px"></i>{$vl.count}
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="entry-content am-u-sm-3 " >
+                <img class="am-img-thumbnail am-radius" style="max-width: 138px;" src="{$vl.cover_url}">
+            </div>
+        <li>
+    </a>
+
+</ul>

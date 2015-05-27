@@ -210,6 +210,9 @@ class ConfigController extends AdminController
         $builder->keyText('ICP', '网站备案号', '设置在网站底部显示的备案号，如“沪ICP备12007941号-2');
         $builder->keySingleImage('LOGO', '网站Logo', '网站的logo设置，建议尺寸156*50');
         $builder->keySingleImage('QRCODE', '微信二维码', '悬浮微信二维码');
+        $builder->keySingleImage('JUMP_BACKGROUND', '跳转页背景图片', '跳转页背景图片');
+
+
 
         $builder->keySingleImage('JUMP_BACKGROUND', '跳转页背景图片', '跳转页背景图片');
         $builder->keyText('SUCCESS_WAIT_TIME', '成功等待时间', '设置成功时页面等待页面');
@@ -221,7 +224,7 @@ class ConfigController extends AdminController
         $builder->keyEditor('COPY_RIGHT', '版权信息', '页脚版权信息');
 
 
-        $builder->group('基本信息', array('WEB_SITE_NAME', 'ICP', 'LOGO', 'QRCODE'));
+        $builder->group('基本信息', array('WEB_SITE_NAME', 'ICP', 'LOGO', 'QRCODE','JUMP_BACKGROUND'));
 
         $builder->group('页脚信息', array('ABOUT_US', 'SUBSCRIB_US', 'COPY_RIGHT'));
 

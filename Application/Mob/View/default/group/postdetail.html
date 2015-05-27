@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>{:L('group')} | {:modC('WEB_SITE_NAME','OpenSNS')}</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel="alternate icon" type="image/png" href="assets/i/favicon.png">
+    <link rel="stylesheet" href="__CSS__/amazeui.min.css"/>
+    <link rel="stylesheet" href="__CSS__/forum.css"/>
+    <link rel="stylesheet" href="__CSS__/app.css"/>
+    <style>
+        .header h1 {
+            font-size: 200%;
+            color: #333;
+            margin-top: 30px;
+        }
+
+        .header p {
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+
+<header data-am-widget="header" class="am-header am-header-default am-header-fixed">
+    <div class="am-header-left am-header-nav">
+        <a href="javascript:history.go(-1);"><span class="am-icon-chevron-left"></span></a>
+        <a href="msg" class="">
+            <i class="am-header-icon am-icon-bell-o"></i>
+        </a>
+    </div>
+    <h1 class="am-header-title">
+        帖子
+    </h1>
+
+    <div class="am-header-right am-header-nav">
+
+        <a href="#nav-link" class="">
+            <i class="am-menu-toggle-icon am-icon-bars"></i>
+        </a>
+    </div>
+</header>
+<div id="demo-view" class="" data-backend-compiled="" style="z-index: 1040">
+    <nav data-am-widget="menu" class="am-menu am-menu-offcanvas1 am-no-layout" data-am-menu-offcanvas=""><a
+            href="javascript: void(0)" class="am-menu-toggle"><i class="am-menu-toggle-icon am-icon-bars"></i></a>
+
+        <div class="am-offcanvas ">
+            <div class="am-offcanvas-bar am-offcanvas-bar-flip">
+                <div class="am-text-center">
+                    <img class="avatar-img" style="width:64px;" src="Public/images/default_avatar_128_128.jpg">
+
+                    <div class="am-text-center">
+                        <a href="http://mob.com/index.php?s=/mob/weibo/index.html">李小龙</a>
+                    </div>
+                </div>
+
+
+                <ul class="am-menu-nav am-avg-sm-1">
+
+                    <li class=""><a href="{:U('weibo/index')}" class="">微博</a></li>
+                    <li class=""><a href="{:U('issue/index')}" class="">专辑</a></li>
+
+                    <li class=""><a href="{:U('blog/index')}" class="">资讯</a></li>
+
+                    <li class=""><a href="##" class="">资讯</a></li>
+
+                    <li class=""><a href="{:U('forum/index')}" class="">论坛</a></li>
+                    <li class=""><a href="{:U('group/index')}" class="">群组</a></li>
+                    <li class=""><a href="{:U('event/index')}" class="">活动</a></li>
+                    <li class=""><a href="##" class="">签到</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</div>
+<div class="post-container " >
+
+
+    <div class="post" id="article_list_ul">
+
+
+        <div class="post-box">
+
+            <div class="am-g info">
+                <div class="am-u-sm-3 avatar">
+                    <img class="avatar-img" src="Public/images/default_avatar_128_128.jpg">
+                </div>
+                <div class="am-u-sm-5 nickname">
+                    <span> 赛巴斯酱</span><br/>
+                    <span class="time">5分钟前</span>
+                </div>
+                <div class="am-u-sm-4 part">
+                    楼主
+                </div>
+            </div>
+            <div class="am-g content">
+                <p> 啊啊啊啊</p>
+            </div>
+            <div class="am-g interact-button">
+                <span class="small-btn">
+                    <a><i class="am-icon-star-o"></i> </a> <span></span>
+                </span>
+
+                <span class="small-btn">
+                    <i class="am-icon-comment-o" id="doc-prompt-toggle"></i>
+                </span>
+
+            </div>
+
+        </div>
+    </div>
+    <php>for($i=1;$i<10;$i++){</php>
+    <div class="comment">
+        <div class=" comment-box">
+            <div class="am-g info">
+                <div class="am-u-sm-2 avatar">
+                    <img class="avatar-img" style="width:32px" src="Public/images/default_avatar_128_128.jpg">
+                </div>
+                <div class="am-u-sm-5 nickname">
+                    <span> 伊布拉希莫维奇</span><br/>
+                    <span class="time">5分钟前</span>
+                </div>
+                <div class="am-u-sm-4 part">
+                    楼层
+                </div>
+            </div>
+        </div>
+        <div class="am-g content">
+            <p>妖怪还我爷爷</p>
+        </div>
+        <div class="am-g interact-button">
+            <span class="small-btn">
+                <a><i class="am-icon-trash" id="doc-confirm-toggle"></i></a>
+            </span>
+            <a href="{:U('group/comment')}" class="small-btn">
+                <i class="am-icon-comment-o"></i>
+            </a>
+        </div>
+    </div>
+    <php>}</php>
+
+    <div class="am-list-news-ft">
+        <a class=" am-btn am-btn-secondary am-btn-block" href="###">查看更多 &raquo;</a>
+    </div>
+
+    <div class="am-modal " tabindex="-1" id="my-comment">
+        <div class="am-modal-dialog">
+            <div class="am-modal-bd">
+                回复
+                <input type="text" class="am-modal-prompt-input">
+            </div>
+            <div class="am-modal-footer">
+                <span class="am-modal-btn" data-am-modal-cancel>取消</span>
+                <span class="am-modal-btn" data-am-modal-confirm>提交</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="am-modal am-modal-confirm" tabindex="-1" id="my-confirm">
+        <div class="am-modal-dialog">
+            <div class="am-modal-bd">
+                你，确定要删除这条记录吗？
+            </div>
+            <div class="am-modal-footer">
+                <span class="am-modal-btn" data-am-modal-cancel>取消</span>
+                <span class="am-modal-btn" data-am-modal-confirm>确定</span>
+            </div>
+        </div>
+    </div>
+
+
+
+</div>
+
+<script src="__JS__/jquery.min.js"></script>
+<script src="__JS__/amazeui.min.js"></script>
+<script>
+    /*回复弹出框*/
+    $(function() {
+        $('#doc-prompt-toggle').on('click', function() {
+            $('#my-comment').modal({
+                relatedTarget: this,
+                onConfirm: function(e) {
+                    alert('你输入的是：' + e.data || '')
+                }
+            });
+        });
+    });
+
+    /*删除弹出框*/
+    $(function() {
+        $('#doc-modal-list').find('.am-icon-trash').add('#doc-confirm-toggle').
+                on('click', function() {
+                    $('#my-confirm').modal({
+                        relatedTarget: this,
+                        onConfirm: function(options) {
+                            var $link = $(this.relatedTarget).prev('a');
+                            var msg = $link.length ? '你要删除的链接 ID 为 ' + $link.data('id') :
+                                    '删除成功';
+                            alert(msg);
+                        },
+                        onCancel: function() {
+                            alert('算求，不弄了');
+                        }
+                    });
+                });
+    });
+    //弹出
+    $(function (){
+
+    });
+</script>
+</body>
+</html>

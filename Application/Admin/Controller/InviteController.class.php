@@ -460,11 +460,19 @@ class InviteController extends AdminController
         if(count($aIds)){
             $map['id']=array('in',$aIds);
         }else{
-            $map['id']=array('gt',0);
+            $map['status']=array('in',array(1,0,-1));
+            $dataListBack=$this->inviteModel->getListAll(array('status'=>2));
         }
-        list($dataList,$totalCount)=$this->inviteModel->getList($map);
-        if(!count($dataList)){
+        $dataList=$this->inviteModel->getListAll($map,'status desc,end_time desc');
+        if(!count($dataList)&&!count($dataListBack)){
             $this->error('没有数据！');
+        }
+        if(count($dataListBack)){
+            if(count($dataList)){
+                $dataList=array_merge($dataList,$dataListBack);
+            }else{
+                $dataList=$dataListBack;
+            }
         }
         $data="id,邀请码类型,邀请码,邀请链接,购买者,可注册数,已经注册数,有效期,状态,生成时间\n";
         foreach ($dataList as $val) {

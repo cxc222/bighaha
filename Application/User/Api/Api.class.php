@@ -34,6 +34,7 @@ abstract class Api{
 	 */
 	public function __construct(){
 		//相关配置检测
+
 		defined('UC_APP_ID') || throw_exception('UC配置错误：缺少UC_APP_ID');
 		defined('UC_API_TYPE') || throw_exception('UC配置错误：缺少UC_APP_API_TYPE');
 		defined('UC_AUTH_KEY') || throw_exception('UC配置错误：缺少UC_APP_AUTH_KEY');
@@ -55,6 +56,8 @@ abstract class Api{
 	/**
 	 * 抽象方法，用于设置模型实例
 	 */
+
 	abstract protected function _init();
+
 
 }

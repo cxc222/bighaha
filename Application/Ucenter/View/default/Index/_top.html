@@ -10,7 +10,7 @@
     </if>
 </div>
 <div class="row uc_info">
-    <div class="col-md-3 col-xs-4">
+    <div class="col-xs-3">
         <dl>
             <dt>
                 <a href="{$user_info.space_url}" title="">
@@ -29,7 +29,7 @@
             </dd>
         </dl>
     </div>
-    <div class="col-md-6 col-xs-8">
+    <div class="col-xs-6">
         <div class="uc_main_info">
             <div class="uc_m_t_12 uc_m_b_12 uc_uname">
                 <span>
@@ -69,7 +69,7 @@
         </div>
     </div>
     <if condition="is_login() && $user_info['uid'] != get_uid()">
-        <div class="col-md-3 col-xs-12">
+        <div class="col-xs-3">
             <div class="uc_follow">
 
                 {:W('Common/Follow/follow',array('follow_who'=>$user_info['uid']))}

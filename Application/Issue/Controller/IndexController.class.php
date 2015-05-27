@@ -79,7 +79,7 @@ class IndexController extends Controller
 
     public function doPost($id = 0, $cover_id = 0, $title = '', $content = '', $issue_id = 0, $url = '')
     {
-        if (!check_auth('addIssueContent')) {
+               if (!check_auth('addIssueContent')) {
             $this->error('抱歉，您不具备投稿权限。');
         }
         $issue_id = intval($issue_id);
@@ -101,6 +101,7 @@ class IndexController extends Controller
         if (trim(op_h($url)) == '') {
             $this->error('请输入网址。');
         }
+
         $content = D('IssueContent')->create();
         $content['content'] = op_h($content['content']);
         $content['title'] = op_t($content['title']);

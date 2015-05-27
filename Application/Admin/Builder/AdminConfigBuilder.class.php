@@ -558,7 +558,7 @@ class AdminConfigBuilder extends AdminBuilder
     public function keyDefault($key, $value)
     {
         $data = $this->_data;
-        $data[$key] = $data[$key]!=null ? $data[$key] : $value;
+        $data[$key] = $data[$key]!==null ? $data[$key] : $value;
         $this->_data = $data;
         return $this;
     }
@@ -581,6 +581,24 @@ class AdminConfigBuilder extends AdminBuilder
         $this->group($group_name, $mod.'_LOCAL_COMMENT_CAN_GUEST,'.$mod.'_LOCAL_COMMENT_ORDER,'.$mod.'_LOCAL_COMMENT_COUNT');
         return $this;
     }
+
+
+
+    public function keyUserDefined($name,$title,$subtitle,$display='',$param=''){
+        $this->assign('param',$param);
+        $this->assign('name',$name);
+        $html = $this->fetch($display);
+
+        $key = array('name'=>$name, 'title' => $title, 'subtitle' => $subtitle, 'type' => 'userDefined', 'definedHtml' => $html);
+        $this->_keyList[] = $key;
+        return $this;
+    }
+
+
+
+
+
+
 
 
 }

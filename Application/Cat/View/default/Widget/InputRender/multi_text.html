@@ -1,0 +1,11 @@
+<if condition="$info_id neq 0">
+    <textarea id="{$field.name}" name="{$field.name}"
+    <if condition="$field.args neq ''"> event-node="textarea" event-args="{$field.args}"</if>
+    class="{$class} form-control" >{$field_value}</textarea>
+
+    <else/>
+    <textarea id="{$field.name}" name="{$field.name}"
+    <if condition="$field.args neq ''"> event-node="textarea" event-args="{$field.args}"</if>
+    class="{$class} form-control" >{$field.default_value}</textarea>
+
+</if>

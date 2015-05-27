@@ -99,6 +99,46 @@ class MemberModel extends Model
         }
 
     }
+    /**
+ * 登录指定用户
+ * @param  integer $uid 用户ID
+ * @param bool $remember
+ * @param int $role_id 有值代表强制登录这个角色
+ * @return boolean      ture-登录成功，false-登录失败
+ */
+    public function mobileLogin($uid, $remember = false, $role_id = 0){
+        /* 检测是否在当前应用注册 */
+        $user = $this->field(true)->find($uid);
+        if ($role_id != 0) {
+            $user['last_login_role'] = $role_id;
+        } else {
+            if (!intval($user['last_login_role'])) {
+                $user['last_login_role'] = $user['show_role'];
+            }
+        }
+        session('temp_login_uid', $uid);
+        session('temp_login_role_id', $user['last_login_role']);
+
+        if ($user['status'] == 3 /*判断是否激活*/) {
+            header('Content-Type:application/json; charset=utf-8');
+            $data['status'] = 1;
+            $data['url'] = U('Ucenter/Member/activate');
+            exit(json_encode($data));
+        }
+
+        if (1 != $user['status']) {
+            $this->error = '用户未激活或已禁用！'; //应用级别禁用
+            return false;
+        }
+        $this->autoLogin($user, $remember);
+
+        session('temp_login_uid', null);
+        session('temp_login_role_id', null);
+        //记录行为
+        action_log('user_login', 'member', $uid, $uid);
+        return true;
+
+    }
 
     /**
      * 登录指定用户
@@ -114,9 +154,9 @@ class MemberModel extends Model
         if ($role_id != 0) {
             $user['last_login_role'] = $role_id;
         } else {
-            if (!intval($user['last_login_role'])) {
-                $user['last_login_role'] = $user['show_role'];
-            }
+                if (!intval($user['last_login_role'])) {
+                    $user['last_login_role'] = $user['show_role'];
+                }
         }
         session('temp_login_uid', $uid);
         session('temp_login_role_id', $user['last_login_role']);
@@ -197,7 +237,6 @@ class MemberModel extends Model
             'role_id' => $user['last_login_role'],
             'audit' => $audit,
         );
-
         session('user_auth', $auth);
         session('user_auth_sign', data_auth_sign($auth));
         if ($remember) {

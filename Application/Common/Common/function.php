@@ -990,6 +990,7 @@ function get_model_attribute($model_id, $group = true)
 function api($name, $vars = array())
 {
     $array = explode('/', $name);
+
     $method = array_pop($array);
     $classname = array_pop($array);
     $module = $array ? array_pop($array) : 'Common';

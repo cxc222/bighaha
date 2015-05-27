@@ -1,0 +1,29 @@
+<div class="pd20">
+    <if condition="count($items) eq 0">
+        购物车内没有任何商品。
+        <else/>
+        <ul class="mb10">
+
+
+            <volist name="items" id="vo">
+                <li class="mb10">
+                    <div class="left mr10"><img src="{$vo.good.data.pic.data.0|getImageSCById=50,50}"></div>
+                    <div class="left"
+                         style="width: 200px;margin-bottom: 10px;padding: 5px">
+                        <a href="{:U('cat/Index/info',array('info_id'=>$vo['good_id']))}" target="_blank">{$vo.good.data.gname.data.0|getShort=10}</a>
+                        <br/>
+                        <br/>
+                        <a onclick="removeItem({$vo['good_id']},this)" class="mr20">删除</a>
+                        ￥ <span class="comput_cny" data="{$vo.good.data.price.data.0}">{$vo.good.data.price.data.0|number_format=2}</span>元
+                    </div>
+                    <div class="right tright" style="width: 100px;line-height: 38px;font-size: 16px">
+                        {$vo.count} 件
+                    </div>
+                    <div class="clearfix"></div>
+                </li>
+            </volist>
+        </ul>
+        <div style="text-align: right"><a target="_blank" href="{:U('cat/Center/buy')}" class="c_btn_buy" style="display: inline-block">去结账</a>
+        </div>
+    </if>
+</div>

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>{:L('group')} | {:modC('WEB_SITE_NAME','OpenSNS')}</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel="alternate icon" type="image/png" href="assets/i/favicon.png">
+    <link rel="stylesheet" href="__CSS__/amazeui.min.css"/>
+    <link rel="stylesheet" href="__CSS__/weibo.css"/>
+    <link rel="stylesheet" href="__CSS__/app.css"/>
+    <style>
+        .header h1 {
+            font-size: 200%;
+            color: #333;
+            margin-top: 30px;
+        }
+
+        .header p {
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+<<<<<<< HEAD
+
+=======
+<!--<script>
+    !function (t) {
+        if (t) {
+            var e = t.AMUI.iScroll;
+            if (e) {
+                var i = "localStorage"in
+                        window && window.localStorage && window.localStorage, o = ["accordion", "divider", "duoshuo", "figure", "footer", "gallery", "gotop", "header", "intro", "list_news", "map", "mechat", "menu", "navbar", "pagination", "paragraph", "slider", "sohucs", "tabs", "titlebar"], n = function () {
+                    var
+                            n = t("body"), s = t(".widget-hd"), a = t("#demo-scroller"), r = t("#widget-list");
+                    this.compile = Handlebars.compile(t("#tpl-demo-list").html()), this.cache = {}, this.demoScroll = null, this.render = function (t, e) {
+                        returnhis.cache[t] || (this.cache[t] = this.compile(e)), this.cache[t]
+                    }, this.createList = function (e) {
+                        e = e || this.getHash();
+                        var n = this, a = "__amui_widget_" + e + "_demos";
+                        returne && s.find("h1").text(r.find("[data-rel=" + e + "]").text() + "Demos"), i && i.getItem(a) ? this.setActive(e, JSON.parse(i.getItem(a))) : !e || o.indexOf(e) < 0 ? this.resetActive() : void
+                                t.ajax({
+                                    type: "GET",
+                                    url: "/widgets/" + e + "?json=1",
+                                    dataType: "json",
+                                    success: function (t) {
+                                        i.setItem(a, JSON.stringify(t)), n.setActive(e, t)
+                                    },
+                                    error: function () {
+                                        alert("Ajaxerror")}})},this.setActive=function(i,o){a.empty().html(this.render(i,o)),n.addClass("demo - list - active"),this.demoScroll||(this.demoScroll=newe("#demo-list")),
+                                        setTimeout(t.proxy(function () {
+                                            this.demoScroll.refresh()
+                                        }, this), 100)
+                                    },
+                                    this.resetActive = function () {
+                                    n.removeClass("demo-list-active")
+                                }, this.getHash = function () {
+                                    returnwindow.location.hash.replace("#", "")
+                                }, this.init = function () {
+                                    r.on("click", "a", function (e) {
+                                        e.preventDefault(), window.location.hash = t(this).attr("data-rel")
+                                    }), t(window).on("hashchange", t.proxy(function () {
+                                        this.createList()
+                                    }, this)), t("#btn-back").on("click", function (t) {
+                                        t.preventDefault(), window.location.hash = ""
+                                    }), r.on("touchmove", function (t) {
+                                        t.preventDefault()
+                                    }), this.createList()
+                                }, this.init(), this.mainScroll = new
+                                        e(r[0])
+                    };
+                t(function () {new n})
+                }
+            }
+        }(window.jQuery || window.Zepto);
+</script>-->
+>>>>>>> b3f2df37912128fcba677d88755e1d60636fed57
+<header data-am-widget="header" class="am-header am-header-default am-header-fixed">
+    <div class="am-header-left am-header-nav">
+        <a href="javascript:history.go(-1);"><span class="am-icon-chevron-left"></span></a>
+    </div>
+
+    <h1 class="am-header-title">
+        发表回复
+    </h1>
+
+    <div class="am-header-right am-header-nav">
+
+    </div>
+
+</header>
+<div id="demo-view" class="" data-backend-compiled="" style="z-index: 1040">
+    <nav data-am-widget="menu" class="am-menu am-menu-offcanvas1 am-no-layout" data-am-menu-offcanvas=""><a
+            href="javascript: void(0)" class="am-menu-toggle"><i class="am-menu-toggle-icon am-icon-bars"></i></a>
+
+        <div class="am-offcanvas" style="touch-action: pan-y; -webkit-user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
+            <div class="am-offcanvas-bar am-offcanvas-bar-flip">
+                <div class="am-text-center">
+                    <img class="avatar-img" style="width:64px;" src="Public/images/default_avatar_128_128.jpg">
+
+                    <div class="am-text-center">
+                        <a href="http://mob.com/index.php?s=/mob/weibo/index.html" >李小龙</a>
+                    </div>
+                </div>
+
+
+                <ul class="am-menu-nav am-avg-sm-1">
+<<<<<<< HEAD
+                    <li class=""><a href="{:U('weibo/index')}" class="">微博</a></li>
+                    <li class=""><a href="{:U('issue/index')}" class="">专辑</a></li>
+                    <li class=""><a href="{:U('blog/index')}" class="">资讯</a></li>
+=======
+
+                    <li class=""><a href="{:U('weibo/index')}" class="">微博</a></li>
+                    <li class=""><a href="{:U('issue/index')}" class="">专辑</a></li>
+                    <li class=""><a href="##" class="">资讯</a></li>
+>>>>>>> b3f2df37912128fcba677d88755e1d60636fed57
+                    <li class=""><a href="{:U('forum/index')}" class="">论坛</a></li>
+                    <li class=""><a href="{:U('group/index')}" class="">群组</a></li>
+                    <li class=""><a href="{:U('event/index')}" class="">活动</a></li>
+                    <li class=""><a href="##" class="">签到</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</div>
+<div class="sendcomment-container ">
+
+    <div class="sendcomment" id="article_post">
+
+        <textarea data-role="comment_content" type="text" name="name" placeholder=""
+                  style="width: 100%;height:150px;padding: 5px"></textarea>
+
+    </div>
+    <!--<div class="ds-post-toolbar" style="position: relative;width: 100%;box-shadow: 0 1px 0 ">
+        <div class="ds-post-options ds-gradient-bg"style="  border-bottom-left-radius: 2px;border-color: #ddd;height: 36px">
+            <span class="ds-sync"style="line-height: 34px"></span>
+        </div>
+        <button class="ds-post-button" type="submit"style="border-bottom-right-radius: 2px;background: #3bb4f2;color: #fff;text-shadow: none;box-shadow: none;border: 1px solid #ddd;height: 38px;">发布</button>
+        <div class="ds-toolbar-buttons"style="top: 8px;left: 10px;text-align: right">
+            <a class="ds-toolbar-button ds-add-emote" title="插入表情"></a>
+        </div>
+    </div>-->
+    <button type="button" class="am-btn am-btn-primary am-btn-block">发表</button>
+</div>
+
+
+<script src="__JS__/jquery.min.js"></script>
+<script src="__JS__/amazeui.min.js"></script>
+</body>
+</html>

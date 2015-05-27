@@ -25,6 +25,9 @@ class ShareController extends  Controller{
         if(empty($aContent)){
             $this->error('内容不能为空');
         }
+        if(!is_login()){
+            $this->error('请登陆后再分享');
+        }
 
         $new_id = send_weibo($aContent, 'share', $feed_data,$feed_data['from']);
 

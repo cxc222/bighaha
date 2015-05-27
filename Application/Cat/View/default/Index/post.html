@@ -1,0 +1,91 @@
+<extend name="Base/common"/>
+<block name="style">
+    <style>
+        .web_uploader_picture_list {
+            margin-top: 10px;
+        }
+        .web_uploader_picture_list img {
+            width: 150px;
+            height: 150px;
+        }
+    </style>
+</block>
+<block name="body">
+    <include file="Public/_cat_header"/>
+    <!--导航栏-->
+    <include file="Public/_navbar"/>
+
+
+    <div class="container">
+        <!--导航栏end-->
+        <div class="mb10 clearfix">
+
+            <div style="background: none">
+                <div class="common_block_border">
+                    <h1 class="common_block_title mb10">发布{$entity.alias}</h1>
+
+                    <div class="pd10">
+                        {:W('EntityProfile/render',array(array('name'=>op_t($_GET['name']),'entity_id'=>$_GET['entity_id'],'p_name'=>'des1')))}
+                    </div>
+                    <div class="pd10 ">
+                        <form id="frm_post" action="{:U('Cat/Index/doAddInfo')}" method="POST" model-node="cat_form" class="ajax-from form-horizontal">
+
+                            <input type="hidden" name="entity_id" value="{$entity_id}">
+                            <if condition="isset($_GET['info_id'])"><input type="hidden" name="info_id"
+                                                                           value="{:I('get.info_id','intval')}"></if>
+                            <div class="cat_tpl_input" style="font-size: 14px;color: #333">
+
+
+                                <div class="form-group has-feedback ">
+
+
+                                    <label for="title" class="col-xs-2 control-label"><span
+                                            class="c_empty">*</span>标题</label>
+
+                                    <div class="col-xs-5">
+                                        <if condition="$info">
+                                            <input id="title" name="title" event-node="input_text"
+                                                   event-args="min=1&max=40&error=长度不合法" value="{$info.title}"
+                                                   class="form-control" type="text">
+                                            <else/>
+                                            <input id="title" name="title" event-node="input_text"
+                                                   event-args="min=1&max=40&error=长度不合法" value=""
+                                                   class=" form-control"
+                                                   type="text">
+
+                                        </if>
+                                        <span class="help-block">必须输入&nbsp;</span>
+                                    </div>
+                                </div>
+                                {$tpl}
+                                <div class="form-group clearfix">
+                                    <div class="col-xs-offset-2 col-xs-10">
+                                        <input type="submit"
+                                               class="btn btn-primary" value="发布{$entity.alias}">
+                                    </div>
+                                </div>
+
+                            </div>
+                            {__TOKEN__}
+                        </form>
+
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <style>
+                    .cat_over_hidden {
+                        color: #008000;
+
+                    }
+
+                    .c_empty {
+                        color: red;
+                    }
+                </style>
+            </div>
+        </div>
+    </div>
+</div>
+    <script src="__JS__/cat_form.js"></script>
+</block>

@@ -7,6 +7,7 @@ return array(
         'options'=>array(
             'Qq'=>'Qq',
             'Sina'=>'Sina',
+            'Weixin'=>'Weixin',
         ),
     ),
     'meta'=>array(//配置在表单中的键名 ,这个会是config[title]

@@ -1,0 +1,27 @@
+<if condition="$info_id neq 0">
+
+    <volist name="field.values" id="vo">
+        <label for="{$field.name}_{$vo}" class="checkbox-inline"><input name="{$field.name}[]" class="store_radio"
+                                                                        id="{$field.name}_{$vo}" type="checkbox" event-node="checkbox" event-args="{$field.args}"
+                                                                              value="{$vo}"
+            <php>
+                $values=explode(',',$field_value);
+            </php>
+            <if condition="in_array($vo,$values)"> checked</if>
+
+            >{$vo}</label>
+    </volist>
+    <div class="clearfix"></div>
+
+    <else/>
+    <volist name="field.values" id="vo">
+        <label for="{$field.name}_{$vo}" class="checkbox-inline"><input name="{$field.name}[]" class="store_radio" event-node="checkbox" event-args="{$field.args}"
+                                                                        id="{$field.name}_{$vo}" type="checkbox"
+                                                                              value="{$vo}"
+            <if condition="$field['default_value'] neq ''">
+                <if condition="$vo eq $field['default_value']"> checked</if>
+            </if>
+            >{$vo}</label>
+    </volist>
+    <div class="clearfix"></div>
+</if>

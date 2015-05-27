@@ -1,0 +1,36 @@
+<include file="__THEME__/admin_header"/>
+<body>
+<h1>请在点击执行自动升级完成付费V1版到付费V2版的升级。全新安装包无需升级。<br/>下面框内可以方便地输入SQL语句。</h1>
+
+<div class="Toolbar_inbox">
+
+    <a class="btn_a" href="{:U('cat/Admin/doUpdate')}"><span>执行自动升级</span></a></div>
+
+<textarea id="tt_sql" name="str_sql" style="width: 600px;height: 300px"></textarea><br/>
+
+<div class="Toolbar_inbox"><a class="btn_a" onclick="doSql()"><span>执行Sql语句</span></a></div>
+</body>
+<script>
+    function doSql() {
+        $.post(U('cat/Admin/doSql'), {str_sql: $('#tt_sql').val()}, function (msg) {
+            if (msg.status == 0) {
+                toast.error('执行失败，请检查语句。' + msg.info);
+            }
+            else {
+                toast.success('执行SQL语句成功。');
+            }
+        }, 'json');
+    }
+    function doUpdate() {
+        $.post(U('cat/Admin/doUpdate'), {str_sql: $('#tt_sql').val()}, function (msg) {
+            if (msg.status == 0) {
+                toast.error('执行失败，请联系作者。' + msg.info);
+            }
+            else {
+                toast.success('恭喜，升级成功。');
+            }
+        }, 'json');
+    }
+
+</script>
+<include file="__THEME__/admin_footer"/>

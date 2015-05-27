@@ -1,0 +1,16 @@
+<ul class="nav nav-pills ucenter-tab">
+
+    <if condition=" modC('OPEN_RECHARGE',0,'recharge') eq 1">
+     <li id="menu_recharge"><a href="{:U('index/index')}">在线充值</a></li>
+    </if>
+    <li id="menu_rechargeList"><a href="{:U('index/rechargeList')}">充值订单</a></li>
+
+
+   <if condition=" modC('OPEN_WITHDRAW',0,'recharge') eq 1">
+    <li id="menu_withdraw"><a href="{:U('index/withdraw')}">提现</a></li>
+    </if>
+    <li id="menu_withdrawList"><a href="{:U('index/withdrawList')}">提现记录</a></li>
+</ul>
+<script>
+    $('#menu_'+"{$tab}").addClass('active')
+</script>

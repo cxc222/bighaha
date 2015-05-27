@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>{:L('issuedetail')} | {:modC('WEB_SITE_NAME','OpenSNS')}</title>
+    <include file="head/head"/>
+    <script src="__JS__/issue.js"></script>
+</head>
+<body>
+
+<header data-am-widget="header" class="am-header am-header-default am-header-fixed">
+    <div class="am-header-left am-header-nav">
+        <a href="javascript:history.go(-1);"><span class="am-icon-chevron-left"></span></a>
+    </div>
+    <h1 class="am-header-title">
+        专辑详情
+    </h1>
+
+    <div class="am-header-right am-header-nav">
+        <a href="{:U('issue/addissue')}" class="am-fl">
+            <i class="am-header-icon am-icon-pencil"></i>
+        </a>
+        <a href="#nav-link" class="">
+            <i class="am-menu-toggle-icon am-icon-bars"></i>
+        </a>
+    </div>
+</header>
+{:W('Mob/UserMenu/index')}
+<div class="issuedetail-container ">
+    <div class="issuedetail">
+        <volist name="issuedetail" id="vl">
+        <div class="am-text-center title">
+            <h3>{$vl.title}</h3>
+        </div>
+        <div class="spliter "></div>
+        <div class="">
+            <div class="am-text-center cover">
+                <img class="" style="width: 100%" src="{$vl.cover_url}">
+            </div>
+            <div class="am-text-center info">
+                <h3>介绍</h3>
+            <span>
+                {$vl.content}
+            </span>
+                <span>发布时间：{$vl.create_time|friendlyDate}</span></br>
+                <span>更新时间：{$vl.update_time|friendlyDate}</span>
+            </div>
+
+        </div>
+        <div class="spliter"></div>
+        <div class="am-text-center am-g">
+            <div class="eye am-u-sm-4">
+                <i class="am-icon-eye"></i>
+                {$vl.view_count}
+            </div>
+<!--点赞-->
+            <div class="am-u-sm-4 am-text-center">
+                <a  class="support" weibo_id="{$vl['id']}" user_id="{$vl['uid']}" url="{:U('Mob/Issue/support')}">
+                    <if condition="$vl.is_support eq 1">
+                        <i class="am-icon-heart"></i>
+                        <else/>
+                        <i class="am-icon-heart-o"></i>
+                    </if>
+                </a>
+            </div>
+
+<!--点赞结束-->
+            <div class="comment am-u-sm-4">
+                <i class="am-icon-comment-o"></i>
+                {$vl.reply_count}
+            </div>
+        </div>
+
+        <div class="spliter"></div>
+            <if condition="$vl.is_admin_or_mine eq 1">
+        <div class="am-text-center am-g">
+            <button type="button" class="am-btn am-btn-secondary am-round"><a class="am-icon-skyatlas" href="{$vl.url}"
+                                                                     style="padding:0 20px">访问</a></button>
+            <button type="button" class="am-btn am-btn-secondary am-round"><a class="am-icon-wrench "
+                                                                     href="{:U('Mob/issue/addissue',array('id'=>$vl['id']))}"
+                                                                     style="padding:0 20px">编辑</a></button>
+        </div>
+            </if>
+        <div class="am-form-group weibo_post_box" id="comment" style="padding: 10px">
+            <h6>评论</h6>
+
+            <textarea class="content" rows="5" id="comment_content_text" style="height: 8em; width: 100%;"></textarea>
+            <!--表情-->
+            <div class="am-cf" style="margin: 5px 0px">
+                <a href="javascript:" data-url=" {:U('Core/Expression/getSmile')}" onclick="insertFace($(this))">
+                    <img src="__IMG__/bq.png"></a>
+            </div>
+
+            <div id="emot_content" class="emot_content"></div>
+            <!--表情end-->
+
+
+            <p class="submit" issue_id="{$vl.id}" url="{:U('Mob/Issue/doAddComment')}">
+                <button style="float: right" type="submit"  class="am-btn-warning am-btn am-btn-block am-round ">提交</button>
+            </p>
+        </div>
+
+        </volist>
+    </div>
+
+    <div class="comment-list addmore" style="margin-top: 20px">
+        <volist name="issuecomment" id="vo">
+            <include file="_issuecomment"/>
+        </volist>
+    </div>
+    <div class="am-list-news-ft look-more">
+        <a class="" id="getmoreissuecomment"
+                >查看更多 &raquo;</a>
+    </div>
+
+
+</div>
+
+
+<script>
+   // comment();
+   nextpage();
+//查看更多
+    var page = 1;
+    var issue_id = "{$issuedetail[0]['id']}";
+    function nextpage() {
+        $('#getmoreissuecomment').unbind('click');
+        $('#getmoreissuecomment').click(function () {
+            $("#getmoreissuecomment").html("查看更多...");
+            $.post("{:U('Mob/Issue/addMoreIssueComment')}", {page: page + 1, id: issue_id}, function (msg) {
+                if (msg.status) {
+                    $(".addmore").append(msg.html);
+                    page++;
+                    del();
+                    comment();
+                } else {
+                    $("#getmoreissuecomment").html("全部加载完成！");
+                    $(".look-more").delay(2000).hide(0);
+                }
+            })
+        });
+    }
+</script>
+</body>
+</html>

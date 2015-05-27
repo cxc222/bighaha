@@ -1,0 +1,337 @@
+<extend name="Base/common"/>
+<block name="header">
+    <include file="Public/nav"/>
+</block>
+<block name="body">
+    <!--banner部分-->
+    <div class="common-block">
+        <!--    <div class="container" style="overflow: hidden">
+                <div class="row"><img src="__IMG__/appstore2.jpg"></div>
+            </div>
+
+            &lt;!&ndash;banner部分&ndash;&gt;
+
+            &lt;!&ndash;平台简介部分开始&ndash;&gt;
+            <div class="container introduction">
+                <div class="common-block">
+
+                    <header>平台简介</header>
+
+                    <p>&nbsp;&nbsp;&nbsp;&nbsp;
+                        OpenSNS云市场是一个面向所有OS站点用户和第三方开发者的应用平台。平台的宗旨是为OS的社区网站提供更好、更丰富的应用插件以达到减轻站点负载、节约运营成本、提升用户体验、增加用户黏性的目的。
+                    </p>
+                </div>
+                &lt;!&ndash;和登录按钮作用一致，如果是已登录状态，则按钮实效&ndash;&gt;
+
+            </div>
+            &lt;!&ndash;平台简介部分结束&ndash;&gt;
+
+            <hr/>
+            &lt;!&ndash;特色部分&ndash;&gt;
+
+            <div class="container item ">
+                <div class="margin-top-15"></div>
+                <div class="col-md-3" style="padding-left: 0px;">
+                    <div class="col-md-6">
+                        <img src="__IMG__/img1.png"/>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="describe pull-left">
+                                <p>为站长量身定制
+                                </p>
+
+                                <p>根据站长需求，各种社区解决方案</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-md-3" style="padding-left: 0px;">
+                    <div class="col-md-6">
+                        <img src="__IMG__/img2.png"/>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="describe pull-left">
+                                <p>模块插件
+                                </p>
+
+                                <p>提供丰富应用插件，减轻站点负担</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="col-md-3" style="padding-left: 0px;">
+                    <div class="col-md-6">
+                        <img src="__IMG__/img3.png"/>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="describe pull-left">
+                                <p>精美模板
+                                </p>
+
+                                <p>提供丰富精致模板</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <div class="col-md-3" style="padding-left: 0px;">
+                    <div class="col-md-6">
+                        <img src="__IMG__/img4.png"/>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="describe pull-left">
+                                <p>完善服务
+                                </p>
+
+                                <p>提供最专业，最细致的服务</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+            </div>
+            <hr/>-->
+        <!--推荐插件部分-->
+        <div class="container plug-in">
+            <div class="common-block clearfix">
+                <header>最新插件 <a href="{:U('index/plugin')}" class="pull-right">更多</a></header>
+                <div class="row">
+                    <empty name="plugins">
+                        <div class="with-padding">
+                            <div style="width: 50%;margin: auto">
+                                <div class="alert  with-icon">
+                                    <i class="icon-inbox"></i>
+
+                                    <div class="content">
+
+                                        <p style="font-size: 16px">暂时没有插件。赶紧 <a class="text-success" href="{:U('Admin/addplugin')}">发布</a> 一款，成为第一个商品。</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </empty>
+                    <volist name="plugins" id="vo">
+                        <div class="col-md-3">
+                            <div class="col-md-6">
+                                <a target="_blank" href="{:U('pluginDetail',array('id'=>$vo['id']))}">
+                                    {$vo.cover|display_cover=80,80}</a>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="describe">
+                                        <div><a class="text-more" style="width: 100%" title="{$vo.title|op_t}"
+                                                target="_blank"
+                                                href="{:U('pluginDetail',array('id'=>$vo['id']))}">{$vo.title|op_t}</a>
+                                        </div>
+
+                                        <div class="summary">{$vo.summary|text|mb_substr=0,20,'utf-8'}</div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </volist>
+                </div>
+                <div class="margin-top-15"></div>
+            </div>
+
+
+        </div>
+        <hr/>
+        <div class="container plug-in">
+            <div class="common-block clearfix">
+                <header>最新模块 <a href="{:U('index/module')}" class="pull-right">更多</a></header>
+                <div class="row">
+                    <empty name="modules">
+                        <div class="with-padding">
+                            <div style="width: 50%;margin: auto">
+                                <div class="alert  with-icon">
+                                    <i class="icon-inbox"></i>
+
+                                    <div class="content">
+
+                                        <p style="font-size: 16px">暂时没有模块。赶紧 <a class="text-success" href="{:U('Admin/addmodule')}">发布</a> 一款，成为第一个商品。</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </empty>
+                    <volist name="modules" id="vo">
+                        <div class="col-md-3">
+                            <div class="col-md-6">
+                                <a target="_blank" href="{:U('moduleDetail',array('id'=>$vo['id']))}">
+                                    {$vo.cover|display_cover=80,80}</a>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="describe">
+                                        <div><a class="text-more" style="width: 100%" title="{$vo.title|op_t}"
+                                                target="_blank"
+                                                href="{:U('moduleDetail',array('id'=>$vo['id']))}">{$vo.title|op_t}</a>
+                                        </div>
+
+                                        <div class="summary">{$vo.summary|text|mb_substr=0,20,'utf-8'}</div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </volist>
+                </div>
+                <div class="margin-top-15"></div>
+            </div>
+
+
+        </div>
+        <hr/>
+        <div class="common-block clearfix">
+            <header>最新主题 <a href="{:U('index/theme')}" class="pull-right">更多</a></header>
+            <empty name="themes">
+                <div class="with-padding">
+                    <div style="width: 50%;margin: auto">
+                        <div class="alert  with-icon">
+                            <i class="icon-inbox"></i>
+
+                            <div class="content">
+
+                                <p style="font-size: 16px">暂时没有主题。赶紧 <a class="text-success" href="{:U('Admin/addtheme')}">发布</a> 一款，成为第一个商品。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </empty>
+            <volist name="themes" id="vo">
+                <div class="col-xs-3">
+                    <div>
+                        <div class="card">
+                            <div class="media-wrapper">
+                                <a target="_blank" data-role="use_this" data-value="Blue"
+                                   href="{:U('themeDetail',array('id'=>$vo['id']))}">
+                                    <img src="{$vo.cover|getThumbImageById=260,300}">
+                                </a>
+                            </div>
+                            <span class="caption">{$vo.etitle}</span>
+
+                            <div class="card-heading">
+                        <span class="pull-right">
+                            <span class="label label-success"
+                                  title="主题版本">{$vo.versions.0.fee|display_fee}</span>
+                        </span>
+                                <a href="{:U('themeDetail',array('id'=>$vo['id']))}"
+                                   target="_blank" title="查看该主题">
+                                    <strong>{$vo.title}</strong>
+                                </a>
+                            </div>
+
+                            <div class="card-content text-muted">
+                                <div class="pull-left">
+                                    {$vo.latest_version|display_version=false}
+                                </div>
+                                <div class="pull-right">
+                                    下载：{$vo.total_download_count|display_download_times}
+                                </div>
+                            </div>
+                            <div class="card-actions">
+                                <div class="text-mute">
+                                    <empty name="vo.author">
+                                        <a
+                                                href="{$vo.user.space_url}">{$vo.user.nickname}</a>
+                                        <else/>
+                                        {$vo.author}
+                                    </empty>
+                                </div>
+                            </div>
+
+                            <!-- <div class="card-actions">
+                                 <div class="btn-group">
+
+                                 </div>
+                             </div>-->
+                        </div>
+                    </div>
+                </div>
+
+            </volist>
+        </div>
+        <!--推荐插件部分-->
+        <!--<div class="container plug-in">
+            <p class="part_name">最新模块</p>
+
+            <volist name="modules" id="vo">
+                <div class="col-md-3" style="padding-left: 0px;">
+                    <div class="col-md-6">
+                        {$vo.cover|display_cover=80,80}
+                    </div>
+                    <div class="col-md-6">
+                        <div class="describe pull-left">
+                            <p><a href="plug_in_item.html">{$vo.title|op_t}</a></p>
+
+                            <p>{$vo.summary|op_t}</p>
+                        </div>
+                    </div>
+                </div>
+            </volist>
+        </div>-->
+        <!--推荐插件部分-->
+        <!-- <div class="container plug-in">
+             <p class="part_name">最新服务</p>
+
+             <volist name="services" id="vo">
+                 <div class="col-md-3" style="padding-left: 0px;">
+                     <div class="col-md-6">
+                         {$vo.cover|display_cover=80,80}
+                     </div>
+                     <div class="col-md-6">
+                         <div class="describe pull-left">
+                             <p><a href="plug_in_item.html">{$vo.title|op_t}</a></p>
+
+                             <p>{$vo.summary|op_t}</p>
+                         </div>
+                     </div>
+                 </div>
+             </volist>
+         </div>-->
+
+        <!--推荐模板部分-->
+        <!--<div class="container templet">
+
+            <p class="part_name">最新模板</p>
+            <volist name="themes" id="vo">
+                <div class="col-md-6 col_left">
+                    <div class="templet_item">
+                        <a href="templet_item.html"><img src="{$vo.cover|getThumbImageById=448,336}"></a>
+                        <if condition="$vo['response_cover']">
+                            &lt;!&ndash;响应式图片&ndash;&gt;
+
+                            <div class="phone_tem">
+                                <img src="{$vo.response_cover|getThumbImageById=80,80}"></div>
+                            &lt;!&ndash;响应式图片&ndash;&gt;
+                        </if>
+
+
+                        <div class="tem_name"><p><a href="templet_item.html">{$vo.title|op_t}</a></p></div>
+                        <div class="tem_item"><span class="count">{$vo.total_download_count} </span>&nbsp;次下载<span
+                                class="author pull-right">作者：<a target="_blank" href="{$vo.user.space_url}">{$vo.user.nickname}</a></span>
+                        </div>
+                    </div>
+                </div>
+            </volist>-->
+
+
+    </div>
+    </div>
+</block>

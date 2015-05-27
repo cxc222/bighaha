@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>{:L('weibo')} | {:modC('WEB_SITE_NAME','OpenSNS')}</title>
+    <include file="head/head"/>
+</head>
+<body class="user-body">
+<header data-am-widget="header" class="am-header am-header-default am-header-fixed am-cf">
+    <div class="am-header-left am-header-nav">
+        <a href="{:U('weibo/index')}" class="am-fl">
+            <i class="am-header-icon am-icon-home"></i>
+        </a>
+    </div>
+    <h1 class="am-header-title">
+        个人主页
+    </h1>
+
+    <div class="am-header-right am-header-nav">
+        <a href="{:U('weibo/addweibo')}" class="am-fl">
+            <i class="am-header-icon am-icon-pencil"></i>
+        </a>
+        <a href="#nav-link" class="">
+            <i class="am-menu-toggle-icon am-icon-bars"></i>
+        </a>
+    </div>
+    {:W('Mob/UserMenu/index')}
+
+</header>
+<div>
+    <div class="am-tabs" id="message">
+        <ul class="am-tabs-nav am-nav am-nav-tabs am-nav-justify"style="font-size: 12px">
+            <li class="am-active"><a href=""style="padding: 0px">未读消息</a></li>
+            <li><a href=""style="padding: 0px">全部消息</a></li>
+            <li><a href=""style="padding: 0px">系统消息</a></li>
+            <li><a href=""style="padding: 0px">用户消息</a></li>
+        </ul>
+        <div class="am-tabs-bd"style="border: none">
+            <div class="am-tab-panel am-active"> <div class=" am-g am-cf message" style="border-bottom: 1px solid #dedede;">
+                <div class="am-fl am-u-sm-3" style="padding: 0px">
+                    <img style="width: 80px;height: 80px" class="am-circle"
+                         src="Application/Mob/Static/test/551931edeecf0.jpg">
+                </div>
+                <div class="am-fl am-u-sm-9"style="margin-top:10px ">
+                    <dl>
+                        <dt>
+                        <div class="am-g">
+                            <div class="am-fl">
+                                <a href="">粉丝数增加</a>
+                                <span class="label label-badge label-info">未读</span>
+                            </div>
+                            <div class="am-fr message-ctime">05月22日 16:14</div>
+                        </div>
+                        </dt>
+                        <dd>nanye 关注了你。</dd>
+                    </dl>
+                </div>
+            </div></div>
+            <div class="am-tab-panel"> <div class=" am-g am-cf message" style="border-bottom: 1px solid #dedede;">
+                <div class="am-fl am-u-sm-3" style="padding: 0px">
+                    <img style="width: 80px;height: 80px" class="am-circle"
+                         src="Application/Mob/Static/test/551931edeecf0.jpg">
+                </div>
+                <div class="am-fl am-u-sm-9"style="margin-top:10px ">
+                    <dl>
+                        <dt>
+                        <div class="am-g">
+                            <div class="am-fl">
+                                <a href="">粉丝数增加</a>
+                                <span class="label label-badge label-info">未读</span>
+                            </div>
+                            <div class="am-fr message-ctime">05月22日 16:14</div>
+                        </div>
+                        </dt>
+                        <dd>nanye 关注了你。</dd>
+                    </dl>
+                </div>
+            </div></div>
+
+            <div class="am-tab-panel"> <div class=" am-g am-cf message" style="border-bottom: 1px solid #dedede;">
+                <div class="am-fl am-u-sm-3" style="padding: 0px">
+                    <img style="width: 80px;height: 80px" class="am-circle"
+                         src="Application/Mob/Static/test/551931edeecf0.jpg">
+                </div>
+                <div class="am-fl am-u-sm-9"style="margin-top:10px ">
+                    <dl>
+                        <dt>
+                        <div class="am-g">
+                            <div class="am-fl">
+                                <a href="">粉丝数增加</a>
+                                <span class="label label-badge label-info">未读</span>
+                            </div>
+                            <div class="am-fr message-ctime">05月22日 16:14</div>
+                        </div>
+                        </dt>
+                        <dd>nanye 关注了你。</dd>
+                    </dl>
+                </div>
+            </div></div>
+            <div class="am-tab-panel">
+                <div class=" am-g am-cf message" style="border-bottom: 1px solid #dedede;">
+                    <div class="am-fl am-u-sm-2" style="padding: 0px">
+                        <img style="width: 60px;height: 60px" class="am-circle"
+                             src="Application/Mob/Static/test/551931edeecf0.jpg">
+                    </div>
+                    <div class="am-fl am-u-sm-9"style="margin-top:10px ">
+                        <div class="am-g">
+                            <div class="am-fl">
+                                <a href="">粉丝数增加</a>
+                                <span class="label label-badge label-info">未读</span>
+                            </div>
+                            <div class="am-fr message-ctime">05月22日 16:14</div>
+                        </div>
+                        <div>
+                            <span>nanye 关注了你。</span>
+                        </div>
+                    </div>
+                </div></div>
+        </div>
+    </div>
+    <script>
+        $(function() {
+            $('#message').tabs();
+        })
+    </script>
+</div>
+
+
+
+

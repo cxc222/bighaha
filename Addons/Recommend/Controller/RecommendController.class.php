@@ -49,7 +49,7 @@ class RecommendController extends Controller
      */
     public function changeRecommend()
     {
-        $config = _getAddonsCinfig();
+        $config = _getAddonsConfig();
         $number=$config['number'];          //获取配置，得到number（查找数量）字段。
 
         $data['status'] = 0;

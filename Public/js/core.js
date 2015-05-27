@@ -26,6 +26,11 @@ $(function () {
         alwaysVisible: true,
         start: 'bottom'
     });
+    $(document).scroll(function () {
+        var left = '-' + $(window).scrollLeft() + 'px';
+        $('#nav_bar').css('left', left);
+        $('#sub_nav').css('left',left);
+    });
 });
 
 $(function () {
@@ -106,8 +111,8 @@ $(function () {
     follower.bind_follow();
 });
 
-var follower ={
-    'bind_follow':function(){
+var follower = {
+    'bind_follow': function () {
         $('[data-role="follow"]').unbind('click')
         $('[data-role="follow"]').click(function () {
             var $this = $(this);
@@ -144,7 +149,6 @@ var follower ={
         })
     }
 }
-
 
 
 /**
@@ -203,18 +207,18 @@ function checkMessage() {
                 tip_message(msg['messages'][index]['content'] + '<div style="text-align: right"> ' + msg['messages'][index]['ctime'] + '</div>', msg['messages'][index]['title']);
                 //  var url=msg[index]['url']===''?U('') //设置默认跳转到消息中心
 
-                var new_html = $('<span><li><a data-url="'+ msg['messages'][index]['url']+'"\
-                onclick="Notify.readMessage(this,'+ msg['messages'][index]['id']+')">\
+                var new_html = $('<span><li><a data-url="' + msg['messages'][index]['url'] + '"\
+                onclick="Notify.readMessage(this,' + msg['messages'][index]['id'] + ')">\
                 <h3 class="margin-top-0"> <i class="icon-bell"></i>\
-                '+msg['messages'][index]['title']+'</h3>\
-            <p> '+msg['messages'][index]['content']+'</p>\
+                ' + msg['messages'][index]['title'] + '</h3>\
+            <p> ' + msg['messages'][index]['content'] + '</p>\
         <span class="time">\
-        '+msg['messages'][index]['ctime']+'\
+        ' + msg['messages'][index]['ctime'] + '\
     </span>\
     </a></li></span>');
                 /*var new_html = $('<span><li><a data-url="' + msg['messages'][index]['url'] + '"' + 'onclick="Notify.readMessage(this,' + msg['messages'][index]['id'] + ')"><i class="icon-bell"></i> ' +
-                msg['messages'][index]['title'] + '<br/><span class="time">' + msg['messages'][index]['ctime'] +
-                '</span> </a></li></span>');*/
+                 msg['messages'][index]['title'] + '<br/><span class="time">' + msg['messages'][index]['ctime'] +
+                 '</span> </a></li></span>');*/
                 $('#nav_message').prepend(new_html.html());
 
 
@@ -403,7 +407,7 @@ var insertFace = function (obj) {
         '<div class="XT_face_main"><div class="XT_face_title"><span class="XT_face_bt" style="float: left">常用表情</span>' +
         '<a onclick="close_face()" class="XT_face_close">X</a></div><div id="face" style="padding: 10px;"></div></div></div>';
     obj.parents('.weibo_post_box').find('#emot_content').html(html);
-    getFace(obj.parents('.weibo_post_box').find('#emot_content'),'');
+    getFace(obj.parents('.weibo_post_box').find('#emot_content'), '');
 };
 
 var face_chose = function (obj) {
@@ -424,40 +428,40 @@ var face_chose = function (obj) {
 
 }
 
-var bind_face_pkg = function(){
+var bind_face_pkg = function () {
     $('[data-role="change_pkg"]').unbind('click');
-    $('[data-role="change_pkg"]').click(function(){
+    $('[data-role="change_pkg"]').click(function () {
         var $this = $(this)
         var pkg = $this.attr('data-name');
-        getFace($this.closest('#emot_content'),pkg);
+        getFace($this.closest('#emot_content'), pkg);
     })
 }
 
-var getFace = function (obj,pkg) {
-    if(typeof pkg == 'undefined'){
+var getFace = function (obj, pkg) {
+    if (typeof pkg == 'undefined') {
         pkg = '';
     }
-    $.post(U('Core/Expression/getSmile'), {pkg:pkg}, function (res) {
+    $.post(U('Core/Expression/getSmile'), {pkg: pkg}, function (res) {
         var expression = res.expression;
         var pkgList = res.pkgList;
         var _imgHtml = '';
-        if(pkgList.length > 0){
-            if(pkgList.length>1){
-                _imgHtml  = "<div class='face-tab'><ul>";
+        if (pkgList.length > 0) {
+            if (pkgList.length > 1) {
+                _imgHtml = "<div class='face-tab'><ul>";
                 for (var e in pkgList) {
-                    if(pkgList[e].name == res.pkg){
-                        _imgHtml += "<li class='active' ><a data-role='change_pkg'  data-name='"+pkgList[e].name+"'>"+pkgList[e].title+"</a></li>";
-                    }else{
-                        _imgHtml += "<li><a data-role='change_pkg' data-name='"+pkgList[e].name+"'>"+pkgList[e].title+"</a></li>";
+                    if (pkgList[e].name == res.pkg) {
+                        _imgHtml += "<li class='active' ><a data-role='change_pkg'  data-name='" + pkgList[e].name + "'>" + pkgList[e].title + "</a></li>";
+                    } else {
+                        _imgHtml += "<li><a data-role='change_pkg' data-name='" + pkgList[e].name + "'>" + pkgList[e].title + "</a></li>";
                     }
                 }
-                _imgHtml +="</ul></div>";
+                _imgHtml += "</ul></div>";
             }
             for (var k in expression) {
                 _imgHtml += '<a href="javascript:void(0)" data-type="' + expression[k].type + '" title="' + expression[k].title + '" onclick="face_chose($(this))";><img src="' + expression[k].src + '" width="24" height="24" /></a>';
             }
             _imgHtml += '<div class="c"></div>';
-        }else{
+        } else {
             _imgHtml = '获取表情失败';
         }
 

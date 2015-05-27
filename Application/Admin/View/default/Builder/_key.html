@@ -262,7 +262,7 @@
             }
         </php>
         <input type="hidden" name="{$field.name}" value="{$field.value}"/>
-        <input type="text" data-field-name="{$field.name}" class="text input-large form-time time form-control"
+        <input type="text" data-field-name="{$field.name}" class="text input-large form-time form-control"
                style="width: 400px" value="{$field.value|time_format='H:i'}" placeholder="请选择时间"/>
     </case>
     <case value="date">
@@ -274,7 +274,7 @@
             }
         </php>
         <input type="hidden" name="{$field.name}" value="{$field.value}"/>
-        <input type="text" data-field-name="{$field.name}" class="text input-large form-date time form-control"
+        <input type="text" data-field-name="{$field.name}" class="text input-large form-date form-control"
                style="width: 400px" value="{$field.value|time_format='Y-m-d'}" placeholder="请选择时间"/>
     </case>
     <case value="datetime">
@@ -286,7 +286,7 @@
             }
         </php>
         <input type="hidden" name="{$field.name}" value="{$field.value}"/>
-        <input type="text" data-field-name="{$field.name}" class="text input-large form-datetime time form-control"
+        <input type="text" data-field-name="{$field.name}" class="text input-large form-datetime form-control"
                style="width: 400px" value="{$field.value|time_format}" placeholder="请选择时间"/>
     </case>
 
@@ -435,6 +435,9 @@
         </div>
     </case>
 
+    <case value="userDefined">
+        {$field.definedHtml}
+    </case>
 
     <default/>
     <span style="color: #f00;">错误：未知字段类型 {$field.type}</span>

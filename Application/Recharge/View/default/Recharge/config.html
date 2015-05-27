@@ -1,0 +1,93 @@
+<div class="flag">
+
+<div class="field" id="re_field" style="width: 400px;">
+
+<volist name="param['data']" id="data">
+    <div class="clearfix one_field" style="margin-bottom: 5px;">
+        <select class="form-control pull-left" style="width: 150px;margin-right: 5px;">
+            <volist name="param['opt']" id="opt">
+                <option <if condition="$data['FIELD'] eq $opt['id']"> selected</if> value="{$opt.id}">{$opt.title}</option>
+            </volist>
+        </select>
+        <input class="form-control pull-left" value="{$data['UNIT']}" style="width: 150px;margin-right: 5px;">
+        <div class="pull-left" style="line-height: 30px;">
+            <a href="javascript:" data-role="remove_field" title="移除">
+                <i class="icon icon-remove"></i>
+            </a>
+        </div>
+    </div>
+</volist>
+
+
+</div>
+<input class="btn" type="button" data-role="add_field" value="添加">
+<div class="field_textarea" style="display: none;">
+    <textarea name="{$name}" style="">{$param.jsonData}</textarea>
+</div>
+
+</div>
+<script>
+    $(function () {
+        $('[data-role="add_field"]').unbind('click');
+        $('[data-role="add_field"]').click(function () {
+            $(this).prev().append($('#key_html').html())
+         //   $('#re_field')
+            bind_remove_field();
+            bind_field_change()
+        })
+        bind_field_change()
+        bind_remove_field();
+    })
+    var bind_field_change = function () {
+        $('.field select').unbind('change');
+        $('.field select').change(function () {
+            change_data($(this).closest('.flag'))
+        })
+        $('.field input').unbind('change');
+        $('.field input').change(function () {
+            change_data($(this).closest('.flag'))
+        })
+    }
+    var bind_remove_field = function () {
+        $('[data-role="remove_field"]').unbind('click');
+        $('[data-role="remove_field"]').click(function () {
+            var $this = $(this);
+            var $obj = $this.closest('.flag');
+            $this.closest('.one_field').remove();
+            change_data($obj)
+        })
+    }
+    var change_data = function($obj){
+
+        var array =new Array();
+        $obj.find('.one_field').each(function (index, element) {
+            if ($(element).find('input').val() != '') {
+                var obj_t =  new Object();
+                obj_t['FIELD'] =  $(element).find('select').val();
+                obj_t['UNIT'] =  $(element).find('input').val();
+                array.push(obj_t)
+            }
+        })
+
+        var array_str = JSON.stringify(array);
+        $obj.find('.field_textarea textarea').val(array_str);
+    }
+</script>
+
+
+<div class="clearfix" id="key_html" style="display: none;">
+    <div class="clearfix one_field" style="margin-bottom: 5px;">
+        <select class="form-control pull-left" style="width: 150px;margin-right: 5px;">
+            <volist name="param['opt']" id="opt">
+                <option value="{$opt.id}">{$opt.title}</option>
+            </volist>
+        </select>
+        <input class="form-control pull-left" value="" style="width: 150px;margin-right: 5px;">
+
+        <div class="pull-left" style="line-height: 30px;">
+            <a href="javascript:" data-role="remove_field" title="移除">
+                <i class="icon icon-remove"></i>
+            </a>
+        </div>
+    </div>
+</div>

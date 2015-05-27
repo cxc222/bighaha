@@ -1,0 +1,48 @@
+<div class="one_answer clearfix">
+    <div class="support_block">
+        <if condition="$answer['is_support']||$answer['is_oppose']">
+            <a title="支持" <eq name="answer['is_support']" value="1">class="butt already_do"<else/>class="butt"</eq>>
+                <i class="icon icon-thumbs-up"></i>
+                <br/>
+                <span class="num">{$answer.support}</span>
+            </a>
+            <a title="反对,不会显示你的名称" <eq name="answer['is_oppose']" value="1">class="butt already_do"<else/>class="butt"</eq>>
+                <span class="num">{$answer.oppose}</span>
+                <br/>
+                <i class="icon icon-thumbs-down"></i>
+            </a>
+            <else/>
+            <a title="支持" class="butt can_do" data-role="answer-support" data-id="{$answer.id}">
+                <i class="icon icon-thumbs-up"></i>
+                <br/>
+                <span class="num">{$answer.support}</span>
+            </a>
+            <a title="反对,不会显示你的名称" class="butt can_do" data-role="answer-oppose" data-id="{$answer.id}">
+                <span class="num">{$answer.oppose}</span>
+                <br/>
+                <i class="icon icon-thumbs-down"></i>
+            </a>
+        </if>
+    </div>
+    <div class="a_info">
+        <div class="answer_user"><a ucard="{$answer.uid}" href="{$answer.user.space_link}">{$answer.user.nickname}</a></div>
+        <div>
+            <notempty name="answer['support_user']">
+                <volist name="answer['support_user']" id="support_user">
+                    <a ucard="{$support_user.uid}" href="{$support_user.space_url}">{$support_user.nickname}</a>&nbsp;
+                </volist>
+                赞同
+            </notempty>
+        </div>
+        <div class="a_content">{$answer.content}</div>
+        <div class="q_black_info">
+            回复时间：{$answer.create_time|friendlyDate}
+            <if condition="check_auth('Question/Answer/edit',$answer['uid'])">
+                &nbsp;&nbsp;<a href="{:U('Question/Answer/edit',array('answer_id'=>$answer['id']))}">编辑</a>
+            </if>
+            <if condition="check_auth('Question/Answer/setBest',-1)|| (($question['uid'] eq is_login()) && !$question['best_answer'])">
+                &nbsp;&nbsp;<a data-role="set-best" data-id="{$answer['id']}" data-question-id="{$question.id}">设为最佳答案</a>
+            </if>
+        </div>
+    </div>
+</div>

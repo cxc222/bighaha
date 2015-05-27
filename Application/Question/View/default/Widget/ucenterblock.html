@@ -1,0 +1,224 @@
+<div style="padding-left:20px;">
+    <div class="common_block_border">
+        <eq name="tab" value="q">
+            <div>
+                <ul class="nav nav-pills ucenter-tab">
+                    <li class="active">
+                        <a href="{:U('Ucenter/Index/applist',array('type'=>'question','tab'=>'q','uid'=>$uid))}">
+                            <if condition="$uid eq is_login()">我<else/>他or她</if>的问题
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{:U('Ucenter/Index/applist',array('type'=>'question','tab'=>'a','uid'=>$uid))}">
+                            <if condition="$uid eq is_login()">我<else/>他or她</if>的回答
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="question_list" style="padding:0 20px">
+                <notempty name="question_list">
+                    <volist name="question_list" id="question">
+                        <div class="one_question clearfix">
+                            <div class="col-xs-12">
+                                <h2 class="q_title">
+                                    <span style="font-size: 25px;color: #AEAEAE;margin-right: 5px;float: left;">Q</span>
+                                    <a target="_blank" href="{:U('Question/Index/detail',array('id'=>$question['id']))}" class="text-more" style="width: 80%;line-height: 32px;margin-left: 8px;">{$question.title}</a>
+                                </h2>
+                                <div>
+                                    <a target="_blank" ucard="{$question.uid}" href="{$question.user.space_url}">{$question.user.nickname}</a>
+                                    <span class="q_black_info">添加了问题</span>
+                                </div>
+                                <div class="q_detail">
+                                    <div>
+                                        <ins>{$question.title}</ins>
+                                    </div>
+                                    <br>
+                                    <div>
+                                        补充说明：
+                                        <ins>
+                                            {$question.info}
+                                            <if condition="$question['img']">
+                                                <br/>
+                                                <img src="{$question['img']}" style="margin-top: 10px;"/>
+                                            </if>
+                                        </ins>
+                                    </div>
+                                </div>
+                                <div class="q_black_info">
+                                    回答数：{$question.answer_num}&nbsp;&nbsp;
+                                    <!--支持数：{$question.support}&nbsp;&nbsp;-->
+                                    创建时间：{$question.create_time|friendlyDate}
+                                </div>
+                            </div>
+                        </div>
+                    </volist>
+                    <style>
+                        .question_list .one_question {
+                            position: relative;
+                            padding: 0;
+                            outline: 0;
+                            margin: 6px 0 0;
+                            border-bottom: 1px solid #eee;
+                            margin-bottom: 10px;
+                        }
+                        .question_list .one_question a {
+                            color: #259;
+                            text-decoration: none;
+                        }
+                        .question_list .one_question .q_title {
+                            margin: 0 30px 3px 0;
+                            padding-left: 0;
+                        }
+                        .question_list .one_question .q_black_info {
+                            position: relative;
+                            margin-bottom: 5px;
+                            color: #999;
+                        }
+                        .question_list .one_question .q_detail {
+                            border-left: 3px solid #DDD;
+                            padding: 5px 10px;
+                            margin: 5px 0;
+                        }
+                        .question_list .one_question .q_detail ins {
+                            text-decoration: none;
+                            padding: 3px 0;
+                            background: #EAF0DD;
+                            color: #5B7918;
+                            line-height: 25px;
+                        }
+                    </style>
+                    <else/>
+                    <div style="font-size:3em;padding:2em 0;color: #ccc;text-align: center">没有可显示问题吆~</div>
+                </notempty>
+            </div>
+        </eq>
+        <eq name="tab" value="a">
+            <div>
+                <ul class="nav nav-pills ucenter-tab">
+                    <li>
+                        <a href="{:U('Ucenter/Index/applist',array('type'=>'question','tab'=>'q','uid'=>$uid))}">
+                            <if condition="$uid eq is_login()">我<else/>他or她</if>的问题
+                        </a>
+                    </li>
+                    <li class="active">
+                        <a href="{:U('Ucenter/Index/applist',array('type'=>'question','tab'=>'a','uid'=>$uid))}">
+                            <if condition="$uid eq is_login()">我<else/>他or她</if>的回答
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="question_list" style="padding:0 20px">
+                <notempty name="question_list">
+                    <volist name="question_list" id="answer">
+                        <div class="one_question clearfix">
+                            <div class="col-xs-12 best_answer" style="margin-bottom: 10px;">
+                                <div class="a_title">
+                                    <span class="q_black_info" style="line-height: 24px;vertical-align: middle;">
+                                        <span style="font-size: 25px;color: #AEAEAE;margin-right: 5px;">A</span>&nbsp;我的回答
+                                    </span>
+                                </div>
+                                <div class="a_content">
+                                    <ins>
+                                        {$answer['content']}
+                                        <div class="clearfix"></div>
+                                    </ins>
+                                </div>
+                                <div class="q_black_info" style="margin-left: 6px;">
+                                    <span>问题</span>&nbsp;&nbsp;<span>{$answer['support']}人支持</span>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div>
+                            <div class="triangle sanjiao" style="margin-left: 20px;border-bottom: 10px solid #e8e8e8;"></div>
+                            <div class="col-xs-12" style="border: 1px solid #e8e8e8;padding: 10px;margin-bottom: 20px;border-radius: 6px;background: #f1f1f1;">
+                                <h2 class="q_title">
+                                    <span style="font-size: 25px;color: #AEAEAE;margin-right: 5px;float: left;">Q</span>
+                                    <a target="_blank" href="{:U('Question/Index/detail',array('id'=>$answer['question']['id']))}" class="text-more" style="width: 80%;line-height: 32px;margin-left: 8px;">{$answer.question.title}</a>
+                                </h2>
+                                <div>
+                                    <a target="_blank" ucard="{$answer.question.uid}" href="{$answer.question.user.space_url}">{$answer.question.user.nickname}</a>
+                                    <span class="q_black_info">添加了问题</span>
+                                </div>
+                                <div class="q_detail">
+                                    <div>
+                                        <ins>{$answer.question.title}</ins>
+                                    </div>
+                                    <br>
+                                    <div>
+                                        补充说明：
+                                        <ins>
+                                            {$answer.question.info}
+                                            <if condition="$answer['question']['img']">
+                                                <br/>
+                                                <img src="{$answer['question']['img']}" style="margin-top: 10px;"/>
+                                            </if>
+                                        </ins>
+                                    </div>
+                                </div>
+                                <div class="q_black_info">
+                                    回答数：{$answer.question.answer_num}&nbsp;&nbsp;
+                                    <!--支持数：{$data.support}&nbsp;&nbsp;-->
+                                    创建时间：{$answer.question.create_time|friendlyDate}
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                    </volist>
+                    <style>
+                        .question_list .one_question {
+                            position: relative;
+                            padding: 0;
+                            outline: 0;
+                            margin: 6px 0 0;
+                            border-bottom: 1px solid #eee;
+                            margin-bottom: 10px;
+                        }
+                        .question_list .one_question a {
+                            color: #259;
+                            text-decoration: none;
+                        }
+                        .question_list .one_question .q_title {
+                            margin: 0 30px 3px 0;
+                            padding-left: 0;
+                        }
+                        .question_list .one_question .q_black_info {
+                            position: relative;
+                            margin-bottom: 5px;
+                            color: #999;
+                        }
+                        .question_list .one_question .q_detail {
+                            border-left: 3px solid #DDD;
+                            padding: 5px 10px;
+                            margin: 5px 0;
+                        }
+                        .question_list .one_question .q_detail ins {
+                            text-decoration: none;
+                            padding: 3px 0;
+                            background: #EAF0DD;
+                            color: #5B7918;
+                            line-height: 25px;
+                        }
+                        .question_list .one_question .best_answer .a_title {
+                            margin: 23px 0 13px;
+                        }
+                        .question_list .one_question .best_answer .a_content {
+                            line-height: 24px;
+                            background: #F9F9F9;
+                            padding: 2px 10px;
+                            margin-bottom: 10px;
+                        }
+                        .question_list .one_question .best_answer .a_content ins {
+                            text-decoration: initial;
+                            color: #7E7E7E;
+                        }
+                    </style>
+                    <else/>
+                    <div style="font-size:3em;padding:2em 0;color: #ccc;text-align: center">没有可显示回答吆~</div>
+                </notempty>
+            </div>
+        </eq>
+        <div class="text-right">
+            {:getPagination($totalCount,10)}
+        </div>
+    </div>
+</div>

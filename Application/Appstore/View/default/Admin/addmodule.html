@@ -1,0 +1,42 @@
+<extend name="Base/common"/>
+<block name="header">
+    <include file="Public/nav"/>
+</block>
+<block name="body">
+    <link type="text/css" rel="stylesheet" href="__PUBLIC__/js/ext/zf/css/zebra_form.css"/>
+    <script type="text/javascript" charset="utf-8" src="__PUBLIC__/js/ext/webuploader/js/webuploader.js"></script>
+    <link href="__PUBLIC__/js/ext//webuploader/css/webuploader.css" type="text/css" rel="stylesheet">
+    <script type="text/javascript" charset="utf-8" src="__PUBLIC__/js/ext/webuploader/js/webuploader.js"></script>
+    <link href="__PUBLIC__/js/ext/webuploader/css/webuploader.css" type="text/css" rel="stylesheet">
+
+    <style>
+        .web_uploader_picture_list {
+            margin-top: 10px;
+        }
+
+        .web_uploader_picture_list img {
+            width: 80px;
+            height: 80px;
+        }
+    </style>
+
+    <div class="container common-block-lg templet">
+        <header>
+          发布模块
+        </header>
+
+        <h3 style="color: #666" class="col-md-offset-2"><span class="text-success">创建{$entity} <i
+                class="icon-chevron-right"></i></span> 更新版本 <i
+                class="icon-chevron-right"></i> 审核 <i class="glyphicon glyphicon-chevron-right"></i>上架
+        </h3>
+
+        <div class="col-md-offset-1 col-md-11">
+            {$form}
+        </div>
+    </div>
+
+    <script type="text/javascript" charset="utf-8" src="__STATIC__/ueditor/ueditor.config.js"></script>
+    <script type="text/javascript" charset="utf-8" src="__STATIC__/ueditor/ueditor.all.min.js"></script>
+
+    <script type="text/javascript" src="__PUBLIC__/js/ext/zf/js/zebra_form.js"></script>
+</block>

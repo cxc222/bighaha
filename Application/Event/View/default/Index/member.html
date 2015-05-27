@@ -2,7 +2,6 @@
 
 <block name="style">
     <link href="__CSS__/event.css" rel="stylesheet" type="text/css"/>
-    <link type="text/css" rel="stylesheet" href="__PUBLIC__/js/ext/magnific/magnific-popup.css"/>
 </block>
 <block name="header">
     <include file="_nav"/>
@@ -23,7 +22,7 @@
 
 <div class="event_member_list" style="margin-top: 15px;">
     <volist name="content['member']" id="vo">
-        <div class="col-md-2" style="height: 180px;">
+        <div class="col-xs-2" style="height: 180px;">
             <div style="width: 128px;">
                 <img ucard="{$vo.id}" src="{$vo.avatar128}" class="avatar-img" style="width: 128px;float: left"/>
                 <div style="text-align: center;">
@@ -57,7 +56,6 @@
 
 <block name="script">
     <script type="text/javascript" src="__STATIC__/uploadify/jquery.uploadify.min.js"></script>
-    <script type="text/javascript" src="__PUBLIC__/js/ext/magnific/jquery.magnific-popup.min.js"></script>
     <script type="text/javascript" src="__JS__/event.js"></script>
     <script>
         $(function () {

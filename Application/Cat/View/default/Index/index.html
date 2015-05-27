@@ -1,0 +1,54 @@
+<extend name="Base/common"/>
+
+<block name="body">
+
+    <include file="Public/_cat_header"/>
+    <include file="Public/_navbar"/>
+    <div class="container">
+        <div id="page-wrap">
+            <div id="main-wrap">
+                <!--导航栏-->
+
+                <!--导航栏end-->
+                <div class="row">
+
+                    <div class="col-xs-8">
+
+                            <div class="mb10">
+                                {:W('MxAd',array('name'=>'cat_index_ad_down',width=>668,'description'=>'分类信息首页公告下方广告'))}
+                            </div>
+                            <volist name="entitys" id="vo">
+                                <div class="mb10 common_block_border" style="min-height: 300px">
+                                    <h1 class="common_block_title mb10">L{$i} &nbsp;{$vo.alias}</h1>
+
+                                    <div class="common_block_body">
+                                        {:W('InfoList/render',array(array('name'=>$vo['name'],'type'=>'limit','order'=>'create_time
+                                        desc',num=>'5')))}
+                                    </div>
+                                </div>
+
+                            </volist>
+                        </div>
+
+
+                    <div class="col-xs-4">
+                        <div class="mb10">
+
+                            <volist name="entitys" id="vo">
+                                <div class="mb10">
+                                    <div class="{$class} mb10  common_block_border">
+                                        <h1 class="common_block_title_right">推荐{$vo['alias']}</h1>
+
+                                {:W('InfoList/render',array(array('name'=>$vo['name'],'type'=>'limit','order'=>'create_time
+                                desc',num=>'5',recom=>true, 'tpl'=>'recom')))}
+                                        </div>
+                                    </div>
+                            </volist>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</block>

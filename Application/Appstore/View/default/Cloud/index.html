@@ -1,0 +1,255 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <include file="Public/head"/>
+    <link href="__CSS__/common.css" rel="stylesheet" type="text/css">
+
+</head>
+<body>
+
+<style>
+    body {
+        background: white;
+    }
+    .nav_bar .navbar-nav > li > a{
+        line-height: 42px;
+    }
+</style>
+<div id="nav_bar" class="nav_bar">
+    <div class="" style="width:auto;">
+
+        <nav class="" id="nav_bar_container">
+          
+            <div class="" id="nav_bar_main">
+
+                <ul class="nav navbar-nav navbar-left">
+                    <li class="active">
+                        <a>插件</a>
+                    </li>
+                    <li><a>模块</a></li>
+                    <li><a>主题</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <!--登陆面板-->
+                    <if condition="is_login()">
+                        <li class="dropdown">
+                            <div></div>
+                            <a id="nav_info" class="dropdown-toggle text-left" data-toggle="dropdown">
+                                <span class="icon-bell-alt"></span><span id="nav_bandage_count"
+                                <if condition="count($unreadMessage) eq 0"> style="display: none"</if>
+                                class="label label-badge label-success">{:count($unreadMessage)}</span>
+                            </a>
+                            <ul class="dropdown-menu extended notification">
+                                <li>
+                                    <div class="clearfix header">
+                                        <div class="col-xs-6 nav_align_left"><span
+                                                id="nav_hint_count">{:count($unreadMessage)}</span> 条未读
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="info-list">
+                                    <div class="list-wrap">
+                                        <ul id="nav_message" class="dropdown-menu-list scroller  list-data"
+                                            style="width: auto;">
+                                            <if condition="count($unreadMessage) eq 0">
+                                                <div style="font-size: 18px;color: #ccc;font-weight: normal;text-align: center;line-height: 150px">
+                                                    暂无任何消息!
+                                                </div>
+                                                <else/>
+                                                <volist name="unreadMessage" id="message">
+                                                    <li>
+                                                        <a data-url="{$message.url}"
+                                                           onclick="Notify.readMessage(this,{$message.id})">
+                                                            <h3 class="margin-top-0"><i class="icon-bell"></i>
+                                                                {$message.title}</h3>
+
+                                                            <p> {$message.content}</p>
+                                                        <span class="time">
+
+                                                         {$message.ctime}
+
+                                                        </span>
+                                                        </a>
+                                                    </li>
+                                                </volist>
+                                            </if>
+
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li class="footer text-right">
+                                    <div class="btn-group">
+                                        <button onclick="Notify.setAllReaded()" class="btn btn-sm  "><i
+                                                class="icon-check"></i> 全部已读
+                                        </button>
+                                        <a class="btn  btn-sm  " href="{:U('ucenter/Message/message')}">
+                                            查看消息
+                                        </a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a title="修改资料" href="{:U('ucenter/Config/index')}"><i
+                                    class="icon-cog"></i></a>
+                        </li>
+                        <li class="top_spliter"></li>
+                        <li class="dropdown">
+                            <php>
+                                $common_header_user = query_user(array('nickname'));
+                            </php>
+                            <a role="button" class="dropdown-toggle dropdown-toggle-avatar" data-toggle="dropdown">
+                                {$common_header_user.nickname}&nbsp;<i style="font-size: 12px"
+                                                                       class="icon-chevron-down"></i>
+                            </a>
+                            <ul class="dropdown-menu text-left" role="menu">
+                                <li><a href="{:U('ucenter/Index/index')}"><span
+                                        class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;个人主页</a>
+                                </li>
+                                <li><a href="{:U('ucenter/message/message')}"><span
+                                        class="glyphicon glyphicon-star"></span>&nbsp;&nbsp;消息中心</a>
+                                </li>
+                                <li><a event-node="logout"><span
+                                        class="glyphicon glyphicon-off"></span>&nbsp;&nbsp;注销</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="top_spliter "></li>
+                        <else/>
+
+
+                        <li class="top_spliter "></li>
+                        <php>
+                            $open_quick_login=modC('OPEN_QUICK_LOGIN', 0, 'USERCONFIG');
+                            $register_type=modC('REGISTER_TYPE','normal','Invite');
+                            $register_type=explode(',',$register_type);
+                            $only_open_register=0;
+                            if(in_array('invite',$register_type)&&!in_array('normal',$register_type)){
+                            $only_open_register=1;
+                            }
+                        </php>
+                        <script>
+                            var OPEN_QUICK_LOGIN = "{$open_quick_login}";
+                            var ONLY_OPEN_REGISTER = "{$only_open_register}";
+                        </script>
+                        <li class="">
+                            <a data-login="do_login">登录</a>
+                        </li>
+                        <li class="">
+                            <a data-role="do_register" data-url="{:U('Ucenter/Member/register')}">注册</a>
+                        </li>
+                        <li class="spliter "></li>
+
+                    </if>
+                </ul>
+
+            </div>
+            <!--导航栏菜单项-->
+
+        </nav>
+    </div>
+</div>
+<div class="common-block templet" style="padding-top: 42px;">
+    <section>
+        <header>
+            <h1>模块</h1>
+        </header>
+
+        <div class="row">
+
+            <div class="col-xs-12">
+                <ul class="nav nav-secondary">
+                    <li id="type_0" class="active"><a href="/index.php?s=/appstore/index/module/tid/0.html">全部 （1）</a>
+                    </li>
+                    <li id="type_13"><a href="/index.php?s=/appstore/index/module/tid/13.html">通用 （1）</a>
+                    </li>
+                </ul>
+            </div>
+            <script>
+                $("#type_0").addClass('active');
+            </script>
+        </div>
+        <div style="padding:10px">
+
+        </div>
+        <div class="up_search">
+            <div class="col-xs-9">
+                <a href="/index.php?s=/appstore/admin/addmodule.html" class="btn btn-primary">发布模块</a>
+
+            </div>
+            <div class="col-xs-3 text-right">
+                <form action="/index.php?s=/appstore/index/module.html" method="post">
+                    <div class="search_input">
+                        <div class="input-group">
+
+                            <input name="keywords" type="text" class="form-control" placeholder="输入模块名称" value="">
+      <span class="input-group-btn">
+        <button class="btn btn-default" type="submit">搜索</button>
+      </span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!--搜素框-->
+            <!--搜素框-->
+        </div>
+
+        <div class="clearfix"></div>
+
+        <!-- 插件列表部分-->
+        <table width="100%" class="margin-top-15 table">
+            <colgroup>
+                <col width="105">
+                <col width="420">
+                <col width="100">
+                <col width="100">
+                <col width="150">
+            </colgroup>
+            <thead>
+            <tr class="first_tr">
+                <th>共1条</th>
+                <th>说明</th>
+                <th>价格</th>
+                <th>下载次数</th>
+                <th>最后更新</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td><a href="/index.php?s=/appstore/index/moduledetail/id/49.html" class="app_icon"><b></b>
+                    <img class="appstore_cover" src="/Application/Appstore/Static/images/no_icon.png">
+                </a></td>
+                <td>
+                    <h3 class="margin-top-0"><a href="/index.php?s=/appstore/index/moduledetail/id/49.html">活动</a></h3>
+
+                    <p class="disrip">312312312</p>
+
+                    <p class="data">版本：<span class="label">暂无新版</span> 作者：
+                        嘉兴想天信息科技有限公司
+                    </p>
+                </td>
+                <td>
+                    免费
+                </td>
+                <td><span class="count">0</span></td>
+                <td>2015-05-21 16:13:50</td>
+                <td><a href="/index.php?s=/appstore/index/moduledetail/id/49.html" class="btn btn-primary">查看详情</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <!-- 插件列表部分-->
+
+        <div class="pull-right"></div>
+    </section>
+
+</div>
+
+<include file="Public/js"/>
+
+<script src="__JS__/jquery.backgroundpos.js" type="text/javascript"></script>
+<script src="__JS__/menu.js" type="text/javascript"></script>
+</body>
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>{:L('cat')} | {:modC('WEB_SITE_NAME','OpenSNS')}</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel="alternate icon" type="image/png" href="assets/i/favicon.png">
+    <link rel="stylesheet" href="__CSS__/amazeui.min.css"/>
+    <link rel="stylesheet" href="__CSS__/cat.css"/>
+    <link rel="stylesheet" href="__CSS__/app.css"/>
+    <style>
+        .header {
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 200%;
+            color: #333;
+            margin-bottom: 0px;
+        }
+
+        .header p {
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<header data-am-widget="header" class="am-header am-header-default am-header-fixed">
+
+
+    <div class="am-header-left am-header-nav">
+        <a href="javascript:history.go(-1);"><span class="am-icon-chevron-left"></span></a>
+        <a href="#phone-link" class="">
+            <i class="am-header-icon am-icon-bell-o"></i>
+        </a>
+    </div>
+    <h1 class="am-header-title">
+      兼职
+    </h1>
+
+    <div class="am-header-right am-header-nav">
+        <a href="#nav-link" class="">
+            <i class=" am-icon-star"></i>
+        </a>
+        <a href="#nav-link" class="">
+            <i class="am-menu-toggle-icon am-icon-bars"></i>
+        </a>
+    </div>
+
+</header>
+
+
+<div class="addparttime-container ">
+    <form action="" class="am-form" id="doc-vld-msg">
+        <fieldset>
+            <div class="am-form-group">
+                <label>标题：</label>
+                <input type="text" minlength="3" placeholder="（至少 3 个字符）" required/>
+            </div>
+
+            <div class="am-form-group">
+                <label>截止日期：</label>
+
+                <div class="am-form-group am-form-icon">
+                    <i class="am-icon-calendar"></i>
+                    <input type="text" class="am-form-field" placeholder="截止日期" data-am-datepicker readonly/>
+                </div>
+            </div>
+            <div class="am-form-group">
+                <label>工作地点</label>
+                <input type="text" placeholder="" required/>
+            </div>
+
+            <div class="am-form-group">
+                <label>联系方式</label>
+                <input type="text" placeholder="" required/>
+            </div>
+
+            <div class="am-form-group">
+                <label>介绍</label>
+                <textarea  minlength="10" maxlength="100"></textarea>
+            </div>
+
+            <button class="am-btn am-btn-secondary am-btn-block" type="submit">发布兼职</button>
+
+        </fieldset>
+    </form>
+</div>
+
+
+<div data-am-widget="navbar" class="am-navbar am-cf am-navbar-default" id="">
+    <ul class="am-navbar-nav am-cf am-avg-sm-5" style="font-size: 12px">
+        <li>
+            <a href="{:U('')}" class="">
+                我
+            </a>
+        </li>
+
+        <li>
+            <a href="{:U('')}" class="">
+                发布
+            </a>
+        </li>
+        <li>
+            <a href="" class="am-icon-star">
+                个人中心
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+<script src="__JS__/jquery.min.js"></script>
+<script src="__JS__/amazeui.min.js"></script>
+<script>
+    $(function () {
+        $('#doc-vld-msg').validator({
+            onValid: function (validity) {
+                $(validity.field).closest('.am-form-group').find('.am-alert').hide();
+            },
+
+            onInValid: function (validity) {
+                var $field = $(validity.field);
+                var $group = $field.closest('.am-form-group');
+                var $alert = $group.find('.am-alert');
+                // 使用自定义的提示信息 或 插件内置的提示信息
+                var msg = $field.data('validationMessage') || this.getValidationMessage(validity);
+
+                if (!$alert.length) {
+                    $alert = $('<div class="am-alert am-alert-danger"></div>').hide().
+                            appendTo($group);
+                }
+                $alert.html(msg).show();
+            }
+        });
+    });
+
+</script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<div class="one_question clearfix">
+    <div class="col-xs-8">
+        <h2 class="q_title">
+            <img src="__ROOT__/Application/Question/Static/images/question_32.png" class="q_icon"/>
+            <a target="_blank" href="{:U('Question/Index/detail',array('id'=>$data['id']))}" class="text-more title">&nbsp;{$data.title}</a>
+        </h2>
+        <div>
+            <a target="_blank" ucard="{$data.uid}" href="{$data.user.space_url}">{$data.user.nickname}</a>
+            <span class="q_black_info">添加了问题</span>
+            <if condition="$data['status'] eq 2">
+                &nbsp;&nbsp;<span style="color: #D79F39;">待审核</span>
+            </if>
+            <if condition="$data['status'] eq 0">
+                &nbsp;&nbsp;<span style="color: #A6A6A6;">审核失败</span>
+            </if>
+        </div>
+        <div class="q_detail">
+            <div>
+                <ins>{$data.title}</ins>
+            </div>
+            <br>
+            <div>
+                补充说明：
+                <ins>
+                    {$data.info}
+                    <if condition="$data['img']">
+                        <br/>
+                        <img src="{$data['img']}" style="margin-top: 10px;"/>
+                    </if>
+                </ins>
+            </div>
+        </div>
+        <div class="q_black_info">
+            回答数：{$data.answer_num}&nbsp;&nbsp;
+            <!--支持数：{$data.support}&nbsp;&nbsp;-->
+            创建时间：{$data.create_time|friendlyDate}
+        </div>
+    </div>
+    <div class="col-xs-4 best_answer">
+        <notempty name="data['best_answer_info']">
+            <div class="a_title">
+                <span class="q_black_info" style="line-height: 24px;vertical-align: middle;">
+                    <if condition="$data['best_answer']">
+                        <img src="__ROOT__/Application/Question/Static/images/best_answer.png" style="width: 28px;"/>&nbsp;最佳答案
+                        <else/>
+                        <img src="__ROOT__/Application/Question/Static/images/answer_24.png"/>&nbsp;支持最多的答案
+                    </if>
+                </span>
+            </div>
+            <div class="a_content">
+                <ins>
+                    {$data['best_answer_info']['content']}
+                    <div class="clearfix"></div>
+                </ins>
+            </div>
+            <div class="q_black_info">回答者：<a ucard="{$data['best_answer_info']['user']['uid']}" href="{$data['best_answer_info']['user']['space_url']}" target="_blank">{$data['best_answer_info']['user']['nickname']}</a>
+            </div>
+            <else/>
+            <div class="a_title">
+                <img src="__IMG__/answer_24.png"/>
+                <span class="q_black_info" style="line-height: 24px;vertical-align: middle;">&nbsp;还没有回答哟~~</span>
+            </div>
+        </notempty>
+    </div>
+</div>

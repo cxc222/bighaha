@@ -162,7 +162,6 @@ class InputRenderWidget extends Action
                             $items[$key]['id'] = $val['id'];
                             $items[$key]['selected'] = ($selected == $val['id']) ? 'selected' : '';
                         }
-                    
                     } else {  
                         if ($data['form_default_value'] != '' && $data['form_default_value'] != null) {
                             /*

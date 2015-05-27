@@ -234,6 +234,7 @@ class IndexController extends Controller{
         if(mb_strlen($data['content'],'utf-8')<20){
             $this->error('内容不能少于20个字！');
         }
+//dump($data);exit;
 
         $res=$this->newsModel->editData($data);
         $title=$aId?"编辑":"新增";
@@ -241,10 +242,10 @@ class IndexController extends Controller{
             if(!$aId){
                 $aId=$res;
                 if($category['need_audit']){
-                    $this->success($title.'资讯成功！请等待审核~',U('News/Index/detail',array('id'=>$aId)));
+                    $this->success($title.'资讯成功！'.cookie('score_tip').' 请等待审核~',U('News/Index/detail',array('id'=>$aId)));
                 }
             }
-            $this->success($title.'资讯成功！',U('News/Index/detail',array('id'=>$aId)));
+            $this->success($title.'资讯成功！'.cookie('score_tip'),U('News/Index/detail',array('id'=>$aId)));
         }else{
             $this->error($title.'资讯失败！'.$this->newsModel->getError());
         }

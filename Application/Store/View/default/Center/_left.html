@@ -1,0 +1,68 @@
+<div class="col-xs-2">
+    <div class="common_block_border">
+        <h2 class="common_block_title">我是买家</h2>
+
+        <div>
+            <ul class="store_sub_menu">
+                <li>
+                    <a class="cur" href="{:U('store/Center/detail')}"><span>·</span> 账户详情</a></li>
+                <li>
+                <li>
+                    <a class="cur" href="{:U('store/Center/buy')}"><span>·</span> 我的购物车</a></li>
+                <li>
+                <li>
+                    <a class="cur" href="{:U('store/Center/orders')}"><span>·</span> 买到的宝贝</a></li>
+                <li><a href="{:U('store/Center/response')}"><span>·</span> 评价管理</a></li>
+                <li><a href="{:U('store/Center/fav')}"><span>·</span> 我的收藏</a></li>
+            </ul>
+        </div>
+
+    </div>
+    <div class="common_block_border">
+        <h2 class="common_block_title">我是卖家</h2>
+        <php>
+            $cd=checkHasCreatedShop(is_login());
+        </php>
+        <div>
+            <h3 class="c_m_l_title">店铺管理</h3>
+            <ul class="store_sub_menu">
+
+                <li>
+                    <if condition="$cd">
+                        <a
+                                href="{:U('store/center/createshop')}"><span>·</span> 基本设置</a>
+                        <else/>
+                        <a
+                                href="{:U('store/center/createshop')}"><span>·</span> 创建店铺</a>
+
+                </if>
+                </li>
+            </ul>
+            <if condition="checkHasCreatedShop(is_login()) eq true">
+                <h3 class="c_m_l_title">商品管理</h3>
+                <ul class="store_sub_menu">
+
+                    <li><a
+                        <if condition="(ACTION_NAME eq 'post') AND($_GET['name'] eq 'good')">class="cur"</if>
+                        href="{:U('store/center/post',array('entity_id'=>8))}"><span>·</span> 发布商品</a></li>
+                    <li><a
+                        <if condition="(ACTION_NAME eq 'selling')">class="cur"</if>
+                        href="{:U('store/Center/selling')}"><span>·</span> 出售中的商品</a></li>
+
+                </ul>
+                <h3 class="c_m_l_title">交易管理</h3>
+
+                <ul class="store_sub_menu">
+                        <li><a
+                            <if condition="(ACTION_NAME eq 'sold')">class="cur"</if>
+                            href="{:U('store/Center/sold')}"><span>·</span> 订单管理</a></li>
+                        <li><a
+                            <if condition="(ACTION_NAME eq 'response') AND (isset($_GET['s']))">class="cur"</if>
+                            href="{:U('store/Center/response',array('s'=>1))}"><span>·</span> 评价管理</a></li>
+
+                </ul>
+            </if>
+            </ul>
+        </div>
+    </div>
+</div>

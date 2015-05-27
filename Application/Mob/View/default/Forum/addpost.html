@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>{:L('forum')} | {:modC('WEB_SITE_NAME','OpenSNS')}</title>
+    <include file="head/head"/>
+</head>
+<body>
+
+<header data-am-widget="header" class="am-header am-header-default am-header-fixed">
+    <div class="am-header-left am-header-nav">
+        <a href="javascript:history.go(-1);"><span class="am-icon-chevron-left"></span></a>
+    </div>
+    <h1 class="am-header-title">
+        发帖子
+    </h1>
+
+    <div class="am-header-right am-header-nav">
+
+    </div>
+</header>
+{:W('Mob/UserMenu/index')}
+<div class="addpost-container" style="padding: 10px;">
+    <form class="am-form" id="send_post" data-am-validator data-url="{:U('Mob/Forum/doAddPost')}">
+        <div class="am-form-group am-form-inline">
+            <select id="doc-select-1" name="forum_id">
+                <volist name="forum_list" id="each_forum">
+                    <if condition="$each_forum['allow_publish']">
+                        <php>
+                            $selected = $each_forum['id'] == $forum_id ?
+                            'selected' : '';
+                        </php>
+                        <option value="{$each_forum.id}"
+                        {$selected}>{$each_forum.title|op_t}
+                        </option>
+                    </if>
+                </volist>
+            </select>
+            <span class="am-form-caret"></span>
+        </div>
+
+        <div class="am-form-group">
+            <input type="text" id="title" name="title" minlength="1" placeholder="标题" class="am-form-field" required/>
+        </div>
+        <div class="am-form-group">
+        <textarea  type="text" name="content" placeholder=""
+                  style="width: 100%;height:150px;padding: 5px"></textarea>
+        </div>
+        <p>
+            <php>$hasWeibo=D('Module')->checkInstalled('Weibo');</php>
+            <eq name="hasWeibo" value="1">
+                <label>
+                    <input type="checkbox" name="sendWeibo" value="1" checked> 同步到微博
+                </label>
+            </eq>
+
+        </p>
+    </form>
+
+    <button type="button" id="confirm" class="am-btn am-btn-primary am-btn-block" style="margin: 20px 0px">发表</button>
+
+</div>
+
+
+<script src="__JS__/amazeui.min.js"></script>
+<script>
+    $(function () {
+        $('#confirm').click(function () {
+            var data = $("#send_post").serialize();
+            var url = $("#send_post").attr('data-url');
+            $.post(url, data, function (msg) {
+                if (msg.status == 1) {
+                    alert('帖子发布成功!');
+                    window.location.href = document.referrer
+                } else {
+                    alert(msg.info);
+                }
+            }, 'json');
+        })
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+
+    <title>{:L('forum')} | {:modC('WEB_SITE_NAME','OpenSNS')}</title>
+
+    <title>{:L('weibo')} | {:modC('WEB_SITE_NAME','OpenSNS')}</title>
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel="alternate icon" type="image/png" href="assets/i/favicon.png">
+    <link rel="stylesheet" href="__CSS__/amazeui.min.css"/>
+    <link rel="stylesheet" href="__CSS__/weibo.css"/>
+    <link rel="stylesheet" href="__CSS__/app.css"/>
+    <style>
+        .header h1 {
+            font-size: 200%;
+            color: #333;
+            margin-top: 30px;
+        }
+
+        .header p {
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<header data-am-widget="header" class="am-header am-header-default am-header-fixed">
+    <div class="am-header-left am-header-nav">
+        <a href="javascript:history.go(-1);"><span class="am-icon-chevron-left"></span></a>
+    </div>
+
+    <h1 class="am-header-title">
+        发表回复
+    </h1>
+
+    <div class="am-header-right am-header-nav">
+
+    </div>
+
+</header>
+<div id="demo-view" class="" data-backend-compiled="" style="z-index: 1040">
+    <nav data-am-widget="menu" class="am-menu am-menu-offcanvas1 am-no-layout" data-am-menu-offcanvas=""><a
+            href="javascript: void(0)" class="am-menu-toggle"><i class="am-menu-toggle-icon am-icon-bars"></i></a>
+
+        <div class="am-offcanvas" style="touch-action: pan-y; -webkit-user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
+            <div class="am-offcanvas-bar am-offcanvas-bar-flip">
+                <div class="am-text-center">
+                    <img class="avatar-img" style="width:64px;" src="Public/images/default_avatar_128_128.jpg">
+
+                    <div class="am-text-center">
+                        <a href="http://mob.com/index.php?s=/mob/weibo/index.html" >李小龙</a>
+                    </div>
+                </div>
+
+
+                <ul class="am-menu-nav am-avg-sm-1">
+
+                    <li class=""><a href="{:U('weibo/index')}" class="">微博</a></li>
+                    <li class=""><a href="{:U('issue/index')}" class="">专辑</a></li>
+                    <li class=""><a href="{:U('blog/index')}" class="">资讯</a></li>
+                    <li class=""><a href="{:U('weibo/index')}" class="">微博</a></li>
+                    <li class=""><a href="{:U('issue/index')}" class="">专辑</a></li>
+                    <li class=""><a href="##" class="">资讯</a></li>
+                    <li class=""><a href="{:U('forum/index')}" class="">论坛</a></li>
+                    <li class=""><a href="{:U('group/index')}" class="">群组</a></li>
+                    <li class=""><a href="{:U('event/index')}" class="">活动</a></li>
+                    <li class=""><a href="##" class="">签到</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</div>
+<div class="sendcomment-container ">
+
+    <div class="sendcomment" id="article_post">
+
+        <textarea data-role="comment_content" type="text" name="name" placeholder=""
+                  style="width: 100%;height:150px;padding: 5px"></textarea>
+
+    </div>
+
+
+    <button type="button" class="am-btn am-btn-primary am-btn-block">发表</button>
+</div>
+
+
+<script src="__JS__/jquery.min.js"></script>
+<script src="__JS__/amazeui.min.js"></script>
+</body>
+</html>

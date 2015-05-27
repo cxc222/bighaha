@@ -9,8 +9,8 @@
 <block name="body">
     <div class="container">
         <div class="row shop">
-            <div class="col-md-12   clearfix">
-                <div class="col-md-12 common_block_border pad_15">
+            <div class="col-xs-12   clearfix">
+                <div class="col-xs-12 common_block_border pad_15">
                     <if condition="$top_category eq ''">
                         <h2 class="title_content">所有商品</h2>
                         <else/>
@@ -23,7 +23,7 @@
                         </h2>
                     </if>
                     <volist name="contents" id="vo">
-                        <div class="col-lg-3 col-md-4  goods">
+                        <div class="col-xs-3 goods">
                             <div class="item_goods position_re">
                                 <if condition="$vo['sell_num'] egt $hot_num"><i class="ico_hot"></i>
                                     <else/>
@@ -93,41 +93,41 @@
                         <input type="hidden" name="address_id" value="{$shop_address['id']}">
 
                         <div class="form-group">
-                            <label for="name" class="col-sm-2 control-label" style="width: 20%">姓名</label>
+                            <label for="name" class="col-xs-2 control-label" style="width: 20%">姓名</label>
 
-                            <div class="col-sm-10" style="width: 60%">
+                            <div class="col-xs-10" style="width: 60%">
                                 <input id="name" name="name" type="text" class="form-control"
                                        value="{$shop_address['name']}"
                                        placeholder="姓名"/>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="address" class="col-sm-2 control-label" style="width: 20%">收货地址</label>
+                            <label for="address" class="col-xs-2 control-label" style="width: 20%">收货地址</label>
 
-                            <div class="col-sm-10" style="width: 60%">
+                            <div class="col-xs-10" style="width: 60%">
                                 <textarea id="address" name="address" class="form-control" placeholder="收货地址"
                                           style="max-width: 310px">{$shop_address['address']}</textarea>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="zipcode" class="col-sm-2 control-label" style="width: 20%">邮编</label>
+                            <label for="zipcode" class="col-xs-2 control-label" style="width: 20%">邮编</label>
 
-                            <div class="col-sm-10" style="width: 60%">
+                            <div class="col-xs-10" style="width: 60%">
                                 <input id="zipcode" name="zipcode" type="text" class="form-control"
                                        value="{$shop_address['zipcode']}" placeholder="邮编"/>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="phone" class="col-sm-2 control-label" style="width: 20%">手机号码</label>
+                            <label for="phone" class="col-xs-2 control-label" style="width: 20%">手机号码</label>
 
-                            <div class="col-sm-10" style="width: 60%">
+                            <div class="col-xs-10" style="width: 60%">
                                 <input id="phone" name="phone" type="text" class="form-control"
                                        value="{$shop_address['phone']}"
                                        placeholder="手机号码"/>
                             </div>
                         </div>
                         <div class="form-group">
-                            <div class="col-sm-offset-2 col-sm-10">
+                            <div class="col-xs-offset-2 col-xs-10">
                                 <button type="submit" class="btn btn-primary ">提交</button>
                             </div>
                         </div>
@@ -143,9 +143,7 @@
 </block>
 
 <block name="script">
-    <link type="text/css" rel="stylesheet" href="__PUBLIC__/Core/js/ext/magnific/magnific-popup.css"/>
     <script type="text/javascript" src="__STATIC__/uploadify/jquery.uploadify.min.js"></script>
-    <script type="text/javascript" src="__PUBLIC__/Core/js/ext/magnific/jquery.magnific-popup.min.js"></script>
     <script>
         var money_name = $('#money_name').val().trim();
         $(function () {

@@ -1,0 +1,71 @@
+
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>{:L('login')} | {:modC('WEB_SITE_NAME','OpenSNS')}</title>
+    <include file="head/head"/>
+    <style>
+        .header {
+            text-align: center;
+        }
+        .header h1 {
+            font-size: 200%;
+            color: #333;
+            margin-top: 30px;
+        }
+        .header p {
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+<div class="header">
+    <div class="am-g">
+        <h1>{:modC('WEB_SITE_NAME','OpenSNS')}</h1>
+        <p>{:modC('SUMMARY','')}</p>
+    </div>
+    <hr />
+</div>
+<div class="am-g">
+    <div class="am-u-lg-6 am-u-md-8 am-u-sm-centered">
+        <form method="post" class="am-form" data-url="{:U('Mob/Member/login')}"><!--{:U('Ucenter/Member/login')}-->
+            <input class="am-radius" placeholder="{$ph}" type="text" name="username" id="text" value="">
+            <br>
+            <input class="am-radius" placeholder="{:L('password')}" type="password" name="password" id="password" value="">
+            <br>
+            <div class="am-cf">
+                <button  id="conf" type="button" name="" value="{:L('login')}" class="am-btn am-radius am-btn-primary am-btn-sm am-fl am-btn-block">登录</button>
+            </div>
+            <br>
+            <div class="am-checkbox">
+                <label>
+                    <input type="checkbox" value="1" name="remember">记住登录
+                </label>
+            </div>
+<!--            <div class="am-g">
+                <div class="am-u-sm-6"><a>{:L('forget_password')}</a></div>
+                <div class="am-u-sm-6 am-text-right"><a href="{:U('index/register')}">{:L('quick_login')}</a></div>
+            </div>-->
+        </form>
+    </div>
+</div>
+
+<script>
+    $('#conf').click(function () {
+        var data = $(".am-form").serialize();
+        var url = $(".am-form").attr('data-url');
+        $.post(url, data, function (msg) {
+            if (msg.status == 1) {
+                toast.success('登录成功!');
+                setTimeout(function () {
+                    location.replace(document.referrer);
+                }, 200);
+            } else {
+                toast.error(msg.info);
+            }
+        }, 'json');
+    })
+</script>
+</body>
+</html>

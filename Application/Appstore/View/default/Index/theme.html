@@ -1,0 +1,142 @@
+<extend name="Base/common"/>
+<block name="header">
+    <include file="Public/nav"/>
+</block>
+<block name="body">
+    <!--推荐模板部分-->
+    <div class="container common-block templet">
+        <section>
+            <header>
+                <h1>主题</h1>
+            </header>
+
+            <div class="row">
+
+                <div class="col-xs-12">
+                    <ul class="nav nav-secondary">
+                        <volist name="types" id="vo">
+                            <li id="type_{$vo.id}"><a href="{:U('theme?tid='.$vo['id'])}">{$vo.title} （{$vo.count}）</a>
+                            </li>
+                        </volist>
+
+                    </ul>
+                </div>
+                <script>
+                    $("#type_{$current_type}").addClass('active');
+                </script>
+            </div>
+            <div style="padding:10px">
+
+            </div>
+            <div class="up_search row">
+
+                <div class="col-xs-9">
+                    <a href="{:U('Admin/addtheme')}" class="btn btn-primary">发布主题</a>
+
+                </div>
+                <div class="col-xs-3 text-right">
+                    <form action="__SELF__" method="post">
+                        <div class="search_input">
+                            <div class="input-group">
+
+                                <input name="keywords" type="text" class="form-control" placeholder="输入主题名称"
+                                       value="{$keywords}">
+      <span class="input-group-btn">
+        <button class="btn btn-default" type="submit">搜索</button>
+      </span>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!--搜素框-->
+                <!--搜素框-->
+            </div>
+
+            <div class="clearfix"></div>
+
+            <!-- 插件列表部分-->
+
+
+            <div class="row margin-top-15">
+                <empty name="themes.data">
+                    <div class="with-padding">
+                        <div style="width: 50%;margin: auto">
+                            <div class="alert  with-icon">
+                                <i class="icon-inbox"></i>
+
+                                <div class="content">
+
+                                    <p style="font-size: 16px">暂时没有主题。赶紧 <a class="text-success" href="{:U('Admin/addtheme')}">发布</a> 一款，成为第一个商品。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </empty>
+                <volist name="themes.data" id="vo">
+                    <div class="col-xs-3">
+                        <div>
+                            <div class="card">
+                                <div class="media-wrapper">
+                                    <a target="_blank" data-role="use_this" data-value="Blue"
+                                       href="{:U('themeDetail',array('id'=>$vo['id']))}">
+                                        <img src="{$vo.cover|getThumbImageById=260,300}">
+                                    </a>
+                                </div>
+                                <span class="caption">{$vo.etitle}</span>
+
+                                <div class="card-heading">
+                        <span class="pull-right">
+                            <span class="label label-success"
+                                  title="主题版本">{$vo.versions.0.fee|display_fee}</span>
+                        </span>
+                                    <a href="{:U('themeDetail',array('id'=>$vo['id']))}"
+                                       target="_blank" title="查看该主题">
+                                        <strong>{$vo.title}</strong>
+                                    </a>
+                                </div>
+
+                                <div class="card-content text-muted">
+                                    <div class="pull-left">
+                                        {$vo.latest_version|display_version=false}
+                                    </div>
+                                    <div class="pull-right">
+                                        下载：{$vo.total_download_count|display_download_times}
+                                    </div>
+                                </div>
+                                <div class="card-actions">
+                                    <div class="text-mute">
+                                        <empty name="vo.author">
+                                            <a
+                                                    href="{$vo.user.space_url}">{$vo.user.nickname}</a>
+                                            <else/>
+                                            {$vo.author}
+                                        </empty>
+                                    </div>
+                                </div>
+
+                                <!-- <div class="card-actions">
+                                     <div class="btn-group">
+
+                                     </div>
+                                 </div>-->
+                            </div>
+                        </div>
+                    </div>
+
+                </volist>
+
+
+                <footer>
+                    {$themes.html}
+                </footer>
+            </div>
+
+            <!-- 插件列表部分-->
+
+        </section>
+
+    </div>
+
+</block>

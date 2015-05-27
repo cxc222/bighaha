@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+
+    <title>{:L('forum')} | {:modC('WEB_SITE_NAME','OpenSNS')}</title>
+
+    <title>{:L('weibo')} | {:modC('WEB_SITE_NAME','OpenSNS')}</title>
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="renderer" content="webkit">
+    <script src="__JS__/jquery.min.js"></script>
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel="alternate icon" type="image/png" href="assets/i/favicon.png">
+    <link rel="stylesheet" href="__CSS__/amazeui.min.css"/>
+    <link rel="stylesheet" href="__CSS__/forum.css"/>
+    <link rel="stylesheet" href="__CSS__/app.css"/>
+    <link href="Application/Mob/Static/js/toastr/toastr.min.css" rel="stylesheet"/>
+
+</head>
+<body class="forum-body">
+
+
+<header data-am-widget="header" class="am-header am-header-default am-header-fixed">
+    <div class="am-header-left am-header-nav">
+        <a href="javascript:history.go(-1);"><span class="am-icon-chevron-left"></span></a>
+
+    </div>
+    <h1 class="am-header-title">
+        帖子详情
+    </h1>
+
+    <div class="am-header-right am-header-nav">
+
+        <a href="#nav-link" class="">
+            <i class="am-menu-toggle-icon am-icon-bars"></i>
+        </a>
+    </div>
+</header>
+{:W('Mob/UserMenu/index')}
+
+<div class="post-container " >
+
+
+    <div class="post" id="article_list_ul">
+
+
+        <div class="post-box">
+
+            <div class="am-g info">
+                <div class="am-u-sm-3 avatar">
+                    <img class="avatar-img" src="{$forum.user.avatar128}">
+                </div>
+                <div class="am-u-sm-5 nickname">
+                    <span> {$forum.user.nickname}</span><br/>
+                    <span class="time">{$forum.create_time|friendlyDate}</span>
+                </div>
+                <div class="am-u-sm-4 part">
+                  楼主
+                </div>
+            </div>
+            <div class="am-g content">
+               <p> {$forum.content}</p>
+            </div>
+
+
+            <div class="am-g interact-button">
+                <span class="small-btn">
+                   <if condition="$isadd eq 0">
+                    <a class="support" post_id="{$forum.id}" add=1 url="{:U('Mob/forum/collection')}">
+                        <i class="am-icon-star-o"></i>收藏
+                    </a>
+                   </if>
+                    <if condition="$isadd eq 1">
+                    <a class="support" post_id="{$forum.id}"  add=0 url="{:U('Mob/forum/collection')}">
+                        <i class="am-icon-star"></i>取消收藏
+                    </a>
+                    </if>
+                </span>
+            </div>
+
+
+
+        </div>
+    </div>
+
+<volist name="postcomment" id="vl" key="k" >
+    <div class="comment am-cf">
+        <div class=" comment-box">
+            <div class="am-g info">
+                <div class="am-fl avatar" >
+                    <img class="avatar-img" style="width:32px" src="{$vl.user.avatar32}">
+                </div>
+                <div class="am-fl nickname"style="margin-left: 15px">
+                    <span> {$vl.user.nickname}</span><br/>
+                    <span class="time">{$vl.create_time|friendlyDate}</span>
+                </div>
+                <div class="am-fr part">
+                   {$k} 楼
+                </div>
+            </div>
+
+        </div>
+        <div class="am-g content">
+            <p>{$vl.content}</p>
+        </div>
+        <div class="am-g interact-button">
+            <span class="small-btn">
+                <a><i class="am-icon-trash" id="doc-confirm-toggle"></i></a>
+            </span>
+            <span class=" small-btn">
+                <i class="am-icon-comment-o"></i>
+            </span>
+        </div>
+    </div>
+</volist>
+
+
+    <div class="am-form-group am-cf" id="comment" style="padding: 10px">
+        <h6>发表回复</h6>
+
+        <textarea class="content" ></textarea>
+
+        <p class="submit" weiboId="{$forum.id}"  url="{:U('Mob/Forum/AddForumComment')}">
+            <button style="float: right" type="submit"  class="am-btn-warning am-btn am-btn-block am-round ">发表</button>
+        </p>
+    </div>
+
+    <div class="am-list-news-ft look-more">
+        <a class="" id="getmore"
+                >查看更多 &raquo;</a>
+    </div>
+
+</div>
+
+<script src="Application/Mob/Static/js/toastr/toastr.min.js"></script>
+<script src="Application/Mob/Static/js/toast.js"></script>
+<script src="__JS__/amazeui.min.js"></script>
+<script>
+    /*回复弹出框*/
+    $(function() {
+        $('.submit').click(function(){
+            var forum_conetnet=$(this).parent('#comment').find('.content').val();
+            var forum_Id=$(this).attr('weiboId');
+            var url=$(this).attr('url');
+
+            $.post(url,{forumId:forum_Id,forumcontent:forum_conetnet},function(msg){
+                if(msg.status==1){
+                    toast.success('回复成功!');
+                    setTimeout(function(){window.location.reload();},3000);
+                }else{
+                    toast.error(msg.info);
+                }
+            },'json')
+        });
+
+        $('.support').click(function(){
+            var post_id=$(this).attr('post_id');
+            var add=$(this).attr('add');
+            var url=$(this).attr('url');
+            $.post(url,{add:add,post_id:post_id},function(msg){
+                if(msg.status==1){
+                    toast.success('已收藏!');
+                    setTimeout(function(){window.location.reload();},1000);
+                }else{
+                    toast.success(msg.info);
+                    setTimeout(function(){window.location.reload();},1000);
+                }
+            },'json')
+        });
+    });
+
+
+</script>
+</body>
+</html>
