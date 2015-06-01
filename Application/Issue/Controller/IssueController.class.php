@@ -28,6 +28,7 @@ class IssueController extends AdminController
         $admin_config = new AdminConfigBuilder();
         $data = $admin_config->handleConfig();
         $data['NEED_VERIFY'] = $data['NEED_VERIFY'] ? $data['NEED_VERIFY'] : 0;
+        $data['DISPLAY_TYPE'] = $data['DISPLAY_TYPE'] ? $data['DISPLAY_TYPE'] : 'list';
         $data['ISSUE_SHOW_TITLE'] = $data['ISSUE_SHOW_TITLE'] ? $data['ISSUE_SHOW_TITLE'] : '最热专辑';
         $data['ISSUE_SHOW_COUNT'] = $data['ISSUE_SHOW_COUNT'] ? $data['ISSUE_SHOW_COUNT'] : 4;
         $data['ISSUE_SHOW_ORDER_FIELD'] = $data['ISSUE_SHOW_ORDER_FIELD'] ? $data['ISSUE_SHOW_ORDER_FIELD'] : 'view_count';
@@ -35,13 +36,14 @@ class IssueController extends AdminController
         $data['ISSUE_SHOW_CACHE_TIME'] = $data['ISSUE_SHOW_CACHE_TIME'] ? $data['ISSUE_SHOW_CACHE_TIME'] : '600';
         $admin_config->title('专辑基本设置')
             ->keyBool('NEED_VERIFY', '投稿是否需要审核', '默认无需审核')
+            ->keyRadio('DISPLAY_TYPE', '默认展示形式', '前台列表默认以该形式展示',array('list'=>'列表','masonry'=>'瀑布流'))
             ->buttonSubmit('', '保存')->data($data);
         $admin_config->keyText('ISSUE_SHOW_TITLE', '标题名称', '在首页展示块的标题');
         $admin_config->keyText('ISSUE_SHOW_COUNT', '显示专辑的个数', '只有在网站首页模块中启用了专辑块之后才会显示');
         $admin_config->keyRadio('ISSUE_SHOW_ORDER_FIELD', '排序值', '展示模块的数据排序方式', array('view_count' => '阅读数', 'reply_count' => '回复数', 'create_time' => '发表时间', 'update_time' => '更新时间'));
         $admin_config->keyRadio('ISSUE_SHOW_ORDER_TYPE', '排序方式', '展示模块的数据排序方式', array('desc' => '倒序，从大到小', 'asc' => '正序，从小到大'));
         $admin_config->keyText('ISSUE_SHOW_CACHE_TIME', '缓存时间', '默认600秒，以秒为单位');
-        $admin_config->group('基本配置', 'NEED_VERIFY')->group('首页展示配置', 'ISSUE_SHOW_COUNT,ISSUE_SHOW_TITLE,ISSUE_SHOW_ORDER_TYPE,ISSUE_SHOW_ORDER_FIELD,ISSUE_SHOW_CACHE_TIME');
+        $admin_config->group('基本配置', 'NEED_VERIFY,DISPLAY_TYPE')->group('首页展示配置', 'ISSUE_SHOW_COUNT,ISSUE_SHOW_TITLE,ISSUE_SHOW_ORDER_TYPE,ISSUE_SHOW_ORDER_FIELD,ISSUE_SHOW_CACHE_TIME');
 
         $admin_config->groupLocalComment('本地评论配置','issueContent');
 
@@ -212,7 +214,7 @@ class IssueController extends AdminController
         if ($status == 1) {
             foreach ($ids as $id) {
                 $content = D('IssueContent')->find($id);
-                D('Common/Message')->sendMessage($content['uid'], "管理员审核通过了您发布的内容。现在可以在列表看到该内容了。", $title = '专辑内容审核通知', U('Issue/Index/issueContentDetail', array('id' => $id)), is_login(), 2);
+                D('Common/Message')->sendMessage($content['uid'],$title = '专辑内容审核通知', "管理员审核通过了您发布的内容。现在可以在列表看到该内容了。",  'Issue/Index/issueContentDetail', array('id' => $id), is_login(), 2);
                 /*同步微博*/
                 /*  $user = query_user(array('nickname', 'space_link'), $content['uid']);
                   $weibo_content = '管理员审核通过了@' . $user['nickname'] . ' 的内容：【' . $content['title'] . '】，快去看看吧：' ."http://$_SERVER[HTTP_HOST]" .U('Issue/Index/issueContentDetail',array('id'=>$content['id']));

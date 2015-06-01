@@ -22,6 +22,12 @@ body {
 .nav > li{
   float: left;
 }
+.nav-stacked > li{
+  float: none;
+}
+.nav-justified > li{
+  float: none;
+}
 .navbar-right{
   float: right !important;
   margin: 0;
@@ -880,9 +886,7 @@ General list for item with image
 }
 /*悬浮样式end*/
 #sub_nav {
-  .navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus{
-    background: none;
-  }
+
   position: fixed;
   z-index: 998;
   top: 50px;
@@ -927,7 +931,7 @@ General list for item with image
   .active > a {
     background: none;
   }
-  .active:before {
+  .active:before,.navbar-default .navbar-nav > li:hover:before, .navbar-default .navbar-nav > li:focus:before {
 
     position: absolute;
     left: 50%;

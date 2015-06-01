@@ -11,6 +11,7 @@ function parse_expression($content)
 {
     return preg_replace_callback("/(\\[.+?\\])/is", 'parse_expression_callback', $content);
 }
+
 function parse_expression_callback($data)
 {
 
@@ -28,6 +29,7 @@ function parse_expression_callback($data)
         return $data[0];
     }
 }
+
 /**
  * 限制字符串长度
  * @param        $str
@@ -147,12 +149,13 @@ function closetags($html)
  * @return bool
  * @author:xjw129xjt xjt@ourstu.com
  */
-function checkImageSrc($file_path){
-      if(!is_bool(strpos($file_path,'http://'))){
-        $header  = curl_get_headers($file_path);
-        $res = strpos($header['Content-Type'],'image/');
-        return is_bool($res)?false:true;
-    }else{
+function checkImageSrc($file_path)
+{
+    if (!is_bool(strpos($file_path, 'http://'))) {
+        $header = curl_get_headers($file_path);
+        $res = strpos($header['Content-Type'], 'image/');
+        return is_bool($res) ? false : true;
+    } else {
         return true;
     }
 }
@@ -163,13 +166,14 @@ function checkImageSrc($file_path){
  * @return mixed
  * @author:xjw129xjt xjt@ourstu.com
  */
-function filterImage($content){
+function filterImage($content)
+{
     preg_match_all("/<[img|IMG].*?src=[\'|\"](.*?(?:[\.gif|\.jpg|\.png]))[\'|\"].*?[\/]?>/", $content, $arr); //匹配所有的图片
-    if($arr[1]){
-        foreach($arr[1] as $v){
+    if ($arr[1]) {
+        foreach ($arr[1] as $v) {
             $check = checkImageSrc($v);
-            if(!$check){
-                $content = str_replace($v,'',$content);
+            if (!$check) {
+                $content = str_replace($v, '', $content);
             }
         }
     }
@@ -183,14 +187,15 @@ function filterImage($content){
  * @return bool
  * @author:xjw129xjt xjt@ourstu.com
  */
-function checkHtmlTags($content,$tags = array()){
-    $tags = is_array($tags)?$tags:array($tags);
-    if(empty($tags)){
-        $tags = array('script','!DOCTYPE','meta','html','head','title','body','base','basefont','noscript','applet','object','param','style','frame','frameset','noframes','iframe');
+function checkHtmlTags($content, $tags = array())
+{
+    $tags = is_array($tags) ? $tags : array($tags);
+    if (empty($tags)) {
+        $tags = array('script', '!DOCTYPE', 'meta', 'html', 'head', 'title', 'body', 'base', 'basefont', 'noscript', 'applet', 'object', 'param', 'style', 'frame', 'frameset', 'noframes', 'iframe');
     }
-    foreach($tags as $v){
-        $res = strpos($content,'<'.$v);
-        if( !is_bool($res) ){
+    foreach ($tags as $v) {
+        $res = strpos($content, '<' . $v);
+        if (!is_bool($res)) {
             return true;
         }
     }
@@ -203,16 +208,40 @@ function checkHtmlTags($content,$tags = array()){
  * @return mixed
  * @author:xjw129xjt xjt@ourstu.com
  */
-function filterBase64($content){
+function filterBase64($content)
+{
     preg_match_all("/data:.*?,(.*?)\"/", $content, $arr); //匹配base64编码
-    if($arr[1]){
-        foreach($arr[1] as $v){
+    if ($arr[1]) {
+        foreach ($arr[1] as $v) {
             $base64_decode = base64_decode($v);
             $check = checkHtmlTags($base64_decode);
-            if($check){
-                $content = str_replace($v,'',$content);
+            if ($check) {
+                $content = str_replace($v, '', $content);
             }
         }
     }
+    return $content;
+}
+
+/**
+ * filter_video  过滤视频
+ * @param $content
+ * @return mixed
+ * @author:xjw129xjt(肖骏涛) xjt@ourstu.com
+ */
+function filter_video($content)
+{
+    $content = D('ContentHandler')->filterVideo($content);
+    return $content;
+}
+
+/**
+ * filter_content  过滤内容，主要用于过滤视频
+ * @param $content
+ * @return mixed
+ * @author:xjw129xjt(肖骏涛) xjt@ourstu.com
+ */
+function filter_content($content){
+    $content = D('ContentHandler')->filterHtmlContent($content);
     return $content;
 }

@@ -673,6 +673,12 @@ body {
 .nav > li {
   float: left;
 }
+.nav-stacked > li {
+  float: none;
+}
+.nav-justified > li {
+  float: none;
+}
 .navbar-right {
   float: right !important;
   margin: 0;
@@ -1426,10 +1432,6 @@ General list for item with image
   background: #4f8ad0;
   color: #ffffff;
 }
-#sub_nav .navbar-default .navbar-nav > li > a:hover,
-#sub_nav .navbar-default .navbar-nav > li > a:focus {
-  background: none;
-}
 #sub_nav .logo {
   margin-left: 15px;
   margin-right: 30px;
@@ -1464,7 +1466,9 @@ General list for item with image
 #sub_nav .active > a {
   background: none;
 }
-#sub_nav .active:before {
+#sub_nav .active:before,
+#sub_nav .navbar-default .navbar-nav > li:hover:before,
+#sub_nav .navbar-default .navbar-nav > li:focus:before {
   position: absolute;
   left: 50%;
   margin-left: -7px;

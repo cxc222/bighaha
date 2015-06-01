@@ -15,12 +15,12 @@
 
 				</div>
 				<div class="fold"><i></i></div>
-				<div class="order"><input type="text" name="sort" class="text input-mini" value="{$list.sort}"></div>
+				<div class="order"><input type="text" name="sort" class="form-control text input-mini" value="{$list.sort}"></div>
 
 				<div class="name">
 					<span class="tab-sign"></span>
 					<input type="hidden" name="id" value="{$list.id}">
-					<input type="text" name="title" class="text" value="{$list.title}">
+					<input type="text" name="title" class="form-control text" style="width: 200px;display: inline-block" value="{$list.title}">
                     <if condition="$level gt 0">
                         <a class="add-sub-cate" title="添加子分类" href="{:U('add'.$model.'?pid='.$list['id'])}">
                             <i class="icon-plus"></i>

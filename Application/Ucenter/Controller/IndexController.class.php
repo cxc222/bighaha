@@ -426,7 +426,7 @@ class IndexController extends BaseController
             $map['status'] = 0;
             $result = D('rank_user')->where($map)->delete();
             if ($result) {
-                D('Message')->sendMessageWithoutCheckSelf(is_login(), '头衔申请取消成功', '取消头衔申请', U('Ucenter/Message/message', array('tab' => 'system')));
+                D('Message')->sendMessageWithoutCheckSelf(is_login(),'取消头衔申请',  '头衔申请取消成功', 'Ucenter/Message/message', array('tab' => 'system'));
                 $this->success('取消成功', U('Ucenter/Index/rankVerifyWait'));
             } else {
                 $this->error('取消失败');
@@ -449,7 +449,7 @@ class IndexController extends BaseController
             }
             $this->assign('old_rank_user', $old_rank_user);
             $map_already['id'] = array('neq', $rank_user_id);
-            D('Message')->sendMessageWithoutCheckSelf(is_login(), '你将进行头衔的重新申请', '头衔重新申请', U('Ucenter/Message/message', array('tab' => 'system')));
+            D('Message')->sendMessageWithoutCheckSelf(is_login(), '头衔重新申请','你将进行头衔的重新申请',  'Ucenter/Message/message', array('tab' => 'system'));
         }
         $alreadyRank = D('rank_user')->where($map_already)->field('rank_id')->select();
         $alreadyRank = array_column($alreadyRank, 'rank_id');
@@ -498,7 +498,7 @@ class IndexController extends BaseController
             $result = D('rank_user')->add($data);
         }
         if ($result) {
-            D('Message')->sendMessageWithoutCheckSelf(is_login(), '头衔申请成功,等待管理员审核', '头衔申请', U('Ucenter/Message/message', array('tab' => 'system')));
+            D('Message')->sendMessageWithoutCheckSelf(is_login(),'头衔申请', '头衔申请成功,等待管理员审核',  'Ucenter/Message/message', array('tab' => 'system'));
             $this->success('申请成功,等待管理员审核', U('Ucenter/Index/rankVerify'));
         } else {
             $this->error('申请失败');

@@ -79,8 +79,7 @@ class Qiniu{
      */
     public function save(&$file,$replace=true) {
         //$file['name'] = $file['savepath'] . $file['savename'];
-        //$key = str_replace('/', '_', $file['savename']);
-    	$key =$this->rootPath.$file['savepath'] . $file['savename'];
+        $key = str_replace('/', '_', $file['name']);
         $upfile = array(
             'name'=>'file',
             'fileName'=>$key,

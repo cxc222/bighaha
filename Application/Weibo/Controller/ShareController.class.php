@@ -34,7 +34,7 @@ class ShareController extends  Controller{
         $user = query_user(array('nickname'), is_login());
         $info =  D('Weibo/Share')->getInfo($feed_data);
         $toUid = $info['uid'];
-        D('Common/Message')->sendMessage($toUid, $user['nickname'] . '分享了您的内容！', '分享提醒', U('Weibo/Index/weiboDetail', array('id' => $new_id)), is_login(), 1);
+        D('Common/Message')->sendMessage($toUid, '分享提醒',$user['nickname'] . '分享了您的内容！',  'Weibo/Index/weiboDetail', array('id' => $new_id), is_login(), 1);
 
 
         $result['url'] ='';

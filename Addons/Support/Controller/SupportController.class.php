@@ -25,6 +25,8 @@ class SupportController extends AddonsController
         $appname = I('POST.appname');
         $table = I('POST.table');
         $row = I('POST.row');
+        $aJump = I('POST.jump');
+
         $message_uid = intval(I('POST.uid'));
         $support['appname'] = $appname;
         $support['table'] = $table;
@@ -41,12 +43,8 @@ class SupportController extends AddonsController
                 $this->clearCache($support);
 
                 $user = query_user(array('nickname'));
-                if (I('POST.jump') == 'no') {
-                    $jump = $_SERVER['HTTP_REFERER']; //如果设置了jump=no，则默认使用引用页
-                } else {
-                    $jump = U($appname . '/Index/' . $table . 'Detail', array('id' => $row));//否则按照约定规则组合消息跳转页面。
-                }
-                D('Message')->sendMessage($message_uid, $user['nickname'] . '给您点了个赞。', $title = $user['nickname'] . '赞了您。', $jump, is_login());
+
+                D('Message')->sendMessage($message_uid,$title = $user['nickname'] . '赞了您。', $user['nickname'] . '给您点了个赞。',  $aJump , array('id' => $row));
                 exit(json_encode(array('status' => 1, 'info' => '感谢您的支持。')));
             } else {
                 exit(json_encode(array('status' => 0, 'info' => '写入数据库失败。')));

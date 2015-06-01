@@ -96,7 +96,7 @@
             {$content.content}
         </div>
     <div>
-    {:hook('localComment', array('path'=>"Issue/issueContent/$content[id]", 'uid'=>$content['uid'],'count_model'=>'issue_content','count_field'=>'reply_count'))}
+    {:hook('localComment', array('path'=>"Issue/issueContent/$content[id]", 'uid'=>$content['uid'],'count_model'=>'issue_content','count_field'=>'reply_count','this_url'=>'Issue/Index/issueContentDetail'))}
     </div>
 </div>
 

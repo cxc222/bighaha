@@ -28,7 +28,7 @@ class AdminController extends AddonsController
             ->buttonDelete(addons_url('Report://Admin/deleteReport'), '删除举报')
             ->keyId()
             ->keyLink('url', "举报链接", '{$url}')
-            ->keyUid('uid', "举报用户的ID")
+            ->keyNickname('uid', "举报用户")
             ->keyText('reason', "举报原因")
             ->keyText('content', "举报描述")
             ->keyText('type', "举报类型")
@@ -103,9 +103,9 @@ class AdminController extends AddonsController
         $result = D('Addons://Report/Report')->where($map)->save($data);
 
         if ($result) {
-            for ($i = 0; $i < count($uid); $i++) {      //根据用户ID，发送系统消息
-                D('Message')->sendMessageWithoutCheckSelf($uid[$i], '处理时间：' . friendlyDate($data['handle_time']) . '。' . '处理状态：' . '已处理' . '。' . '处理结果：' . $data['handle_result'] . '。' . '处理人：' . $name['nickname'], '您有新的系统消息', '', is_login(), 0);
-            }
+
+            D('Message')->sendMessageWithoutCheckSelf($uid, '您的举报已被处理。',  '处理时间：' . friendlyDate($data['handle_time']) . '。' . '处理状态：' . '已处理' . '。' . '处理结果：' . $data['handle_result'] . '。' . '处理人：' . $name['nickname']);
+
             $this->success('处理成功', 0);
         } else {
             $this->error('处理失败');
@@ -136,9 +136,9 @@ class AdminController extends AddonsController
         $result = D('Addons://Report/Report')->where($map)->save($data);
 
         if ($result) {
-            for ($i = 0; $i < count($uid); $i++) {   //根据用户ID，发送系统消息
-                D('Message')->sendMessageWithoutCheckSelf($uid[$i], '处理时间：' . friendlyDate($data['handle_time']) . '。' . '处理状态：' . '已处理' . '。' . '处理结果：' . $data['handle_result'] . '。' . '处理人：' . $name['nickname'], '您有新的系统消息', '', is_login(), 0);
-            }
+
+            D('Message')->sendMessageWithoutCheckSelf($uid,'您的举报已被处理。',  '处理时间：' . friendlyDate($data['handle_time']) . '。' . '处理状态：' . '已处理' . '。' . '处理结果：' . $data['handle_result'] . '。' . '处理人：' . $name['nickname']);
+
 
             $this->success('处理成功', 0);
         } else {

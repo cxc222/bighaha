@@ -64,22 +64,21 @@ class DevtoolController extends AdminController
         if (file_exists($path)) {
             require_once($path);
             $controller = A('Admin/' . $controller_name);
-            if($controller){
-                $methods = $this->get_class_all_methods($controller);
-                foreach ($all_menus as &$v) {
-                    $v['url'] = strtolower($v['url']);
-                }
-                unset($v);
-                $all_menus_url = getSubByKey($all_menus, 'url');
-                foreach ($methods as $m) {
-                    if (!in_array(strtolower($this->module['name'] . '/' . $m['name']), $all_menus_url)) {
-                        $havent_created[] = $m;
-                    }
-                }
-                $this->assign('havent_created', $havent_created);
-                $this->assign('created', 1);
+            $methods = $this->get_class_all_methods($controller);
+            foreach ($all_menus as &$v) {
+                $v['url'] = strtolower($v['url']);
             }
+            unset($v);
+            $all_menus_url = getSubByKey($all_menus, 'url');
+            foreach ($methods as $m) {
+                if (!in_array(strtolower($this->module['name'] . '/' . $m['name']), $all_menus_url)) {
+                    $havent_created[] = $m;
+                }
+            }
+            $this->assign('havent_created', $havent_created);
+            $this->assign('created', 1);
         }
+
 
         $this->display(T('Devtool@Admin/module1'));
     }

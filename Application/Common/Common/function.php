@@ -990,7 +990,6 @@ function get_model_attribute($model_id, $group = true)
 function api($name, $vars = array())
 {
     $array = explode('/', $name);
-
     $method = array_pop($array);
     $classname = array_pop($array);
     $module = $array ? array_pop($array) : 'Common';
@@ -1576,7 +1575,7 @@ function check_verify_open($open)
 
 
 function check_is_in_config($key,$config){
-    $config = explode(',',$config);
+    !is_array($config)  && $config = explode(',',$config);
     return in_array($key,$config);
 
 }

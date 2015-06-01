@@ -411,7 +411,7 @@ class ShopController extends AdminController
                 D('shop_buy')->where('id=' . $id)->setField('gettime', $gettime);
                 $content = D('shop_buy')->find($id);
                 $message = "你购买的商品已发货。现在可以在已完成交易列表中查看该交易。";
-                D('Message')->sendMessageWithoutCheckSelf($content['uid'], $message, '发货通知', U('Shop/Index/myGoods', array('status' => '1')), is_login(), 1);
+                D('Message')->sendMessageWithoutCheckSelf($content['uid'], '发货通知',$message,  'Shop/Index/myGoods', array('status' => '1'), is_login(), 1);
 
                 //商城记录
                 $goods_name = D('shop')->field('goods_name')->find($content['goods_id']);

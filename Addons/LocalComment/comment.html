@@ -21,7 +21,7 @@
                     <textarea class="form-control new-comment-text" rows="2" placeholder=""></textarea>
                 </div>
                 <div class="pull-right">
-                    <a href="javascript:" data-role="send_local_comment" data-path="{$path}"
+                    <a href="javascript:" data-role="send_local_comment" data-path="{$path}"  data-this-url="{$this_url}"
                        data-url="{:tox_addons_url('LocalComment/Index/addComment', array('uid'=>$uid,'count_model'=>$count_model,'count_field'=>$count_field))}"
                        class="btn btn-primary">
                         <i class="icon-comment-alt"></i> 发表评论

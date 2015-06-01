@@ -85,6 +85,61 @@ class ConfigController extends BaseController
         $this->display();
     }
 
+    public function score()
+    {
+
+        $scoreModel=D('Ucenter/Score');
+        $scores=$scoreModel->getTypeList();
+        foreach($scores as &$v){
+            $v['value']=$scoreModel->getUserScore(is_login(),$v['id']);
+        }
+        unset($v);
+        $this->assign('scores',$scores);
+
+
+        $level=nl2br(modC('LEVEL','
+0:Lv1 实习
+50:Lv2 试用
+100:Lv3 转正
+200:Lv4 助理
+400:Lv5 经理
+800:Lv6 董事
+1600:Lv7 董事长
+        ','UserConfig'));
+        $this->assign('level',$level);
+
+        $self=query_user(array('score','title'));
+        $this->assign('self',$self);
+
+        $action=D('Admin/Action')->getAction(array('status'=>1));
+        $action_module=array();
+        foreach($action as &$v){
+            $v['rule_array']=unserialize($v['rule']);
+            foreach($v['rule_array'] as &$o){
+                if(is_numeric($o['rule'])){
+                    $o['rule']=$o['rule']>0?'+'.intval($o['rule']):$o['rule'];
+                }
+                $o['score']=D('Score')->getType(array('id'=>$o['field']));
+            }
+            if($v['rule_array']!=false){
+                $action_module[$v['module']]['action'][]=$v;
+            }
+
+        }
+        unset($v);
+
+        foreach ($action_module as $key=>&$a) {
+            if(empty($a['action'])){
+                unset($action_module[$key]);
+            }
+            $a['module']=D('Common/Module')->getModule($key);
+        }
+
+        $this->assign('action_module',$action_module);
+
+        $this->_setTab('score');
+        $this->display();
+    }
     public function other()
     {
 

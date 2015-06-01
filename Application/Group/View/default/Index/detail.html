@@ -131,7 +131,7 @@
         </div>
         <div style="padding: 10px"></div>
         <div class="col-md-12 main_content" style="margin-left: -15px">
-            {$post.content}
+            {$post.content|filter_video}
 
 
             <php>if($post['attachment_count']>0){</php>

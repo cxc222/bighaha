@@ -48,7 +48,7 @@ class ForumModel extends Model
             foreach ($forum_list as &$f) {
                 $map['status'] = 1;
                 $map['forum_id'] = $f['id'];
-                $f['background'] = intval($f['background']) != 0 ? getThumbImageById($f['background'], 980, 180) : C('TMPL_PARSE_STRING.__IMG__') . '/default_head.jpg';
+                $f['background'] = intval($f['background']) != 0 ? getThumbImageById($f['background'], 1160, 180) : C('TMPL_PARSE_STRING.__IMG__') . '/default_head.jpg';
                 $f['logo'] = intval($f['logo']) != 0 ? getThumbImageById($f['logo'], 128, 128) : C('TMPL_PARSE_STRING.__IMG__') . '/default_logo.jpg';
                 $f['topic_count'] = $forumPostModel->where($map)->count();
                 $f['admin'] = explode(',', str_replace('[', '', str_replace(']', '', $f['admin'])));

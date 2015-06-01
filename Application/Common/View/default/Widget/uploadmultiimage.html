@@ -56,7 +56,7 @@
                     }
                     $("[name='{$id}']").parent().find('.upload-pre-item').append(
                             ' <div class="each"><a href="'+ data.path+'" title="点击查看大图"><img src="'+ data.path+'"></a><div class="text-center opacity del_btn" ></div>' +
-                            '<div onclick="image_upload.removeImage($(this),'+data.id+')"  class="text-center del_btn">删除</div></div>'
+                                    '<div onclick="image_upload.removeImage($(this),'+data.id+')"  class="text-center del_btn">删除</div></div>'
                     );
                     imageUpload.callback();
 

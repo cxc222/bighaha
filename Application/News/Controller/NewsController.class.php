@@ -259,7 +259,7 @@ str;
                 foreach($ids as $val){
                     $news=$this->newsModel->getData($val);
                     $tip = '你的资讯投稿【'.$news['title'].'】审核失败，失败原因：'.$reason;
-                    $messageModel->sendMessage($news['uid'], $tip, '资讯投稿审核失败！', U('News/Index/detail',array('id'=>$val)), is_login(), 2);
+                    $messageModel->sendMessage($news['uid'], '资讯投稿审核失败！',$tip,  'News/Index/detail',array('id'=>$val), is_login(), 2);
                 }
                 //发送消息 end
             }else{
@@ -285,7 +285,7 @@ str;
         foreach($ids as $val){
             $news=$this->newsModel->getData($val);
             $tip = '你的资讯投稿【'.$news['title'].'】审核通过。';
-            $messageModel->sendMessage($news['uid'], $tip, '资讯投稿审核通过！', U('News/Index/detail',array('id'=>$val)), is_login(), 2);
+            $messageModel->sendMessage($news['uid'],'资讯投稿审核通过！', $tip,  'News/Index/detail',array('id'=>$val), is_login(), 2);
         }
         //发送消息 end
         $builder->doSetStatus('News', $ids, $status);
@@ -388,7 +388,7 @@ str;
             foreach($ids as $val){
                 $news=$this->newsModel->getData($val);
                 $tip = '你的资讯投稿【'.$news['title'].'】被设为过期。';
-                $messageModel->sendMessage($news['uid'], $tip, '资讯投稿被设为过期！', U('News/Index/detail',array('id'=>$val)), is_login(), 2);
+                $messageModel->sendMessage($news['uid'],'资讯投稿被设为过期！',  $tip, 'News/Index/detail',array('id'=>$val), is_login(), 2);
             }
             //发送消息 end
             S('news_home_data',null);

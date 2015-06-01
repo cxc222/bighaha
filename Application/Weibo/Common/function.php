@@ -76,10 +76,9 @@ function send_comment($weibo_id, $content, $comment_id = 0){
  */
 function send_comment_message($uid, $weibo_id, $message){
     $title = '评论消息';
-    $url = U('Weibo/Index/weiboDetail', array('id' => $weibo_id));
     $from_uid = is_login();
     $type = 1;
-    D('Common/Message')->sendMessage($uid, $message, $title, $url, $from_uid, $type);
+    D('Common/Message')->sendMessage($uid,$title, $message,  'Weibo/Index/weiboDetail',array('id' => $weibo_id), $from_uid, $type);
 }
 
 
@@ -96,10 +95,9 @@ function send_at_message($uids, $weibo_id, $content)
     foreach ($uids as $uid) {
         $message = '内容：' . $content;
         $title = $my_username . '@了您';
-        $url = U('Weibo/Index/weiboDetail', array('id' => $weibo_id));
         $fromUid = get_uid();
         $messageType = 1;
-        D('Common/Message')->sendMessage($uid, $message, $title, $url, $fromUid, $messageType);
+        D('Common/Message')->sendMessage($uid, $title, $message, 'Weibo/Index/weiboDetail',array('id' => $weibo_id), $fromUid, $messageType);
     }
 }
 

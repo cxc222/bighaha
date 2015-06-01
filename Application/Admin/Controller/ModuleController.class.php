@@ -121,6 +121,7 @@ class ModuleController extends AdminController
     public function uninstall()
     {
         $aId = I('id', 0, 'intval');
+        $aNav=I('remove_nav',0,'intval');
         $moduleModel = new ModuleModel();
 
         $module = $moduleModel->getModuleById($aId);
@@ -132,6 +133,10 @@ class ModuleController extends AdminController
                 if (file_exists(APP_PATH . '/' . $module['name'] . '/Info/uninstall.php')) {
                     require_once(APP_PATH . '/' . $module['name'] . '/Info/uninstall.php');
                 }
+                if($aNav) {
+                    M('Channel')->where(array('url'=>$module['entry']))->delete();
+                    S('common_nav',null);
+                }
                 $this->success('卸载模块成功。', U('lists'));
             } else {
                 $this->error('卸载模块失败。' . $this->moduleModel->error);
@@ -142,10 +147,12 @@ class ModuleController extends AdminController
 
         $builder = new AdminConfigBuilder();
         $builder->title($module['alias'] . '——卸载模块');
+        $module['remove_nav']=1;
         $builder->keyReadOnly('id', '模块编号');
         $builder->suggest('<span class="text-danger">请谨慎操作，此操作无法还原。</span>');
         $builder->keyReadOnly('alias', '卸载的模块');
-        $builder->keyBool('withoutData', '是否保留模块数据?', '默认保留模块数据');
+        $builder->keyBool('withoutData', '是否保留模块数据?', '默认保留模块数据')  ->keyBool('remove_nav','移除导航','卸载后自动卸载掉对应的菜单，或者<a target="_blank" href="'.U('channel/index').'">手动设置</a>');
+
         $module['withoutData'] = 1;
         $builder->data($module);
         $builder->buttonSubmit();
@@ -158,13 +165,26 @@ class ModuleController extends AdminController
 
     public function install()
     {
-        $aName = I('name', '', 'text');
+        $aName = I('get.name', '', 'text');
+        $aNav=I('add_nav',0,'intval');
         $module = $this->moduleModel->getModule($aName);
 
         if (IS_POST) {
             //执行guide中的内容
             $res = $this->moduleModel->install($module['id']);
+
             if ($res === true) {
+                if($aNav){
+                    $channel['title']=$module['alias'];
+                    $channel['url']=$module['entry'];
+                    $channel['sort']=100;
+                    $channel['status']=1;
+                    $channel['icon']=$module['icon'];
+                    M('Channel')->add($channel);
+                    S('common_nav',null);
+                }
+
+
                 $this->success('安装模块成功。', U('lists'));
             } else {
                 $this->error('安装模块失败。' . $res['error_code']);
@@ -185,7 +205,8 @@ class ModuleController extends AdminController
                 ->keyText('admin_entry', '后台入口');
 
 //, 'repair' => '修复模式'修复模式不会导入模块专用数据表，只导入菜单、权限、行为、行为限制
-            $builder->keyRadio('mode', '安装模式', '', array('install' => '覆盖安装模式'));
+            $builder->keyRadio('mode', '安装模式', '', array('install' => '覆盖安装模式'))
+                    ->keyBool('add_nav','添加导航','安装后自动在导航栏中加入菜单，或者<a target="_blank" href="'.U('channel/index').'">手动设置</a>');
          /*   $builder->keyRadio('add_nav','添加导航菜单','默认不会添加导航',array(1=>'不添加',2=>'添加'));*/
             $builder->group('安装选项', 'mode,add_nav');
            /* $builder->group('模块信息', 'id,name,alias,version,icon,summary,developer,entry,admin_entry');*/

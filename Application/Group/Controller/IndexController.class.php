@@ -235,9 +235,6 @@ class IndexController extends BaseController
             $aType = I('post.type', 0, 'intval');
             $aBackground = I('post.background', 0, 'intval');
             $aMemberAlias = I('post.member_alias', '成员', 'text');
-
-
-
             if (empty($aTitle)) {
                 $this->error('请填写群组名称');
             }
@@ -283,7 +280,7 @@ class IndexController extends BaseController
             if ($need_verify) {
                 $message = '创建成功，请耐心等候管理员审核。';
                 // 发送消息
-                D('Message')->sendMessage(1, get_nickname(is_login()) . "创建了群组【{$aTitle}】，快去审核吧。", '群组创建审核', U('admin/group/unverify'), is_login());
+                D('Message')->sendMessage(1,'群组创建审核', get_nickname(is_login()) . "创建了群组【{$aTitle}】，快去审核吧。",  'admin/group/unverify');
                 $this->success($message, U('group/index/index'));
             }
 
@@ -436,7 +433,7 @@ class IndexController extends BaseController
         $aPostId = I('post.post_id', 0, 'intval');
         $aGroupId = I('post.group_id', 0, 'intval');
         $aTitle = I('post.title', '', 'text');
-        $aContent = I('post.content', '', '');
+        $aContent = I('post.content', '', 'filter_content');
         $aCategory = I('post.category', 0, 'intval');
 
         if (is_joined($aGroupId) != 1) {
@@ -469,9 +466,6 @@ class IndexController extends BaseController
         if (empty($aContent)) {
             $this->error('请填写帖子内容');
         }
-
-
-        $aContent = D('ContentHandler')->filterHtmlContent($aContent);
 
 
         $model = D('GroupPost');
@@ -764,14 +758,15 @@ class IndexController extends BaseController
         $this->checkAuth(null, get_reply_admin($aReplyId));
         if (IS_POST) {
             $this->checkActionLimit('edit_group_reply', 'GroupPostReply', $aReplyId, is_login(), true);
-            $aContent = I('post.content', '', 'html');
+            $aContent = I('post.content', '', 'filter_content');
             $groipReplyModel = D('GroupPostReply');
             $post = $groipReplyModel->getReply($aReplyId);
-
 
             $data['id'] = $aReplyId;
             $data['content'] = $aContent;
             $data['update_time'] = time();
+
+
             $res = $groipReplyModel->editReply($data);
             if ($res) {
 
@@ -797,7 +792,8 @@ class IndexController extends BaseController
     public function doReply()
     {
         $aPostId = I('get.post_id', 0, 'intval');
-        $aContent = I('post.content', '', 'html');
+        $aContent = I('post.content', '', 'filter_content');
+
         // 获取群组ID
         $group_id = $this->getGroupIdByPost($aPostId);
         $this->requireLogin();
@@ -860,7 +856,7 @@ class IndexController extends BaseController
             $res = D('GroupMember')->addMember($data);
             $info = '，等待群组管理员审核！';
             // 发送消息
-            D('Message')->sendMessage($group['uid'], get_nickname($uid) . "请求加入群组【{$group['title']}】", '加入群组审核', U('group/Manage/member', array('group_id' => $aGroupId, 'status' => 0)), $uid);
+            D('Message')->sendMessage($group['uid'], '加入群组审核',get_nickname($uid) . "请求加入群组【{$group['title']}】", 'group/Manage/member', array('group_id' => $aGroupId, 'status' => 0), $uid);
         } else {
             // 群组为公共的
             $data['status'] = 1;
@@ -926,7 +922,7 @@ class IndexController extends BaseController
             $uids = I('post.uids');
             $group = D('Group')->getGroup($aGroupId);
             foreach ($uids as $uid) {
-                D('Message')->sendMessage($uid, get_nickname(is_login()) . "邀请您加入群组【{$group['title']}】  <a class='ajax-post' href='" . U('group/index/attend', array('group_id' => $aGroupId)) . "'>接受邀请</a>", '邀请加入群组', U('group/index/group', array('id' => $aGroupId)), is_login());
+                D('Message')->sendMessage($uid, '邀请加入群组', get_nickname(is_login()) . "邀请您加入群组【{$group['title']}】  <a class='ajax-post' href='" . U('group/index/attend', array('group_id' => $aGroupId)) . "'>接受邀请</a>",  'group/index/group', array('id' => $aGroupId), is_login());
             }
 
             $result = array('status' => 1, 'info' => '邀请成功');

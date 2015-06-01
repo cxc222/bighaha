@@ -66,14 +66,12 @@ class TypeController extends Controller
         $weibo_data = unserialize($weibo['data']);
         $weibo_data['attach_ids'] = explode(',', $weibo_data['attach_ids']);
         $source_weibo = D('Weibo/Weibo')->getWeiboDetail($weibo_data['sourseId']);
+        $source_weibo['user']=query_user(array('uid', 'nickname',  'avatar32', 'space_url',  'rank_link', 'title'), $source_weibo['uid']);
         $param['weibo'] = $weibo;
         $param['weibo']['source_weibo'] = $source_weibo;
-
         $this->assign($param);
         return $this->fetch(T('Application://Weibo@Type/fetchrepost'));
 
     }
-
-
 
 }

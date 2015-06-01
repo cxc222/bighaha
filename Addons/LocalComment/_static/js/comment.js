@@ -49,10 +49,11 @@ var bind_send_local_comment = function(){
         var $this = $(this);
         var $textarea = $this.closest('.comments').find('textarea');
         var url = $this.attr('data-url');
+        var this_url =$this.attr('data-this-url');
         var path = $this.attr('data-path');
         var content = $textarea.val();
         $('#submit-comment').attr('disabled','disabled');
-        $.post(url, {content: content,path:path}, function (res) {
+        $.post(url, {content: content,path:path,this_url:this_url}, function (res) {
             if(res.status){
                 var $list = $this.closest('.comments').find('section');
                var  $totalCount = $this.closest('.comments').find('.total_count');

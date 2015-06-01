@@ -28,12 +28,14 @@ class UserController extends AdminController
      */
     public function index()
     {
-        $nickname = I('nickname');
+        $nickname = I('nickname', '', 'text');
         $map['status'] = array('egt', 0);
         if (is_numeric($nickname)) {
             $map['uid|nickname'] = array(intval($nickname), array('like', '%' . $nickname . '%'), '_multi' => true);
         } else {
-            $map['nickname'] = array('like', '%' . (string)$nickname . '%');
+            if ($nickname !== '') {
+                $map['nickname'] = array('like', '%' . (string)$nickname . '%');
+            }
         }
         $list = $this->lists('Member', $map);
         int_to_string($list);
@@ -46,23 +48,24 @@ class UserController extends AdminController
      * 重置用户密码
      * @author 郑钟良<zzl@ourstu.com>
      */
-    public function initPass(){
-        $uids=I('id');
-        !is_array($uids)&&$uids=explode(',',$uids);
-        foreach($uids as $key=>$val){
-            if(!query_user('uid',$val)){
+    public function initPass()
+    {
+        $uids = I('id');
+        !is_array($uids) && $uids = explode(',', $uids);
+        foreach ($uids as $key => $val) {
+            if (!query_user('uid', $val)) {
                 unset($uids[$key]);
             }
         }
-        if(!count($uids)){
+        if (!count($uids)) {
             $this->error('前选择要重置的用户！');
         }
-        $ucModel=UCenterMember();
-        $data=$ucModel->create(array('password'=>'123456'));
-        $res=$ucModel->where(array('id'=>array('in',$uids)))->save(array('password'=>$data['password']));
-        if($res){
+        $ucModel = UCenterMember();
+        $data = $ucModel->create(array('password' => '123456'));
+        $res = $ucModel->where(array('id' => array('in', $uids)))->save(array('password' => $data['password']));
+        if ($res) {
             $this->success('密码重置成功！');
-        }else{
+        } else {
             $this->error('密码重置失败！可能密码重置前就是“123456”。');
         }
     }
@@ -100,7 +103,7 @@ class UserController extends AdminController
             }
 
 
-            $groups = M('AuthGroup')->where(array('status'=>1))->select();
+            $groups = M('AuthGroup')->where(array('status' => 1))->select();
             $this->assign('groups', $groups);
             $this->assign('users', $user);
             $this->display();
@@ -159,34 +162,33 @@ class UserController extends AdminController
     }
 
 
-
     /**用户扩展资料详情
      * @param string $uid
      * @author 郑钟良<zzl@ourstu.com>
      */
     public function expandinfo_details($uid = 0)
     {
-        if(IS_POST){
+        if (IS_POST) {
             /* 修改积分 xjw129xjt(肖骏涛)*/
             $data = I('post.');
-            foreach($data as $key=>$val){
-                if(substr($key,0,5) =='score'){
-                    $data_score[$key]=$val;
+            foreach ($data as $key => $val) {
+                if (substr($key, 0, 5) == 'score') {
+                    $data_score[$key] = $val;
                 }
             }
-            $res = D('Member')->where(array('uid'=>$data['id']))->save($data_score);
+            $res = D('Member')->where(array('uid' => $data['id']))->save($data_score);
             if ($res) {
                 $this->success('设置成功');
             } else {
                 $this->error('设置失败');
             }
             /* 修改积分 end*/
-        }else{
+        } else {
             $map['uid'] = $uid;
             $map['status'] = array('egt', 0);
             $member = M('Member')->where($map)->find();
             $member['id'] = $member['uid'];
-            $member['username']=query_user('username',$uid);
+            $member['username'] = query_user('username', $uid);
             //扩展信息查询
             $map_profile['status'] = 1;
             $field_group = D('field_group')->where($map_profile)->select();
@@ -208,26 +210,26 @@ class UserController extends AdminController
             $builder = new AdminConfigBuilder();
             $builder->title("用户扩展资料详情");
             $builder->meta_title = '用户扩展资料详情';
-            $builder->keyId()->keyReadOnly('username', "用户名称")->keyReadOnly('nickname','昵称');
-            $field_key = array('id','username','nickname');
+            $builder->keyId()->keyReadOnly('username', "用户名称")->keyReadOnly('nickname', '昵称');
+            $field_key = array('id', 'username', 'nickname');
             foreach ($fields_list as $vt) {
                 $field_key[] = $vt['field_name'];
                 $builder->keyReadOnly($vt['field_name'], $vt['field_name']);
             }
 
             /* 积分设置 xjw129xjt(肖骏涛)*/
-            $field = D('Ucenter/Score')->getTypeList(array('status'=>1));
+            $field = D('Ucenter/Score')->getTypeList(array('status' => 1));
             $score_key = array();
-            foreach($field as $vf){
-               $score_key[]='score'.$vf['id'];
-               $builder->keyText('score'.$vf['id'], $vf['title']);
+            foreach ($field as $vf) {
+                $score_key[] = 'score' . $vf['id'];
+                $builder->keyText('score' . $vf['id'], $vf['title']);
             }
-            $score_data = D('Member')->where(array('uid'=>$uid))->field(implode(',',$score_key))->find();
-            $member = array_merge($member,$score_data);
+            $score_data = D('Member')->where(array('uid' => $uid))->field(implode(',', $score_key))->find();
+            $member = array_merge($member, $score_data);
             /*积分设置end*/
 
-            $builder->group('基本设置', implode(',',$field_key));
-            $builder->group('积分设置', implode(',',$score_key));
+            $builder->group('基本设置', implode(',', $field_key));
+            $builder->group('积分设置', implode(',', $score_key));
             $builder->data($member);
             $builder->buttonSubmit('', '保存');
             $builder->buttonBack();
@@ -355,7 +357,7 @@ class UserController extends AdminController
      * @param $input_tips
      * @author 郑钟良<zzl@ourstu.com>
      */
-    public function editFieldSetting($id =  0, $profile_group_id = 0, $field_name = '', $child_form_type = 0, $visiable = 0, $required = 0, $form_type = 0, $form_default_value = '', $validation = 0, $input_tips = '')
+    public function editFieldSetting($id = 0, $profile_group_id = 0, $field_name = '', $child_form_type = 0, $visiable = 0, $required = 0, $form_type = 0, $form_default_value = '', $validation = 0, $input_tips = '')
     {
         if (IS_POST) {
             $data['field_name'] = $field_name;
@@ -368,10 +370,10 @@ class UserController extends AdminController
             $data['form_type'] = $form_type;
             $data['form_default_value'] = $form_default_value;
             //当表单类型为以下三种是默认值不能为空判断@MingYang
-            $form_types = array('radio','checkbox','select');
-            if(in_array($data['form_type'],$form_types)){
-                if($data['form_default_value'] == ''){
-                    $this->error($data['form_type'].'表单类型默认值不能为空');
+            $form_types = array('radio', 'checkbox', 'select');
+            if (in_array($data['form_type'], $form_types)) {
+                if ($data['form_default_value'] == '') {
+                    $this->error($data['form_type'] . '表单类型默认值不能为空');
                 }
             }
             $data['input_tips'] = $input_tips;
@@ -394,24 +396,24 @@ class UserController extends AdminController
                 $data['sort'] = 0;
                 $res = D('field_setting')->add($data);
             }
-            $role_ids=I('post.role_ids',array());
-            $this->_setFieldRole($role_ids,$res,$id);
+            $role_ids = I('post.role_ids', array());
+            $this->_setFieldRole($role_ids, $res, $id);
             $this->success($id == '' ? "添加字段成功" : "编辑字段成功", U('field', array('id' => $profile_group_id)));
         } else {
-            $roleOptions=D('Role')->selectByMap(array('status'=>array('gt',-1)),'id asc','id,title');
+            $roleOptions = D('Role')->selectByMap(array('status' => array('gt', -1)), 'id asc', 'id,title');
 
             $builder = new AdminConfigBuilder();
             if ($id != 0) {
                 $field_setting = D('field_setting')->where('id=' . $id)->find();
 
                 //所属角色
-                $roleConfigModel=D('RoleConfig');
+                $roleConfigModel = D('RoleConfig');
                 $map = getRoleConfigMap('expend_field', 0);
                 unset($map['role_id']);
-                $map['value']=array('like',array('%,'.$id.',%',$id.',%','%,'.$id,$id),'or');
-                $already_role_id=$roleConfigModel->where($map)->field('role_id')->select();
-                $already_role_id=array_column($already_role_id,'role_id');
-                $field_setting['role_ids']=$already_role_id;
+                $map['value'] = array('like', array('%,' . $id . ',%', $id . ',%', '%,' . $id, $id), 'or');
+                $already_role_id = $roleConfigModel->where($map)->field('role_id')->select();
+                $already_role_id = array_column($already_role_id, 'role_id');
+                $field_setting['role_ids'] = $already_role_id;
                 //所属角色 end
 
                 $builder->title("修改字段信息");
@@ -439,7 +441,7 @@ class UserController extends AdminController
                 'join' => '关联字段',
                 'number' => '数字'
             );
-            $builder->keyReadOnly("id", "标识")->keyReadOnly('profile_group_id', '分组id')->keyText('field_name', "字段名称")->keyChosen('role_ids','拥有该字段的角色','详细设置请到“角色列表》默认信息配置》扩展资料配置”中操作',$roleOptions)->keySelect('form_type', "表单类型", '', $type_default)->keySelect('child_form_type', "二级表单类型", '', $child_type)->keyTextArea('form_default_value',"多个值用'|'分割开,格式【字符串：男|女，数组：1:男|2:女，关联数据表：字段名|表名】开")
+            $builder->keyReadOnly("id", "标识")->keyReadOnly('profile_group_id', '分组id')->keyText('field_name', "字段名称")->keyChosen('role_ids', '拥有该字段的角色', '详细设置请到“角色列表》默认信息配置》扩展资料配置”中操作', $roleOptions)->keySelect('form_type', "表单类型", '', $type_default)->keySelect('child_form_type', "二级表单类型", '', $child_type)->keyTextArea('form_default_value', "多个值用'|'分割开,格式【字符串：男|女，数组：1:男|2:女，关联数据表：字段名|表名】开")
                 ->keyText('validation', '表单验证规则', '例：min=5&max=10')->keyText('input_tips', '用户输入提示', '提示用户如何输入该字段信息')->keyBool('visiable', '是否公开')->keyBool('required', '是否必填');
             $builder->data($field_setting);
             $builder->buttonSubmit(U('editFieldSetting'), $id == 0 ? "添加" : "修改")->buttonBack();
@@ -620,14 +622,27 @@ class UserController extends AdminController
      */
     public function action()
     {
+        $aModule = I('post.module', '', 'text');
+        $map['module'] = $aModule;
+        $this->assign('current_module', $aModule);
+        $map['status'] = array('gt', -1);
         //获取列表数据
         $Action = M('Action')->where(array('status' => array('gt', -1)));
-        $list = $this->lists($Action);
+
+        $list = $this->lists($Action, $map);
         int_to_string($list);
         // 记录当前列表页的cookie
         Cookie('__forward__', $_SERVER['REQUEST_URI']);
-
         $this->assign('_list', $list);
+        $module = D('Common/Module')->getAll();
+        foreach ($module as $key => $v) {
+            if ($v['is_setup'] == false) {
+                unset($module[$key]);
+            }
+        }
+        $module = array_merge(array(array('name' => '', 'alias' => '系统')), $module);
+        $this->assign('module', $module);
+
         $this->meta_title = '用户行为';
         $this->display();
     }
@@ -642,7 +657,7 @@ class UserController extends AdminController
 
 
         $module = D('Module')->getAll();
-        $this->assign('module',$module);
+        $this->assign('module', $module);
         $this->assign('data', null);
         $this->display('editaction');
     }
@@ -658,7 +673,7 @@ class UserController extends AdminController
         $data = M('Action')->field(true)->find($id);
 
         $module = D('Module')->getAll();
-        $this->assign('module',$module);
+        $this->assign('module', $module);
         $this->assign('data', $data);
         $this->meta_title = '编辑行为';
         $this->display();
@@ -761,7 +776,6 @@ class UserController extends AdminController
     }
 
 
-
     public function scoreList()
     {
         //读取数据
@@ -775,39 +789,39 @@ class UserController extends AdminController
             ->title('积分类型')
             ->suggest('id<=4的不能删除')
             ->buttonNew(U('editScoreType'))
-            ->setStatusUrl(U('setTypeStatus'))->buttonEnable()->buttonDisable()->button('删除',array('class' => 'btn ajax-post tox-confirm', 'data-confirm' => '您确实要删除积分分类吗？（删除后对应的积分将会清空，不可恢复，请谨慎删除！）', 'url' => U('delType'), 'target-form' => 'ids'))
-            ->button('充值',array('href' => U('recharge')))
-
+            ->setStatusUrl(U('setTypeStatus'))->buttonEnable()->buttonDisable()->button('删除', array('class' => 'btn ajax-post tox-confirm', 'data-confirm' => '您确实要删除积分分类吗？（删除后对应的积分将会清空，不可恢复，请谨慎删除！）', 'url' => U('delType'), 'target-form' => 'ids'))
+            ->button('充值', array('href' => U('recharge')))
             ->keyId()->keyText('title', '名称')
-           ->keyText('unit', '单位')->keyStatus()->keyDoActionEdit('editScoreType?id=###')
+            ->keyText('unit', '单位')->keyStatus()->keyDoActionEdit('editScoreType?id=###')
             ->data($list)
             ->display();
     }
 
-    public function recharge(){
-        $scoreTypes = D('Ucenter/Score')->getTypeList(array('status'=>1));
-        if(IS_POST){
-            $aUids = I('post.uid','','op_t');
-            foreach($scoreTypes as $v){
-                $aAction = I('post.action_score'.$v['id'],'','op_t');
-                $aValue = I('post.value_score'.$v['id'],0,'intval');
-                D('Ucenter/Score')->setUserScore($aUids,$aValue,$v['id'],$aAction);
+    public function recharge()
+    {
+        $scoreTypes = D('Ucenter/Score')->getTypeList(array('status' => 1));
+        if (IS_POST) {
+            $aUids = I('post.uid', '', 'op_t');
+            foreach ($scoreTypes as $v) {
+                $aAction = I('post.action_score' . $v['id'], '', 'op_t');
+                $aValue = I('post.value_score' . $v['id'], 0, 'intval');
+                D('Ucenter/Score')->setUserScore($aUids, $aValue, $v['id'], $aAction);
             }
-            $this->success('设置成功','refresh');
-        }else{
+            $this->success('设置成功', 'refresh');
+        } else {
 
-            $this->assign('scoreTypes',$scoreTypes);
+            $this->assign('scoreTypes', $scoreTypes);
             $this->display();
         }
     }
 
-    public function getNickname(){
-        $uid = I('get.uid',0,'intval');
-        if($uid){
-            $user = query_user(null,$uid);
+    public function getNickname()
+    {
+        $uid = I('get.uid', 0, 'intval');
+        if ($uid) {
+            $user = query_user(null, $uid);
             $this->ajaxReturn($user);
-        }
-        else{
+        } else {
             $this->ajaxReturn(null);
         }
 
@@ -820,7 +834,8 @@ class UserController extends AdminController
 
     }
 
-    public function delType($ids){
+    public function delType($ids)
+    {
         $model = D('Ucenter/Score');
         $res = $model->delType($ids);
         if ($res) {
@@ -829,38 +844,40 @@ class UserController extends AdminController
             $this->error('删除失败');
         }
     }
-    public function editScoreType(){
-            $aId = I('id',0,'intval');
-            $model = D('Ucenter/Score');
-            if (IS_POST) {
-                $data['title'] = I('post.title','','op_t');
-                $data['status'] = I('post.status',1,'intval');
-                $data['unit'] = I('post.unit','','op_t');
 
-                if ($aId != 0) {
-                    $data['id'] = $aId;
-                    $res = $model->editType($data);
-                } else {
-                    $res = $model->addType($data);
-                }
-                if ($res) {
-                    $this->success(($aId == 0 ? '添加' : '编辑') . '成功');
-                } else {
-                    $this->error(($aId == 0 ? '添加' : '编辑') . '失败');
-                }
+    public function editScoreType()
+    {
+        $aId = I('id', 0, 'intval');
+        $model = D('Ucenter/Score');
+        if (IS_POST) {
+            $data['title'] = I('post.title', '', 'op_t');
+            $data['status'] = I('post.status', 1, 'intval');
+            $data['unit'] = I('post.unit', '', 'op_t');
+
+            if ($aId != 0) {
+                $data['id'] = $aId;
+                $res = $model->editType($data);
             } else {
-                $builder = new AdminConfigBuilder();
-                if ($aId != 0) {
-                    $type = $model->getType(array('id'=>$aId));
-                } else {
-                    $type = array('status' => 1, 'sort' => 0);
-                }
-                $builder->title(($aId == 0 ? '新增' : '编辑').'积分分类')->keyId()->keyText('title', '名称')
-                    ->keyText('unit', '单位')
-                    ->keySelect('status', '状态', null,  array(-1 => '删除', 0 => '禁用', 1 => '启用'))
-                    ->data($type)
-                    ->buttonSubmit(U('editScoreType'))->buttonBack()->display();
+                $res = $model->addType($data);
             }
+            if ($res) {
+                $this->success(($aId == 0 ? '添加' : '编辑') . '成功');
+            } else {
+                $this->error(($aId == 0 ? '添加' : '编辑') . '失败');
+            }
+        } else {
+            $builder = new AdminConfigBuilder();
+            if ($aId != 0) {
+                $type = $model->getType(array('id' => $aId));
+            } else {
+                $type = array('status' => 1, 'sort' => 0);
+            }
+            $builder->title(($aId == 0 ? '新增' : '编辑') . '积分分类')->keyId()->keyText('title', '名称')
+                ->keyText('unit', '单位')
+                ->keySelect('status', '状态', null, array(-1 => '删除', 0 => '禁用', 1 => '启用'))
+                ->data($type)
+                ->buttonSubmit(U('editScoreType'))->buttonBack()->display();
+        }
     }
 
     /**
@@ -868,59 +885,61 @@ class UserController extends AdminController
      * @param $role_ids 角色ids
      * @param $add_id 新增字段时字段id
      * @param $edit_id 编辑字段时字段id
+     * @return bool
      * @author 郑钟良<zzl@ourstu.com>
      */
-    private function _setFieldRole($role_ids,$add_id,$edit_id){
+    private function _setFieldRole($role_ids, $add_id, $edit_id)
+    {
         $type = 'expend_field';
-        $roleConfigModel=D('RoleConfig');
+        $roleConfigModel = D('RoleConfig');
         $map = getRoleConfigMap($type, 0);
-        if($edit_id){//编辑字段
+        if ($edit_id) {//编辑字段
             unset($map['role_id']);
-            $map['value']=array('like',array('%,'.$edit_id.',%',$edit_id.',%','%,'.$edit_id,$edit_id),'or');
-            $already_role_id=$roleConfigModel->where($map)->select();
-            $already_role_id=array_column($already_role_id,'role_id');
+            $map['value'] = array('like', array('%,' . $edit_id . ',%', $edit_id . ',%', '%,' . $edit_id, $edit_id), 'or');
+            $already_role_id = $roleConfigModel->where($map)->select();
+            $already_role_id = array_column($already_role_id, 'role_id');
 
 
             unset($map['value']);
-            if(count($role_ids)&&count($already_role_id)){
-                $need_add_role_ids=array_diff($role_ids,$already_role_id);
-                $need_del_role_ids=array_diff($already_role_id,$role_ids);
-            }else if(count($role_ids)){
-                $need_add_role_ids=$role_ids;
-            }else{
-                $need_del_role_ids=$already_role_id;
+            if (count($role_ids) && count($already_role_id)) {
+                $need_add_role_ids = array_diff($role_ids, $already_role_id);
+                $need_del_role_ids = array_diff($already_role_id, $role_ids);
+            } else if (count($role_ids)) {
+                $need_add_role_ids = $role_ids;
+            } else {
+                $need_del_role_ids = $already_role_id;
             }
 
-            foreach($need_add_role_ids as $val){
-                $map['role_id']=$val;
-                $data=$map;
+            foreach ($need_add_role_ids as $val) {
+                $map['role_id'] = $val;
+                $data = $map;
                 $data['value'] = $edit_id;
                 $roleConfigModel->addData($data);
             }
 
 
-            foreach($need_del_role_ids as $val){
-                $map['role_id']=$val;
-                $oldConfig=$roleConfigModel->where($map)->find();
+            foreach ($need_del_role_ids as $val) {
+                $map['role_id'] = $val;
+                $oldConfig = $roleConfigModel->where($map)->find();
                 if (count($oldConfig)) {
-                    $oldConfig['value']=implode(',',array_diff(explode(',',$oldConfig['value']),array($edit_id)));
+                    $oldConfig['value'] = implode(',', array_diff(explode(',', $oldConfig['value']), array($edit_id)));
                     $roleConfigModel->saveData($map, $oldConfig);
                 } else {
-                    $data=$map;
+                    $data = $map;
                     $data['value'] = $edit_id;
                     $roleConfigModel->addData($data);
                 }
             }
 
-        }else{//新增字段
-            foreach($role_ids as $val){
-                $map['role_id']=$val;
-                $oldConfig=$roleConfigModel->where($map)->find();
+        } else {//新增字段
+            foreach ($role_ids as $val) {
+                $map['role_id'] = $val;
+                $oldConfig = $roleConfigModel->where($map)->find();
                 if (count($oldConfig)) {
-                    $oldConfig['value']=implode(',',array_unique(array_merge(explode(',',$oldConfig['value']),array($add_id))));
+                    $oldConfig['value'] = implode(',', array_unique(array_merge(explode(',', $oldConfig['value']), array($add_id))));
                     $roleConfigModel->saveData($map, $oldConfig);
                 } else {
-                    $data=$map;
+                    $data = $map;
                     $data['value'] = $add_id;
                     $roleConfigModel->addData($data);
                 }

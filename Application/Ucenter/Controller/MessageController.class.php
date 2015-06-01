@@ -208,7 +208,7 @@ class MessageController extends BaseController
             $talkMessage['id'] = $talkMessageModel->add($talkMessage);
 
 
-            D('Message')->sendMessage($message['from_uid'], '聊天名称：' . $talk['title'], '您有新的主题聊天', U('Ucenter/Message/talk', array('talk_id' => $talk['id'])), is_login(), 0);
+            D('Message')->sendMessage($message['from_uid'],'您有新的主题聊天',  '聊天名称：' . $talk['title'], 'Ucenter/Message/talk', array('talk_id' => $talk['id']));
 
             return $talk;
 

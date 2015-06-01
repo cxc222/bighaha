@@ -98,7 +98,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <div class="col-xs-offset-2 col-xs-1">
+                            <div class="col-sm-offset-2 col-xs-1">
                                 <button type="submit" class="btn btn-primary " href="{:U('Event/Index/doPost')}">提交
                                 </button>
 
@@ -168,6 +168,18 @@
             minView:0,
             forceParse:0,
             format: 'yyyy-mm-dd hh:ii'
+        });
+
+        $('.time_d').datetimepicker({
+            language:'zh-CN',
+            weekStart:1,
+            todayBtn:1,
+            autoclose:1,
+            todayHighlight:1,
+            startView:2,
+            minView:2,
+            forceParse:0,
+            format: 'yyyy-mm-dd'
         });
 
     </script>

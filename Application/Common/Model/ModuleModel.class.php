@@ -59,7 +59,7 @@ class ModuleModel extends Model
         foreach ($modules as $m) {
             if (isset($m['is_setup']) && $m['is_setup'] == 0 && $m['name'] == ucfirst($name)) {
                 header("Content-Type: text/html; charset=utf-8");
-                exit('您所访问的模块未安装，禁止访问。');
+                exit('您所访问的模块未安装，禁止访问，请管理员到后台云市场-本地-模块中安装。');
             }
         }
 

@@ -16,9 +16,7 @@ class UserApi extends Api{
      * 构造方法，实例化操作模型
      */
     protected function _init(){
-
         $this->model = new UcenterMemberModel();
-
     }
 
     /**
@@ -66,7 +64,6 @@ class UserApi extends Api{
             if(UC_SYNC && $username != get_username(1)){
                 return $this->ucLogin($username, $password);
             }
-
             return $this->model->login($username, $password, $type);
         }
 

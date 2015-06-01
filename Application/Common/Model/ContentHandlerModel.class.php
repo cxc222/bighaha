@@ -15,30 +15,32 @@ namespace Common\Model;
  * @package Common\Model
  * @auth 陈一枭
  */
-class ContentHandlerModel {
+class ContentHandlerModel
+{
 
     /**处理@
      * @auth 陈一枭
      */
-    public function handleAtWho($content,$url='',$app_name='',$escap_first=false){
+    public function handleAtWho($content, $url = '', $app_name = '', $escap_first = false)
+    {
         $uids = get_at_uids($content);
 
         $uids = array_unique($uids);
-        $sender=query_user(array('nickname'));
-        $first=true;
+        $sender = query_user(array('nickname'));
+        $first = true;
         foreach ($uids as $uid) {
-            if($escap_first && $first){
-                $first=false;
+            if ($escap_first && $first) {
+                $first = false;
                 continue;
             }
             //$user = UCenterMember()->find($uid);
             $title = $sender['nickname'] . '@了您';
-            $message = '评论内容：' . mb_substr(op_t( $content),0,50,'utf-8');
-            if($url==''){//如果未设置来源的url，则自动跳转到来源页面
+            $message = '评论内容：' . mb_substr(op_t($content), 0, 50, 'utf-8');
+            if ($url == '') { //如果未设置来源的url，则自动跳转到来源页面
                 $url = $_SERVER['HTTP_REFERER'];
             }
 
-            D('Common/Message')->sendMessage($uid, $message, $title, $url, get_uid(), 0, $app_name);
+            D('Common/Message')->sendMessage($uid,$title, $message,  $url,$args);
         }
     }
 
@@ -46,8 +48,10 @@ class ContentHandlerModel {
      * @param $content
      * @return mixed
      */
-    public function filterHtmlContent($content){
-        $content=html($content);
+    public function filterHtmlContent($content)
+    {
+        $content = html($content);
+        $content = $this->beforeSave($content);
         $content = filterBase64($content);
         //检测图片src是否为图片并进行过滤
         $content = filterImage($content);
@@ -57,9 +61,10 @@ class ContentHandlerModel {
     /**显示html内容,一般用于显示编辑器内容，会加入弹窗和at效果
      * @param $content
      */
-    public function displayHtmlContent($content){
-        $content=parse_popup($content);
-        $content=parse_at_users($content);
+    public function displayHtmlContent($content)
+    {
+        $content = parse_popup($content);
+        $content = parse_at_users($content);
         return $content;
 
     }
@@ -69,30 +74,138 @@ class ContentHandlerModel {
      * @param int $count
      * @return mixed
      */
-    public function limitPicture($content,$count=10){
+    public function limitPicture($content, $count = 10)
+    {
 
-            //默认最多显示10张图片
-            $maxImageCount =$count;
-            //正则表达式配置
-            $beginMark = 'BEGIN0000hfuidafoidsjfiadosj';
-            $endMark = 'END0000fjidoajfdsiofjdiofjasid';
-            $imageRegex ='/<img(.*?)\\>/i';
-            $reverseRegex = "/{$beginMark}(.*?){$endMark}/i";
-            //如果图片数量不够多，那就不用额外处理了。
-            $imageCount= preg_match_all($imageRegex, $content,$res);
-            if ($imageCount <= $maxImageCount) {
-                return $content;
-            }
-            //清除伪造图片
-            $content = preg_replace($reverseRegex, "<img$1>", $content);
-            //临时替换图片来保留前$maxImageCount张图片
-            $content = preg_replace($imageRegex, "{$beginMark}$1{$endMark}", $content, $maxImageCount);
-            //替换多余的图片
-            $content = preg_replace($imageRegex, "[图片]", $content);
-            //将替换的东西替换回来
-            $content = preg_replace($reverseRegex, "<img$1>", $content);
-            //返回结果
+        //默认最多显示10张图片
+        $maxImageCount = $count;
+        //正则表达式配置
+        $beginMark = 'BEGIN0000hfuidafoidsjfiadosj';
+        $endMark = 'END0000fjidoajfdsiofjdiofjasid';
+        $imageRegex = '/<img(.*?)\\>/i';
+        $reverseRegex = "/{$beginMark}(.*?){$endMark}/i";
+        //如果图片数量不够多，那就不用额外处理了。
+        $imageCount = preg_match_all($imageRegex, $content, $res);
+        if ($imageCount <= $maxImageCount) {
             return $content;
+        }
+        //清除伪造图片
+        $content = preg_replace($reverseRegex, "<img$1>", $content);
+        //临时替换图片来保留前$maxImageCount张图片
+        $content = preg_replace($imageRegex, "{$beginMark}$1{$endMark}", $content, $maxImageCount);
+        //替换多余的图片
+        $content = preg_replace($imageRegex, "[图片]", $content);
+        //将替换的东西替换回来
+        $content = preg_replace($reverseRegex, "<img$1>", $content);
+        //返回结果
+        return $content;
+    }
 
 
-} }
+
+    public function beforeSave($content){
+        $content = preg_replace('/\<embed[^>]*?src=\"[^>]*?\.swf[^>]*?\>/', '', $content);
+        return $content;
+    }
+
+
+    public function filterVideo($content)
+    {
+
+        require_once('./ThinkPHP/Library/Vendor/Collection/phpQuery.php');
+        \phpQuery::newDocument($content);
+        foreach (pq("embed") as $embed) {
+            $link = pq($embed)->attr('src');
+            $rs = $this->getVideoInfo($link);
+
+            // 替换视频地址
+            if ($rs['flash_url']) {
+                $content = str_replace($link, $rs['flash_url'], $content);
+            } else {
+                $link = addcslashes(quotemeta($link), '/');
+                $content = preg_replace('/' . $link . '/', '', $content);
+            }
+        }
+
+        return $content;
+    }
+
+
+    public function getVideoInfo($link)
+    {
+        $return = S('video_info_'.md5($link));
+        if(empty($return)){
+            require_once('./ThinkPHP/Library/Vendor/Collection/phpQuery.php');
+            preg_match("/(youku.com|ku6.com|sohu.com|sina.com.cn|qq.com|tudou.com|yinyuetai.com|iqiyi.com)/i", $link, $hosts);
+            $host = $hosts[1];
+            $content = get_content_by_url($link);
+            if ('youku.com' == $host) {
+                \phpQuery::newDocument($content);
+                $title = pq("title")->html();
+                $flash_url = pq("#link2")->attr('value');
+            } elseif ('ku6.com' == $host) {
+                \phpQuery::$defaultCharset = GBK;
+                \phpQuery::newDocument($content);
+                $title = pq("title")->html();
+                $flash_url = pq(".ckl_input")->eq(0)->attr('value');
+                $title = iconv("GBK", "UTF-8", $title);
+            } elseif ('tudou.com' == $host) {
+                \phpQuery::newDocument($content);
+                $title = pq("title")->html();
+                preg_match('/iid:(.*?)\s+,icode/s', $content, $program);
+                $programId = intval($program[1]);
+                if (strpos($link, 'www.tudou.com/albumplay') !== false) {
+                    preg_match("/albumplay\/([\w\-\.]+)[\/|\.]/", $link, $album);
+                    $albumId = $album[1];
+                    $flash_url = 'http://www.tudou.com/a/' . $albumId . '/&iid=' . $programId . '/v.swf';
+                } elseif (strpos($link, 'www.tudou.com/programs') !== false) {
+                    $flash_url = 'http://www.tudou.com/v/' . $programId . '/v.swf';
+                } elseif (strpos($link, 'www.tudou.com/listplay') !== false) {
+                    preg_match("/listplay\/([\w\-\.]+)\//", $link, $list);
+                    $listId = $list[1];
+                    $flash_url = 'http://www.tudou.com/l/' . $listId . '/&iid=' . $programId . '/v.swf';
+                }
+            } elseif ('sohu.com' == $host) {
+                \phpQuery::$defaultCharset = GBK;
+                \phpQuery::newDocument($content);
+                $title = pq("title")->html();
+                $title = iconv("GBK", "UTF-8", $title);
+                $flash_url = pq("[property='og:videosrc']")->attr('content');
+            } elseif ('qq.com' == $host) {
+
+                $contentType = 'text/html;charset=gbk';
+                \phpQuery::newDocument($content, $contentType);
+                preg_match("/vid=(.*)/i", $link, $vid);
+                $vid = $vid[1];
+                $flash_url = 'http://static.video.qq.com/TPout.swf?vid=' . $vid . '&auto=0';
+                $title = $title = pq("#" . $vid)->attr('title');
+            } elseif ('sina.com.cn' == $host) {
+                \phpQuery::newDocument($content);
+                $title = pq("title")->html();
+                preg_match("/swfOutsideUrl:\'(.+?)\'/i", $content, $flashvar);
+                $flash_url = $flashvar[1];
+
+            } elseif ('yinyuetai.com' == $host) {
+                \phpQuery::newDocument($content);
+                $title = pq("title")->html();
+                $flash_url = pq("[property='og:videosrc']")->attr('content');
+            } elseif ('iqiyi.com' == $host) {
+                \phpQuery::newDocument($content);
+                $title = pq("title")->html();
+                $obj = pq("#videoArea")->find('div')->eq(0);
+                $temp1 = $obj->attr('data-player-videoid');
+                preg_match("/iqiyi.com\/(.*).html/i", $link, $temp2);
+                $temp2 = $temp2[1];
+                $temp3 = $obj->attr('data-player-albumid');
+                $temp4 = $obj->attr('data-player-tvid');
+                $flash_url = 'http://player.video.qiyi.com/' . $temp1 . '/0/0/' . $temp2 . '.swf-albumId=' . $temp3 . '-tvId=' . $temp4;
+            }
+            $return['title'] = text($title);
+            $return['flash_url'] = urldecode($flash_url);
+            S('video_info_'.md5($link),$return,60*60);
+        }
+        return $return;
+    }
+
+
+}

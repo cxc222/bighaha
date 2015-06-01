@@ -33,7 +33,7 @@
     <div class="col-md-10">
         <div style="min-height: 10em;overflow: hidden;word-break: break-all" class="post_content">
             <div style="padding: 15px"></div>
-            {$reply.content|parse_popup|parse_at_users|parse_content}
+            {$reply.content|parse_popup|parse_at_users|parse_content|filter_video}
             <br/>
         </div>
         <p class="pull-right text-muted">

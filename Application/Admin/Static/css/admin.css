@@ -295,3 +295,18 @@ label {
   margin-top: 10px;
   margin-left: 20px;
 }
+.oneselect {
+  display: inline-block;
+  margin-left: 10px;
+}
+.oneselect .title {
+  float: left;
+  line-height: 32px;
+}
+.oneselect .select_box {
+  float: left;
+  line-height: 32px;
+}
+.oneselect .select_box select {
+  min-width: 200px;
+}

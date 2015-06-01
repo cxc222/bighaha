@@ -208,6 +208,32 @@ class View
         }
         // 分析模板文件规则
         $file = THEME_PATH . $template . C('TMPL_TEMPLATE_SUFFIX');
+        /**
+         * 2015-6-1 10:35
+         * 如果模版存在，则返回主题公共目录下的模版 start
+         * @author 郑钟良<zzl@ourstu.com>
+         */
+        if(!is_file($file)){
+            $TO_LOOK_THEME = cookie('TO_LOOK_THEME', '', array('prefix' => 'OSV2'));
+            if ($TO_LOOK_THEME) {
+                if ($TO_LOOK_THEME != 'default') {
+                    $common_file_path = OS_THEME_PATH . $TO_LOOK_THEME . '/Common/'.C('DEFAULT_V_LAYER').'/'. $file . C('TMPL_TEMPLATE_SUFFIX');
+                }
+            } else {
+                $now_theme = modC('NOW_THEME', 'default', 'Theme');
+                if ($now_theme != 'default') {
+                    $common_file_path = OS_THEME_PATH . $now_theme . '/Common/' .C('DEFAULT_V_LAYER').'/'.$file . C('TMPL_TEMPLATE_SUFFIX');
+                }
+            }
+            if (isset($common_file_path) && is_file($common_file_path)) {
+                return $common_file_path;
+            }
+        }
+        /**
+         * 2015-6-1 10:35
+         * 如果模版存在，则返回主题公共目录下的模版 end
+         * @author 郑钟良<zzl@ourstu.com>
+         */
         if (C('TMPL_LOAD_DEFAULTTHEME') && THEME_NAME != C('DEFAULT_THEME') && !is_file($file)) {
             // 找不到当前主题模板的时候定位默认主题中的模板
             $file = dirname(THEME_PATH) . '/' . C('DEFAULT_THEME') . '/' . $template . C('TMPL_TEMPLATE_SUFFIX');

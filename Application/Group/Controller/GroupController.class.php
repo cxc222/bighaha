@@ -297,7 +297,6 @@ class GroupController extends AdminController
 
     public function editGroup($id = 0)
     {
-
         if (IS_POST) {
             $aId = I('post.id', 0, 'intval');
             $aTitle = I('post.title', '', 'text');
@@ -308,15 +307,6 @@ class GroupController extends AdminController
             $aTypeId = I('post.type_id', 0, 'intval');
             $aDetail = I('post.detail', '', 'text');
             $aType = I('post.type', 0, 'intval');
-            dump($aId);
-            dump($aTitle);
-            dump($aCreateTime);
-            dump($aStatus);
-            dump($aAllowUserGroup);
-            dump($aLogo);
-            dump($aTypeId);
-            dump($aDetail);
-            dump($aType);exit;
 
             $isEdit = $aId ? true : false;
             //生成数据

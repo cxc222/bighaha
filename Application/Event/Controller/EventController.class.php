@@ -110,7 +110,7 @@ class EventController extends AdminController
         if ($status == 1) {
             foreach ($ids as $id) {
                 $content = D('Event')->find($id);
-                D('Common/Message')->sendMessage($content['uid'], "管理员审核通过了您发布的内容。现在可以在列表看到该内容了。", $title = '专辑内容审核通知', U('Event/Index/detail', array('id' => $id)), is_login(), 2);
+                D('Common/Message')->sendMessage($content['uid'],$title = '专辑内容审核通知', "管理员审核通过了您发布的内容。现在可以在列表看到该内容了。",  'Event/Index/detail', array('id' => $id ), is_login(), 2);
                 if (D('Common/Module')->isInstalled('Weibo')) { //安装了微博模块
                     /*同步微博*/
                     $user = query_user(array('username', 'space_link'), $content['uid']);

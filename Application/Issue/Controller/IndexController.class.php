@@ -49,6 +49,24 @@ class IndexController extends Controller
 
     public function index($page = 1, $issue_id = 0)
     {
+        //设置展示方式 列表；瀑布流
+        $aDisplay_type=I('display_type','','text');
+        $cookie_type=cookie('issue_display_type');
+        if($aDisplay_type==''){
+            if($cookie_type){
+                $aDisplay_type=$cookie_type;
+            }else{
+                $aDisplay_type=modC('DISPLAY_TYPE','list','Issue');
+                cookie('issue_display_type',$aDisplay_type);
+            }
+        }else{
+            if($cookie_type!=$aDisplay_type){
+                cookie('issue_display_type',$aDisplay_type);
+            }
+        }
+        $this->assign('display_type',$aDisplay_type);
+        //设置展示方式 列表；瀑布流 end
+
         $issue_id = intval($issue_id);
         $issue = D('Issue')->find($issue_id);
         if (!$issue_id == 0) {
@@ -66,6 +84,12 @@ class IndexController extends Controller
         foreach ($content as &$v) {
             $v['user'] = query_user(array('id', 'nickname', 'space_url', 'space_link', 'avatar128', 'rank_html'), $v['uid']);
             $v['issue'] = D('Issue')->field('id,title')->find($v['issue_id']);
+            if($aDisplay_type=='masonry'){
+                $cover = M('Picture')->where(array('status' => 1))->getById($v['cover_id']);
+                $imageinfo = getimagesize('.'.$cover['path']);
+                $v['cover_height']=$imageinfo[1]*255/$imageinfo[0];
+                $v['cover_height']=$v['cover_height']?$v['cover_height']:253;
+            }
         }
         unset($v);
         $this->assign('contents', $content);
@@ -79,7 +103,7 @@ class IndexController extends Controller
 
     public function doPost($id = 0, $cover_id = 0, $title = '', $content = '', $issue_id = 0, $url = '')
     {
-               if (!check_auth('addIssueContent')) {
+        if (!check_auth('addIssueContent')) {
             $this->error('抱歉，您不具备投稿权限。');
         }
         $issue_id = intval($issue_id);
@@ -101,7 +125,6 @@ class IndexController extends Controller
         if (trim(op_h($url)) == '') {
             $this->error('请输入网址。');
         }
-
         $content = D('IssueContent')->create();
         $content['content'] = op_h($content['content']);
         $content['title'] = op_t($content['title']);
@@ -130,7 +153,7 @@ class IndexController extends Controller
                 $user = query_user(array('nickname'), is_login());
                 $admin_uids = explode(',', C('USER_ADMINISTRATOR'));
                 foreach ($admin_uids as $admin_uid) {
-                    D('Common/Message')->sendMessage($admin_uid, "{$user['nickname']}向专辑投了一份稿件，请到后台审核。", $title = '专辑投稿提醒', U('Admin/Issue/verify'), is_login(), 2);
+                    D('Common/Message')->sendMessage($admin_uid, $title = '专辑投稿提醒',"{$user['nickname']}向专辑投了一份稿件，请到后台审核。",  'Admin/Issue/verify', array(),is_login(), 2);
                 }
             }
             $rs = D('IssueContent')->add($content);

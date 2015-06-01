@@ -296,7 +296,7 @@ class IndexController extends Controller
                 D('shop')->where('id=' . $id)->setInc('sell_num', $num);
                 //发送系统消息
                 $message = $goods['goods_name'] . "购买成功，请等待发货。";
-                D('Message')->sendMessageWithoutCheckSelf(is_login(), $message, '购买成功通知', U('Shop/Index/myGoods', array('status' => '0')));
+                D('Message')->sendMessageWithoutCheckSelf(is_login(),'购买成功通知', $message,  'Shop/Index/myGoods', array('status' => '0'));
 
                 //商城记录
                 $shop_log['message'] = '用户[' . is_login() . ']' . query_user('nickname', is_login()) . '在' . time_format($data['createtime']) . '购买了商品<a href="index.php?s=/Shop/Index/goodsDetail/id/' . $goods['id'] . '.html" target="_black">' . $goods['goods_name'] . '</a>';

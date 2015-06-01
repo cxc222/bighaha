@@ -71,6 +71,13 @@
                 autoclose: true,
                 format: 'hh:ii'
             });
+            $('.time').change(function () {
+                var fieldName = $(this).attr('data-field-name');
+                var dateString = $(this).val();
+                var date = new Date(dateString);
+                var timestamp = date.getTime();
+                $('[name=' + fieldName + ']').val(Math.floor(timestamp / 1000));
+            });
         </script>
     </if>
 

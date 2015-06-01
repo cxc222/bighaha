@@ -9,7 +9,7 @@
 namespace User\Model;
 
 use Think\Model;
-
+use Home\Model\MemberModel;
 
 require_once(APP_PATH . 'User/Conf/config.php');
 require_once(APP_PATH . 'User/Common/common.php');
@@ -173,9 +173,6 @@ class UcenterMemberModel extends Model
         }
     }
 
-
-
-
     /**
      * 用户登录认证
      * @param  string  $username 用户名
@@ -186,13 +183,10 @@ class UcenterMemberModel extends Model
     public function login($username, $password, $type = 1)
     {
 
-       if (UC_SYNC && $username != get_username(1) && $type == 1) {
+        if (UC_SYNC && $username != get_username(1) && $type == 1) {
             return $this->ucLogin($username, $password);
-
         }
-
         $map = array();
-
         switch ($type) {
             case 1:
                 $map['username'] = $username;
@@ -219,44 +213,32 @@ class UcenterMemberModel extends Model
 
         if (is_array($user) && $user['status']) {
             /* 验证用户密码 */
-
             if (think_ucenter_md5($password, UC_AUTH_KEY) === $user['password']) {
                 $this->updateLogin($user['id']); //更新用户登录信息
-               return $user['id']; //登录成功，返回用户ID.
-
+                return $user['id']; //登录成功，返回用户ID
             } else {
-
                 action_log('input_password','ucenter_member',$user['id'],$user['id']);
                 return -2; //密码错误
             }
-
         } else {
-
-
             return -1; //用户不存在或被禁用
         }
-
     }
 
 
     public function ucLogin($username, $password)
     {
-
         include_once './api/uc_client/client.php';
         //Ucenter 内数据
         $uc_user = uc_user_login($username, $password, 0);
-
         //关联表内数据
         $uc_user_ref = tox_get_ucenter_user_ref('', $uc_user['0'], '');
         //登录
         if ($uc_user_ref['uid'] && $uc_user_ref['uc_uid'] && $uc_user[0] > 0) {
             return $uc_user_ref['uid'];
-
         }
-
         //本地帐号信息
         $tox_user = $this->model->getLocal($username, $password);
-
         // 关联表无、UC有、本地无的
         if ($uc_user[0] > 0 && !$tox_user['id']) {
             $uid = $this->register($uc_user[1], $uc_user[1], $uc_user[2], $uc_user[3], '', 1);
@@ -269,7 +251,6 @@ class UcenterMemberModel extends Model
             }
             return $uid;
         }
-
         // 关联表无、UC有、本地有的
         if ($uc_user[0] > 0 && $tox_user['id'] > 0) {
             $result = tox_add_ucenter_user_ref($tox_user['id'], $uc_user[0], $uc_user[1], $uc_user[3]);
@@ -278,7 +259,6 @@ class UcenterMemberModel extends Model
             }
             return $tox_user['id'];
         }
-
         // 关联表无、UC无、本地有
         if ($uc_user[0] < 0 && $tox_user['id'] > 0) {
             //写入UC
@@ -306,7 +286,6 @@ class UcenterMemberModel extends Model
 
     public function getLocal($username, $password)
     {
-
         $map = array();
         $map['username'] = $username;
 
@@ -446,7 +425,6 @@ class UcenterMemberModel extends Model
      */
     protected function updateLogin($uid)
     {
-
         $data = array(
             'id' => $uid,
             'last_login_time' => NOW_TIME,

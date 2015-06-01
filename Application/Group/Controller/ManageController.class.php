@@ -116,7 +116,7 @@ class ManageController extends BaseController
         D('GroupDynamic')->add($dynamic);
         if ($res) {
             $group = D('Group')->getGroup($this->groupId);
-            D('Message')->sendMessage($aUid, get_nickname(is_login()) . "通过了您加入群组【{$group['title']}】的请求", '群组审核通过', U('group/index/group', array('id' => $this->groupId)), is_login());
+            D('Message')->sendMessage($aUid,'群组审核通过', get_nickname(is_login()) . "通过了您加入群组【{$group['title']}】的请求",  'group/index/group', array('id' => $this->groupId), is_login());
             S('group_member_count_' . $group['id'],null);
             S('group_is_join_' . $group['id'] . '_' . $aUid, null);
             $this->success('审核成功', 'refresh');
@@ -137,7 +137,7 @@ class ManageController extends BaseController
         D('GroupDynamic')->add($dynamic);
         if ($res) {
             $group = D('Group')->getGroup($this->groupId);
-            D('Message')->sendMessage($aUid, get_nickname(is_login()) . "将您移出了群组【{$group['title']}】", '移出群组', U('group/index/group', array('id' => $this->groupId)), is_login());
+            D('Message')->sendMessage($aUid, '移出群组', get_nickname(is_login()) . "将您移出了群组【{$group['title']}】", 'group/index/group', array('id' => $this->groupId), is_login());
             S('group_member_count_' . $group['id'],null);
             S('group_is_join_' . $group['id'] . '_' . $aUid, null);
             $this->success('删除成功', 'refresh');

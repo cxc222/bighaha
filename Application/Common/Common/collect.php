@@ -14,7 +14,12 @@
 //todo 扩展多种采集方式，以备一种方式采集不到页面
 
 function get_content_by_url($url){
-    $content = curl_file_get_contents($url);
+    $md5 = md5($url);
+    $content = S('file_content_'.$md5);
+    if(is_bool($content)){
+        $content = curl_file_get_contents($url);
+        S('file_content_'.$md5,$content,60*60);
+    }
     return $content;
 }
 

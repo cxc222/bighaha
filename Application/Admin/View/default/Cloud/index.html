@@ -1,4 +1,18 @@
 <extend name="Public/base"/>
 <block name="body">
-    <iframe src="http://cos.com/index.php?s=/appstore/cloud/index.html" id="main" name="main" width="100%" height="100%" frameborder="0" scrolling="yes" style="overflow: visible;bottom: 0;position: absolute;top: 0"></iframe>
+    <iframe id="market" src="http://cos.com/index.php?s=/appstore.html" name="main" width="100%" height="100%"
+            frameborder="0" scrolling="yes" style="overflow: visible;bottom: 0;position: absolute;top: 0"></iframe>
+    <script>
+
+        var website_title = "{:modC('WEB_SITE_NAME','','config')}";
+        window.addEventListener('message', function (event, domain) {
+            if (event.data.type == 'getWebSiteInfo') {
+                document.getElementById("market").contentWindow.postMessage({
+                    'type': 'returnWebSiteInfo',
+                    'domain': window.location.host,
+                    'title': website_title
+                }, '*');
+            }
+        })
+    </script>
 </block>

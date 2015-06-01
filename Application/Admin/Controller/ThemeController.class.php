@@ -42,6 +42,10 @@ class ThemeController extends AdminController{
         $this->display();
     }
 
+    /**
+     * 打包
+     * @author 郑钟良<zzl@ourstu.com>
+     */
     public function packageDownload()
     {
         $aTheme = I('theme', '', 'text');
@@ -61,6 +65,12 @@ class ThemeController extends AdminController{
         $this->error('参数错误！');
     }
 
+    /**
+     * 下载
+     * @param $get_url
+     * @param $file_name
+     * @author 郑钟良<zzl@ourstu.com>
+     */
     private function _download($get_url,$file_name)
     {
         ob_end_clean();
@@ -94,11 +104,20 @@ class ThemeController extends AdminController{
         $this->error('参数错误！', U('Admin/Theme/tpls'));
     }
 
+    /**
+     * 设置网站使用主题
+     * @author 郑钟良<zzl@ourstu.com>
+     */
     public function setTheme()
     {
         $aTheme = I('post.theme', 'default', 'text');
-        if (D('Config')->where(array('name' => '_THEME_NOW_THEME'))->count()) {
-            $res = D('Config')->where(array('name' => '_THEME_NOW_THEME'))->setField('value', $aTheme);
+        $now_them=D('Config')->where(array('name' => '_THEME_NOW_THEME'))->find();
+        if ($now_them) {
+            if($now_them['value']==$aTheme){
+                $res=1;
+            }else{
+                $res = D('Config')->where(array('name' => '_THEME_NOW_THEME'))->setField('value', $aTheme);
+            }
         } else {
             $config['name'] = '_THEME_NOW_THEME';
             $config['type'] = 0;
@@ -113,10 +132,10 @@ class ThemeController extends AdminController{
             $config['sort'] = 0;
             $res = D('Config')->add($config);
         }
-
         if ($res) {
-            S('conf_THEME_NOW_THEME', $aTheme);
-            cookie('TO_LOOK_THEME', $aTheme, array('prefix' => 'OSV2', 'expire' => 60));
+            S('conf_THEME_NOW_THEME',$aTheme);//重设modC的session
+            cookie('TO_LOOK_THEME', $aTheme, array('prefix' => 'OSV2'));//重设cookie
+            clean_cache('./Runtime/Cache/');//清除模板缓存
             $result['info'] = '设置主题成功！';
             $result['status'] = 1;
         } else {
@@ -126,10 +145,17 @@ class ThemeController extends AdminController{
         $this->ajaxReturn($result);
     }
 
+    /**
+     * 临时查看主题（管理员预览用）
+     * @author 郑钟良<zzl@ourstu.com>
+     */
     public function lookTheme()
     {
+
         $aTheme = I('theme', '', 'text');
-        cookie('TO_LOOK_THEME', $aTheme, array('prefix' => 'OSV2', 'expire' => 60));
+        cookie('TO_LOOK_THEME', $aTheme, array('prefix' => 'OSV2', 'expire' => 180));//重设cookie
+        S('conf_THEME_NOW_THEME',$aTheme,180);//重设modC的session
+        clean_cache('./Runtime/Cache/');//清除模板缓存
         redirect(U('Home/Index/index'));
     }
 

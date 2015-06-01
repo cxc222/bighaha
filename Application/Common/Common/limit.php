@@ -72,7 +72,7 @@ class ActionLimit
                 }
                 unset($punish);
                 if ($val['if_message']) {
-                    D('Message')->sendMessageWithoutCheckSelf($item['user_id'], $val['message_content']);
+                    D('Message')->sendMessageWithoutCheckSelf($item['user_id'], '',$val['message_content']);
                 }
             }
         }

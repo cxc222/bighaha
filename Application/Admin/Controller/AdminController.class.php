@@ -455,7 +455,8 @@ class AdminController extends Controller
 
         $options['where'] = array_filter(array_merge((array)$base, /*$REQUEST,*/
             (array)$where), function ($val) {
-            if ($val === '' || $val === null) {
+            //if ($val === '' || $val === null) {
+            if ( $val === null) {
                 return false;
             } else {
                 return true;

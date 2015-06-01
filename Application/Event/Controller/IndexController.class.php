@@ -204,7 +204,7 @@ class IndexController extends Controller
                 $content['status'] = 0;
                 $tip = '但需管理员审核通过后才会显示在列表中，请耐心等待。';
                 $user = query_user(array('username', 'nickname'), is_login());
-                D('Common/Message')->sendMessage(C('USER_ADMINISTRATOR'), "{$user['nickname']}发布了一个活动，请到后台审核。", $title = '活动发布提醒', U('Admin/Event/verify'), is_login(), 2);
+                D('Common/Message')->sendMessage(C('USER_ADMINISTRATOR'), $title = '活动发布提醒', "{$user['nickname']}发布了一个活动，请到后台审核。",  'Admin/Event/verify', array(),is_login(), 2);
             }
             $rs = D('Event')->add($content);
             if (D('Common/Module')->isInstalled('Weibo')) { //安装了微博模块
@@ -370,7 +370,7 @@ class IndexController extends Controller
             $res = D('event_attend')->add($data);
             if ($res) {
 
-                D('Message')->sendMessageWithoutCheckSelf($event_content['uid'], query_user('nickname', is_login()) . '报名参加了活动]' . $event_content['title'] . ']，请速去审核！', '报名通知', U('Event/Index/member', array('id' => $event_id)), is_login());
+                D('Message')->sendMessageWithoutCheckSelf($event_content['uid'], '报名通知',query_user('nickname', is_login()) . '报名参加了活动]' . $event_content['title'] . ']，请速去审核！',  'Event/Index/member', array('id' => $event_id));
 
                 D('Event')->where(array('id' => $event_id))->setInc('signCount');
                 action_log('event_do_sign', 'event', $event_id, is_login());
@@ -406,10 +406,10 @@ class IndexController extends Controller
             } else {
                 D('Event')->where(array('id' => $event_id))->setInc('attentionCount');
             }
-            D('Message')->sendMessageWithoutCheckSelf($uid, query_user('nickname', is_login()) . '已经通过了您对活动' . $event_content['title'] . '的报名请求', '审核通知', U('Event/Index/detail', array('id' => $event_id)), is_login());
+            D('Message')->sendMessageWithoutCheckSelf($uid, '审核通知',query_user('nickname', is_login()) . '已经通过了您对活动' . $event_content['title'] . '的报名请求',  'Event/Index/detail', array('id' => $event_id));
         } else {
             D('Event')->where(array('id' => $event_id))->setDec('attentionCount');
-            D('Message')->sendMessageWithoutCheckSelf($uid, query_user('nickname', is_login()) . '取消了您对活动[' . $event_content['title'] . ']的报名请求', '取消审核通知', U('Event/Index/member', array('id' => $event_id)), is_login());
+            D('Message')->sendMessageWithoutCheckSelf($uid, '取消审核通知',query_user('nickname', is_login()) . '取消了您对活动[' . $event_content['title'] . ']的报名请求',  'Event/Index/member', array('id' => $event_id));
         }
         if ($res) {
             $this->success('操作成功');
@@ -440,7 +440,7 @@ class IndexController extends Controller
             }
             D('Event')->where(array('id' => $event_id))->setDec('signCount');
 
-            D('Message')->sendMessageWithoutCheckSelf($event_content['uid'], query_user('nickname', is_login()) . '取消了对活动[' . $event_content['title'] . ']的报名', '取消报名通知', U('Event/Index/detail', array('id' => $event_id)), is_login());
+            D('Message')->sendMessageWithoutCheckSelf($event_content['uid'],  '取消报名通知',query_user('nickname', is_login()) . '取消了对活动[' . $event_content['title'] . ']的报名', 'Event/Index/detail', array('id' => $event_id));
 
             $this->success('取消报名成功');
         } else {

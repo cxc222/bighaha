@@ -61,4 +61,20 @@ function rmdirr($dirname)
     return rmdir($dirname);
 }
 
+/**
+ * 清理指定位置缓存
+ * @param $dirname
+ * @author 郑钟良<zzl@ourstu.com>
+ */
+function clean_cache($dirname='./Runtime/')
+{
+//清文件缓存
+    $dirs = array($dirname);
+//清理缓存
+    foreach ($dirs as $value) {
+        rmdirr($value);
+    }
+    @mkdir($dirname, 0777, true);
+}
+
 

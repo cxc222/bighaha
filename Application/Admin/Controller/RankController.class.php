@@ -18,7 +18,6 @@ use Admin\Builder\AdminConfigBuilder;
  * @package Admin\Controller
  * @郑钟良
  */
-
 class RankController extends AdminController
 {
 
@@ -35,7 +34,7 @@ class RankController extends AdminController
         $list = $model->page($page, $r)->select();
         foreach ($list as &$val) {
             $val['u_name'] = D('member')->where('uid=' . $val['uid'])->getField('nickname');
-            $val['types']=$val['types']?'是':'否';
+            $val['types'] = $val['types'] ? '是' : '否';
         }
         $totalCount = $model->count();
         //显示页面
@@ -43,7 +42,7 @@ class RankController extends AdminController
         $builder
             ->title('头衔列表')
             ->buttonNew(U('Rank/editRank'))
-            ->keyId()->keyTitle()->keyText('u_name', '上传者')->keyCreateTime()->keyLink('types','前台是否可申请','changeTypes?id=###')->keyDoActionEdit('editRank?id=###')->keyDoAction('deleteRank?id=###', '删除')
+            ->keyId()->keyTitle()->keyText('u_name', '上传者')->keyCreateTime()->keyLink('types', '前台是否可申请', 'changeTypes?id=###')->keyDoActionEdit('editRank?id=###')->keyDoAction('deleteRank?id=###', '删除')
             ->data($list)
             ->pagination($totalCount, $r)
             ->display();
@@ -54,13 +53,14 @@ class RankController extends AdminController
      * @param null $id
      * @author 郑钟良<zzl@ourstu.com>
      */
-    public function changeTypes($id=null){
+    public function changeTypes($id = null)
+    {
         if (!$id) {
             $this->error('请选择头衔');
         }
-        $types=D('rank')->where('id=' . $id)->getField('types');
-        $types=$types?0:1;
-        $result=D('rank')->where('id=' . $id)->setField('types',$types);
+        $types = D('rank')->where('id=' . $id)->getField('types');
+        $types = $types ? 0 : 1;
+        $result = D('rank')->where('id=' . $id)->setField('types', $types);
         if ($result) {
             $this->success('设置成功');
         } else {
@@ -95,14 +95,14 @@ class RankController extends AdminController
      * @param int $types
      * @author 郑钟良<zzl@ourstu.com>
      */
-    public function editRank($id = null, $title = null, $logo = null, $types =1)
+    public function editRank($id = null, $title = null, $logo = null, $types = 1)
     {
         //判断是否为编辑模式
         $isEdit = $id ? true : false;
         if (IS_POST) {
             $data = array('title' => $title, 'logo' => $logo);
             $model = D('rank');
-            $data['types']=$types;
+            $data['types'] = $types;
             if ($isEdit) {
                 $data_old = $model->where('id=' . $id)->find();
                 if ($title != '') {
@@ -114,7 +114,7 @@ class RankController extends AdminController
                 if ($title == '' && $logo == '') {
                     $this->error('信息不完整');
                 }
-                $data_old['types']=$data['types'];
+                $data_old['types'] = $data['types'];
                 $result = $model->where('id=' . $id)->save($data_old);
                 if (!$result) {
                     $this->error('修改失败');
@@ -133,7 +133,7 @@ class RankController extends AdminController
             }
             $this->success($isEdit ? '编辑成功' : '添加成功', U('Rank/index'));
         } else {
-            $rank['types']='1';//默认前台可以申请
+            $rank['types'] = '1';//默认前台可以申请
             //如果是编辑模式
             if ($isEdit) {
                 $rank = M('rank')->where(array('id' => $id))->find();
@@ -146,7 +146,7 @@ class RankController extends AdminController
             );
             $builder
                 ->title($isEdit ? '编辑头衔' : '新增头衔')
-                ->keyId()->keyTitle()->keySingleImage('logo', '头衔图标', '图标')->keyRadio('types', '前台是否可申请',null, $options)
+                ->keyId()->keyTitle()->keySingleImage('logo', '头衔图标', '图标')->keyRadio('types', '前台是否可申请', null, $options)
                 ->data($rank)
                 ->buttonSubmit(U('editRank'))->buttonBack()
                 ->display();
@@ -159,12 +159,13 @@ class RankController extends AdminController
      */
     public function userList()
     {
-        $nickname = I('nickname');
+        $nickname = I('nickname','','text');
         $map['status'] = array('egt', 0);
         if (is_numeric($nickname)) {
             $map['uid|nickname'] = array(intval($nickname), array('like', '%' . $nickname . '%'), '_multi' => true);
         } else {
-            $map['nickname'] = array('like', '%' . (string)$nickname . '%');
+            if ($nickname !== '')
+                $map['nickname'] = array('like', '%' . (string)$nickname . '%');
         }
         $list = $this->lists('Member', $map);
         int_to_string($list);
@@ -186,8 +187,8 @@ class RankController extends AdminController
         }
         $u_name = D('member')->where('uid=' . $id)->getField('nickname');
         $model = D('rank_user');
-        $rankList = $model->where(array('uid'=> $id,'status'=>1))->page($page, 20)->order('create_time asc')->select();
-        $totalCount = $model->where(array('uid'=> $id,'status'=>1))->count();
+        $rankList = $model->where(array('uid' => $id, 'status' => 1))->page($page, 20)->order('create_time asc')->select();
+        $totalCount = $model->where(array('uid' => $id, 'status' => 1))->count();
         foreach ($rankList as &$val) {
             $val['title'] = D('rank')->where('id=' . $val['rank_id'])->getField('title');
             $val['is_show'] = $val['is_show'] ? '显示' : '不显示';
@@ -231,7 +232,7 @@ class RankController extends AdminController
                 }
                 $data = $model->create($data);
                 $data['create_time'] = time();
-                $data['status']=1;
+                $data['status'] = 1;
                 $result = $model->add($data);
                 if (!$result) {
                     $this->error('关联失败');
@@ -372,17 +373,9 @@ class RankController extends AdminController
         }
     }
 
-    public function sendMessage($data, $content,$type='头衔颁发')
+    public function sendMessage($data, $content, $type = '头衔颁发')
     {
-        /**
-         * @param $to_uid 接受消息的用户ID
-         * @param string $content 内容
-         * @param string $title 标题，默认为  您有新的消息
-         * @param $url 链接地址，不提供则默认进入消息中心
-         * @param $int $from_uid 发起消息的用户，根据用户自动确定左侧图标，如果为用户，则左侧显示头像
-         * @param int $type 消息类型，0系统，1用户，2应用
-         */
-        D('Message')->sendMessage($data['uid'], $content, $type, U('Usercenter/Message/message'), is_login(), 1);
+        D('Message')->sendMessage($data['uid'], $type, $content, 'Ucenter/Message/message',array(),is_login(), 1);
     }
 
     /**
@@ -390,24 +383,24 @@ class RankController extends AdminController
      * @param int $page
      * @author 郑钟良<zzl@ourstu.com>
      */
-    public function rankVerify($page=1)
+    public function rankVerify($page = 1)
     {
         $model = D('rankUser');
-        $rankList = $model->where(array('status'=>0))->page($page, 20)->order('create_time asc')->select();
-        $totalCount = $model->where(array('status'=>0))->count();
+        $rankList = $model->where(array('status' => 0))->page($page, 20)->order('create_time asc')->select();
+        $totalCount = $model->where(array('status' => 0))->count();
         foreach ($rankList as &$val) {
             $val['title'] = D('rank')->where('id=' . $val['rank_id'])->getField('title');
             $val['is_show'] = $val['is_show'] ? '显示' : '不显示';
             //获取用户信息
             $u_user = D('member')->where('uid=' . $val['uid'])->getField('nickname');
-            $val['u_name']=$u_user;
+            $val['u_name'] = $u_user;
         }
         unset($val);
         $builder = new AdminListBuilder();
         $builder
             ->title('待审核的头衔列表')
-            ->buttonSetStatus(U('setVerifyStatus'),'1','审核通过',null)->buttonDelete(U('setVerifyStatus'),'审核不通过')
-            ->keyId()->keyText('uid','用户ID')->keyText('u_name','用户名')->keyText('title', '头衔名称')->keyText('reason', '申请理由')->keyText('is_show', '是否显示在昵称右侧')->keyCreateTime()->keyDoActionEdit('Rank/userChangeRank?id=###')
+            ->buttonSetStatus(U('setVerifyStatus'), '1', '审核通过', null)->buttonDelete(U('setVerifyStatus'), '审核不通过')
+            ->keyId()->keyText('uid', '用户ID')->keyText('u_name', '用户名')->keyText('title', '头衔名称')->keyText('reason', '申请理由')->keyText('is_show', '是否显示在昵称右侧')->keyCreateTime()->keyDoActionEdit('Rank/userChangeRank?id=###')
             ->data($rankList)
             ->pagination($totalCount, 20)
             ->display();
@@ -418,37 +411,37 @@ class RankController extends AdminController
      * @param int $page
      * @author 郑钟良<zzl@ourstu.com>
      */
-    public function rankVerifyFailure($page=1)
+    public function rankVerifyFailure($page = 1)
     {
         $model = D('rankUser');
-        $rankList = $model->where(array('status'=>-1))->page($page, 20)->order('create_time asc')->select();
-        $totalCount = $model->where(array('status'=>-1))->count();
+        $rankList = $model->where(array('status' => -1))->page($page, 20)->order('create_time asc')->select();
+        $totalCount = $model->where(array('status' => -1))->count();
         foreach ($rankList as &$val) {
             $val['title'] = D('rank')->where('id=' . $val['rank_id'])->getField('title');
             $val['is_show'] = $val['is_show'] ? '显示' : '不显示';
             //获取用户信息
             $u_user = D('member')->where('uid=' . $val['uid'])->getField('nickname');
-            $val['u_name']=$u_user;
+            $val['u_name'] = $u_user;
         }
         unset($val);
         $builder = new AdminListBuilder();
         $builder
             ->title('被驳回的头衔申请列表')
-            ->buttonSetStatus(U('setVerifyStatus'),'1','审核通过',null)
-            ->keyId()->keyText('uid','用户ID')->keyText('u_name','用户名')->keyText('title', '头衔名称')->keyText('reason', '申请理由')->keyText('is_show', '是否显示在昵称右侧')->keyCreateTime()->keyDoActionEdit('Rank/userChangeRank?id=###')
+            ->buttonSetStatus(U('setVerifyStatus'), '1', '审核通过', null)
+            ->keyId()->keyText('uid', '用户ID')->keyText('u_name', '用户名')->keyText('title', '头衔名称')->keyText('reason', '申请理由')->keyText('is_show', '是否显示在昵称右侧')->keyCreateTime()->keyDoActionEdit('Rank/userChangeRank?id=###')
             ->data($rankList)
             ->pagination($totalCount, 20)
             ->display();
     }
 
-    public function setVerifyStatus($ids,$status)
+    public function setVerifyStatus($ids, $status)
     {
 
-        $model_user=D('rankUser');
-        $model=D('rank');
-        if($status==1){
-            foreach($ids as $val){
-                $rank_user=$model_user->where('id='.$val)->field('uid,rank_id,reason')->find();
+        $model_user = D('rankUser');
+        $model = D('rank');
+        if ($status == 1) {
+            foreach ($ids as $val) {
+                $rank_user = $model_user->where('id=' . $val)->field('uid,rank_id,reason')->find();
                 $rank = $model->where('id=' . $rank_user['rank_id'])->find();
                 $content = '管理员通过了你的头衔申请：[' . $rank['title'] . ']';
 
@@ -456,22 +449,22 @@ class RankController extends AdminController
 
                 $content1 = '管理员通过了@' . $user['username'] . ' 的头衔申请：[' . $rank['title'] . ']，申请理由：' . $rank_user['reason'];
                 clean_query_user_cache($rank_user['uid'], array('rank_link'));
-                $this->sendMessage($rank_user, $content,'头衔申请审核通过');
+                $this->sendMessage($rank_user, $content, '头衔申请审核通过');
                 if (D('Common/Module')->isInstalled('Weibo')) { //安装了微博模块
                     //发微博
                     $model_weibo = D('Weibo/Weibo');
                     $result = $model_weibo->addWeibo(is_login(), $content1);
                 }
             }
-        }else if($status=-1){
-            foreach($ids as $val){
-                $rank_user=$model_user->where('id='.$val)->field('uid,rank_id')->find();
+        } else if ($status = -1) {
+            foreach ($ids as $val) {
+                $rank_user = $model_user->where('id=' . $val)->field('uid,rank_id')->find();
                 $rank = $model->where('id=' . $rank_user['rank_id'])->find();
                 $content = '管理员驳回了你的头衔申请：[' . $rank['title'] . ']';
-                $this->sendMessage($rank_user, $content,'头衔申请审核不通过');
+                $this->sendMessage($rank_user, $content, '头衔申请审核不通过');
             }
         }
-        $builder=new AdminListBuilder();
-        $builder->doSetStatus('rankUser',$ids,$status);
+        $builder = new AdminListBuilder();
+        $builder->doSetStatus('rankUser', $ids, $status);
     }
 }

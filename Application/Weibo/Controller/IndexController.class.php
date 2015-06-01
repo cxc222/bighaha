@@ -150,7 +150,7 @@ class IndexController extends BaseController
                 if(method_exists($class,'parseExtra')){
                     $aExtra = Hook::exec('Addons\\Insert' . ucfirst($aType) . '\\Insert' . ucfirst($aType) . 'Addon', 'parseExtra', $aExtra);
                     if(!$aExtra){
-                        $this->error('参数错误');
+                        $this->error('仅支持优酷、酷6、新浪、土豆网、搜狐、音悦台、腾讯、爱奇艺等视频网址发布');
                     }
                 }
 
@@ -259,7 +259,7 @@ class IndexController extends BaseController
 // 发送消息
         $user = query_user(array('nickname'), is_login());
         $toUid = D('weibo')->where(array('id' => $aWeiboId))->getField('uid');
-        D('Common/Message')->sendMessage($toUid, $user['nickname'] . '转发了您的微博！', '转发提醒', U('Weibo/Index/weiboDetail', array('id' => $new_id)), is_login(), 1);
+        D('Common/Message')->sendMessage($toUid,'转发提醒', $user['nickname'] . '转发了您的微博！',  'Weibo/Index/weiboDetail', array('id' => $new_id), is_login(), 1);
 
         // 发布评论
         //  dump($aBeComment);exit;

@@ -41,7 +41,7 @@
                             <table class="col-xs-12">
                                 <tbody>
                                 <volist name="already_roles" id="role">
-                                    <tr class="col-xs-12" style="line-height: 40px;">
+                                    <tr style="line-height: 40px;">
                                         <td style="width: 20%">{$role.title}</td>
                                         <td style="width: 50%">{$role.user_status}</td>
                                         <td style="width: 30%"><neq name="role.user_role_status" value="0"><eq name="role.can_login" value="1"><a data-role="changeLoginRole" data-id="{$role.id}">切换登录</a><else/>当前登录</neq></eq></td>
@@ -55,13 +55,13 @@
                             <table class="col-xs-12">
                                 <tbody class="col-xs-12">
                                 <volist name="can_have_roles" id="role">
-                                    <tr class="col-xs-12" style="line-height: 40px;">
+                                    <tr style="line-height: 40px;">
                                         <td style="width: 20%">{$role.title}</td>
                                         <td style="width: 80%"><a data-role="hold_role" data-id="{$role.id}">持有该身份</a></td>
                                     </tr>
                                 </volist>
                                 <volist name="can_up_roles" id="role">
-                                    <tr class="col-xs-12" style="line-height: 40px;">
+                                    <tr style="line-height: 40px;">
                                         <td style="width: 20%">{$role.title}</td>
                                         <td style="width: 80%"><a data-role="up_role" data-url="{:U('Ucenter/Member/upRole',array('role_id'=>$role['id']))}">升级该身份</a></td>
                                     </tr>
@@ -98,7 +98,7 @@
                             <div class="col-xs-5"><span class="input-tips">他人进入您的个人主页时，默认已该身份展示</span></div>
                         </div>
                         <div class="form-group">
-                            <div class="col-xs-offset-2 col-xs-10">
+                            <div class="col-sm-offset-2 col-xs-10">
                                 <button type="submit" class="btn btn-primary">保存</button>
                             </div>
                         </div>

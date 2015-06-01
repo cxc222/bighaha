@@ -85,8 +85,7 @@
 
 .item_core  {
   .cover{
-    width: 280px;
-    height: 210px;
+    width: 255px;
   }
 
   position: relative;
@@ -113,7 +112,7 @@
 .uploadcover {
   color: rgb(255, 255, 255);
   background-color: rgba(3, 3, 3, 0.50);
-  border-color: rgb(47, 122, 81);
+  border-color: #4f8ad0;
   display: inline-block;
   margin-bottom: 0;
   font-weight: normal;
@@ -165,18 +164,18 @@
     position: relative;
     min-height: 80px;
     .triangle_left {
-    width: 0;
-    height: 0;
-    border-top: 10px solid rgba(0, 0, 0, 0);
-    border-right: 10px solid rgb(245, 245, 245);
-    border-bottom: 10px solid rgba(0, 0, 0, 0);
-    /* float: right; */
-    margin-left: -30px;
-    margin-top: 0px;
-    z-index: 2;
-    display: inline-block;
-    position: absolute;
-  }
+      width: 0;
+      height: 0;
+      border-top: 10px solid rgba(0, 0, 0, 0);
+      border-right: 10px solid rgb(245, 245, 245);
+      border-bottom: 10px solid rgba(0, 0, 0, 0);
+      /* float: right; */
+      margin-left: -30px;
+      margin-top: 0px;
+      z-index: 2;
+      display: inline-block;
+      position: absolute;
+    }
     .triangle {
       width: 0;
       height: 0;
@@ -268,5 +267,17 @@
         font-size: 1.0em;
       }
     }
+  }
+}
+
+.display_type{
+  position: absolute;right: 19px;width: 25px;
+  a{
+    i{
+      font-size: 25px;
+    }
+  }
+  .current{
+    color: #4f8ad0;
   }
 }
