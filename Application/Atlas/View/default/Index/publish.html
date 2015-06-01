@@ -2,21 +2,22 @@
 <block name="style">
 <link type="text/css" rel="stylesheet" href="__CSS__/atlas.css" />
 </block>
-<block name="header"> </block>
+<block name="header">
+    <include file="Public/nav"/>
+</block>
 <block name="body">
 <div class="col-md-9">
 	<div class="container">
 		<div class="row">
 			<div class="col-xs-12 common_block_border fourm-top">
 					<h4>
-						<if condition="$isEdit"> 编辑图文 <else /> 发表图文 </if>
+						<if condition="$isEdit"> 编辑尿点 <else /> 投稿尿点  </if>
 					</h4>
 					<hr />
 					
 					<div class="col-xs-8">
 						<section id="contents">
-							<form class="form-horizontal" role="form" method='post'>
-								
+							<form class="form-horizontal" role="form" method='post' action="{:U('Atlas/Index/doPost')}">
 								<div class="form-group">
 									<label class="col-md-2 control-label">内容</label>
 									<div class="col-md-10">
@@ -41,8 +42,8 @@
 											class="btn btn-large btn-primary pull-right"
 											id="submit-button">
 											<span class="glyphicon glyphicon-edit"></span> <span
-												id="submit-content"><if condition="$isEdit"> 编辑帖子
-												Ctrl+Enter <else /> 发表帖子 Ctrl+Enter </if></span>
+												id="submit-content"><if condition="$isEdit"> 编辑尿点
+												Ctrl+Enter <else /> 投稿尿点  Ctrl+Enter </if></span>
 										</button>
 									</div>
 								</div>
@@ -55,7 +56,7 @@
 					<div class="col-xs-4">
 						<h2>发布须知</h2>
 						<ol>
-							<li>真实有笑点，不含政治、色情、广告、个人隐私、歧视等内容。 </li>
+							<li>真实有笑点, 尿点，不含政治、色情、广告、个人隐私、歧视等内容。 </li>
 							<li>内容经过审核后发表。 </li>
 							<li>转载请注明出处。 </li>
 						</ol>
@@ -78,7 +79,6 @@
 <script src="__JS__/atlas.js"></script>
 <script>
         $("#upload_picture_cover").uploadify({
-        	"debug":true,
             "height": 30,
             "swf": "__STATIC__/uploadify/uploadify.swf",
             "fileObjName": "download",
