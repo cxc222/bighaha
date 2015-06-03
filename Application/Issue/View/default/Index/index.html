@@ -40,7 +40,7 @@
                         <ul class="operation clearfix">
                             <li><i class="glyphicon glyphicon-stats"></i>{$vo.view_count}</li>
                             <li>
-                                {:Hook('support',array('table'=>'issue_content','row'=>$vo['id'],'app'=>'Issue','uid'=>$vo['uid'],'jump'=>'no'))}
+                                {:Hook('support',array('table'=>'issue_content','row'=>$vo['id'],'app'=>'Issue','uid'=>$vo['uid'],'jump'=>'issue/index/issuecontentdetail'))}
                             </li>
                             <li><i class="glyphicon glyphicon-comment"></i>{$vo.reply_count}</li>
                         </ul>

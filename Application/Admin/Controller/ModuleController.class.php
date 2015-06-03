@@ -187,7 +187,7 @@ class ModuleController extends AdminController
 
                 $this->success('安装模块成功。', U('lists'));
             } else {
-                $this->error('安装模块失败。' . $res['error_code']);
+                $this->error('安装模块失败。' .$this->moduleModel->getError());
             }
 
 

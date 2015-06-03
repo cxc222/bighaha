@@ -1,4 +1,4 @@
-<div class="col-xs-4"style="padding: 0px">{:Hook('support',array('table'=>'weibo','row'=>$weibo['id'],'app'=>'Weibo','uid'=>$weibo['uid']))}</div>
+<div class="col-xs-4"style="padding: 0px">{:Hook('support',array('table'=>'weibo','row'=>$weibo['id'],'app'=>'Weibo','uid'=>$weibo['uid'],'jump'=>'weibo/index/weibodetail'))}</div>
 
 <php>$sourseId =$weibo['data']['sourseId']?$weibo['data']['sourseId']:$weibo['id']; </php>
 <a title="转发"  data-role="send_repost"  href="{:U('Weibo/Index/sendrepost',array('sourseId'=>$sourseId,'weiboId'=>$weibo['id']))}">转发 {$weibo.repost_count}</a>

@@ -17,6 +17,7 @@ class BaseController extends Controller
     public function _initialize()
     {
 
+
         if (is_login()) {
             $sub_menu['left'][] = array('tab' => 'my', 'title' => "我的" . $this->MODULE_ALIAS, 'href' => is_login() ? U('group/index/my') : "javascript:toast.error('登录后才能操作')");
         } else {
@@ -30,7 +31,7 @@ class BaseController extends Controller
             ));
         $sub_menu['right'] =
             array(
-                array('tab' => 'create', 'title' => '创建' . $this->MODULE_ALIAS, 'href' => is_login() ? U('group/index/create') : "javascript:toast.error('登录后才能操作')"),
+                array('tab' => 'create', 'title' => '创建' . $this->MODULE_ALIAS, 'href' => check_auth('Group/Index/addGroup',-1) ? U('group/index/create') : "javascript:toast.error('您无添加群组权限')"),
             );
 
         $this->assign('sub_menu', $sub_menu);

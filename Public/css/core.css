@@ -670,9 +670,6 @@ body {
   word-break: break-word;
   background: #f4f6f8;
 }
-.nav > li {
-  float: left;
-}
 .nav-stacked > li {
   float: none;
 }
@@ -1432,6 +1429,13 @@ General list for item with image
   background: #4f8ad0;
   color: #ffffff;
 }
+#sub_nav .nav > li {
+  float: left;
+}
+#sub_nav .navbar-default .navbar-nav > li > a:hover,
+#sub_nav .navbar-default .navbar-nav > li > a:focus {
+  background: none;
+}
 #sub_nav .logo {
   margin-left: 15px;
   margin-right: 30px;
@@ -1538,6 +1542,9 @@ General list for item with image
 #nav_bar .logo {
   padding: 0 20px 0 0;
   line-height: 50px;
+}
+#nav_bar .nav > li {
+  float: left;
 }
 /*导航栏end*/
 /*底部栏*/

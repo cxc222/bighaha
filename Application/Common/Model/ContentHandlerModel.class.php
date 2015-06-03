@@ -21,7 +21,7 @@ class ContentHandlerModel
     /**处理@
      * @auth 陈一枭
      */
-    public function handleAtWho($content, $url = '', $app_name = '', $escap_first = false)
+    public function handleAtWho($content, $url = '' ,$args=array(), $app_name = '', $escap_first = false)
     {
         $uids = get_at_uids($content);
 

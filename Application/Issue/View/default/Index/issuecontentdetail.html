@@ -24,7 +24,7 @@
                     <div class="col-md-8">
                         <ul class="operation clearfix">
                             <li><i class="glyphicon glyphicon-stats"></i>{$content.view_count}</li>
-                            <li>{:Hook('support',array('table'=>'issue_content','row'=>$content['id'],'app'=>'Issue','uid'=>$content['uid'],'jump'=>'no'))}</li>
+                            <li>{:Hook('support',array('table'=>'issue_content','row'=>$content['id'],'app'=>'Issue','uid'=>$content['uid'],'jump'=>'issue/index/issuecontentdetail'))}</li>
                             <li><i class="glyphicon glyphicon-comment"></i>{$content.reply_count}</li>
                         </ul>
 

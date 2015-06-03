@@ -84,11 +84,11 @@
                                                 <else/>
                                                 <volist name="unreadMessage" id="message">
                                                     <li>
-                                                        <a data-url="{$message.url}"
+                                                        <a data-url="{$message.content.web_url}"
                                                            onclick="Notify.readMessage(this,{$message.id})">
                                                            <h3 class="margin-top-0"> <i class="icon-bell"></i>
-                                                            {$message.title}</h3>
-                                                            <p> {$message.content}</p>
+                                                            {$message.content.title}</h3>
+                                                            <p> {$message.content.content}</p>
                                                         <span class="time">
 
                                                          {$message.ctime}

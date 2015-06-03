@@ -13,23 +13,24 @@ class CheckInController extends AddonsController
         if (!is_login()) {
             $this->error('请先登陆！');
         }
-        $time = get_some_day(0);
-        $uid = is_login();
-        $model = D('Addons://CheckIn/CheckIn');
-        $memberModel = D('Member');
-        $check = $model->getCheck($uid);
-        if (!$check) {
-            $model->addCheck($uid);
-            $memberModel->where(array('uid' => $uid))->setInc('total_check');
-            $model->checkYesterday($uid);
-            clean_query_user_cache($uid, array('con_check', 'total_check'));
-            S('check_rank_today_' . $time, null);
-            S('check_rank_con_' . $time, null);
-            S('check_rank_total_' . $time, null);
-            $this->success('签到成功');
-        } else {
-            $this->error('已经签到了！');
+
+        $name = get_addon_class('CheckIn');
+        $class = new $name();
+
+        $config = $class->getConfig();
+        if(empty($config['action'])){
+            $res = $class->doCheckIn();
+            if($res){
+                $this->success('签到成功');
+            }else{
+                $this->error('已经签到了！');
+            }
+        }else{
+            $action_info = M('Action')->getByName($config['action']);
+            $this->error('只支持['.$action_info['title'].']来签到！');
         }
+
+
     }
 
 
@@ -62,7 +63,6 @@ class CheckInController extends AddonsController
                 $val['status'] = '<span>已签到 ' . friendlyDate($val['create_time']) . '</span>';
                 $user = query_user(array('uid', 'nickname', 'total_check', 'con_check'), $val['uid']);
                 $val = array_merge($val, $user);
-
             }
             unset($key, $val);
 

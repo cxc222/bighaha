@@ -29,7 +29,7 @@ $(function () {
     $(document).scroll(function () {
         var left = '-' + $(window).scrollLeft() + 'px';
         $('#nav_bar').css('left', left);
-        $('#sub_nav').css('left',left);
+        $('#sub_nav').css('left', left);
     });
 });
 
@@ -201,27 +201,17 @@ function checkMessage() {
             if (count == 0) {
                 $('#nav_message').html('');
             }
+
             paly_ios_sound();
+
             for (var index in msg.messages) {
-
-                tip_message(msg['messages'][index]['content'] + '<div style="text-align: right"> ' + msg['messages'][index]['ctime'] + '</div>', msg['messages'][index]['title']);
-                //  var url=msg[index]['url']===''?U('') //设置默认跳转到消息中心
-
-                var new_html = $('<span><li><a data-url="' + msg['messages'][index]['url'] + '"\
-                onclick="Notify.readMessage(this,' + msg['messages'][index]['id'] + ')">\
-                <h3 class="margin-top-0"> <i class="icon-bell"></i>\
-                ' + msg['messages'][index]['title'] + '</h3>\
-            <p> ' + msg['messages'][index]['content'] + '</p>\
-        <span class="time">\
-        ' + msg['messages'][index]['ctime'] + '\
-    </span>\
-    </a></li></span>');
-                /*var new_html = $('<span><li><a data-url="' + msg['messages'][index]['url'] + '"' + 'onclick="Notify.readMessage(this,' + msg['messages'][index]['id'] + ')"><i class="icon-bell"></i> ' +
-                 msg['messages'][index]['title'] + '<br/><span class="time">' + msg['messages'][index]['ctime'] +
-                 '</span> </a></li></span>');*/
-                $('#nav_message').prepend(new_html.html());
-
-
+                var message = msg['messages'];
+                tip_message(message[index]['content']['content'] + '<div style="text-align: right"> ' + message[index]['ctime'] + '</div>', message[index]['content']['title']);
+                 var html = '<li><a data-url="' + message[index]['content']['web_url'] + '" onclick="Notify.readMessage(this,' + message[index]['id'] + ')">' +
+                    '<h3 class="margin-top-0"><i class="icon-bell"></i>' + message[index]['content']['title'] + '</h3>' +
+                    '<p>' + message[index]['content']['content'] + '</p> ' +
+                    '<span class="time">' + message[index]['ctime'] + '</span></a></li>';
+                $('#nav_message').prepend(html);
             }
 
             $hint_count.text(count + msg.messages.length);

@@ -61,7 +61,6 @@ SQL
     }
 
 
-
     public function checkIn($param)
     {
         $model = $this->checkInModel();
@@ -124,6 +123,46 @@ SQL
         }
         $this->assign('day', date('Y.m.d'));
         $this->assign('week', $week);
+
+    }
+
+
+    public function doCheckIn()
+    {
+        $time = get_some_day(0);
+        $uid = is_login();
+        $model = $this->checkInModel();
+        $memberModel = D('Member');
+        $check = $model->getCheck($uid);
+        if (!$check) {
+            $model->addCheck($uid);
+            $memberModel->where(array('uid' => $uid))->setInc('total_check');
+            $model->checkYesterday($uid);
+            clean_query_user_cache($uid, array('con_check', 'total_check'));
+            S('check_rank_today_' . $time, null);
+            S('check_rank_con_' . $time, null);
+            S('check_rank_total_' . $time, null);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
+    public function handleAction($param)
+    {
+        $config = $this->getConfig();
+        if (!empty($config['action'])) {
+            $action_info = M('Action')->getByName($config['action']);
+            if ($action_info['id'] == $param['action_id']) {
+                $res = $this->doCheckIn();
+                if($res){
+                    $param['log_score'] .= '签到成功！';
+                    return $res;
+                }
+            }
+        }
+        return false;
 
     }
 

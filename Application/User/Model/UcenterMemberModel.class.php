@@ -602,7 +602,6 @@ class UcenterMemberModel extends Model
      */
     public function addSyncData()
     {
-
         $data['email'] = $this->rand_email();
         $data['password'] = create_rand(10);
         $data['type'] = 2;  // 视作用邮箱注册

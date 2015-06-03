@@ -42,8 +42,10 @@ class ForumPostReplyModel extends Model
         $post = $postModel->find($post_id);
         D('Forum')->where(array('id' => $post['forum_id']))->setField('last_reply_time', time());
 
-        $url = $this->sendReplyMessage(is_login(), $post_id, $content, $result);
-        $this->handleAt($content, $url);
+        $pageCount = $this->sendReplyMessage(is_login(), $post_id, $content, $result);
+
+        $this->handleAt($content, 'Forum/Index/detail#'.$result, array('id' => $post_id, 'page' => $pageCount));
+
 
         //返回结果
         return $result;
@@ -76,6 +78,7 @@ class ForumPostReplyModel extends Model
         $title = $user['nickname'] . '回复了您的帖子。';
         $content = '回复内容：' . mb_substr(op_t($content), 0, 20);
         D('Message')->sendMessage($post['uid'], $title, $content, 'Forum/Index/detail#'.$reply_id, array('id' => $post_id, 'page' => $pageCount) , $uid, 2);
+        return $pageCount;
     }
 
     public function getReplyList($map, $order, $page, $limit)

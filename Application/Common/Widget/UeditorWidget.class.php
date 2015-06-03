@@ -6,7 +6,7 @@ use Think\Controller;
 class UeditorWidget extends Controller
 {
 
-    public function editor($id = 'myeditor', $name = 'content',$default='',$width='100%',$height='200px',$config='',$style='')
+    public function editor($id = 'myeditor', $name = 'content',$default='',$width='100%',$height='200px',$config='',$style='',$param='')
     {
         $this->assign('id',$id);
         $this->assign('name',$name);
@@ -26,6 +26,7 @@ class UeditorWidget extends Controller
         is_bool(strpos($height,'%')) && $config.=',initialFrameHeight:'.str_replace('px','',$height);
         $config.=',autoHeightEnabled: false';
         $this->assign('config',$config);
+        $this->assign('param',$param);
         $this->display(T('Application://Common@Widget/ueditor'));
     }
 

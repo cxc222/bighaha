@@ -364,7 +364,6 @@ class IndexController extends BaseController
         $r = 10;
         $post = D('GroupPost')->getPost($aId);
 
-
         $post['group'] = D('Group')->getGroup($post['group_id']);
         $post['content'] = D('ContentHandler')->displayHtmlContent($post['content']);
         $post['content'] = limit_picture_count($post['content']);
@@ -433,6 +432,8 @@ class IndexController extends BaseController
         $aPostId = I('post.post_id', 0, 'intval');
         $aGroupId = I('post.group_id', 0, 'intval');
         $aTitle = I('post.title', '', 'text');
+
+
         $aContent = I('post.content', '', 'filter_content');
         $aCategory = I('post.category', 0, 'intval');
 
@@ -814,7 +815,7 @@ class IndexController extends BaseController
         $dynamic['row_id'] = $result;
         D('GroupDynamic')->addDynamic($dynamic);
         //增加活跃度
-        $group_id = $this->getGroupIdByPost($aPostId);
+
         M('Group')->where(array('id' => $group_id))->setInc('activity');
         M('GroupPost')->where(array('id' => $data['post_id']))->setInc('reply_count');
         M('GroupMember')->where(array('group_id' => $group_id, 'uid' => is_login()))->setInc('activity');

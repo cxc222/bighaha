@@ -558,7 +558,7 @@ class AdminConfigBuilder extends AdminBuilder
     public function keyDefault($key, $value)
     {
         $data = $this->_data;
-        $data[$key] = $data[$key]!=null ? $data[$key] : $value;
+        $data[$key] = $data[$key]!==null ? $data[$key] : $value;
         $this->_data = $data;
         return $this;
     }

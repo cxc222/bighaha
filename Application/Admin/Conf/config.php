@@ -53,11 +53,13 @@ return array(
     'TMPL_PARSE_STRING' => array(
         '__STATIC__' => __ROOT__ . '/Public/static',
         '__ADDONS__' => __ROOT__ . '/Public/' . MODULE_NAME . '/Addons',
-        '__IMG__' =>  __ROOT__ . '/Application/' . MODULE_NAME . '/Static/images',
-        '__CSS__' =>  __ROOT__ . '/Application/' . MODULE_NAME . '/Static/css',
-        '__JS__' =>  __ROOT__ . '/Application/' . MODULE_NAME . '/Static/js',
-        '__ZUI__' =>  __ROOT__ . '/Application/' . MODULE_NAME . '/Static/zui'
+        '__IMG__' => __ROOT__ . '/Application/' . MODULE_NAME . '/Static/images',
+        '__CSS__' => __ROOT__ . '/Application/' . MODULE_NAME . '/Static/css',
+        '__JS__' => __ROOT__ . '/Application/' . MODULE_NAME . '/Static/js',
+        '__ZUI__' => __ROOT__ . '/Application/' . MODULE_NAME . '/Static/zui',
+        '__CLOUD__' => 'http://v2.opensns.cn',
     ),
+    '__CLOUD__'=>'http://v2.opensns.cn',
 
     /* SESSION 和 COOKIE 配置 */
     'SESSION_PREFIX' => 'onethink_admin', //session前缀

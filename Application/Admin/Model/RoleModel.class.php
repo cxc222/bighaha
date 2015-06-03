@@ -97,7 +97,7 @@ class RoleModel extends Model
      * @return mixed 结果列表
      * @author 郑钟良<zzl@ourstu.com>
      */
-    public function selectByMap($map=array(),$order,$fields=null){
+    public function selectByMap($map=array(),$order=null,$fields=null){
         $order=$order?$order:"id asc";
         if($fields==null){
             $list=$this->where($map)->order($order)->select();

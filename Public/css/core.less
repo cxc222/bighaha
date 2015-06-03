@@ -19,9 +19,7 @@ body {
   word-break: break-word;
   background: #f4f6f8;
 }
-.nav > li{
-  float: left;
-}
+
 .nav-stacked > li{
   float: none;
 }
@@ -886,7 +884,12 @@ General list for item with image
 }
 /*悬浮样式end*/
 #sub_nav {
-
+  .nav > li{
+    float: left;
+  }
+  .navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus{
+    background:none;
+  }
   position: fixed;
   z-index: 998;
   top: 50px;
@@ -1011,6 +1014,9 @@ General list for item with image
     line-height: 50px;
     img {
     }
+  }
+  .nav > li{
+    float: left;
   }
 }
 

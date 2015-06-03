@@ -14,6 +14,6 @@ class OperationController extends AdminController
 
     public function index()
     {
-        $this->redirect('Message/index');
+        $this->redirect('Message/userList');
     }
 }

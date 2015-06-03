@@ -110,32 +110,10 @@ class ThemeController extends AdminController{
      */
     public function setTheme()
     {
+
         $aTheme = I('post.theme', 'default', 'text');
-        $now_them=D('Config')->where(array('name' => '_THEME_NOW_THEME'))->find();
-        if ($now_them) {
-            if($now_them['value']==$aTheme){
-                $res=1;
-            }else{
-                $res = D('Config')->where(array('name' => '_THEME_NOW_THEME'))->setField('value', $aTheme);
-            }
-        } else {
-            $config['name'] = '_THEME_NOW_THEME';
-            $config['type'] = 0;
-            $config['title'] = '';
-            $config['group'] = 0;
-            $config['extra'] = '';
-            $config['remark'] = '';
-            $config['create_time'] = time();
-            $config['update_time'] = time();
-            $config['status'] = 1;
-            $config['value'] = $aTheme;
-            $config['sort'] = 0;
-            $res = D('Config')->add($config);
-        }
-        if ($res) {
-            S('conf_THEME_NOW_THEME',$aTheme);//重设modC的session
-            cookie('TO_LOOK_THEME', $aTheme, array('prefix' => 'OSV2'));//重设cookie
-            clean_cache('./Runtime/Cache/');//清除模板缓存
+        $themeModel = D('Common/Theme');
+        if ($themeModel->setTheme($aTheme)) {
             $result['info'] = '设置主题成功！';
             $result['status'] = 1;
         } else {

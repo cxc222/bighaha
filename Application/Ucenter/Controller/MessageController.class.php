@@ -42,6 +42,7 @@ class MessageController extends BaseController
         $totalCount = D('Message')->where($map)->order('create_time desc')->count(); //用于分页
 
         foreach ($messages as &$v) {
+            $v['content'] = D('Common/Message')->getContent($v['content_id']);
             if ($v['from_uid'] != 0) {
                 $v['from_user'] = query_user(array('username', 'space_url', 'avatar64', 'space_link'), $v['from_uid']);
             }

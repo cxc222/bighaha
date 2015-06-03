@@ -110,7 +110,7 @@
 
                 <div style="padding: 15px"></div>
                 <div class="col-md-12 post_title">
-                    <h2>{$post.title|op_t}
+                    <h2>{$post.title}
                         <if condition="$post['is_top'] eq 1"><img src="__IMG__/is_top.png"></if>
                         <if condition="$post['digest'] eq 1"><img src="__IMG__/digest.png"></if>
                     </h2>
@@ -121,7 +121,7 @@
                            class="text-primary">{$user.nickname}</a> {$post.create_time|time_format} 发表在<a
                                 href="{:U('Group/Index/group',array('id'=>$post['group_id']))}">【{$post.group.title}】</a>
                         <a href="{:U('group',array('cate'=>$post['cate_id'],'id'=>$post['group_id']))}">{$post.cate_id|get_post_category}</a>
-                        {:Hook('support',array('app'=>'Group',table=>'post','row'=>$post['id'],'uid'=>$post['uid'],'jump'=>'no'))}
+                        {:Hook('support',array('app'=>'Group',table=>'post','row'=>$post['id'],'uid'=>$post['uid'],'jump'=>'group/index/detail'))}
                         {:W('Weibo/Share/shareBtn',array('param'=>array('app'=>'Group','model'=>'GroupPost','method'=>'getPost','id'=>$post['id'],'img'=>get_pic($post['content']),'from'=>'群组','site_link'=>U('group/index/detail',array('id'=>$post['id']))),'text'=>'分享'))}
 
                     </div>

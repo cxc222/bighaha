@@ -73,7 +73,7 @@
                             <div class="small sub_title">   <br/>
                                 <a href="{$user.space_url}" ucard="{$user.uid}"
                                    class="text-primary">{$user.nickname}</a>  {$post.create_time|time_format} 发表在<a
-                                    href="{:U('Forum/Index/forum',array('id'=>$post['forum_id']))}">【{$post.forum.title}】</a>  {:Hook('support',array('app'=>'Forum',table=>'post','row'=>$post['id'],'uid'=>$post['uid'],'jump'=>'no'))}
+                                    href="{:U('Forum/Index/forum',array('id'=>$post['forum_id']))}">【{$post.forum.title}】</a>  {:Hook('support',array('app'=>'Forum',table=>'post','row'=>$post['id'],'uid'=>$post['uid'],'jump'=>'forum/index/detail'))}
                             </div>
                         </div>
 

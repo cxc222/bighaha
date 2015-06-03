@@ -120,8 +120,7 @@ class ForumLzlReplyModel extends Model
         $count = D('ForumLzlReply')->where($map)->count();
         $pageCount = ceil($count / $limit);
         //增加微博的评论数量
-        $url = U('Forum/Index/detail', array('id' => $post_id, 'page' => $p, 'sr' => $to_f_reply_id, 'sp' => $pageCount)) . '#' . $to_f_reply_id;
-        D('ContentHandler')->handleAtWho($content, $url,'',1);
+        D('ContentHandler')->handleAtWho($content, 'Forum/Index/detail#'.$to_f_reply_id,array('id' => $post_id, 'page' => $p, 'sr' => $to_f_reply_id, 'sp' => $pageCount) ,'',1);
     }
 
 

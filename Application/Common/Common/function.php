@@ -825,6 +825,9 @@ function parse_action($action = null, $self)
 function execute_action($rules = false, $action_id = null, $user_id = null, $log_id = null)
 {
     $log_score = '';
+
+    hook('handleAction',array('action_id'=>$action_id,'user_id'=>$user_id,'log_id'=>$log_id,'log_score'=>&$log_score));
+
     if (!$rules || empty($action_id) || empty($user_id)) {
         return false;
     }
@@ -1188,7 +1191,7 @@ function get_list_count($category, $status = 1)
  * @param string text 文本内容
  * @return string 处理后内容
  */
-function op_t($text, $addslanshes = true)
+function op_t($text, $addslanshes = false)
 {
     $text = nl2br($text);
     $text = real_strip_tags($text);
@@ -1202,7 +1205,7 @@ function op_t($text, $addslanshes = true)
  * @param $text
  * @auth 陈一枭
  */
-function text($text, $addslanshes = true)
+function text($text, $addslanshes = false)
 {
     return op_t($text, $addslanshes);
 }
@@ -1580,7 +1583,12 @@ function check_is_in_config($key,$config){
 
 }
 
-
+/**
+ * convert_url_query  转换url参数为数组
+ * @param $query
+ * @return array|string
+ * @author:xjw129xjt(肖骏涛) xjt@ourstu.com
+ */
 function convert_url_query($query)
 {
     if(!empty($query)){
@@ -1598,7 +1606,12 @@ function convert_url_query($query)
 }
 
 
-
+/**
+ * get_ip_lookup  获取ip地址所在的区域
+ * @param null $ip
+ * @return bool|mixed
+ * @author:xjw129xjt(肖骏涛) xjt@ourstu.com
+ */
 function get_ip_lookup($ip=null){
     if(empty($ip)){
         $ip = get_client_ip(0);
@@ -1657,4 +1670,19 @@ function array_search_key($array, $key, $value)
         }
     }
     return false;
+}
+
+
+/**
+ * array_delete  删除数组中的某个值
+ * @param $array
+ * @param $value
+ * @return mixed
+ * @author:xjw129xjt(肖骏涛) xjt@ourstu.com
+ */
+function array_delete($array,$value){
+    $key = array_search($value, $array);
+    if ($key !== false)
+        array_splice($array, $key, 1);
+    return $array;
 }

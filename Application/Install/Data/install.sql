@@ -4378,7 +4378,8 @@ INSERT INTO `ocenter_hooks` (`id`, `name`, `description`, `type`, `update_time`,
 (62, 'dealPicture', '上传图片处理', 2, 1417139975, ''),
 (63, 'ucenterSideMenu', '用户中心左侧菜单', 1, 1417161205, ''),
 (64, 'afterTop', '顶部导航之后的钩子，调用公告等', 1, 1429671392, ''),
-(65, 'report', '举报钩子', 1, 1429511732, 'Report');
+(65, 'report', '举报钩子', 1, 1429511732, 'Report'),
+(66, 'handleAction', '行为的额外操作', 2, 1433300260, 'CheckIn');
 
 DROP TABLE IF EXISTS `ocenter_invite`;
 CREATE TABLE IF NOT EXISTS `ocenter_invite` (
@@ -4617,7 +4618,7 @@ INSERT INTO `ocenter_menu` (`id`, `title`, `pid`, `sort`, `url`, `hide`, `tip`, 
 (102, 'SEO规则回收站', 74, 0, 'SEO/ruleTrash', 0, '', 'SEO规则', 0, '', ''),
 (103, '全部补丁', 74, 0, 'Admin/Update/quick', 0, '', '升级补丁', 0, '', ''),
 (104, '新增补丁', 74, 0, 'Admin/Update/addpack', 1, '', '升级补丁', 0, '', ''),
-(105, '云市场', 0, 10, 'Cloud/index', 0, '', '', 0, 'cloud', ''),
+(105, '云市场', 0, 100, 'Cloud/index', 0, '', '', 0, 'cloud', ''),
 (106, '模块安装', 105, 0, 'module/install', 1, '', '本地', 0, '', ''),
 (107, '模块管理', 105, 2, 'module/lists', 0, '', '本地', 0, '', ''),
 (108, '卸载模块', 105, 0, 'module/uninstall', 1, '', '本地', 0, '', ''),
@@ -4708,23 +4709,39 @@ INSERT INTO `ocenter_menu` (`id`, `title`, `pid`, `sort`, `url`, `hide`, `tip`, 
 (193, '设置置顶话题', 181, 0, 'Weibo/setTopicTop', 1, '', '', 0, '', 'Weibo'),
 (194, '删除话题', 181, 0, 'Weibo/delTopic', 1, '', '', 0, '', 'Weibo'),
 (195, '会员展示', 0, 22, 'People/config', 1, '', '', 0, '', 'People'),
-(196, '基本设置', 195, 0, 'People/config', 0, '', '配置', 0, '', 'People');
+(196, '基本设置', 195, 0, 'People/config', 0, '', '配置', 0, '', 'People'),
+(197, '运营', 0, 25, 'Operation/index', 0, '', '', 0, 'laptop', ''),
+(198, '群发消息用户列表', 197, 0, 'message/userList', 0, '', '群发消息', 0, '', ''),
+(199, '群发消息', 197, 0, 'message/sendMessage', 1, '', '群发消息', 0, '', ''),
+(200, '在线安装', 178, 0, 'Cloud/install', 1, '', '', 0, '', '');
+
 
 DROP TABLE IF EXISTS `ocenter_message`;
 CREATE TABLE IF NOT EXISTS `ocenter_message` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `content_id` int(11) NOT NULL,
   `from_uid` int(11) NOT NULL,
   `to_uid` int(11) NOT NULL,
-  `title` varchar(100) NOT NULL,
-  `content` text NOT NULL,
   `create_time` int(11) NOT NULL,
-  `type` tinyint(4) NOT NULL COMMENT '0系统消息,1用户消息,2应用消息',
   `is_read` tinyint(4) NOT NULL,
   `last_toast` int(11) NOT NULL,
-  `url` varchar(400) NOT NULL,
   `status` tinyint(4) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='thinkox新增消息表' AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='消息表' AUTO_INCREMENT=1 ;
+
+DROP TABLE IF EXISTS `ocenter_message_content`;
+CREATE TABLE IF NOT EXISTS `ocenter_message_content` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `from_id` int(11) NOT NULL,
+  `title` varchar(500) NOT NULL,
+  `content` text NOT NULL,
+  `url` varchar(100) NOT NULL,
+  `args` text NOT NULL,
+  `type` tinyint(11) NOT NULL,
+  `create_time` int(11) NOT NULL,
+  `status` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 DROP TABLE IF EXISTS `ocenter_module`;
 CREATE TABLE IF NOT EXISTS `ocenter_module` (

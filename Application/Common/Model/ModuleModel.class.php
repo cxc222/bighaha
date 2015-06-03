@@ -132,15 +132,15 @@ class ModuleModel extends Model
     public function install($id)
     {
         $log = '';
-        $aId = I('id', 0, 'intval');
-        if ($aId != 0) {
+        if ($id != 0) {
             $module = $this->find($id);
         } else {
             $aName = I('get.name', '');
-            $module =$this->getModule($aName);
+            $module = $this->getModule($aName);
         }
         if ($module['is_setup'] == 1) {
-            return array('error_code' => '模块已安装。');
+            $this->error = '模块已安装。';
+            return false;
         }
         if (file_exists(APP_PATH . '/' . $module['name'] . '/Info/guide.json')) {
             //如果存在guide.json
@@ -152,7 +152,7 @@ class ModuleModel extends Model
             if (!empty($menu)) {
                 $this->cleanMenus($module['name']);
                 if ($this->addMenus($menu[0]) == true) {
-                    $log .= '菜单成功安装;<br/>';
+                    $log .= '&nbsp;&nbsp;>菜单成功安装;<br/>';
                 }
             }
 
@@ -161,12 +161,12 @@ class ModuleModel extends Model
             if (!empty($auth_rule)) {
                 $this->cleanAuthRules($module['name']);
                 if ($this->addAuthRule($auth_rule)) {
-                    $log .= '权限成功导入。<br/>';
+                    $log .= '&nbsp;&nbsp;>权限成功导入。<br/>';
                 }
                 //设置默认的权限
                 $default_rule = json_decode($data['default_rule'], true);
                 if ($this->addDefaultRule($default_rule, $module['name'])) {
-                    $log .= '默认权限设置成功。<br/>';
+                    $log .= '&nbsp;&nbsp;>默认权限设置成功。<br/>';
                 }
             }
 
@@ -175,7 +175,7 @@ class ModuleModel extends Model
             if (!empty($action)) {
                 $this->cleanAction($module['name']);
                 if ($this->addAction($action)) {
-                    $log .= '行为成功导入。<br/>';
+                    $log .= '&nbsp;&nbsp;>行为成功导入。<br/>';
                 }
             }
 
@@ -183,21 +183,26 @@ class ModuleModel extends Model
             if (!empty($action_limit)) {
                 $this->cleanActionLimit($module['name']);
                 if ($this->addActionLimit($action_limit)) {
-                    $log .= '行为限制成功导入。<br/>';
+                    $log .= '&nbsp;&nbsp;>行为限制成功导入。<br/>';
                 }
             }
 
             if (file_exists(APP_PATH . '/' . $module['name'] . '/Info/install.sql')) {
                 $install_sql = APP_PATH . '/' . $module['name'] . '/Info/install.sql';
                 if (D()->executeSqlFile($install_sql) === true) {
-                    $log .= '模块数据添加成功。';
+                    $log .= '&nbsp;&nbsp;>模块数据添加成功。';
                 }
             }
         }
 
         $module['is_setup'] = 1;
-        $this->save($module);
+        $rs = $this->save($module);
+        if ($rs === false) {
+            $this->error = '模块信息修改失败。';
+            return false;
+        }
         $this->cleanModulesCache();//清除全站缓存
+        $this->error = $log;
         return true;
     }
 

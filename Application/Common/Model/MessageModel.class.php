@@ -17,13 +17,13 @@ class MessageModel extends Model
 
     /**
      * sendMessage   发送消息，屏蔽自己
-     * @param $to_uids  接收消息的用户们
-     * @param string $title  消息标题
-     * @param string $content  消息内容
-     * @param string $url   消息指向的路径，U函数的第一个参数
-     * @param array $url_args  消息链接的参数，U函数的第二个参数
-     * @param int $from_uid   发送消息的用户
-     * @param int $type  消息类型，0系统，1用户，2应用
+     * @param $to_uids 接收消息的用户们
+     * @param string $title 消息标题
+     * @param string $content 消息内容
+     * @param string $url 消息指向的路径，U函数的第一个参数
+     * @param array $url_args 消息链接的参数，U函数的第二个参数
+     * @param int $from_uid 发送消息的用户
+     * @param int $type 消息类型，0系统，1用户，2应用
      * @return bool
      * @author:xjw129xjt(肖骏涛) xjt@ourstu.com
      */
@@ -37,7 +37,7 @@ class MessageModel extends Model
         }
 
         if (count($to_uids) > 0) {
-            $this->sendMessageWithoutCheckSelf($to_uids, $title, $content, $url, $url_args, $from_uid, $type);
+            return $this->sendMessageWithoutCheckSelf($to_uids, $title, $content, $url, $url_args, $from_uid, $type);
         } else {
             return false;
         }
@@ -45,13 +45,13 @@ class MessageModel extends Model
 
     /**
      * sendMessageWithoutCheckSelf  发送消息，不屏蔽自己
-     * @param $to_uids    接收消息的用户们
-     * @param string $title   消息标题
-     * @param string $content  消息内容
-     * @param string $url   消息指向的路径，U函数的第一个参数
-     * @param array $url_args   消息链接的参数，U函数的第二个参数
-     * @param int $from_uid   发送消息的用户
-     * @param int $type  消息类型，0系统，1用户，2应用
+     * @param $to_uids 接收消息的用户们
+     * @param string $title 消息标题
+     * @param string $content 消息内容
+     * @param string $url 消息指向的路径，U函数的第一个参数
+     * @param array $url_args 消息链接的参数，U函数的第二个参数
+     * @param int $from_uid 发送消息的用户
+     * @param int $type 消息类型，0系统，1用户，2应用
      * @return bool
      * @author:xjw129xjt(肖骏涛) xjt@ourstu.com
      */
@@ -74,12 +74,12 @@ class MessageModel extends Model
 
     /**
      * addMessageContent  添加消息内容到表
-     * @param $from_uid   发送消息的用户
-     * @param $title     消息的标题
-     * @param $content   消息内容
-     * @param $url   消息指向的路径，U函数的第一个参数
-     * @param $url_args   消息链接的参数，U函数的第二个参数
-     * @param $type    消息类型，0系统，1用户，2应用
+     * @param $from_uid 发送消息的用户
+     * @param $title 消息的标题
+     * @param $content 消息内容
+     * @param $url 消息指向的路径，U函数的第一个参数
+     * @param $url_args 消息链接的参数，U函数的第二个参数
+     * @param $type 消息类型，0系统，1用户，2应用
      * @return mixed
      * @author:xjw129xjt(肖骏涛) xjt@ourstu.com
      */
@@ -89,7 +89,7 @@ class MessageModel extends Model
         $data_content['title'] = $title;
         $data_content['content'] = $content;
         $data_content['url'] = $url;
-        $data_content['args'] = json_encode($url_args);
+        $data_content['args'] = empty($url_args) ? '':json_encode($url_args);
         $data_content['type'] = $type;
         $data_content['create_time'] = time();
         $data_content['status'] = 1;
@@ -98,8 +98,49 @@ class MessageModel extends Model
     }
 
 
+    public function getContent($id)
+    {
+        $content = S('message_content_' . $id);
+        if (empty($content)) {
+            $content = D('message_content')->find($id);
+            if($content){
+                $content['args'] = json_decode($content['args'],true);
+                $content['args_json'] = json_encode($content['args']) ;
+                $content['web_url'] = is_bool(strpos($content['url'],'http://')) ? U($content['url'],$content['args']):$content['url'];
+            }
+            S('message_content_' . $id, $content, 60 * 60);
+        }
 
-    /*------------------------------------------超级华丽的分割线----------------------------------------------------------------------------*/
+        return $content;
+    }
+
+
+    /**取回全部未读,也没有提示过的信息
+     * @param $uid
+     * @return mixed
+     */
+    public function getHaventReadMeassageAndToasted($uid)
+    {
+        $messages = D('message')->where('to_uid=' . $uid . ' and  is_read=0  and last_toast!=0')->order('id desc')->limit(99999)->select();
+        foreach ($messages as &$v) {
+            $v['ctime'] = friendlyDate($v['create_time']);
+            $v['content'] = $this->getContent($v['content_id']);
+        }
+        unset($v);
+        return $messages;
+    }
+
+    public function readMessage($message_id)
+    {
+        return $this->where(array('id' => $message_id))->setField('is_read', 1);
+    }
+
+
+    public function setAllReaded($uid)
+    {
+        D('message')->where('to_uid=' . $uid . ' and  is_read=0')->setField('is_read', 1);
+    }
+
 
 
     /**获取全部没有提示过的消息
@@ -111,7 +152,7 @@ class MessageModel extends Model
         $messages = D('message')->where('to_uid=' . $uid . ' and  is_read=0  and last_toast=0')->order('id desc')->limit(99999)->select();
         foreach ($messages as &$v) {
             $v['ctime'] = friendlyDate($v['create_time']);
-            $v['content'] = op_t($v['content']);
+            $v['content'] = $this->getContent($v['content_id']);
         }
         unset($v);
         return $messages;
@@ -126,10 +167,6 @@ class MessageModel extends Model
         D('message')->where('to_uid=' . $uid . ' and  is_read=0 and last_toast=0')->setField('last_toast', $now);
     }
 
-    public function setAllReaded($uid)
-    {
-        D('message')->where('to_uid=' . $uid . ' and  is_read=0')->setField('is_read', 1);
-    }
 
 
     /**取回全部未读信息
@@ -141,30 +178,10 @@ class MessageModel extends Model
         $messages = D('message')->where('to_uid=' . $uid . ' and  is_read=0 ')->order('id desc')->limit(99999)->select();
         foreach ($messages as &$v) {
             $v['ctime'] = friendlyDate($v['create_time']);
-            $v['content'] = op_t($v['content']);
+            $v['content'] = $this->getContent($v['content_id']);
         }
         unset($v);
         return $messages;
     }
 
-    /**取回全部未读,也没有提示过的信息
-     * @param $uid
-     * @return mixed
-     */
-    public function getHaventReadMeassageAndToasted($uid)
-    {
-        $messages = D('message')->where('to_uid=' . $uid . ' and  is_read=0  and last_toast!=0')->order('id desc')->limit(99999)->select();
-        foreach ($messages as &$v) {
-            $v['ctime'] = friendlyDate($v['create_time']);
-            $v['content'] = op_t($v['content']);
-        }
-        unset($v);
-        return $messages;
-    }
-
-
-    public function readMessage($message_id)
-    {
-        return $this->where(array('id' => $message_id))->setField('is_read', 1);
-    }
 } 

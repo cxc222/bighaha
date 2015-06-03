@@ -69,7 +69,7 @@ class ForumPostModel extends Model {
      */
     private function handlerAt($content,$id)
     {
-        D('ContentHandler')->handleAtWho($content,U('Forum/Index/detail',array('id'=>$id)));
+        D('ContentHandler')->handleAtWho($content,'Forum/Index/detail',array('id'=>$id));
 
     }
 
