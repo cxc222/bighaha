@@ -30,7 +30,7 @@
 					<p id="title-{$detail.id}" class="web_size">{$detail.content|parseWeiboContent}</p>
 					<p>
 						<img id="pic-{$detail.id}"
-							data-original="{$detail.image_id|getAtlasThumbImageById=720}" class="img-responsive lazy">
+							data-original="{$detail.image_id|getAtlasThumbImageById=720}" src="__PUBLIC__/js/ext/lazyload/load.gif" class="img-responsive lazy">
 							<noscript>
 								<img src="{$detail.image_id|getAtlasThumbImageById=720}" class="img-responsive">
 							</noscript>
