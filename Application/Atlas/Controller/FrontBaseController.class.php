@@ -41,7 +41,6 @@ class FrontBaseController extends Controller{
 				)
 		);
 		$this->assign('sub_menu', $sub_menu);
-		$this->setTitle('图集');
 	}
 	
 	
