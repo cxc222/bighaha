@@ -1,4 +1,4 @@
-<a href="bighh.com">笑尿了</a>官网
+<a href="http://www.bighh.com">笑尿了</a>官网
 
 基于Apache2.0的开源协议，对商业友好，永久开源免费。
 
