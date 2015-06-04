@@ -9,13 +9,13 @@
 
 namespace Group\Widget;
 
-use Think\Action;
+use Think\Controller;
 
 /**
  * 活跃的会员widget
  * 用于动态调用分类信息
  */
-class HotPeopleWidget extends Action
+class HotPeopleWidget extends Controller
 {
 
     /* 显示指定分类的同级分类或子分类列表 */

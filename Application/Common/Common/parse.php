@@ -6,68 +6,6 @@
  * Time: 2:46 PM
  */
 
-function parse_weibo_content($content)
-{
-    $content = shorten_white_space($content);
-    $content = op_t($content);
-    $content = parse_url_link($content);
-
-    $content = parse_expression($content);
-    $content = parse_at_users($content);
-
-    $content = parseWeiboContent($content);
-
-    return $content;
-}
-
-
-function parseWeiboContent($content)
-{
-    hook('parseWeiboContent', array('content' => &$content));
-    return $content;
-
-}
-
-function parse_topic($content){
-    //找出话题
-    $topic = get_topic($content);
-
-    //将##替换成链接
-    foreach ($topic as $e) {
-        $tik = D('Weibo/Topic')->where(array('name' => $e))->find();
-
-        //没有这个话题的时候创建这个话题
-        if($tik){
-            //D('Weibo/Topic')->add(array('name'=> $e));
-            $space_url = U('Weibo/Topic/index',array('topk'=>urlencode($e)));
-            $content = str_replace("#$e#", "<a  href=\"$space_url\" target=\"_blank\">#$e# </a>", $content);
-        }
-    }
-
-    //返回替换的文本
-    return $content;
-}
-
-function get_topic($content){
-    //正则表达式匹配
-    $topic_pattern = "/#([^\\#|.]+)#/";
-    preg_match_all($topic_pattern, $content, $users);
-
-    //返回话题列表
-    return array_unique($users[1]);
-}
-
-function parse_comment_content($content)
-{
-    //就目前而言，评论内容和微博的格式是一样的。
-    return parse_weibo_content($content);
-}
-
-function shorten_white_space($content)
-{
-    $content = preg_replace('/\s+/', ' ', $content);
-    return $content;
-}
 
 function parse_expression($content)
 {
@@ -80,10 +18,10 @@ function parse_expression_callback($data)
     if (preg_match("/#.+#/i", $data[0])) {
         return $data[0];
     }
-    $allexpression = D('Common/Expression')->getAll();
-/*    if(!stristr($data[0],":")){
-        $data[0] = str_replace(']',':miniblog]',$data[0]);
-    }*/
+    $allexpression = D('Core/Expression')->getAll();
+    /*    if(!stristr($data[0],":")){
+            $data[0] = str_replace(']',':miniblog]',$data[0]);
+        }*/
     $info = $allexpression[$data[0]];
     if ($info) {
         return preg_replace("/\\[.+?\\]/i", "<img src='" . $info['src'] . "' />", $data[0]);
@@ -91,55 +29,6 @@ function parse_expression_callback($data)
         return $data[0];
     }
 }
-
-function parse_at_users($content)
-{
-    $content = $content . ' ';
-    //找出被AT的用户
-    $at_usernames = get_at_usernames($content);
-
-    //将@用户替换成链接
-    foreach ($at_usernames as $e) {
-        $user = D('Member')->where(array('nickname' => $e))->find();
-        if ($user) {
-            $query_user = query_user(array('space_url'), $user['uid']);
-            $content = str_replace("@$e", "<a ucard=\"$user[uid]\" href=\"$query_user[space_url]\">@$e </a>", $content);
-        }
-    }
-
-    //返回替换的文本
-    return $content;
-}
-
-function get_at_usernames($content)
-{
-    //正则表达式匹配
-    $user_pattern = "/\\@([^\\#|\\s|^\\<]+)/";
-    preg_match_all($user_pattern, $content, $users);
-
-    //返回用户名列表
-    return array_unique($users[1]);
-}
-
-function get_at_uids($content)
-{
-    $usernames = get_at_usernames($content);
-    $result = array();
-    foreach ($usernames as $username) {
-        $user = D('Member')->where(array('nickname' => op_t($username)))->field('uid')->find();
-        $result[] = $user['uid'];
-    }
-    return $result;
-}
-
-function parse_url_link($content)
-{
-    $content = preg_replace("#((http|https|ftp)://(\S*?\.\S*?))(\s|\;|\)|\]|\[|\{|\}|,|\"|'|:|\<|$|\.\s)#ie",
-        "'<a href=\"$1\" target=\"_blank\"><i class=\"glyphicon glyphicon-link\" title=\"$1\"></i></a>$4'", $content
-    );
-    return $content;
-}
-
 
 /**
  * 限制字符串长度
@@ -260,12 +149,13 @@ function closetags($html)
  * @return bool
  * @author:xjw129xjt xjt@ourstu.com
  */
-function checkImageSrc($file_path){
-      if(!is_bool(strpos($file_path,'http://'))){
-        $header  = tox_get_headers($file_path);
-        $res = strpos($header['Content-Type'],'image/');
-        return is_bool($res)?false:true;
-    }else{
+function checkImageSrc($file_path)
+{
+    if (!is_bool(strpos($file_path, 'http://'))) {
+        $header = curl_get_headers($file_path);
+        $res = strpos($header['Content-Type'], 'image/');
+        return is_bool($res) ? false : true;
+    } else {
         return true;
     }
 }
@@ -276,13 +166,14 @@ function checkImageSrc($file_path){
  * @return mixed
  * @author:xjw129xjt xjt@ourstu.com
  */
-function filterImage($content){
+function filterImage($content)
+{
     preg_match_all("/<[img|IMG].*?src=[\'|\"](.*?(?:[\.gif|\.jpg|\.png]))[\'|\"].*?[\/]?>/", $content, $arr); //匹配所有的图片
-    if($arr[1]){
-        foreach($arr[1] as $v){
+    if ($arr[1]) {
+        foreach ($arr[1] as $v) {
             $check = checkImageSrc($v);
-            if(!$check){
-                $content = str_replace($v,'',$content);
+            if (!$check) {
+                $content = str_replace($v, '', $content);
             }
         }
     }
@@ -296,14 +187,15 @@ function filterImage($content){
  * @return bool
  * @author:xjw129xjt xjt@ourstu.com
  */
-function checkHtmlTags($content,$tags = array()){
-    $tags = is_array($tags)?$tags:array($tags);
-    if(empty($tags)){
-        $tags = array('script','!DOCTYPE','meta','html','head','title','body','base','basefont','noscript','applet','object','param','style','frame','frameset','noframes','iframe');
+function checkHtmlTags($content, $tags = array())
+{
+    $tags = is_array($tags) ? $tags : array($tags);
+    if (empty($tags)) {
+        $tags = array('script', '!DOCTYPE', 'meta', 'html', 'head', 'title', 'body', 'base', 'basefont', 'noscript', 'applet', 'object', 'param', 'style', 'frame', 'frameset', 'noframes', 'iframe');
     }
-    foreach($tags as $v){
-        $res = strpos($content,'<'.$v);
-        if( !is_bool($res) ){
+    foreach ($tags as $v) {
+        $res = strpos($content, '<' . $v);
+        if (!is_bool($res)) {
             return true;
         }
     }
@@ -316,16 +208,40 @@ function checkHtmlTags($content,$tags = array()){
  * @return mixed
  * @author:xjw129xjt xjt@ourstu.com
  */
-function filterBase64($content){
+function filterBase64($content)
+{
     preg_match_all("/data:.*?,(.*?)\"/", $content, $arr); //匹配base64编码
-    if($arr[1]){
-        foreach($arr[1] as $v){
+    if ($arr[1]) {
+        foreach ($arr[1] as $v) {
             $base64_decode = base64_decode($v);
             $check = checkHtmlTags($base64_decode);
-            if($check){
-                $content = str_replace($v,'',$content);
+            if ($check) {
+                $content = str_replace($v, '', $content);
             }
         }
     }
+    return $content;
+}
+
+/**
+ * filter_video  过滤视频
+ * @param $content
+ * @return mixed
+ * @author:xjw129xjt(肖骏涛) xjt@ourstu.com
+ */
+function filter_video($content)
+{
+    $content = D('ContentHandler')->filterVideo($content);
+    return $content;
+}
+
+/**
+ * filter_content  过滤内容，主要用于过滤视频
+ * @param $content
+ * @return mixed
+ * @author:xjw129xjt(肖骏涛) xjt@ourstu.com
+ */
+function filter_content($content){
+    $content = D('ContentHandler')->filterHtmlContent($content);
     return $content;
 }

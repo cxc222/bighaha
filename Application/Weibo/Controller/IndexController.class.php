@@ -1,384 +1,506 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: caipeichao
- * Date: 14-3-10
- * Time: PM9:14
- */
-
 namespace Weibo\Controller;
 
 use Think\Controller;
 use Think\Hook;
-use Weibo\Api\WeiboApi;
-use Think\Exception;
-use Common\Exception\ApiException;
 
-class IndexController extends Controller
+class IndexController extends BaseController
 {
     /**
-     * 业务逻辑都放在 WeiboApi 中
-     * @var
+     * index   微博首页
+     * @author:xjw129xjt(肖骏涛) xjt@ourstu.com
      */
-    private $weiboApi;
-
-    public function _initialize()
+    public function index()
     {
-        $this->weiboApi = new WeiboApi();
-    }
+        $this->assign('tab', 'index');
 
-    public function index($uid = 0, $page = 1, $lastId = 0)
-    {
-        $page = intval($page);
-        //载入第一页微博
-        if ($uid != 0) {
-            $result = $this->weiboApi->listAllWeibo($page, 30, array('uid' => $uid), 1, $lastId);
+        $tab_config = get_kanban_config('WEIBO_DEFAULT_TAB', 'enable', array('all', 'concerned', 'hot'));
+
+        if (!is_login()) {
+            $_key = array_search('concerned', $tab_config);
+            unset($tab_config[$_key]);
+        }
+
+        //获取参数
+        $aType = I('get.type', reset($tab_config), 'op_t');
+        $aUid = I('get.uid', 0, 'intval');
+        $aPage = I('get.page', 1, 'intval');
+        if (!in_array($aType, $tab_config)) {
+            $this->error('参数错误');
+        }
+        $param = array();
+        //查询条件
+        $weiboModel = D('Weibo');
+        $param['field'] = 'id';
+        if ($aPage == 1) {
+            $param['limit'] = 10;
         } else {
-            $result = $this->weiboApi->listAllWeibo($page, 30, '', 1, $lastId);
+            $param['page'] = $aPage;
+            $param['count'] = 30;
         }
-        //显示页面
-        $this->assign('list', $result['list']);
-        $this->assign('lastId', $result['lastId']);
-        $this->assign('page', $page);
-        $this->assign('tab', 'all');
-        $this->assign('loadMoreUrl', U('loadweibo', array('uid' => $uid)));
-        $total_count = $this->weiboApi->listAllWeiboCount();
+        $param = $this->filterWeibo($aType, $param);
+        $param['where']['status'] = 1;
+        $param['where']['is_top'] = 0;
+        //查询
+        $list = $weiboModel->getWeiboList($param);
+        $this->assign('list', $list);
 
-        $this->assign('total_count', $total_count['total_count']);
-
-        $this->assign('tox_money_name', getToxMoneyName());
-        $this->assign('tox_money', getMyToxMoney());
-        $this->setTitle('全站关注——微博');
-        $this->assign('filter_tab', 'all');
-        $this->assignSelf();
-        $this->display();
-    }
-
-    public function search($uid = 0, $page = 1, $lastId = 0)
-    {
-        $keywords = op_t($_REQUEST['keywords']);
-        if (!isset($keywords)) {
-            $keywords = '';
-        }
-        //载入第一页微博
-        if ($uid != 0) {
-            $result = $this->weiboApi->listAllWeibo($page, null, array('uid' => $uid), 1, $lastId, $keywords);
+        // 获取置顶微博
+        $top_list = $weiboModel->getWeiboList(array('where' => array('status' => 1, 'is_top' => 1)));
+        $this->assign('top_list', $top_list);
+        $this->assign('total_count', $weiboModel->getWeiboCount($param['where']));
+        $this->assign('page', $aPage);
+        $this->assign('loadMoreUrl', U('loadweibo', array('uid' => $aUid)));
+        $this->assign('type', $aType);
+        $this->assign('tab_config', $tab_config);
+        if ($aType == 'concerned') {
+            $this->assign('title', '我关注的');
+            $this->assign('filter_tab', 'concerned');
+        } else if ($aType == 'hot') {
+            $this->assign('title', '热门微博');
+            $this->assign('filter_tab', 'hot');
         } else {
-            $result = $this->weiboApi->listAllWeibo($page, 0, '', 1, $lastId, $keywords);
+            $this->assign('title', '全站关注');
+            $this->assign('filter_tab', 'all');
         }
-        //显示页面
-        $this->assign('list', $result['list']);
-        $this->assign('lastId', $result['lastId']);
-        $this->assign('page', $page);
-        $this->assign('tab', 'all');
-        $this->assign('loadMoreUrl', U('loadWeibo', array('uid' => $uid, 'keywords' => $keywords)));
-        if (isset($keywords) && $keywords != '') {
-            $map['content'] = array('like', "%{$keywords}%");
-        }
-        $total_count = $this->weiboApi->listAllWeiboCount($map);
-
-        $this->assign('key_words', $keywords);
-        $this->assign('total_count', $total_count['total_count']);
-
-        $this->assign('tox_money_name', getToxMoneyName());
-        $this->assign('tox_money', getMyToxMoney());
-        $this->setTitle('全站搜索微博');
-        $this->assign('filter_tab', 'all');
+        $this->setTitle('{$title}——微博');
         $this->assignSelf();
+        if (is_login() && check_auth('Weibo/Index/doSend')) {
+            $this->assign('show_post', true);
+        }
         $this->display();
     }
 
-    public function myconcerned($uid = 0, $page = 1, $lastId = 0)
+
+    private function filterWeibo($aType, $param)
     {
-        if ($page == 1) {
-            $result = $this->weiboApi->listMyFollowingWeibo($page, null, '', 1, $lastId);
-            $this->assign('lastId', $result['lastId']);
-            $this->assign('list', $result['list']);
+        if ($aType == 'concerned') {
+            $followList = D('Follow')->getFollowList();
+            $param['where']['uid'] = array('in', $followList);
         }
-        //载入我关注的微博
-
-
-        $total_count = $this->weiboApi->listMyFollowingWeiboCount($page, 0, '', 1, $lastId);
-        $this->assign('total_count', $total_count['total_count']);
-
-        $this->assign('page', $page);
-
-        //显示页面
-
-
-        $this->assign('tab', 'concerned');
-        $this->assign('loadMoreUrl', U('loadConcernedWeibo'));
-
-        $this->assignSelf();
-        $this->setTitle('我关注的——微博');
-        $this->assign('filter_tab', 'concerned');
-
-
-        $this->assign('tox_money_name', getToxMoneyName());
-        $this->assign('tox_money', getMyToxMoney());
-        $this->display('index');
+        if ($aType == 'hot') {
+            $hot_left = modC('HOT_LEFT', 3);
+            $time_left = get_some_day($hot_left);
+            $param['where']['create_time'] = array('gt', $time_left);
+            $param['order'] = 'comment_count desc';
+            $this->assign('tab', 'hot');
+        }
+        return $param;
     }
 
-    public function weiboDetail($id)
+    /**
+     * loadweibo   滚动载入
+     * @author:xjw129xjt(肖骏涛) xjt@ourstu.com
+     */
+    public function loadweibo()
     {
-        //读取微博详情
-        $result = $this->weiboApi->getWeiboDetail($id);
 
-        //显示页面
-        $this->assign('weibo', $result['weibo']);
-        $this->assignSelf();
-        $this->setTitle('{$weibo.content|op_t}——微博详情');
+        $expect_type = array('hot');
+        $aType = I('get.type', '', 'text');
+        $aPage = I('get.page', 1, 'intval');
+        $aLastId = I('get.lastId', 0, 'intval');
+        $aLoadCount = I('get.loadCount', 0, 'intval');
 
+        $weiboModel = D('Weibo');
+        $param['where'] = array(
+            'status' => 1,
+            'is_top' => 0,
+        );
+        $param = $this->filterWeibo($aType, $param);
+
+
+        $param['field'] = 'id';
+        if ($aPage == 1) {
+            if (!in_array($aType, $expect_type)) {
+                $param['limit'] = 10;
+                $param['where']['id'] = array('lt', $aLastId);
+            } else {
+                $param['page'] = $aLoadCount;
+                $param['count'] = 10;
+            }
+        } else {
+            $param['page'] = $aPage;
+            $param['count'] = 30;
+        }
+        $list = $weiboModel->getWeiboList($param);
+        $this->assign('list', $list);
+        $this->assign('lastId', end($list));
         $this->display();
     }
 
-    public function sendrepost($sourseId, $weiboId)
+    /**
+     * doSend   发布微博
+     * @author:xjw129xjt(肖骏涛) xjt@ourstu.com
+     */
+    public function doSend()
     {
+        $aContent = I('post.content', '', 'op_t');
+        $aType = I('post.type', 'feed', 'op_t');
+        $aAttachIds = I('post.attach_ids', '', 'op_t');
+        $aExtra = I('post.extra', array(), 'convert_url_query');
 
+        $types = array('repost', 'feed', 'image', 'share');
+        if (!in_array($aType, $types)) {
+            $class_str = 'Addons\\Insert' . ucfirst($aType) . '\\Insert' . ucfirst($aType) . 'Addon';
+            $class_exists = class_exists($class_str);
+            if(!$class_exists){
+                $this->error('无法发表该类型的微博');
+            }else{
+                $class = new $class_str();
+                if(method_exists($class,'parseExtra')){
+                    $aExtra = Hook::exec('Addons\\Insert' . ucfirst($aType) . '\\Insert' . ucfirst($aType) . 'Addon', 'parseExtra', $aExtra);
+                    if(!$aExtra){
+                        $this->error('仅支持优酷、酷6、新浪、土豆网、搜狐、音悦台、腾讯、爱奇艺等视频网址发布');
+                    }
+                }
 
-        $result = $this->weiboApi->getWeiboDetail($sourseId);
-        $this->assign('soueseWeibo', $result['weibo']);
+            }
+        }
 
-        if ($sourseId != $weiboId) {
-            $weibo1 = $this->weiboApi->getWeiboDetail($weiboId);
-            $weiboContent = '//@' . $weibo1['weibo']['user']['nickname'] . ' ：' . $weibo1['weibo']['content'];
+        //权限判断
+        $this->checkIsLogin();
+        $this->checkAuth(null, -1, '您无微博发布权限。');
+        $return = check_action_limit('add_weibo', 'weibo', 0, is_login(), true);
+        if ($return && !$return['state']) {
+            $this->error($return['info']);
+        }
+
+        $feed_data = array();
+        if (!empty($aAttachIds)) {
+            $feed_data['attach_ids'] = $aAttachIds;
+        }
+
+        if (!empty($aExtra)) $feed_data = array_merge($feed_data, $aExtra);
+
+        // 执行发布，写入数据库
+        $weibo_id = send_weibo($aContent, $aType, $feed_data);
+        if (!$weibo_id) {
+            $this->error('发布失败');
+        }
+        $result['html'] = R('WeiboDetail/weibo_html', array('weibo_id' => $weibo_id), 'Widget');
+
+        $result['status'] = 1;
+        $result['info'] = '发布成功！' . cookie('score_tip');
+        //返回成功结果
+        $this->ajaxReturn($result);
+    }
+
+    /**
+     * sendrepost  发布转发页面
+     * @author:xjw129xjt(肖骏涛) xjt@ourstu.com
+     */
+    public function sendrepost()
+    {
+        $aSourseId = I('get.sourseId', 0, 'intval');
+        $aWeiboId = I('get.weiboId', 0, 'intval');
+
+        $weiboModel = D('Weibo');
+        $result = $weiboModel->getWeiboDetail($aSourseId);
+
+        $this->assign('soueseWeibo', $result);
+        $weiboContent = '';
+        if ($aSourseId != $aWeiboId) {
+            $weibo1 = $weiboModel->getWeiboDetail($aWeiboId);
+            $weiboContent = '//@' . $weibo1['user']['nickname'] . ' ：' . $weibo1['content'];
 
         }
-        $this->assign('weiboId', $weiboId);
+        $this->assign('weiboId', $aWeiboId);
         $this->assign('weiboContent', $weiboContent);
-        $this->assign('sourseId', $sourseId);
+        $this->assign('sourseId', $aSourseId);
 
         $this->display();
     }
 
-    public function doSendRepost($content, $type, $sourseId, $weiboId, $becomment)
+    /**
+     * doSendRepost   执行转发
+     * @author:xjw129xjt(肖骏涛) xjt@ourstu.com
+     */
+    public function doSendRepost()
     {
+        $this->checkIsLogin();
+        $aContent = I('post.content', '', 'op_t');
+
+        $aType = I('post.type', '', 'op_t');
+
+        $aSoueseId = I('post.sourseId', 0, 'intval');
+
+        $aWeiboId = I('post.weiboId', 0, 'intval');
+
+        $aBeComment = I('post.becomment', 'false', 'op_t');
+
+
+        $this->checkAuth(null, -1, '您无微博转发权限。');
+
+        $return = check_action_limit('add_weibo', 'weibo', 0, is_login(), true);
+        if ($return && !$return['state']) {
+            $this->error($return['info']);
+        }
+
+        if (empty($aContent)) {
+            $this->error('内容不能为空');
+        }
+
+
+        $weiboModel = D('Weibo');
         $feed_data = '';
-        $sourse = $this->weiboApi->getWeiboDetail($sourseId);
+        $sourse = $weiboModel->getWeiboDetail($aSoueseId);
         $sourseweibo = $sourse['weibo'];
         $feed_data['sourse'] = $sourseweibo;
-        $feed_data['sourseId'] = $sourseId;
+        $feed_data['sourseId'] = $aSoueseId;
+        //发布微博
+        $new_id = send_weibo($aContent, $aType, $feed_data);
 
-        Hook('beforeSendRepost', array('content' => &$content, 'type' => &$type, 'feed_data' => &$feed_data));
-
-        //发送微博
-        $result = $this->weiboApi->sendWeibo($content, $type, $feed_data);
-        if ($result) {
-            D('weibo')->where('id=' . $sourseId)->setInc('repost_count');
-            $weiboId != $sourseId && D('weibo')->where('id=' . $weiboId)->setInc('repost_count');
-            S('weibo_' . $weiboId, null);
-            S('weibo_' . $sourseId, null);
+        if ($new_id) {
+            D('weibo')->where('id=' . $aSoueseId)->setInc('repost_count');
+            $aWeiboId != $aSoueseId && D('weibo')->where('id=' . $aWeiboId)->setInc('repost_count');
+            S('weibo_' . $aWeiboId, null);
+            S('weibo_' . $aSoueseId, null);
         }
-
+// 发送消息
         $user = query_user(array('nickname'), is_login());
-        $toUid = D('weibo')->where(array('id' => $weiboId))->getField('uid');
-        D('Common/Message')->sendMessage($toUid, $user['nickname'] . '转发了您的微博！', '转发提醒', U('Weibo/Index/weiboDetail', array('id' => $result['weibo_id'])), is_login(), 1);
+        $toUid = D('weibo')->where(array('id' => $aWeiboId))->getField('uid');
+        D('Common/Message')->sendMessage($toUid,'转发提醒', $user['nickname'] . '转发了您的微博！',  'Weibo/Index/weiboDetail', array('id' => $new_id), is_login(), 1);
 
+        // 发布评论
+        //  dump($aBeComment);exit;
+        if ($aBeComment == 'true') {
+            send_comment($aWeiboId, $aContent);
 
-        if ($becomment == 'true') {
-            $this->weiboApi->sendRepostComment($weiboId, $content);
         }
 
-        $weibo = $this->weiboApi->getWeiboDetail($result['weibo_id']);
-
-        $result['html'] = R('WeiboDetail/weibo_html', array('weibo' => $weibo['weibo']), 'Widget');
+        $result['html'] = R('WeiboDetail/weibo_html', array('weibo_id' => $new_id), 'Widget');
         //返回成功结果
-        $this->ajaxReturn(apiToAjax($result));
+
+        $result['status'] = 1;
+        $result['info'] = '转发成功！' . cookie('score_tip');;
+        $this->ajaxReturn($result);
     }
 
-    public function loadweibo($page = 1, $uid = 0, $loadCount = 1, $lastId = 0, $keywords = '')
+
+    /**
+     * doComment  发布评论
+     * @author:xjw129xjt(肖骏涛) xjt@ourstu.com
+     */
+    public function doComment()
     {
-        $count = 30;
-        //载入全站微博
-        if ($uid != 0) {
-            $result = $this->weiboApi->listAllWeibo($page, $count, array('uid' => $uid), $loadCount, $lastId, $keywords);
-        } else {
-            $result = $this->weiboApi->listAllWeibo($page, $count, '', $loadCount, $lastId, $keywords);
-        }
-        //如果没有微博，则返回错误
-        if (!$result['list']) {
-            $this->error('没有更多了');
-        }
+        $this->checkIsLogin();
+        $aWeiboId = I('post.weibo_id', 0, 'intval');
+        $aContent = I('post.content', 0, 'op_t');
+        $aCommentId = I('post.comment_id', 0, 'intval');
 
-        //返回html代码用于ajax显示
-        $this->assign('list', $result['list']);
-        $this->assign('lastId', $result['lastId']);
-        $this->display();
-    }
-
-    public function loadConcernedWeibo($page = 1, $loadCount = 1, $lastId = 0)
-    {
-
-        $count = 30;
-        //载入我关注的人的微博
-        $result = $this->weiboApi->listMyFollowingWeibo($page, $count, '', $loadCount, $lastId);
-
-        //如果没有微博，则返回错误
-        if (!$result['list']) {
-            $this->error('没有更多了');
+        $this->checkAuth(null, -1, '您无微博发布评论权限。');
+        $return = check_action_limit('add_weibo_comment', 'weibo_comment', 0, is_login(), true);
+        if ($return && !$return['state']) {
+            $this->error($return['info']);
         }
 
-        //返回html代码用于ajax显示
-        $this->assign('list', $result['list']);
-        $this->assign('lastId', $result['lastId']);
-        $this->display('loadweibo');
-    }
 
-    public function doSend($content, $type = 'feed', $attach_ids = '')
-    {
-        if (!check_auth('sendWeibo')) {
-            $this->error('您无微博发布权限。');
+        if (empty($aContent)) {
+            $this->error('内容不能为空');
         }
-        $feed_data = '';
-        $feed_data['attach_ids'] = $attach_ids;
-
-        Hook('beforeSendWeibo', array('content' => &$content, 'type' => &$type, 'feed_data' => &$feed_data));
-
-        //发送微博
-        $result = $this->weiboApi->sendWeibo($content, $type, $feed_data);
-
-        $weibo = $this->weiboApi->getWeiboDetail($result['weibo_id']);
-
-        $result['html'] = R('WeiboDetail/weibo_html', array('weibo' => $weibo['weibo']), 'Widget');
-
-
-        //返回成功结果
-        $this->ajaxReturn(apiToAjax($result));
-    }
-
-    public function settop($weibo_id)
-    {
-        $weibo_id = intval($weibo_id);
-        if (is_administrator() || check_auth('setWeiboTop')) {
-            $weiboModel = D('Weibo');
-            $weibo = $weiboModel->find($weibo_id);
-            if (!$weibo) {
-                $this->error('置顶失败，微博不能存在。');
-            }
-            if ($weibo['is_top'] == 0) {
-                if ($weiboModel->where(array('id' => $weibo_id))->setField('is_top', 1)) {
-                    S('weibo_' . $weibo_id, null);
-                    $this->success('置顶成功。');
-                } else {
-                    $this->error('置顶失败。');
-                };
-            } else {
-                if ($weiboModel->where(array('id' => $weibo_id))->setField('is_top', 0)) {
-                    S('weibo_' . $weibo_id, null);
-                    $this->success('取消置顶成功。');
-                } else {
-                    $this->error('取消置顶失败。');
-                };
-            }
-        } else {
-            $this->error('置顶失败，您不具备管理权限。');
-        }
-    }
-
-    public function doComment($weibo_id, $content, $comment_id = 0)
-    {
         //发送评论
-        $result = $this->weiboApi->sendComment($weibo_id, $content, $comment_id);
+        $result['data'] = send_comment($aWeiboId, $aContent, $aCommentId);
 
+        $result['html'] = R('Comment/comment_html', array('comment_id' => $result['data']), 'Widget');
+
+        $result['status'] = 1;
+        $result['info'] = '评论成功！' . cookie('score_tip');
         //返回成功结果
-        $this->ajaxReturn(apiToAjax($result));
+        $this->ajaxReturn($result);
     }
 
-    public function loadComment($weibo_id)
+    /**
+     * checkIsLogin  判断是否登录
+     * @author:xjw129xjt(肖骏涛) xjt@ourstu.com
+     */
+    private function  checkIsLogin()
     {
-        //读取数据库中全部的评论列表
-        // $result = $this->weiboApi->listComment($weibo_id, 1, 10000);
-        //$list = $result['list'];
-        $weiboCommentTotalCount = D('WeiboComment')->where(array('weibo_id' => intval($weibo_id), 'status' => 1))->count();
-        //$weiboCommentTotalCount = count($list);
-
-        $result1 = $this->weiboApi->listComment($weibo_id, 1, 5);
-        $list1 = $result1['list'];
-        //返回html代码用于ajax显示
-        $this->assign('list', $list1);
-        $this->assign('weiboId', $weibo_id);
-        $weobo = $this->weiboApi->getWeiboDetail($weibo_id);
-        $this->assign('weibo', $weobo['weibo']);
-        $this->assign('weiboCommentTotalCount', $weiboCommentTotalCount);
-        $this->display();
+        if (!is_login()) {
+            $this->error('请登陆后再进行操作');
+        }
     }
 
-    public function commentlist($weibo_id, $page = 1)
+    /**
+     * commentlist  评论列表
+     * @author:xjw129xjt(肖骏涛) xjt@ourstu.com
+     */
+    public function commentlist()
     {
-
-        $result = $this->weiboApi->listComment($weibo_id, $page, 10000);
-        $list = $result['list'];
+        $aWeiboId = I('post.weibo_id', 0, 'intval');
+        $aPage = I('post.page', 1, 'intval');
+        $aShowMore = I('post.show_more', 0, 'intval');
+        $list = D('WeiboComment')->getCommentList($aWeiboId, $aPage, $aShowMore);
         $this->assign('list', $list);
-        $this->assign('weiboId', $weibo_id);
+        $this->assign('page', $aPage);
+        $this->assign('weiboId', $aWeiboId);
+        $weobo = D('Weibo')->getWeiboDetail($aWeiboId);
+        $this->assign('weiboCommentTotalCount', $weobo['comment_count']);
+        $this->assign('show_more', $aShowMore);
         $html = $this->fetch('commentlist');
         $this->ajaxReturn($html);
-        dump($html);
 
     }
 
-    public function doDelWeibo($weibo_id = 0)
+    /**
+     * doDelComment  删除评论
+     * @author:xjw129xjt(肖骏涛) xjt@ourstu.com
+     */
+    public function doDelComment()
     {
-        //删除微博
-        $result = $this->weiboApi->deleteWeibo($weibo_id);
 
-        //返回成功信息
-        $this->ajaxReturn(apiToAjax($result));
-    }
+        $aCommentId = I('post.comment_id', 0, 'intval');
+        $this->checkIsLogin();
+        $comment = D('Weibo/WeiboComment')->getComment($aCommentId);
+        $this->checkAuth(null, $comment['uid'], '您无删除微博评论权限。');
 
-    public function doDelComment($comment_id = 0)
-    {
+
         //删除评论
-        $result = $this->weiboApi->deleteComment($comment_id);
-
+        $result = D('Weibo/WeiboComment')->deleteComment($aCommentId);
+        action_log('del_weibo_comment', 'weibo_comment', $aCommentId, is_login());
+        if ($result) {
+            $return['status'] = 1;
+            $return['info'] = '删除成功';
+        } else {
+            $return['status'] = 0;
+            $return['info'] = '删除失败';
+        }
         //返回成功信息
-        $this->ajaxReturn(apiToAjax($result));
+        $this->ajaxReturn($return);
     }
 
-    public function atWhoJson()
+    /**
+     * doDelWeibo  删除微博
+     * @author:xjw129xjt(肖骏涛) xjt@ourstu.com
+     */
+    public function doDelWeibo()
     {
-        exit(json_encode($this->getAtWhoUsersCached()));
+        $aWeiboId = I('post.weibo_id', 0, 'intval');
+        $weiboModel = D('Weibo');
+
+        $weibo = $weiboModel->getWeiboDetail($aWeiboId);
+
+        $this->checkAuth(null, $weibo['uid'], '您无删除微博评论权限。');
+
+        //删除微博
+        $result = $weiboModel->deleteWeibo($aWeiboId);
+        action_log('del_weibo', 'weibo', $aWeiboId, is_login());
+        if (!$result) {
+            $return['status'] = 0;
+            $return['status'] = '数据库写入错误';
+        } else {
+            $return['status'] = 1;
+            $return['status'] = '删除成功';
+        }
+        //返回成功信息
+        $this->ajaxReturn($return);
     }
 
-
-    private function getAtWhoUsers()
+    /**
+     * setTop  置顶
+     * @author:xjw129xjt(肖骏涛) xjt@ourstu.com
+     */
+    public function setTop()
     {
-        //获取能AT的人，UID列表
-        $uid = get_uid();
-        $follows = D('Follow')->where(array('who_follow' => $uid, 'follow_who' => $uid, '_logic' => 'or'))->limit(999)->select();
-        $uids = array();
-        foreach ($follows as &$e) {
-            $uids[] = $e['who_follow'];
-            $uids[] = $e['follow_who'];
-        }
-        unset($e);
-        $uids = array_unique($uids);
+        $aWeiboId = I('post.weibo_id', 0, 'intval');
 
-        //加入拼音检索
-        $users = array();
-        foreach ($uids as $uid) {
-            $user = query_user(array('nickname', 'id', 'avatar32'), $uid);
-            $user['search_key'] = $user['nickname'] . D('PinYin')->Pinyin($user['nickname']);
-            $users[] = $user;
+        $this->checkAuth(null, -1, '置顶失败，您不具备管理权限。');
+        $weiboModel = D('Weibo');
+        $weibo = $weiboModel->find($aWeiboId);
+        if (!$weibo) {
+            $this->error('置顶失败，微博不能存在。');
+        }
+        if ($weibo['is_top'] == 0) {
+            if ($weiboModel->where(array('id' => $aWeiboId))->setField('is_top', 1)) {
+                action_log('set_weibo_top', 'weibo', $aWeiboId, is_login());
+                S('weibo_' . $aWeiboId, null);
+                $this->success('置顶成功。');
+            } else {
+                $this->error('置顶失败。');
+            };
+        } else {
+            if ($weiboModel->where(array('id' => $aWeiboId))->setField('is_top', 0)) {
+                action_log('set_weibo_down', 'weibo', $aWeiboId, is_login());
+                S('weibo_' . $aWeiboId, null);
+                $this->success('取消置顶成功。');
+            } else {
+                $this->error('取消置顶失败。');
+            };
         }
 
-        //返回at用户列表
-        return $users;
     }
 
-    private function getAtWhoUsersCached()
-    {
-        $cacheKey = 'weibo_at_who_users_' . get_uid();
-        $atusers = S($cacheKey);
-        if (empty($atusers)) {
-            $atusers = $this->getAtWhoUsers();
-            S($cacheKey, $atusers, 600);
-        }
-        return $atusers;
-    }
-
+    /**
+     * assignSelf  输出当前登录用户信息
+     * @author:xjw129xjt(肖骏涛) xjt@ourstu.com
+     */
     private function assignSelf()
     {
         $self = query_user(array('title', 'avatar128', 'nickname', 'uid', 'space_url', 'icons_html', 'score', 'title', 'fans', 'following', 'weibocount', 'rank_link'));
+        //获取用户封面id
+        $map = getUserConfigMap('user_cover');
+        $map['role_id'] = 0;
+        $model = D('Ucenter/UserConfig');
+        $cover = $model->findData($map);
+        $self['cover_id'] = $cover['value'];
+        $self['cover_path'] = getThumbImageById($cover['value'], 273, 80);
         $this->assign('self', $self);
     }
+
+    /**
+     * weiboDetail  微博详情页
+     * @param $id
+     * @author:xjw129xjt(肖骏涛) xjt@ourstu.com
+     */
+    public function weiboDetail($id)
+    {
+        //读取微博详情
+
+        $weibo = D('Weibo')->getWeiboDetail($id);
+        if ($weibo === null) {
+            $this->error('404，不存在。');
+        }
+        $weibo['user'] = query_user(array('space_url', 'avatar128', 'nickname', 'title'), $weibo['uid']);
+        //显示页面
+
+        $this->assign('weibo', $weibo);
+
+        $this->userInfo($weibo['uid']);
+
+        $this->userInfo($weibo['uid']);
+
+        $supported = D('Weibo')->getSupportedPeople($weibo['id'], array('nickname', 'space_url', 'avatar128', 'space_link'), 12);
+        $this->assign('supported', $supported);
+        $this->setTitle('{$weibo.content|op_t}——微博详情');
+
+        $this->assign('tab', 'index');
+        $this->display();
+    }
+
+
+    private function userInfo($uid = null)
+    {
+        $user_info = query_user(array('avatar128', 'nickname', 'uid', 'space_url', 'icons_html', 'score', 'title', 'fans', 'following', 'weibocount', 'rank_link', 'signature'), $uid);
+        //获取用户封面id
+        $map = getUserConfigMap('user_cover', '', $uid);
+        $map['role_id'] = 0;
+        $model = D('Ucenter/UserConfig');
+        $cover = $model->findData($map);
+        $user_info['cover_id'] = $cover['value'];
+        $user_info['cover_path'] = getThumbImageById($cover['value'], 1140, 230);
+
+        $user_info['tags'] = D('Ucenter/UserTagLink')->getUserTag($uid);
+        $this->assign('user_info', $user_info);
+        return $user_info;
+    }
+
+    public function loadComment()
+    {
+        $aWeiboId = I('post.weibo_id', 0, 'intval');
+        $return['html'] = R('Comment/someCommentHtml', array('weibo_id' => $aWeiboId), 'Widget');
+        $return['status'] = 1;
+        //返回成功信息
+        $this->ajaxReturn($return);
+    }
+
+
 }

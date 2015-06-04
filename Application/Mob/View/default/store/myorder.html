@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>{:L('store')} | {:modC('WEB_SITE_NAME','OpenSNS')}</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel="alternate icon" type="image/png" href="assets/i/favicon.png">
+    <link rel="stylesheet" href="__CSS__/amazeui.min.css"/>
+    <link rel="stylesheet" href="__CSS__/store.css"/>
+    <link rel="stylesheet" href="__CSS__/app.css"/>
+    <style>
+        header {
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 200%;
+            color: #333;
+            margin-bottom: 0px;
+        }
+
+        header p {
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<header data-am-widget="header" class="am-header am-header-default am-header-fixed">
+
+
+    <div class="am-header-left am-header-nav">
+        <a href="javascript:history.go(-1);"><span class="am-icon-chevron-left"></span></a>
+        <a href="#phone-link" class="">
+            <i class="am-header-icon am-icon-bell-o"></i>
+        </a>
+    </div>
+    <h1 class="am-header-title">
+        我的评价
+    </h1>
+
+    <div class="am-header-right am-header-nav">
+
+        <a href="#nav-link" class="">
+            <i class="am-menu-toggle-icon am-icon-bars"></i>
+        </a>
+    </div>
+
+</header>
+
+
+<div class="myorder-container ">
+    <div class="order-list-box am-text-center">
+            <table class="order-list">
+                <thead>
+                <tr>
+                    <th>订单编号</th>
+                    <th>买家</th>
+                    <th>卖家</th>
+                    <th>评价时间</th>
+                    <th>评价状况</th>
+                    <th>评语</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>2584</td>
+                    <td>我</td>
+                    <td>他</td>
+                    <td>2015-5-6</td>
+                    <td>过期</td>
+                    <td>太棒了</td>
+                </tr>
+                </tbody>
+            </table>
+    </div>
+
+
+</div>
+<script src="__JS__/jquery.min.js"></script>
+<script src="__JS__/amazeui.min.js"></script>
+<script>
+    $(function() {
+        $('#doc-my-tabs').tabs();
+    })
+</script>
+</body>
+</html>

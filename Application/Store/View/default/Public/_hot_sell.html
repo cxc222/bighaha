@@ -1,0 +1,49 @@
+<div class="col-xs-12">
+    <div class="common_block_border" style="margin-bottom: 20px;">
+        <h3 class="common_block_title">掌柜热卖</h3>
+        <php>
+            $hot=S('store_hot_sell');
+            if(empty($hot)){
+            $items=D('Goods')->getLimit('status =1',4,'sell desc');
+            foreach($items as $key=>$v)
+            {
+            $items[$key]['user']=query_user(null,$v['uid']);
+            $items[$key]['shop']=D('Shop')->getById($v['shop_id']);
+            }
+            $hot=$items;
+            S('store_hot_sell',$hot,60);
+            }
+
+        </php>
+        <ul>
+            <volist name="hot" id="vo">
+                <li class="col-xs-3" >
+                    <div class=" mb10" style="padding: 15px" >
+                        <h3 class="mb10">No. {$i}</h3>
+                        <div class="text-center">
+                            <a target="_blank" href="{:U('store/Index/info',array('info_id'=>$vo['id']))}"><img
+                                    class="mb10" style="width: 150px;height: 150px" src="{:getThumbImageById($vo['cover_id'],150,150)}"></a>
+                        </div>
+                        <div class=" clearfix">
+                            <div class="mb10 ">
+                                <a target="_blank " class="text-more" style="width: 100%" href="{:U('store/Index/info',array('info_id'=>$vo['id']))}">{$vo.title}</a>
+                            </div>
+                            <div class="clearfix">
+                                <div class="mb10 pull-right">
+                                    销量：{$vo.sell}
+                                </div>
+                                <div class="mb10 pull-left">
+                                    <b class="f14px cgrey">￥</b> <span class="cred f14px bld">{$vo.price|number_format=2}</span>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div style="clear: both" class="clearfix"></div>
+                    </div>
+                </li>
+            </volist>
+        </ul>
+        <div class="clearfix"></div>
+    </div>
+</div>
+

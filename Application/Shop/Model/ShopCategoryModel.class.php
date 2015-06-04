@@ -77,4 +77,15 @@ class ShopCategoryModel extends Model {
         return $this->field($field)->where($map)->find();
     }
 
+    public function editData($data)
+    {
+        $data=$this->create();
+        if($data['id']){
+            $res=$this->save($data);
+        }else{
+            $res=$this->add($data);
+        }
+        return $res;
+    }
+
 }

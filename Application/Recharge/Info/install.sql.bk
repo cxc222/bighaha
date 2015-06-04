@@ -1,0 +1,94 @@
+
+DROP TABLE IF EXISTS `ocenter_recharge_order`;
+CREATE TABLE IF NOT EXISTS `ocenter_recharge_order` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '订单号',
+  `field` int(11) NOT NULL COMMENT '充值字段',
+  `amount` decimal(10,2) NOT NULL COMMENT '充值数额',
+  `method` varchar(50) NOT NULL COMMENT '支付方式',
+  `uid` int(11) NOT NULL COMMENT '用户ID',
+  `create_time` int(11) NOT NULL,
+  `status` tinyint(4) NOT NULL,
+  `record_id` int(11) NOT NULL,
+  `payok` tinyint(4) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='充值订单表' AUTO_INCREMENT=1 ;
+
+DROP TABLE IF EXISTS `ocenter_recharge_record_alipay`;
+CREATE TABLE IF NOT EXISTS `ocenter_recharge_record_alipay` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `out_trade_no` varchar(20) NOT NULL,
+  `buyer_email` varchar(500) NOT NULL,
+  `buyer_id` varchar(100) NOT NULL,
+  `seller_email` varchar(50) NOT NULL,
+  `seller_id` varchar(30) NOT NULL,
+  `subject` varchar(500) NOT NULL,
+  `total_fee` decimal(10,2) NOT NULL,
+  `trade_no` varchar(100) NOT NULL,
+  `trade_status` varchar(20) NOT NULL,
+  `sign` varchar(100) NOT NULL,
+  `sign_type` varchar(100) NOT NULL,
+  `body` varchar(500) NOT NULL,
+  `exterface` varchar(50) NOT NULL,
+  `is_success` varchar(50) NOT NULL,
+  `notify_id` varchar(500) NOT NULL,
+  `notify_time` int(11) NOT NULL,
+  `notify_type` varchar(50) NOT NULL,
+  `payment_type` varchar(20) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `trade_no_2` (`trade_no`),
+  KEY `trade_no` (`trade_no`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='支付宝付款记录表' AUTO_INCREMENT=1 ;
+
+
+DROP TABLE IF EXISTS `ocenter_recharge_withdraw`;
+CREATE TABLE IF NOT EXISTS `ocenter_recharge_withdraw` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `field` int(11) NOT NULL COMMENT '提现字段',
+  `amount` decimal(10,2) NOT NULL COMMENT '提现金额',
+  `method` varchar(50) NOT NULL COMMENT '提现方式',
+  `uid` int(11) NOT NULL COMMENT '提现用户',
+  `create_time` int(11) NOT NULL COMMENT '创建时间',
+  `status` tinyint(4) NOT NULL COMMENT '状态',
+  `payok` tinyint(4) NOT NULL COMMENT '支付状态',
+  `pay_uid` int(11) NOT NULL COMMENT '支付者',
+  `pay_time` int(11) NOT NULL COMMENT '支付时间',
+  `frozen_amount` decimal(10,2) NOT NULL COMMENT '冻结积分，用于防止兑率更改后取消订单返回积分不同',
+  `account_info` varchar(400) NOT NULL COMMENT '账号信息',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='提现订单表' AUTO_INCREMENT=1 ;
+
+
+
+INSERT INTO `ocenter_menu` (`title`, `pid`, `sort`, `url`, `hide`, `tip`, `group`, `is_dev`, `icon`) VALUES
+( '充值', 0, 100, 'Recharge/config', 0, '', '', 0, 'credit');
+
+
+set @tmp_id=0;
+select @tmp_id:= id from `ocenter_menu` where title = '充值';
+
+INSERT INTO `ocenter_menu` ( `title`, `pid`, `sort`, `url`, `hide`, `tip`, `group`, `is_dev`, `icon`) VALUES
+( '充值配置', @tmp_id, 0, 'Recharge/config', 0, '', '配置', 0, ''),
+( '支付宝订单', @tmp_id, 0, 'Recharge/alipayList', 0, '', '充值订单', 0, ''),
+( '充值记录', @tmp_id, 0, 'Recharge/rechargeList', 0, '', '列表', 0, ''),
+( '提现记录', @tmp_id, 0, 'Recharge/withdrawList', 0, '', '列表', 0, ''),
+( '执行提现', @tmp_id, 0, 'Recharge/doWithdraw', 1, '', '', 0, ''),
+( '取消提现', @tmp_id, 0, 'Recharge/cancelWithdraw', 1, '', '', 0, '');
+
+
+
+delete from `ocenter_auth_rule` where  `module` = 'Recharge';
+INSERT INTO `ocenter_auth_rule` ( `module`, `type`, `name`, `title`, `status`, `condition`) VALUES
+( 'Recharge', 1, 'Recharge/Index/cancelWithdraw', '取消提现（管理）', 1, '');
+
+
+
+
+INSERT INTO `ocenter_action` ( `name`, `title`, `remark`, `rule`, `log`, `type`, `status`, `update_time`, `module`) VALUES
+( 'create_withdraw', '创建提现订单', '创建提现订单', '', '[user|get_nickname]在[time|time_format]创建了提现订单：[record|intval]', 1, 1, 1431666854, 'Recharge'),
+( 'create_order', '创建充值订单', '创建充值订单', '', '[user|get_nickname]在[time|time_format]创建了充值订单：[record|intval]', 1, 1, 1431666854, 'Recharge');
+
+
+INSERT INTO `ocenter_action_limit` ( `title`, `name`, `frequency`, `time_number`, `time_unit`, `punish`, `if_message`, `message_content`, `action_list`, `status`, `create_time`, `module`) VALUES
+( 'create_order', '创建充值订单', 1, 10, 'second', 'warning', 0, '', '[create_order]', 1, 0, 'Recharge'),
+( 'create_withdraw', '创建提现订单', 1, 10, 'second', 'warning', 0, '', '[create_withdraw]', 1, 0, 'Recharge');
+

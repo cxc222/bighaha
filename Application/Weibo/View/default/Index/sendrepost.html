@@ -9,7 +9,7 @@
 
         <div class="col-xs-12">
 
-            <div>  <a ucard="{$soueseWeibo.user.uid}"        href="{$soueseWeibo.user.space_url}">{$soueseWeibo.user.username|htmlspecialchars}</a></div>
+            <div>  <a ucard="{$soueseWeibo.user.uid}" href="{$soueseWeibo.user.space_url}">{$soueseWeibo.user.nickname}</a></div>
 
             <div>{$soueseWeibo.content|parse_weibo_content}</div>
 
@@ -17,8 +17,8 @@
             <br/>
             <p><textarea class="form-control" id="repost_content" style="height: 6em;"
                          placeholder="写点什么吧～～">{$weiboContent}</textarea></p>
-            <a href="javascript:" onclick="insertFace($(this))"><img src="__STATIC__/image/bq.png"/></a>
-            <p class="pull-right"><input type="submit" value="发表 Ctrl+Enter" id="send_repost_button"
+            <a href="javascript:" onclick="insertFace($(this))"><img src="__CORE_IMAGE__/bq.png"/></a>
+            <p class="pull-right"><input type="submit" value="发表 Ctrl+Enter" data-role="do_send_repost"  data-weibo-id="{$weiboId}"  data-sourse-id = "{$sourseId}"
                                          class="btn btn-primary" data-url="{:U('weibo/Index/doSendRepost')}"/></p>
           <p><input id="becomment" checked type="checkbox" value="1" name="becomment" >同时作为评论发布</p>
         </div>
@@ -30,42 +30,12 @@
 <!-- /.modal -->
 
         <script>
+        weibo_bind();
             $(function () {
                 $('#repost_content').keypress(function (e) {
                 if (e.ctrlKey && e.which == 13 || e.which == 10) {
-                    $("#send_repost_button").click();
-
+                    $("[data-role='do_send_repost']").click();
                 }
-
-            });
-            //点击发表微博按钮之后
-            $('#send_repost_button').click(function () {
-                //获取参数
-                var url = $(this).attr('data-url');
-                var content = $('#repost_content').val();
-                var button = $(this);
-                var originalButtonText = button.val();
-                var feedType = 'repost';
-                var sourseId = '{$sourseId}';
-                var weiboId = '{$weiboId}';
-                var becomment=   document.getElementsByName("becomment")
-                //发送到服务器
-                $.post(url, {content: content,type:feedType,sourseId:sourseId,weiboId:weiboId,becomment:becomment[0].checked}, function (a) {
-                   handleAjax(a);
-                    if (a.status) {
-                        $('.mfp-close').click();
-                        button.attr('class', 'btn btn-primary');
-                        button.val(originalButtonText);
-                        setTimeout(function(){
-                            $('#weibo_list').prepend(a.html)
-                            bindRepost();
-                            bind_weibo_popup();
-                        },1000)
-                        $('.XT_face').remove();
-                        insert_image.close();
-
-                    }
-                });
             });
             });
         </script>

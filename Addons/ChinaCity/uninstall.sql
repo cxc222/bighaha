@@ -1,1 +1,1 @@
-DROP TABLE IF EXISTS `opensns_district`;
+DROP TABLE IF EXISTS `thinkox_district`;

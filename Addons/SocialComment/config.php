@@ -29,12 +29,6 @@ return array(
 						'value'=>'90040',
 						'tip'=>'填写自己登录友言后的uid,填写后可进相应官方后台'
 					),
-				    'comment_key_youyan'=>array(
-				        'title'=>'认证密匙:',
-				        'type'=>'text',
-				        'value'=>'',
-				        'tip'=>'填写自己登录友言后的认证密匙,用于cookie加密'
-				    )
 				)
 			),
 			'duoshuo'=>array(

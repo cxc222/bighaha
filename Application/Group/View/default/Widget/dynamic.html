@@ -7,78 +7,76 @@
 <switch name="dynamic.type">
     <case value="attend">
         <div class="col-xs-10">
-            <h3><a href="{$user.space_url}">{$user.nickname}</a> 加入了群组 <a target="_blank"
-                                                                          href="{:U('group/index/group',array('id'=>$dynamic['group_id']))}" title="{$dynamic.group_id|getGroupName}">{$dynamic.group_id|getGroupName|getShortSp=15}</a>
+            <h3><a href="{$user.space_url}">{$user.nickname}</a> 加入了群组
+                <a target="_blank" href="{:U('group/index/group',array('id'=>$dynamic['group_id']))}" title="{$dynamic.group_id|get_group_name}">{$dynamic.group_id|get_group_name|getShortSp=15}</a>
                 <span class="pull-right hidden-xs">  {$dynamic.create_time|friendlyDate}</span>
             </h3>
         </div>
     </case>
     <case value="quit">
         <div class="col-xs-10">
-            <h3><a href="{$user.space_url}">{$user.nickname}</a> 退出了圈子 <a target="_blank"
-                                                                          href="{:U('group/index/group',array('id'=>$dynamic['group_id']))}" title="{$dynamic.group_id|getGroupName}" >{$dynamic.group_id|getGroupName|getShortSp=15}</a>
+            <h3><a href="{$user.space_url}">{$user.nickname}</a> 退出了圈子
+                <a target="_blank"  href="{:U('group/index/group',array('id'=>$dynamic['group_id']))}" title="{$dynamic.group_id|get_group_name}" >{$dynamic.group_id|get_group_name|getShortSp=15}</a>
                 <span class="pull-right  hidden-xs">  {$dynamic.create_time|friendlyDate}</span>
             </h3>
         </div>
     </case>
     <case value="remove">
         <div class="col-xs-10">
-            <h3><a href="{$user.space_url}">{$user.nickname}</a> 被管理员移出了圈子 <a target="_blank"
-                                                                              href="{:U('group/index/group',array('id'=>$dynamic['group_id']))}" title="{$dynamic.group_id|getGroupName}">{$dynamic.group_id|getGroupName|getShortSp=15}</a>
+            <h3><a href="{$user.space_url}">{$user.nickname}</a> 被管理员移出了圈子
+                <a target="_blank"  href="{:U('group/index/group',array('id'=>$dynamic['group_id']))}" title="{$dynamic.group_id|get_group_name}">{$dynamic.group_id|get_group_name|getShortSp=15}</a>
                 <span class="pull-right hidden-xs"> {$dynamic.create_time|friendlyDate}</span>
             </h3>
         </div>
     </case>
     <case value="reply">
         <php>
-            $reply = D('GroupPostReply')->where(array('id'=>$dynamic['row_id']))->find();
-            $post = D('GroupPost')->where(array('id'=>$reply['post_id']))->find();
-            $post_user = query_user(array('nickname','uid','space_url'),$post['uid']);
+            $reply = D('GroupPostReply')->getReply($dynamic['row_id']);
+            $post = D('GroupPost')->getPost($reply['post_id']);
         </php>
-
         <div class="col-xs-10">
-            <h3><a href="{$user.space_url}">{$user.nickname}</a> 回复了 <a href="{$post_user.space_url}"
-                                                                        ucard="{$post_user.uid}">{$post_user['nickname']}</a>
+            <h3><a href="{$user.space_url}">{$user.nickname}</a> 回复了 <a href="{$post.user.space_url}"
+                                                                        ucard="{$post.user.uid}">{$post['user']['nickname']}</a>
                 的帖子 <a target="_blank"
-                       href="{:U('group/index/detail',array('id'=>$post['id']))}" title="{$post['title']|parseWeiboContent}">{$post['title']|parseWeiboContent|getShortSp=15}</a>
+                       href="{:U('group/index/detail',array('id'=>$post['id']))}" title="{$post['title']}">{$post['title']|getShortSp=15}</a>
                 <span class="pull-right hidden-xs">{$dynamic.create_time|friendlyDate}</span>
             </h3>
-
             <div class="feed_content">
                 <if condition="$reply['status'] neq 1">
                     该回复已被删除<else/>
-                    {$reply['content']|parseWeiboContent}
+                    {$reply['content']|limit_picture_count=0|text|getShortSp=30}
                 </if>
             </div>
         </div>
     </case>
     <case value="post">
         <php>
-            $post = D('GroupPost')->where(array('id'=>$dynamic['row_id']))->find();
-            $post_user = query_user(array('nickname','uid','space_url'),$post['uid']);
+            $post = D('GroupPost')->getPost($dynamic['row_id']);
         </php>
-
         <div class="col-xs-10">
             <h3><a href="{$user.space_url}">{$user.nickname}</a>
                 发布了一个帖子
-                <a target="_blank" href="{:U('group/index/detail',array('id'=>$post['id']))}" title="{$post['title']|parseWeiboContent}">{$post['title']|parseWeiboContent|getShortSp=15}</a>
+                <a target="_blank" href="{:U('group/index/detail',array('id'=>$post['id']))}" title="{$post['title']}">{$post['title']|getShortSp=15}</a>
                 <span class="pull-right hidden-xs">{$dynamic.create_time|friendlyDate}</span>
             </h3>
-
+            <div class="feed_content">
+                <if condition="$post['status'] neq 1">
+                    该回复已被删除<else/>
+                    {$post['content']|limit_picture_count=0|text|getShortSp=30}
+                </if>
+            </div>
         </div>
     </case>
     <case value="update_post">
         <php>
-            $post = D('GroupPost')->where(array('id'=>$dynamic['row_id']))->find();
-            $post_user = query_user(array('nickname','uid','space_url'),$post['uid']);
+            $post = D('GroupPost')->getPost($dynamic['row_id']);
         </php>
         <div class="col-xs-10">
             <h3><a href="{$user.space_url}">{$user.nickname}</a>
                  更新了帖子
-                 <a target="_blank" href="{:U('group/index/detail',array('id'=>$post['id']))}" title="{$post['title']|parseWeiboContent}">{$post['title']|parseWeiboContent|getShortSp=15}</a>
+                 <a target="_blank" href="{:U('group/index/detail',array('id'=>$post['id']))}" title="{$post['title']}">{$post['title']|getShortSp=15}</a>
                 <span class="pull-right hidden-xs">{$dynamic.create_time|friendlyDate}</span>
             </h3>
-
         </div>
     </case>
     <default />

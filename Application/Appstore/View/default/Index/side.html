@@ -1,0 +1,59 @@
+<php>
+    $assign=D('AppstorePlugin')->getLimit(array('status'=>1,'uid'=>$data['uid'],'id'=>array('neq',$data['id'])),3,'update_time desc',1);
+</php>
+<empty name="assign">
+
+    <else/>
+    <!--一个插件-->
+    <header>作者的其他作品</header>
+    <!--一个插件-->
+
+    <section>
+        <volist name="assign" id="vo">
+            <div class="row side_plug_in">
+                <div class="col-md-6">
+                    <a href="{:U('pluginDetail',array('id'=>$vo['id']))}">{$vo.cover|display_cover}</a>
+                </div>
+
+                <div class="col-md-6 col_left">
+                    <p class="tem_name_item text-more"><a href="{:U('pluginDetail',array('id'=>$vo['id']))}">{$vo.title}</a></p>
+
+                    <php>$assing_versions=D('AppstoreVersion')->where(array('goods_id'=>$vo['id']))->order('create_time desc')->limit(1)->select();</php>
+                    <p><span class="count">{$vo.total_download_count}</span> 次下载</p>
+
+                    <p><span>{$assing_versions[0]['fee']|display_fee}</span></p>
+                </div>
+            </div>
+        </volist>
+    </section>
+    <hr style="margin-top: 0;margin-bottom: 0">
+</empty>
+
+
+
+<!--一个插件-->
+<header>最近更新</header>
+
+<!--一个插件-->
+<php>
+    $assign=D('AppstorePlugin')->getLimit(array('status'=>1),5,'update_time desc',1);
+</php>
+<section>
+    <volist name="assign" id="vo">
+        <div class="row side_plug_in">
+            <div class="col-md-6">
+                <a href="{:U('pluginDetail',array('id'=>$vo['id']))}">{$vo.cover|display_cover}</a>
+            </div>
+
+            <div class="col-md-6 col_left">
+                <p class="tem_name_item text-more"><a href="{:U('pluginDetail',array('id'=>$vo['id']))}">{$vo.title}</a></p>
+
+                <php>$assing_versions=D('AppstoreVersion')->where(array('goods_id'=>$vo['id']))->order('create_time desc')->limit(1)->select();</php>
+                <p><span class="count">{$vo.total_download_count}</span> 次下载</p>
+
+                <p><span>{$assing_versions[0]['fee']|display_fee}</span></p>
+            </div>
+        </div>
+    </volist>
+</section>
+

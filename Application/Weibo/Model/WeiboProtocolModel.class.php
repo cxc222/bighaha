@@ -19,7 +19,7 @@ class WeiboProtocolModel extends Model
 
     public function _initialize()
     {
-        $this->weiboApi = new WeiboApi();
+        $this->weiboApi =D('Weibo');
     }
     // 在个人空间里查看该应用的内容列表
     public function profileContent($uid=null,$page=1,$count=10) {

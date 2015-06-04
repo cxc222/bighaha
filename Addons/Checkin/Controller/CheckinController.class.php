@@ -1,211 +1,120 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Alan
- * Date: 14-3-19
- * Time: 下午2:19
- */
-namespace Addons\Checkin\Controller;
+
+namespace Addons\CheckIn\Controller;
+
 use Home\Controller\AddonsController;
 use Think\Hook;
-class CheckinController extends AddonsController{
 
-   public function render($data)
+class CheckInController extends AddonsController
+{
+
+    public function doCheckIn()
     {
-      /*  $uid = is_login();
+        if (!is_login()) {
+            $this->error('请先登陆！');
+        }
 
-        $data = model('Cache')->get('check_info_' . $uid . '_' . date('Ymd'));  //s('check_info');
-       //dump($data);exit;
-        if (!$data) {
-            $map['uid'] = $uid;
-            $map['ctime'] = array('gt', strtotime(date('Ymd')));
-            $res = D('Check_info')->where($map)->find();
-            //是否签到
-            $data['ischeck'] = $res ? true : false;
+        $name = get_addon_class('CheckIn');
+        $class = new $name();
 
-
-
-            $checkinfo = D('Check_info')->where('uid=' . $uid)->order('ctime desc')->limit(1)->find();
-
-            if ($checkinfo) {
-                if ($checkinfo['ctime'] > (strtotime(date('Ymd')) - 86400)) {
-                    $data['con_num'] = $checkinfo['con_num'];
-                } else {
-                    $data['con_num'] = 0;
-                }
-                $data['total_num'] = $checkinfo['total_num'];
-            } else {
-                $data['con_num'] = 0;
-                $data['total_num'] = 0;
+        $config = $class->getConfig();
+        if(empty($config['action'])){
+            $res = $class->doCheckIn();
+            if($res){
+                $this->success('签到成功');
+            }else{
+                $this->error('已经签到了！');
             }
-            $data['day'] = date('m.d');
-           model('Cache')->set('check_info_' . $uid . '_' . date('Ymd'), $data);
+        }else{
+            $action_info = M('Action')->getByName($config['action']);
+            $this->error('只支持['.$action_info['title'].']来签到！');
         }
-
-        $data['tpl'] = 'index';
-        $week = date('w');
-        switch ($week) {
-            case '0':
-                $week = '周日';
-                break;
-            case '1':
-                $week = '周一';
-                break;
-            case '2':
-                $week = '周二';
-                break;
-            case '3':
-                $week = '周三';
-                break;
-            case '4':
-                $week = '周四';
-                break;
-            case '5':
-                $week = '周五';
-                break;
-            case '6':
-                $week = '周六';
-                break;
-        }
-        $data['week'] = $week;
-        //$content = $this->renderFile(dirname(__FILE__) . "/" . $data['tpl'] . '.html', $data);
-       // return $content;
-            $this->assign("check",$data);
-            $this-display('View/checkin');*/
 
 
     }
 
-    /*
-     *签到
-     */
-    public function check_in()
+
+    public function getRank()
     {
-        if(!is_login()){
-            $res['status']=0;
-            $res['info']='请先登录！';
-            $this->ajaxReturn($res);
-        }
+        $aType = I('post.type', 'today', 'op_t');
+        $name = get_addon_class('CheckIn');
+        $class = new $name();
+        $html = $class->rank($aType);
+        $this->ajaxReturn(array('status' => 1, 'html' => $html));
+    }
 
-        $uid =is_login();
 
+    public function ranking()
+    {
+        $aPage = I('get.page', 1, 'intval');
+        $aOrder = I('get.order', 'total_check', 'op_t');
+        $checkInfoModel = D('Addons://CheckIn/CheckIn');
+        $memberModel = D('Member');
+        $limit = 50;
+        if ($aOrder == 'today') {
+            $user_list = $checkInfoModel->field('uid,create_time')->page($aPage, $limit)->where(array('create_time' => array('egt', get_some_day(0))))->order('create_time asc, uid asc')->select();
+            $totalCount = $checkInfoModel->where(array('create_time' => array('egt', get_some_day(0))))->count();
+            foreach ($user_list as $key => &$val) {
 
-        $map['ctime'] = array('egt', strtotime(date('Ymd')));
-        $map['uid'] = $uid;
-        $ischeck = D('Check_info')->where($map)->find();
-
-        //是否重复签到
-       // dump($ischeck);exit;
-
-        if (!$ischeck) {
-            $map_last['ctime'] = array('lt', strtotime(date('Ymd')));
-            $map_last['uid'] = $uid;
-            $last = D('Check_info')->where($map_last)->order('ctime desc')->find();
-
-            $data['ctime'] = $_SERVER['REQUEST_TIME'];
-            $add_score= modC('USER_CHECKIN_SCORE', '0', 'user');
-           //是否有签到记录
-            if ($last) {
-                //是否是连续签到
-                if ($last['ctime'] > (strtotime(date('Ymd')) -86400)) {
-                    $data['con_num'] = $last['con_num'] + 1;
-                } else {
-                    $data['con_num'] = 1;
+                $val['ranking'] = ($aPage - 1) * $limit + $key + 1;
+                if ($val['ranking'] <= 3) {
+                    $val['ranking'] = '<span style="color:#EB7112;">' . $val['ranking'] . '</span>';
                 }
-                $data['total_num'] = $last['total_num'] + 1;
-                $data['total_score']=$last['total_score']+$add_score;
-                $result=D('Check_info')->where(array('uid'=>$uid))->save($data);
-            } else {
-                $data['uid'] = $uid;
-                $data['con_num'] = 1;
-                $data['total_num'] = 1;
-                $data['total_score']=$add_score;
-                $result=D('Check_info')->add($data);
+                $val['status'] = '<span>已签到 ' . friendlyDate($val['create_time']) . '</span>';
+                $user = query_user(array('uid', 'nickname', 'total_check', 'con_check'), $val['uid']);
+                $val = array_merge($val, $user);
             }
-            if ($result) {
-                //更新连续签到和累计签到的数据
-                /*$connum = D('User_cdata')->where('uid=' . $uid . " and `key`='check_connum'")->find();
-                if ($connum) {
-                    $connum = D('Check_info')->where('uid=' . $uid)->getField('max(con_num)');
-                    //D('User_cdata')->setField('value', $connum, "`key`='check_connum' and uid=" . $uid);
-                    //D('User_cdata')->setField('value', $data['total_num'], "`key`='check_totalnum' and uid=" . $uid);
+            unset($key, $val);
 
+        } else {
+            $user_list = $memberModel->field('uid,nickname,total_check,con_check')->page($aPage, $limit)->order($aOrder . ' desc,uid asc')->select();
+            $totalCount = $memberModel->count();
+            foreach ($user_list as $key => &$val) {
+                $val['ranking'] = ($aPage - 1) * $limit + $key + 1;
+                if ($val['ranking'] <= 3) {
+                    $val['ranking'] = '<span style="color:#EB7112;">' . $val['ranking'] . '</span>';
+                }
+                $check = $checkInfoModel->getCheck($val['uid']);
+                if ($check) {
+                    $val['status'] = '<span>已签到 ' . friendlyDate($check['create_time']) . '</span>';
                 } else {
-                    $connumdata['uid'] = $uid;
-                    $connumdata['value'] = $data['con_num'];
-                    $connumdata['key'] = 'check_connum';
-
-                    $totalnumdata['uid'] = $uid;
-                    $totalnumdata['value'] = $data['total_num'];
-                    $totalnumdata['key'] = 'check_totalnum';
-                }*/
-                $res['total_num'] = $data['total_num'];
-                $res['con_num'] = $data['con_num'];
-                $res['html'] = Hook::exec('Addons\\Rank_checkin\\Rank_checkinAddon', 'getHtml');
-                $this->success($res);
-                S('check_rank',null);
+                    $val['status'] = '<span style="color: #BDBDBD;">未签到</span>';
+                }
             }
         }
 
 
+        $this->assign('user_list', $user_list);
+        $this->assign('totalCount', $totalCount);
+        if (is_login()) {
+            //获取用户信息
+            $user_info = query_user(array('uid', 'nickname', 'space_url', 'avatar64', 'con_check', 'total_check'), is_login());
 
-
-
-
-      /*  $list = D('Check_info')->group('uid')->findAll();
-        foreach ( $list as $v ){
-            $con = D('User_cdata')->where('uid='.$v['uid']." and `key`='check_connum'")->find();
-
-            $connum = D('Check_info')->where('uid='.$v['uid'])->getField('max(con_num)');
-            $totalnum = D('Check_info')->where('uid='.$v['uid'])->getField('max(total_num)');
-            if ( !$con ){
-
-                $connumdata['uid'] = $v['uid'];
-                $connumdata['value'] = $connum;
-                $connumdata['key'] = 'check_connum';
-                D('User_cdata')->add($connumdata);
-
-                $totalnumdata['uid'] = $v['uid'];
-                $totalnumdata['value'] = $totalnum;
-                $totalnumdata['key'] = 'check_totalnum';
-                //D('User_cdata')->add($totalnumdata);
+            $check = $checkInfoModel->getCheck(is_login());
+            if ($check) {
+                $user_info['is_sign'] = $check['create_time'];
             } else {
-                //D('User_cdata')->setField('value' , $connum , "`key`='check_connum' and uid=".$v['uid']);
-
-                //D('User_cdata')->setField('value' , $totalnum , "`key`='check_totalnum' and uid=".$v['uid']);
+                $user_info['is_sign'] = 0;
             }
-        }*/
 
-    }
-
-    }
-
-
-
-
-      /*  public function update_user_data(){
-    $list = D('Check_info')->group('uid')->findAll();
-        foreach ( $list as $v ){
-            //$con = D('User_cdata')->where('uid='.$v['uid']." and `key`='check_connum'")->find();
-
-            $connum = D('Check_info')->where('uid='.$v['uid'])->getField('max(con_num)');
-            $totalnum = D('Check_info')->where('uid='.$v['uid'])->getField('max(total_num)');
-            if ( !$con ){
-
-                $connumdata['uid'] = $v['uid'];
-                $connumdata['value'] = $connum;
-                $connumdata['key'] = 'check_connum';
-                //D('User_cdata')->add($connumdata);
-
-                $totalnumdata['uid'] = $v['uid'];
-                $totalnumdata['value'] = $totalnum;
-                $totalnumdata['key'] = 'check_totalnum';
-                //D('User_cdata')->add($totalnumdata);
+            if ($aOrder == 'today') {
+                $ranking = $checkInfoModel->field('uid')->where(array('create_time' => array('egt', get_some_day(0))))->order('create_time asc, uid asc')->select();
             } else {
-                //D('User_cdata')->setField('value' , $connum , "`key`='check_connum' and uid=".$v['uid']);
-
-                //D('User_cdata')->setField('value' , $totalnum , "`key`='check_totalnum' and uid=".$v['uid']);
+                $ranking = $memberModel->field('uid')->order($aOrder . ' desc,uid asc')->select();
             }
+
+
+            $ranking = getSubByKey($ranking, 'uid');
+            if (array_search(is_login(), $ranking) === false) {
+                $user_info['ranking'] = count($ranking) + 1;
+            } else {
+                $user_info['ranking'] = array_search(is_login(), $ranking) + 1;
+            }
+            $this->assign('user_info', $user_info);
         }
+        $this->assign('order', $aOrder);
+        $this->display(T('Addons://CheckIn@CheckIn/ranking'));
     }
-}*/
+
+
+}

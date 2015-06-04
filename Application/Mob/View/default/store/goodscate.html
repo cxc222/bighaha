@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>{:L('store')} | {:modC('WEB_SITE_NAME','OpenSNS')}</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel="alternate icon" type="image/png" href="assets/i/favicon.png">
+    <link rel="stylesheet" href="__CSS__/amazeui.min.css"/>
+    <link rel="stylesheet" href="__CSS__/store.css"/>
+    <link rel="stylesheet" href="__CSS__/app.css"/>
+    <style>
+        .header {
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 200%;
+            color: #333;
+            margin-bottom: 0px;
+        }
+
+        .header p {
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<header data-am-widget="header" class="am-header am-header-default am-header-fixed">
+
+
+    <div class="am-header-left am-header-nav">
+        <a href="javascript:history.go(-1);"><span class="am-icon-chevron-left"></span></a>
+        <a href="#phone-link" class="">
+            <i class="am-header-icon am-icon-bell-o"></i>
+        </a>
+    </div>
+    <h1 class="am-header-title">
+
+    </h1>
+
+    <div class="am-header-right am-header-nav">
+
+        <a href="#nav-link" class="">
+            <i class="am-menu-toggle-icon am-icon-bars"></i>
+        </a>
+    </div>
+
+</header>
+<style type="text/css">
+    .cate-nav {
+        position: relative;
+        height:300px;
+        z-index: 1;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        padding: 0px;
+        overflow: hidden
+    }
+
+    .cate-nav ul {
+        position: absolute;
+         margin-top:60px;
+    }
+
+    .cate-nav li {;
+        background: #F2F2F2;
+        cursor: pointer;
+        display: block;
+        text-align: center;
+        padding: 5px;
+
+    }
+
+    .cate-nav ul .hover {
+        background: #FFFFFF;
+    }
+
+    .cate-content {
+        position: relative;
+        height: 300px;
+        z-index: 1;
+        top: 0;
+        bottom: 0;
+        left: 0;
+
+        overflow: hidden;
+        background: #FFFFFF;
+
+        padding: 10px;
+    }
+
+    .cate-content .block {
+        padding: 0px 5px;
+        position: absolute;
+        height: 650px;
+    }
+</style>
+
+<div class="goodscate-container">
+    <div>
+        <a href="{:U('store/search')}" style="margin-top: 0px">
+            <input type="text" class="am-form-field am-input-sm" placeholder="搜索宝贝、店铺">
+        </a>
+    </div>
+    <div class="goodscate am-g">
+
+        <div class="cate-nav am-u-sm-3">
+            <ul id="leftmenu">
+                <li class="menu_item">运动户外</li>
+                <li class="menu_item">服饰内衣</li>
+                <li class="menu_item">美妆个护</li>
+                <li class="menu_item">数码产品</li>
+                <li class="menu_item">图书</li>
+                <li class="menu_item">虚拟物品</li>
+                <li class="menu_item">食品零食</li>
+                <li class="menu_item">电脑办公</li>
+                <li class="menu_item">家电电器</li>
+                <li class="menu_item">母婴玩具</li>
+                <li class="menu_item">服饰内衣</li>
+
+            </ul>
+        </div>
+
+        <div class="border">
+            <ul>
+                <li class="mask-top"></li>
+                <li class="mask-bottom"></li>
+            </ul>
+        </div>
+
+        <div class="cat-subcategory am-u-sm-9">
+            <div class="shadow">
+                <div class="entity-main">
+                    <ul class="shadow-left">
+                        <li><a href="#">LED电视</a> <a href="#">LCD电视</a> <a href="#">3D电视</a> <a href="#">等离子电视</a> <a
+                                href="#">家庭影院</a> <a href="#">配件</a></li>
+                        <li><a href="#">壁挂空调</a> <a href="#">柜式空调</a> <a href="#">移动空调</a> <a href="#">冷暖空调</a></li>
+                        <li><a href="#">对开门</a> <a href="#">双门冰箱</a> <a href="#">三门冰箱</a> <a href="#">迷你冰箱</a> <a
+                                href="#">酒柜</a> <a href="#">冷柜</a></li>
+                        <li><a href="#">烟灶套装</a> <a href="#">油烟机</a> <a href="#">燃气灶</a> <a href="#">消毒柜</a> <a
+                                href="#">欧式</a> <a href="#">中式</a> <a href="#">侧吸式</a></li>
+                        <li><a href="#">滚筒洗衣机</a> <a href="#">双缸洗衣机</a> <a href="#">迷你洗衣机</a> <a href="#">单脱水机</a></li>
+                    </ul>
+                    <dl class="shadow-right">
+                        <dt><b>大家电品牌 </b></dt>
+                        <dd><a href="#">海尔</a> <a href="#">TCL</a> <a href="#">海信</a> <a href="#">创维</a> <a
+                                href="#">格力</a> <a href="#">方太</a> <a href="#">西门子</a> <a href="#">美的</a> <a
+                                href="#">华帝</a> <a href="#">老板</a> <a href="#">奥克斯</a> <a href="#">容声</a> <a
+                                href="#">夏普</a> <a href="#">索尼</a> <a href="#">清华同方</a> <a href="#">pangoo</a> <a
+                                href="#">康佳</a> <a href="#">长虹</a> <a href="#">帅康</a> <a href="#">LG</a> <a
+                                href="#">康宝</a> <a href="#">德意</a> <a href="#">乐华</a> <a href="#">科龙</a>
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+        <!--店铺街链接-->
+    </div>
+</div>
+
+
+<script src="__JS__/jquery.min.js"></script>
+<script src="__JS__/amazeui.min.js"></script>
+<script>
+    var iScroll = $.AMUI.iScroll;
+
+    var myScroll = new iScroll('.cate-nav', {
+        hideScrollbar: false,
+        hScroll: false,
+        bounce: true,
+        vScroll: true,
+        hScrollbar: false
+    });
+/*    var mycontentScroll = new iScroll('.cate-content', {
+        hideScrollbar: false,
+        hScroll: false,
+        bounce: true,
+        vScroll: true,
+        hScrollbar: false
+    });*/
+
+    var $box = document.getElementById('leftmenu'),
+
+            liArray = $box.querySelectorAll('li'),
+
+            liNum = liArray.length;
+    console.log(liNum);
+    console.log($("#leftmenu li:first-child").height());
+    $box.style.height =(liNum*$("#leftmenu li:first-child").height()+500+'px');
+    console.log( $box.style.height);
+</script>
+
+</body>
+</html>

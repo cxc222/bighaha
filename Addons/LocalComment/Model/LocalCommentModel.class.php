@@ -7,9 +7,11 @@
  */
 
 namespace Addons\LocalComment\Model;
+
 use Think\Model;
 
-class LocalCommentModel extends Model {
+class LocalCommentModel extends Model
+{
 
     /* 用户模型自动验证 */
     protected $_validate = array(
@@ -24,15 +26,45 @@ class LocalCommentModel extends Model {
     );
 
     //此方法未被调用。
-    public function addComment($uid, $document_id, $content) {
-        //添加评论
-        $row = array('uid'=>$uid, 'document_id'=>$document_id,'parse'=>0,'content'=>$content, 'create_time'=>time(), 'pid'=>0, 'status'=>1);
-        $result = $this->add($row);
-        if(!$result) {
+
+
+    public function addComment($data)
+    {
+        $data = $this->create($data);
+        if (!$data) return false;
+        $result = $this->add($data);
+        if (!$result) {
             return false;
         }
-
-        //返回评论编号
         return $result;
     }
+
+
+
+    public function getComment($id){
+
+            $comment = S('local_comment_' . $id);
+            if (is_bool($comment)) {
+                $comment = $this->where(array('id' => $id, 'status' => 1))->find();
+                if ($comment) {
+                    $comment['user'] = query_user(array('avatar32', 'nickname', 'uid', 'space_url'), $comment['uid']);
+                }
+                S('local_comment_' . $id, $comment, 60 * 60);
+            }
+            return $comment;
+        }
+
+    public function deleteComment($comment_id)
+    {
+        //获取微博编号
+        $comment = $this->getComment($comment_id);
+        if ($comment['status'] == -1) {
+            return false;
+        }
+        $this->where(array('id' => $comment_id))->setField('status', -1);
+        S('local_comment_' . $comment_id, null);
+        //返回成功结果
+        return true;
+    }
+
 }

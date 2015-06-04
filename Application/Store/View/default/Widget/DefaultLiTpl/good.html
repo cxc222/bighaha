@@ -1,0 +1,81 @@
+<style>
+    .c_s_ul_good li {
+        float: left;
+        margin-right: 15px;
+        margin-bottom: 10px;
+        height: 260px;
+    }
+    .c_s_ul_good img {
+        width: 150px;
+        height: 150px;
+        *margin-left: -1px;
+    }
+    .c_s_ul_good .c_tt {
+        overflow: hidden;
+        line-height: 18px;
+        height: 28px
+    }
+</style>
+<if condition="$type eq 'list'">
+    <div class="pull-right text-right" style="padding: 10px;">
+        共 {$infos.count} 件商品
+    </div>
+    <div class="clearfix {$class} mb10 c_def_frm">
+        <ul class="c_s_ul_good" style="padding-left: 25px">
+            <volist name="infos.data" id="vo">
+                <li style="margin:0 15px 0 15px;width: 152px">
+                    <div>
+                        <div class="">
+                            <a target="_blank" href="{:U('store/Index/info',array('info_id'=>$vo['id']))}"><img
+                                    class="" src="{:getThumbImageById($vo['cover_id'],150,150)}"></a>
+                        </div>
+                        <div class="pd10" style="height: 70px">
+                            <div class=" c_tt">
+                                <a class="text-more" style="width: 100%" target="_blank" href="{:U('store/Index/info',array('info_id'=>$vo['id']))}">{$vo.title}</a>
+                            </div>
+                            <div class="">
+                                <b class="f14px cgrey">￥</b> <span class="cred f14px bld">{$vo.price|number_format=2}</span>
+                            </div>
+                            <div class="">
+                                <a target="_blank" href="{:U('store/Index/info',array('info_id'=>$vo['shop']['id']))}">{$vo.shop.title}</a>
+                            </div>
+                        </div>
+
+                    </div>
+                </li>
+            </volist>
+        </ul>
+        <div class="clearfix"></div>
+    </div>
+    <div class="page text-right" style="padding-right: 15px">
+      {$infos.html}
+    </div>
+    <else/>
+    <div class="{$class} mb10 ">
+        <ul class="c_s_ul_good" style="padding-left: 23px">
+            <volist name="infos" id="vo">
+                <li style="margin:0 15px 0 15px;width: 220px">
+                    <div>
+                        <div class="">
+                            <a target="_blank" href="{:U('store/Index/info',array('info_id'=>$vo['id']))}"><img
+                                    class="" src="{:getThumbImageById($vo['cover_id'],150,150)}"></a>
+                        </div>
+                        <div class="pd10" style="height: 70px">
+                            <div class=" c_tt">
+                                <a class="text-more" style="width: 100%" target="_blank" href="{:U('store/Index/info',array('info_id'=>$vo['id']))}">{$vo.title}</a>
+                            </div>
+                            <div class="">
+                                <b class="f14px cgrey">￥</b> <span class="cred f14px bld">{$vo.price|number_format=2}</span>
+                            </div>
+                            <div class="">
+                                <a target="_blank" href="{:U('store/Index/info',array('info_id'=>$vo['shop']['id']))}">{$vo.shop.title}</a>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </volist>
+        </ul>
+        <div class="clearfix"></div>
+    </div>
+</if>
+

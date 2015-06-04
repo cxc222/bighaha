@@ -37,7 +37,7 @@ class TalkModel extends Model
     public function getCurrentSessions()
     {
         //每次获取到所有的id，就对这些做delete处理。防止反复提示。
-        $new_talks=D('TalkPush')->where(array('uid'=>get_uid(),'status'=>array('NEQ',-1)))->select();
+        $new_talks = D('TalkPush')->where(array('uid' => get_uid(), 'status' => array('NEQ', -1)))->select();
         $new_ids = array();
         foreach ($new_talks as $push) {
             D('TalkPush')->where(array('id' => $push['id']))->setField('status', 1);//全部置为已提示
@@ -46,12 +46,12 @@ class TalkModel extends Model
 
 
         //每次获取到所有的id，就对这些做delete处理。防止反复提示。
-        $new_talk_messages=D('TalkMessagePush')->where(array('uid'=>get_uid(),'status'=>array('NEQ',-1)))->select();
+        $new_talk_messages = D('TalkMessagePush')->where(array('uid' => get_uid(), 'status' => array('NEQ', -1)))->select();
         foreach ($new_talk_messages as $v) {
             D('TalkMessagePush')->where(array('id' => $v['id']))->setField('status', 1);//全部置为已提示
-           $message= D('TalkMessage')->find($v['source_id']);
-            if(!in_array($message['talk_id'],$new_ids)){
-                $new_ids[]=$message['talk_id'];
+            $message = D('TalkMessage')->find($v['source_id']);
+            if (!in_array($message['talk_id'], $new_ids)) {
+                $new_ids[] = $message['talk_id'];
             };
         }
 
@@ -80,45 +80,57 @@ class TalkModel extends Model
         return $last_message;
     }
 
+    /**检测是不是双人会话
+     * @param $talk
+     * @return bool
+     * @auth 陈一枭
+     */
+    public function isP2P($talk)
+    {
+        $uids = explode(',', $talk['uids']);
+        return count($uids) > 1;
+    }
+
     /**创建聊天
      * @param        $members
      * @param string $message
      * @return array
      * @auth 陈一枭
      */
-    public function createTalk($members, $message = '')
+    public function createTalk($members)
     {
-
-
         $orin_member = $members;
         if (is_array($members)) {
             $members[] = is_login();
             $ico_user = $this->getFirstOtherUser($members);
             $members = $this->encodeArrayByRec($members);
             $talk['uids'] = implode(',', $members);
-        } else {
-            /*创建talk*/
-            $talk['uids'] = implode(',', array('[' . is_login() . ']', '[' . $members . ']'));
+            if (count($members) == 2) {
+                //检查两人间是否已经创建过对话
+                $created_talk = $this->where('uids like "' . $members[0] . ',' . $members[1] . '" or uids like "' . $members[1] . ',' . $members[0] . '"')->find();
+                if ($created_talk) {
+                    if ($created_talk['status'] == -1) {
+                        $created_talk['status'] = 1;
+                        $this->save($created_talk);
+                    }
+                    $created_talk['icon'] = $ico_user['avatar64'];
 
-        }
-        if ($message != '') {
-            $talk = $this->assignTalkData($message, $talk);
-            //通过消息获取到对应应用内的消息模型
-            $messageModel = $this->getMessageModel($message);
-            //从对应模型内取回对话源资料
-            $talk = array_merge($messageModel->getSource($message), $talk);
-        } else {
-            if (count($orin_member) == 1) {
-                $user_one = query_user(array('nickname'), $orin_member[0]);
-                $user_two = query_user(array('nickname'));
-                $talk['title'] = $user_one['nickname'] . ' 和 ' . $user_two['nickname'] . '的聊天';
+
+                    return $created_talk;//已有，则直接返回不创建
+                }
             }
+        }
+        if (count($orin_member) == 1) {
+            $user_one = query_user(array('nickname'), $orin_member[0]);
+            $user_two = query_user(array('nickname'));
+            $talk['title'] = $user_two['nickname'] . ' 和 ' . $user_one['nickname'] . '的聊天';
         }
 
 
         //创建聊天
-        $talk = D('Talk')->create($talk);
+        $talk = $this->create($talk);
         $talk['id'] = D('Talk')->add($talk);
+
 
         foreach ($orin_member as $mem) {
             if ($mem != is_login()) {
@@ -131,9 +143,8 @@ class TalkModel extends Model
         }
 
 
-
         //获取图标用于输出
-        $talk['ico'] = $ico_user['avatar64'];
+        $talk['icon'] = $ico_user['avatar64'];
         return $talk;
         /*创建talk end*/
 
@@ -206,18 +217,5 @@ class TalkModel extends Model
         return $members;
     }
 
-    /**
-     * @param $message
-     * @param $talk
-     * @return mixed
-     * @auth 陈一枭
-     */
-    private function assignTalkData($message, $talk)
-    {
-        $talk['appname'] = $message['appname'];
-        $talk['apptype'] = $message['apptype'];
-        $talk['source_id'] = $message['source_id'];
-        $talk['message_id'] = $message['id'];
-        return $talk;
-    }
+
 }

@@ -52,19 +52,7 @@ class TalkMessageModel extends Model
      */
     public function sendMessage($content, $to_uids, $talk_id)
     {
-        foreach ($to_uids as $uid) {
-            /**
-             * @param $to_uids 接受消息的用户ID
-             * @param string $content 内容
-             * @param string $title 标题，默认为  您有新的消息
-             * @param $url 链接地址，不提供则默认进入消息中心
-             * @param $int $from_uid 发起消息的用户，根据用户自动确定左侧图标，如果为用户，则左侧显示头像
-             * @param int $type 消息类型，0系统，1用户，2应用
-             */
-            if ($uid != is_login()) {
-                D('Message')->sendMessage($uid, '对话内容：' . op_t($content), '您有新的聊天消息', U('UserCenter/Message/talk', array('talk_id' => $talk_id)), is_login(), 1);
-            }
-        }
+        D('Message')->sendMessage($to_uids,'您有新的聊天消息', '对话内容：' . op_t($content), 'UserCenter/Message/talk', array('talk_id' => $talk_id) , is_login(), 1);
     }
 
     /**

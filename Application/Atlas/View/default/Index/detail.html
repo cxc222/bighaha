@@ -1,8 +1,10 @@
 <extend name="Base/common" />
 <block name="style">
-<link type="text/css" rel="stylesheet" href="__CSS__/atals.css" />
+<link type="text/css" rel="stylesheet" href="__CSS__/atlas.css" />
 </block>
-<block name="header"> </block>
+<block name="header">
+    <include file="Public/nav"/>
+</block>
 
 <block name="body">
 <div class="span9">
@@ -28,7 +30,10 @@
 					<p id="title-{$detail.id}" class="web_size">{$detail.content|parseWeiboContent}</p>
 					<p>
 						<img id="pic-{$detail.id}"
-							src="{$detail.image_id|getThumbImageById=300,300}">
+							data-original="{$detail.image_id|getAtlasThumbImageById=720}" class="img-responsive lazy">
+							<noscript>
+								<img src="{$detail.image_id|getAtlasThumbImageById=720}" class="img-responsive">
+							</noscript>
 					</p>
 				</div>
 
@@ -60,9 +65,7 @@
 		</div>
 	</div>
 </div>
-<script src="__JS__/atlas.js"></script> </block>
-
-<block name="side"> <!-- 右侧 nav
-================================================== -->
-<div class="span3">Level 2</div>
+</block>
+<block name="script">
+<script src="__JS__/atlas.js"></script>
 </block>

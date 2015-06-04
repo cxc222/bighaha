@@ -1,0 +1,46 @@
+<extend name="Base/common"/>
+
+<block name="body">
+
+    <include file="Public/_cat_header"/>
+    <include file="Public/_navbar"/>
+    <div class="container">
+
+        <div class="col-xs-12 common_block_border">
+
+            <div class="col-xs-2 " style="height: 700px;border-right: 1px solid #ddd">
+
+                <include file="Center/_left"/>
+
+
+            </div>
+            <div class="col-xs-10" style="padding-top: 15px">
+                <ul class="nav nav-pills " role="tablist">
+                    <volist name="entitys" id="vo">
+                        <li
+                        <if condition="$current_entity eq $vo['id']"> class="active"</if>
+                        ><a
+
+                            href="{:U('Cat/Center/my',array('id'=>$vo['id']))}">{$vo.alias}</a></li>
+                    </volist>
+                </ul>
+                <div class="">
+
+                    <div class="clearfix"></div>
+                    <div class="underline_x"></div>
+                    <div class="pd10 mb10 " style="min-height: 500px">
+
+                        <ul id="c_ul_s_infos">
+                            <volist name="my_post.data" id="vo">
+                                <li>{$vo.tpl}</li>
+                            </volist>
+                        </ul>
+                        <div class="page">{$my_post.html}</div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</block>

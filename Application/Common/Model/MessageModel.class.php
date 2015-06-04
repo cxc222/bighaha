@@ -13,6 +13,136 @@ use Think\Model;
 
 class MessageModel extends Model
 {
+
+
+    /**
+     * sendMessage   发送消息，屏蔽自己
+     * @param $to_uids 接收消息的用户们
+     * @param string $title 消息标题
+     * @param string $content 消息内容
+     * @param string $url 消息指向的路径，U函数的第一个参数
+     * @param array $url_args 消息链接的参数，U函数的第二个参数
+     * @param int $from_uid 发送消息的用户
+     * @param int $type 消息类型，0系统，1用户，2应用
+     * @return bool
+     * @author:xjw129xjt(肖骏涛) xjt@ourstu.com
+     */
+    public function sendMessage($to_uids, $title = '您有新的消息', $content = '', $url = '', $url_args = array(), $from_uid = -1, $type = 0)
+    {
+        $from_uid == -1 && $from_uid = is_login();
+        $to_uids = is_array($to_uids) ? $to_uids : array($to_uids);
+        $k = array_search(is_login(), $to_uids);
+        if ($k !== false) {
+            unset($to_uids[$k]);
+        }
+
+        if (count($to_uids) > 0) {
+            return $this->sendMessageWithoutCheckSelf($to_uids, $title, $content, $url, $url_args, $from_uid, $type);
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * sendMessageWithoutCheckSelf  发送消息，不屏蔽自己
+     * @param $to_uids 接收消息的用户们
+     * @param string $title 消息标题
+     * @param string $content 消息内容
+     * @param string $url 消息指向的路径，U函数的第一个参数
+     * @param array $url_args 消息链接的参数，U函数的第二个参数
+     * @param int $from_uid 发送消息的用户
+     * @param int $type 消息类型，0系统，1用户，2应用
+     * @return bool
+     * @author:xjw129xjt(肖骏涛) xjt@ourstu.com
+     */
+    public function sendMessageWithoutCheckSelf($to_uids, $title = '您有新的消息', $content = '', $url = '', $url_args = array(), $from_uid = -1, $type = 0)
+    {
+        $from_uid == -1 && $from_uid = is_login();
+        $message_content_id = $this->addMessageContent($from_uid, $title, $content, $url, $url_args, $type);
+        $to_uids = is_array($to_uids) ? $to_uids : array($to_uids);
+        foreach ($to_uids as $to_uid) {
+            $message['to_uid'] = $to_uid;
+            $message['content_id'] = $message_content_id;
+            $message['from_uid'] = $from_uid;
+            $message['create_time'] = time();
+            $message['status'] = 1;
+            $this->add($message);
+            unset($message);
+        }
+        return true;
+    }
+
+    /**
+     * addMessageContent  添加消息内容到表
+     * @param $from_uid 发送消息的用户
+     * @param $title 消息的标题
+     * @param $content 消息内容
+     * @param $url 消息指向的路径，U函数的第一个参数
+     * @param $url_args 消息链接的参数，U函数的第二个参数
+     * @param $type 消息类型，0系统，1用户，2应用
+     * @return mixed
+     * @author:xjw129xjt(肖骏涛) xjt@ourstu.com
+     */
+    private function addMessageContent($from_uid, $title, $content, $url, $url_args, $type)
+    {
+        $data_content['from_id'] = $from_uid;
+        $data_content['title'] = $title;
+        $data_content['content'] = $content;
+        $data_content['url'] = $url;
+        $data_content['args'] = empty($url_args) ? '':json_encode($url_args);
+        $data_content['type'] = $type;
+        $data_content['create_time'] = time();
+        $data_content['status'] = 1;
+        $message_id = D('message_content')->add($data_content);
+        return $message_id;
+    }
+
+
+    public function getContent($id)
+    {
+        $content = S('message_content_' . $id);
+        if (empty($content)) {
+            $content = D('message_content')->find($id);
+            if($content){
+                $content['args'] = json_decode($content['args'],true);
+                $content['args_json'] = json_encode($content['args']) ;
+                $content['web_url'] = is_bool(strpos($content['url'],'http://')) ? U($content['url'],$content['args']):$content['url'];
+            }
+            S('message_content_' . $id, $content, 60 * 60);
+        }
+
+        return $content;
+    }
+
+
+    /**取回全部未读,也没有提示过的信息
+     * @param $uid
+     * @return mixed
+     */
+    public function getHaventReadMeassageAndToasted($uid)
+    {
+        $messages = D('message')->where('to_uid=' . $uid . ' and  is_read=0  and last_toast!=0')->order('id desc')->limit(99999)->select();
+        foreach ($messages as &$v) {
+            $v['ctime'] = friendlyDate($v['create_time']);
+            $v['content'] = $this->getContent($v['content_id']);
+        }
+        unset($v);
+        return $messages;
+    }
+
+    public function readMessage($message_id)
+    {
+        return $this->where(array('id' => $message_id))->setField('is_read', 1);
+    }
+
+
+    public function setAllReaded($uid)
+    {
+        D('message')->where('to_uid=' . $uid . ' and  is_read=0')->setField('is_read', 1);
+    }
+
+
+
     /**获取全部没有提示过的消息
      * @param $uid 用户ID
      * @return mixed
@@ -22,7 +152,7 @@ class MessageModel extends Model
         $messages = D('message')->where('to_uid=' . $uid . ' and  is_read=0  and last_toast=0')->order('id desc')->limit(99999)->select();
         foreach ($messages as &$v) {
             $v['ctime'] = friendlyDate($v['create_time']);
-            $v['content'] = op_t($v['content']);
+            $v['content'] = $this->getContent($v['content_id']);
         }
         unset($v);
         return $messages;
@@ -37,10 +167,6 @@ class MessageModel extends Model
         D('message')->where('to_uid=' . $uid . ' and  is_read=0 and last_toast=0')->setField('last_toast', $now);
     }
 
-    public function setAllReaded($uid)
-    {
-        D('message')->where('to_uid=' . $uid . ' and  is_read=0')->setField('is_read', 1);
-    }
 
 
     /**取回全部未读信息
@@ -52,80 +178,10 @@ class MessageModel extends Model
         $messages = D('message')->where('to_uid=' . $uid . ' and  is_read=0 ')->order('id desc')->limit(99999)->select();
         foreach ($messages as &$v) {
             $v['ctime'] = friendlyDate($v['create_time']);
-            $v['content'] = op_t($v['content']);
+            $v['content'] = $this->getContent($v['content_id']);
         }
         unset($v);
         return $messages;
     }
 
-    /**取回全部未读,也没有提示过的信息
-     * @param $uid
-     * @return mixed
-     */
-    public function getHaventReadMeassageAndToasted($uid)
-    {
-        $messages = D('message')->where('to_uid=' . $uid . ' and  is_read=0  and last_toast!=0')->order('id desc')->limit(99999)->select();
-        foreach ($messages as &$v) {
-            $v['ctime'] = friendlyDate($v['create_time']);
-            $v['content'] = op_t($v['content']);
-        }
-        unset($v);
-        return $messages;
-    }
-
-
-
-    /**
-     * 注：appname及之后的参数，一般情况下无需填写
-     * @param        $to_uid 接受消息的用户ID
-     * @param string $content 内容
-     * @param string $title 标题，默认为  您有新的消息
-     * @param        $url 链接地址，不提供则默认进入消息中心
-     * @param int    $from_uid 发起消息的用户，根据用户自动确定左侧图标，如果为用户，则左侧显示头像
-     * @param int    $type 消息类型，0系统，1用户，2应用
-     * @param string $appname 应用名，默认不需填写，如果填写了就必须实现对应的消息处理模型，例如贴吧里面可以基于某个回复开启聊天
-     * @param string $apptype 同上，应用里面的一个标识符
-     * @param int    $source_id 来源ID，通过来源ID获取基于XX聊天的来源信息
-     * @param int    $find_id 查找ID，通过查找ID获得标识ID
-     * @return int
-     * @auth 陈一枭
-     */
-    public function sendMessage($to_uid, $content = '', $title = '您有新的消息', $url, $from_uid = 0, $type = 0, $appname = '', $apptype = '', $source_id = 0, $find_id = 0)
-    {
-        if ($to_uid == is_login()) {
-            return 0;
-        }
-        $this->sendMessageWithoutCheckSelf($to_uid, $content, $title, $url, $from_uid, $type, $appname, $apptype, $source_id, $find_id);
-    }
-
-    /**
-     * @param $to_uid 接受消息的用户ID
-     * @param string $content 内容
-     * @param string $title 标题，默认为  您有新的消息
-     * @param $url 链接地址，不提供则默认进入消息中心
-     * @param $int $from_uid 发起消息的用户，根据用户自动确定左侧图标，如果为用户，则左侧显示头像
-     * @param int $type 消息类型，0系统，1用户，2应用
-     */
-    public function sendMessageWithoutCheckSelf($to_uid, $content = '', $title = '您有新的消息', $url, $from_uid = 0, $type = 0, $appname = '', $apptype = '', $source_id = 0, $find_id = 0)
-    {
-        $message['to_uid'] = $to_uid;
-        $message['content'] = op_t($content);
-        $message['title'] = $title;
-        $message['url'] = $url;
-        $message['from_uid'] = $from_uid;
-        $message['type'] = $type;
-        $message['create_time'] = time();
-        $message['appname'] = $appname == '' ? strtolower(MODULE_NAME) : $appname;
-        $message['source_id'] = $source_id;
-        $message['apptype'] = $apptype;
-        $message['find_id'] = $find_id;
-
-        $rs = $this->add($message);
-        return $rs;
-    }
-
-    public function readMessage($message_id)
-    {
-        return $this->where(array('id' => $message_id))->setField('is_read', 1);
-    }
 } 

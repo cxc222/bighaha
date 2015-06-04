@@ -29,7 +29,7 @@ function getPagination($totalCount, $countPerPage = 10)
     $html = '';
 
     //添加头部
-    $html .= '<div class="pagination">';
+    $html .= '<div class="pager">';
 
     //添加上一页的按钮
     if ($currentPage > 1) {
@@ -72,10 +72,10 @@ function getPageHtml($f_name, $totalpage, $data, $nowpage)
         }
         $pages = '';
         for ($i = 1; $i <= $totalpage; $i++) {
-            if ($i == $nowpage) {
-                $pages = $pages . "<li class=\"active\"><a href=\"javascript:\" id='page_" . $i . "' class='page active' onclick='" . $f_name . "(" . $str . $i . ")'>" . $i . "</a></li>";
+           if ($i == $nowpage) {
+                $pages = $pages . "<li class=\"active\"><a href=\"javascript:\"  class='page active' onclick='" . $f_name . "(" . $str . $i . ")'>" . $i . "</a></li>";
             } else {
-                $pages = $pages . "<li><a href=\"javascript:\" id='page_" . $i . "' class='page' onclick='" . $f_name . "(" . $str . $i . ")'>" . $i . "</a></li>";
+                $pages = $pages . "<li><a href=\"javascript:\"  class='page' onclick='" . $f_name . "(" . $str . $i . ")'>" . $i . "</a></li>";
             }
         }
         if ($nowpage == 1) {

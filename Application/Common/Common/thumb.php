@@ -172,6 +172,10 @@ function getThumbImage($filename, $width = 100, $height = 'auto', $type = 0, $re
     }
 }
 
+/**获取网站的根Url
+ * @return string
+ * @auth 陈一枭
+ */
 function getRootUrl()
 {
     if (__ROOT__ != '') {
@@ -182,8 +186,50 @@ function getRootUrl()
     return __ROOT__;
 }
 
-
+/**通过ID获取到图片的缩略图
+ * @param        $cover_id 图片的ID
+ * @param int    $width 需要取得的宽
+ * @param string $height 需要取得的高
+ * @param int    $type 图片的类型，qiniu 七牛，local 本地, sae SAE
+ * @param bool   $replace 是否强制替换
+ * @return string
+ * @auth 陈一枭
+ */
 function getThumbImageById($cover_id, $width = 100, $height = 'auto', $type = 0, $replace = false)
+{
+
+    $picture=S('picture_'.$cover_id);
+    if(empty($picture)){
+        $picture = M('Picture')->where(array('status' => 1))->getById($cover_id);
+        S('picture_'.$cover_id,$picture);
+    }
+
+    if (empty($picture)) {
+        return getRootUrl() . 'Public/images/nopic.png';
+    }
+    switch ($picture['type']) {
+        case 'qiniu':
+            $height=$height=='auto'?100:$height;
+            if(stripos($picture['path'],'imageMogr2') !== false){
+                $picture['path'] = $picture['path'] . '/thumbnail/' . $width . 'x' . $height;
+            }else{
+                $picture['path'] = $picture['path'] . '?imageView/1/w/' . $width . '/h/' . $height;
+            }
+            return $picture['path'];
+            break;
+        case 'local':
+            $attach = getThumbImage($picture['path'], $width, $height, $type, $replace);
+            $attach['src'] = getRootUrl() . $attach['src'];
+            return $attach['src'];
+        case 'sae':
+            $attach = getThumbImage($picture['path'], $width, $height, $type, $replace);
+            return $attach['src'];
+        default:
+            return $picture['path'];
+    }
+
+}
+function getThumbImageByCoverId($cover_id, $width =180, $height = 'auto', $type = 0, $replace = false)
 {
 
     $picture = M('Picture')->where(array('status' => 1))->getById($cover_id);
@@ -193,13 +239,12 @@ function getThumbImageById($cover_id, $width = 100, $height = 'auto', $type = 0,
     switch ($picture['type']) {
         case 'qiniu':
             $height=$height=='auto'?100:$height;
-            $qiniuConfig = C('QINIU_CONFIG');
             if(stripos($picture['path'],'imageMogr2') !== false){
                 $picture['path'] = $picture['path'] . '/thumbnail/' . $width . 'x' . $height;
             }else{
                 $picture['path'] = $picture['path'] . '?imageView/1/w/' . $width . '/h/' . $height;
             }
-            return 'http://'.$qiniuConfig['domain'].'/'.$picture['path'];
+            return $picture['path'];
             break;
         case 'local':
             $attach = getThumbImage($picture['path'], $width, $height, $type, $replace);
@@ -227,4 +272,18 @@ function fixAttachUrl($url)
         return $url;
     }
 
+}
+
+/**获取第一张图
+ * @param $str_img
+ * @return mixed
+ */
+function get_pic($str_img)
+{
+    preg_match_all("/<img.*\>/isU", $str_img, $ereg); //正则表达式把图片的整个都获取出来了
+    $img = $ereg[0][0]; //图片
+    $p = "#src=('|\")(.*)('|\")#isU"; //正则表达式
+    preg_match_all($p, $img, $img1);
+    $img_path = $img1[2][0]; //获取第一张图片路径
+    return $img_path;
 }

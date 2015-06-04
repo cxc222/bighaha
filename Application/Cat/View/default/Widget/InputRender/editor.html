@@ -1,0 +1,7 @@
+<div id="{$field.name}" class="cat_editor mb10">
+    <php>
+        $config="toolbars:[['source','|','bold','italic','underline','fontsize','forecolor','justifyleft','fontfamily','|','map','emotion','insertimage','insertcode']]";
+    </php>
+
+    {:W('Common/Ueditor/editor',array('contentEditor',$field['name'],$field_value,'100%','250px',$config))}
+</div>

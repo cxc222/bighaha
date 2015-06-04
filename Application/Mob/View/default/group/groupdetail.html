@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>{:L('group')} | {:modC('WEB_SITE_NAME','OpenSNS')}</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel="alternate icon" type="image/png" href="assets/i/favicon.png">
+    <link rel="stylesheet" href="__CSS__/amazeui.min.css"/>
+    <link rel="stylesheet" href="__CSS__/group.css"/>
+    <link rel="stylesheet" href="__CSS__/app.css"/>
+    <style>
+        .header h1 {
+            font-size: 200%;
+            color: #333;
+            margin-top: 30px;
+        }
+
+        .header p {
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<header data-am-widget="header" class="am-header am-header-default am-header-fixed">
+    <div class="am-header-left am-header-nav">
+        <a href="javascript:history.go(-1);">
+            <span class="am-icon-chevron-left">
+            </span>
+        </a>
+        <a href="#msg" class="">
+            <i class="am-header-icon am-icon-bell-o"></i>
+        </a>
+    </div>
+    <h1 class="am-header-title">群组详情
+    </h1>
+
+
+    <div class="am-header-right am-header-nav">
+        <a href="{:U('group/addgroup')}" class="">
+            <i class="am-header-icon am-icon-pencil"></i>
+        </a>
+        <a href="#nav-link" class="" data-am-modal="{target: '#my-actions'}">
+            <i class="am-menu-toggle-icon am-icon-bars"></i>
+        </a>
+    </div>
+</header>
+
+<div class="group-detail" style="padding: 10px;">
+    <div class="" style="border: solid 1px #F2F2F2;padding: 5px;margin-bottom: 10px;font-size: 12px">
+        <div class="group-title am-g">
+            <div class="am-u-sm-6 title" style="padding: 0px;font-size: 16px">
+                <img class="avatar-img" style="width: 36px" src="Public/images/default_avatar_128_128.jpg">
+                背锅瞎
+            </div>
+            <a class="am-btn-xs diy-btn am-u-sm-6 am-radius" data-group-id style="padding: 0px;text-align: right">+邀请好友加入</a>
+            <a class="am-btn-xs diy-btn am-u-sm-6 am-radius" data-group-id
+               style="padding: 0px;text-align: right">+加入群组</a>
+            <a href="{:U('group/groupadmin')}" class="am-btn-xs diy-btn am-u-sm-6 am-radius" data-group-id
+               style="padding: 0px;text-align: right">管理</a>
+        </div>
+        <div class="group-type">群组类型：公共群组</div>
+        <div><span>分类：群组默认分类</span></div>
+        <div class="am-g">
+            <span class="am-u-sm-6" style="padding: 0px">帖子：1</span>
+            <span class="am-u-sm-6" style="padding: 0px">成员：2</span>
+        </div>
+    </div>
+
+    <div class="am-tabs am-nav am-nav-tabs" data-am-tabs="{noSwipe: 1}">
+        <ul class="am-tabs-nav am-nav am-nav-tabs">
+            <li class="am-active"><a href="#tab1">最新动态</a></li>
+            <li><a href="#tab2">帖子</a></li>
+            <li><a href="#tab3">成员</a></li>
+
+        </ul>
+
+        <div class="am-tabs-bd">
+            <div class="am-tab-panel am-fade am-in am-active" id="tab1">
+                <php>for($i=1;$i<11;$i++){</php>
+                <div class="update-situation-box " style="border: solid 1px #F2F2F2;padding: 3px;margin-bottom: 10px">
+                    <div class="am-g update-situation" style="">
+                        <div class="am-u-sm-3 am-u-md-1">
+                           <span class="avatar-img ">
+                           <img class="avatar-img" style="width: 36px" src="Public/images/default_avatar_128_128.jpg">
+                           </span>
+                        </div>
+                        <div class="am-u-sm-9 am-u-md-8">
+                            <a href="">斑马</a> 加入了群组 <a href="" title="">巴拉巴拉小魔仙</a>
+                        </div>
+                        <div class="am-u-sm-10 am-u-md-3" style="text-align: right">
+                            <span>  03月28日 08:52</span>
+                        </div>
+                    </div>
+                </div>
+                <php>}</php>
+            </div>
+
+            <div class="am-tab-panel am-fade" id="tab2">
+                <div>
+                    <a class="active" href="" style="font-size: 14px;background: #03ae87;
+  color: #fff !important">默认分类</a>
+                    <a href="" style="font-size: 14px;background: #03ae87;
+  color: #fff !important">默认分类</a>
+                    <a href="" style="font-size: 14px;background: #03ae87;
+  color: #fff !important">默认分类</a>
+                    <a href="" style="font-size: 14px;background: #03ae87;
+  color: #fff !important">默认分类</a>
+
+                </div>
+                <php>for($i=1;$i<11;$i++){</php>
+                <div class="post-subject am-list " style="border: solid 1px #F2F2F2;padding: 10px;">
+                    <div class="post-info am-g ">
+                        <div class="title am-u-sm-6" style="padding: 0px">
+                            <a href="{:U('group/postdetail')}">迪亚波罗</a></br>
+                            <span class="avatar-img ">
+                           <img class="avatar-img" style="width: 24px" src="Public/images/default_avatar_128_128.jpg">
+                           </span>
+                            <a href="##" style="font-size: 13px;"> 阿波罗</a>
+                        </div>
+                        <div class="am-u-sm-6  self-info " style="font-size: 13px;text-align: right;padding: 0px">
+                            <span>
+                                发表时间：03月28日 08:51
+                            </span>
+
+                            <span>
+                                最新回复：03月28日 08:51
+                            </span>
+                        </div>
+                    </div>
+                    <div class="icon-btn" style="text-align: left;font-size: 13px;">
+                        <span>12人浏览</span>
+                        <span>2人回复</span>
+                    </div>
+                </div>
+                <php>}</php>
+            </div>
+            <div class="am-tab-panel am-fade" id="tab3">
+                <div class="member-box">
+
+                    <div class="">
+                        <h3 style="margin-bottom: 5px">创始人</h3>
+
+                        <div class="master">
+                            <img class="avatar-img" style="width: 24px" src="Public/images/default_avatar_128_128.jpg">
+                            <a href="##" style="font-size: 13px;"> 阿波罗</a>
+                        </div>
+                    </div>
+                    <div class="active-member">
+                        <h3 style="margin-bottom: 5px">活跃成员</h3>
+                        <ul class="am-avg-sm-4 ">
+                            <li><img class="avatar-img" style="width: 24px"
+                                     src="Public/images/default_avatar_128_128.jpg">
+                                <a href="##" style="font-size: 13px;"> 阿波罗</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="new-member">
+                        <h3 style="margin-bottom: 5px">最新成员</h3>
+                        <ul class="am-avg-sm-4 ">
+                            <li><img class="avatar-img" style="width: 24px"
+                                     src="Public/images/default_avatar_128_128.jpg">
+                                <a href="##" style="font-size: 13px;"> 阿波罗</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="member">
+                        <h3 style="margin-bottom: 5px">全体成员</h3>
+                        <ul class="am-avg-sm-4 ">
+                            <php>for($i=1;$i<11;$i++){</php>
+                            <li>
+                                <img class="avatar-img" style="width: 24px"
+                                     src="Public/images/default_avatar_128_128.jpg">
+                                <a href="##" style="font-size: 13px;"> 阿波罗</a>
+                            </li>
+                            <php>}</php>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="am-modal-actions" id="my-actions">
+    <div class="am-modal-actions-group">
+        <ul class="am-list">
+            <li class="am-modal-actions-header">成员管理</li>
+
+            <li>
+                <a href="#">默认排序</a>
+            </li>
+            <li>
+                <a href="#">按最后活跃时间排序</a>
+            </li>
+            <li>
+                <a href="#">邀请好友加入</a>
+            </li>
+            <li class="am-modal-actions-danger">
+                <a href="#">删除群组成员</a>
+            </li>
+        </ul>
+    </div>
+    <div class="am-modal-actions-group">
+        <button class="am-btn am-btn-secondary am-btn-block" data-am-modal-close>取消</button>
+    </div>
+</div>
+<script src="__JS__/jquery.min.js"></script>
+<script src="__JS__/amazeui.min.js"></script>
+
+</body>
+</html>

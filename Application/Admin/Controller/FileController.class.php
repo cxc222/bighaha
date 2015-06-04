@@ -71,10 +71,10 @@ class FileController extends AdminController {
             C('PICTURE_UPLOAD_DRIVER'),
             C("UPLOAD_{$pic_driver}_CONFIG")
         ); //TODO:上传到远程服务器
-
         /* 记录图片信息 */
         if($info){
             $return['status'] = 1;
+            empty($info['download']) && $info['download']= $info['file'];
             $return = array_merge($info['download'], $return);
         } else {
             $return['status'] = 0;

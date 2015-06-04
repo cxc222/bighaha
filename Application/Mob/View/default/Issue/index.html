@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>{:L('issue')} | {:modC('WEB_SITE_NAME','OpenSNS')}</title>
+    <include file="head/head"/>
+    <script src="__JS__/issue.js"></script>
+</head>
+<body class="issue-body">
+
+
+<header data-am-widget="header" class="am-header am-header-default am-header-fixed am-cf">
+    <div class="am-header-left am-header-nav">
+        <a href="{:U('issue/index')}" class="am-fl">
+            <i class="am-header-icon am-icon-home"></i>
+        </a>
+<!--        <a href="#phone-link" class="am-fl">
+            <i class="am-header-icon am-icon-bell-o"></i>
+        </a>-->
+    </div>
+
+    <if condition="$title.pid neq 0">
+        <h1 class="am-header-title">
+            {$title.title}
+        </h1>
+    </if>
+    <if condition="$title.pid eq 0">
+    <h1 class="am-header-title">
+        专辑
+    </h1>
+    </if>
+    <div class="am-header-right am-header-nav">
+        <a href="{:U('issue/addissue')}" class="am-fl">
+            <i class="am-header-icon am-icon-pencil"></i>
+        </a>
+        <a href="#nav-link" class="">
+            <i class="am-menu-toggle-icon am-icon-bars"></i>
+        </a>
+    </div>
+</header>
+
+{:W('Mob/UserMenu/index')}
+
+
+<div class=" issue-container">
+    <!--分类-->
+    <div>
+
+    </div>
+    <!-- 专辑列表-->
+    <ul class="am-g  issue-list am-avg-sm-2 am-avg-md-4 am-avg-lg-5 ulclass" style="margin:0 auto">
+        <notempty name="issue">
+            <volist name="issue" id="vo">
+                <include file="_issuelist"/>
+            </volist>
+            <else/>
+            <div class="am-text-center" style="background-color:#FFFFFF;margin-top: -15px"><img src="__IMG__/tip.png"style="width: 100%;height: 100%"></div>
+        </notempty>
+
+    </ul>
+</div>
+
+
+<div data-am-widget="navbar" class="am-navbar am-cf am-navbar-default "
+     id="">
+    <ul class="am-navbar-nav am-cf am-avg-sm-4">
+        <li>
+            <a href="{:U('Mob/Issue/index')}">
+                全站专辑
+            </a>
+        </li>
+        <li>
+            <a href="{:U('issue/issuesection')}">
+                专辑分类
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+<if condition="$title.pid eq 0">
+    <div class="am-list-news-ft look-more">
+        <a class="" id="getmore" data-url="{:U('Mob/Issue/addMoreIssue')}"
+                >查看更多 &raquo;</a>
+    </div>
+</if>
+<if condition="$title.pid neq 0">
+    <div class="am-list-news-ft look-more">
+        <a class="" id="getmoreclass" data-url="{:U('Mob/Issue/addMoreIssueClass')}"
+                >查看更多 &raquo;</a>
+    </div>
+</if>
+</body>
+</html>

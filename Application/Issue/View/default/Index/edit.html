@@ -89,9 +89,11 @@
 
                             <div class="col-sm-10">
 
-                                <php>$config='toolbar:[\'bold italic underline fontsize forecolor justifyleft | map image emotion link \']';
+                                <php>
+                                    $config="toolbars:[['source','|','bold','italic','underline','fontsize','forecolor','justifyleft','fontfamily','|','map','emotion','insertimage','insertcode']]";
                                 </php>
-                                {:W('UeditorMini/editor',array('myeditor_edit','content',$content['content'],'378px','250px',$config))}
+
+                                {:W('Common/Ueditor/editor',array('myeditor_edit','content',$content['content'],'378px','250px',$config))}
                             </div>
                         </div>
                         <div class="form-group">
@@ -120,7 +122,7 @@
             "fileObjName": "download",
             "buttonText": "上传封面",
             "buttonClass": "uploadcover",
-            "uploader": "{:U('Home/File/uploadPicture',array('session_id'=>session_id()))}",
+            "uploader": "{:U('Core/File/uploadPicture',array('session_id'=>session_id()))}",
             "width": 250,
             'removeTimeout': 1,
             'fileTypeExts': '*.jpg; *.png; *.gif;',

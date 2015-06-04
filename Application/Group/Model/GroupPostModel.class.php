@@ -1,15 +1,11 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: caipeichao
- * Date: 14-3-8
- * Time: PM4:14
- */
-
 namespace Group\Model;
 use Think\Model;
 
 class GroupPostModel extends Model {
+
+
+    protected $tableName='group_post';
     protected $_validate = array(
         array('title', '1,100', '标题长度不合法', self::EXISTS_VALIDATE, 'length'),
         array('content', '1,40000', '内容长度不合法', self::EXISTS_VALIDATE, 'length'),
@@ -22,94 +18,49 @@ class GroupPostModel extends Model {
         array('status', '1', self::MODEL_INSERT),
     );
 
-    public function editPost($data) {
-        $at_source=$data['content'];
 
-        $data = $this->create($data);
-        if(!$data) return false;
-        // 对@进行处理
-
-        $content = $this->filterPostContent($data['content']);
-        $data['content']=$content;
-        $data['title']=op_t($data['title']);
-        $this->handlerAt($at_source,$data['id']);
-        return $this->save($data);
+    public function getPost($id){
+        $post = S('group_post_'.$id);
+        if(is_bool($post)){
+            $post = $this->where(array('id'=>$id,'status'=>1))->find();
+            if($post){
+                $post['user'] = query_user(array('avatar128', 'avatar64', 'nickname', 'uid', 'space_url', 'icons_html'), $post['uid']);
+                S('group_post_'.$id,$post,60*60);
+            }
+        }
+        return $post;
     }
+
 
     public function createPost($data) {
         //新增帖子
-        $at_source=$data['content'];
         $data = $this->create($data);
-
         //对帖子内容进行安全过滤
         if(!$data) return false;
-
-
-
-
-        $content = $this->filterPostContent($data['content']);
-        $data['content']=$content;
-        $data['title']=op_t($data['title']);
         $result = $this->add($data);
-        action_log('add_post','GroupPost',$result,is_login());
         if(!$result) {
             return false;
         }
-
+        action_log('add_group_post','GroupPost',$result,is_login());
         //增加板块的帖子数量
         D('Group')->where(array('id'=>$data['group_id']))->setInc('post_count');
-        $this->handlerAt($at_source,$result);
         //返回帖子编号
         return $result;
     }
 
-    /**
-     * @param $data
-     * @auth 陈一枭
-     */
-    private function handlerAt($content,$id)
-    {
-        D('ContentHandler')->handleAtWho($content,U('Group/Index/detail',array('id'=>$id)));
 
-    }
+    public function editPost($data) {
 
-    private function filterPostContent($content)
-    {
-        $content = op_h($content);
-        $content = $this->limitPictureCount($content);
-        $content = op_h($content);
-        return $content;
-    }
-    private function limitPictureCount($content)
-    {
-        //默认最多显示10张图片
-        $maxImageCount = 10;
-
-        //正则表达式配置
-        $beginMark = 'BEGIN0000hfuidafoidsjfiadosj';
-        $endMark = 'END0000fjidoajfdsiofjdiofjasid';
-        $imageRegex = '/<img(.*?)\\>/i';
-        $reverseRegex = "/{$beginMark}(.*?){$endMark}/i";
-
-        //如果图片数量不够多，那就不用额外处理了。
-        $imageCount = preg_match_all($imageRegex, $content);
-        if ($imageCount <= $maxImageCount) {
-            return $content;
+        $data = $this->create($data);
+        if(!$data) return false;
+        $result = $this->save($data);
+        if(!$result) {
+            return false;
         }
-
-        //清除伪造图片
-        $content = preg_replace($reverseRegex, "<img$1>", $content);
-
-        //临时替换图片来保留前$maxImageCount张图片
-        $content = preg_replace($imageRegex, "{$beginMark}$1{$endMark}", $content, $maxImageCount);
-
-        //替换多余的图片
-        $content = preg_replace($imageRegex, "[图片]", $content);
-
-        //将替换的东西替换回来
-        $content = preg_replace($reverseRegex, "<img$1>", $content);
-
-        //返回结果
-        return $content;
+        action_log('edit_group_post','GroupPost',$data['id'],is_login());
+        S('group_post_'.$data['id'],null);
+        return $result;
     }
+
+
 }

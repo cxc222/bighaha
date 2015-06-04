@@ -24,7 +24,6 @@ class GroupBookmarkModel extends Model {
         if($this->exists($uid, $post_id)) {
             return 0;
         }
-
         //如果不存在，就添加到数据库
         $data = array('uid'=>$uid,'post_id'=>$post_id);
         $data = $this->create($data);

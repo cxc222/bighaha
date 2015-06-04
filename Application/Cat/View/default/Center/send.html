@@ -1,0 +1,90 @@
+<extend name="Base/common"/>
+
+<block name="body">
+
+    <include file="Public/_cat_header"/>
+    <include file="Public/_navbar"/>
+    <div class="container">
+
+        <div class="col-xs-12 common_block_border">
+
+            <div class="col-xs-2 " style="height: 700px;border-right: 1px solid #ddd">
+
+                <include file="Center/_left"/>
+
+            </div>
+
+
+            <div class="col-xs-10" style="padding-top: 15px">
+                <ul class="nav nav-pills ">
+                    <li>
+                        <a href="{:U('cat/Center/rec')}">收到的信息</a>
+                    </li>
+                    <li class="active"><a href="{:U('cat/Center/send')}">发送的信息</a></li>
+                    <li class="splitter"></li>
+                    <li><a href="{:U('cat/Center/post')}">发送信息</a></li>
+                </ul>
+                <div class="clearfix"></div>
+                <div class="underline_x"></div>
+                <div class="mb10">
+                    <div style="padding: 15px"></div>
+
+
+
+                        <volist name="rec.data" id="vo">
+                            <div class="media" id="s_{$vo.id}">
+                                <a class="pull-left" target="_blank" ucard="{$vo.rec_user.uid}"
+                                   href="{$vo.rec_user.space_url}">
+                                    <img class="media-object img-circle" title="{$vo.rec_user.nickname}"
+                                         src="{$vo.rec_user.avatar64}">
+                                </a>
+
+                                <div class="media-body">
+                                    <div class="col-xs-6">
+                                        <h4 class="media-heading"><a
+                                                href="{:U('cat/Index/info',array('info_id'=>$vo['info_id']))}">{$vo.info.title|op_t}
+                                            <if condition="$vo['readed']">
+                                                <span class="cgrey">【已阅读】</span>
+                                                <else/>
+                                                <span>【未阅读】</span>
+                                            </if>
+                                        </a></h4>
+                                        <p>
+                                            <if condition="$vo['s_info_id']">
+                                                <strong>来源信息：</strong>
+
+                                                <a target="_blank"
+                                                   href="{:U('cat/Index/info',array('info_id'=>$vo['s_info_id']))}">{$vo.s_info.title|default=无来源信息}</a>
+                                                <br/>
+                                            </if>
+
+                                            <strong>附言：</strong>{$vo.content|default=你没有留下任何话哦}
+                                            <br/>
+                                            {$vo.create_time|friendlyDate}
+                                        </p>
+                                        </p>
+
+                                    </div>
+                                    <div class="col-xs-6 text-right">
+                                        <button class="btn btn-danger" event-node="get_back" event-args="id={$vo.id}"><i
+                                                class="glyphicon glyphicon-remove"></i> 销毁
+                                        </button>
+                                    </div>
+
+                                </div>
+                                <div class="clearfix"></div>
+                                <hr/>
+                            </div>
+                        </volist>
+                </div>
+                </ul>
+                <div class="page">{$rec.html}</div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    </div>
+    </div>
+
+</block>

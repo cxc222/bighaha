@@ -1,0 +1,35 @@
+<div style="border-bottom: 1px solid #ddd;margin-left: -20px;margin-right: -10px;margin-top: -15px">
+    <php>
+        $self=query_user(array('avatar64','nickname','space_url'))
+    </php>
+    <div style="padding: 30px;padding-bottom: 15px">
+        <a href="{$self.space_url}">
+            <img class="avatar-img" src="{$self.avatar64}">
+            {$self.nickname}</a>
+    </div>
+
+    <div style="border-top: 1px dashed #ccc;padding: 15px;padding-left: 30px">
+        发布信息： <a href="{:U('my')}">{$count.posted}</a> 条
+        <br/>
+        收藏信息： <a href="{:U('fav')}">{$count.fav}</a> 条
+    </div>
+</div>
+<div class="nav_left">
+
+    <a class="  <if condition="ACTION_NAME eq 'my'">active</if>"
+            href="{:U('Cat/Center/my')}"><i class="glyphicon glyphicon-send"></i> 发布的信息</a>
+    <a class="   <if condition="ACTION_NAME eq 'fav'"> current</if>"
+        href="{:U('Cat/Center/fav')}"><i class="glyphicon glyphicon-heart-empty"></i> 收藏的信息</a>
+   <a class="  <if condition="(ACTION_NAME eq 'rec') OR (ACTION_NAME eq 'send') OR (ACTION_NAME eq 'post')">current</if>"
+        href="{:U('Cat/Center/rec')}"><i class="glyphicon glyphicon-envelope"></i> 我的信箱</a>
+</div>
+<style>
+.nav_left{
+    margin-top: 15px;
+}
+.nav_left a{
+    line-height: 28px;
+    display: block;
+    font-size: 14px;
+}
+</style>

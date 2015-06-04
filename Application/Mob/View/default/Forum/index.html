@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>{:L('forum')} | {:modC('WEB_SITE_NAME','OpenSNS')}</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="renderer" content="webkit">
+    <script src="__JS__/jquery.min.js"></script>
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel="alternate icon" type="image/png" href="assets/i/favicon.png">
+    <link rel="stylesheet" href="__CSS__/amazeui.min.css"/>
+    <link rel="stylesheet" href="__CSS__/app.css"/>
+    <link rel="stylesheet" href="__CSS__/forum.css"/>
+</head>
+
+
+<body>
+
+<header data-am-widget="header" class="am-header am-header-default am-header-fixed">
+    <div class="am-header-left am-header-nav">
+        <a  class="am-fl" href="javascript:history.go(-1);"><span class="am-icon-chevron-left"></span></a>
+
+    </div>
+    <if condition="$title.pid neq 0">
+        <h1 class="am-header-title">
+            {$title.title}
+        </h1>
+    </if>
+    <if condition="$title.pid eq 0">
+        <h1 class="am-header-title">
+            论坛
+        </h1>
+    </if>
+
+    <div class="am-header-right am-header-nav">
+        <a href="#nav-link" class="am-fr">
+            <i class="am-menu-toggle-icon am-icon-bars"></i>
+        </a>
+    </div>
+</header>
+{:W('Mob/UserMenu/index')}
+<div class="forum-post-container ulclass" style="padding: 10px;">
+<volist name="forum" id="vo">
+    <include file="_forumlist"/>
+    </volist>
+
+
+</div>
+
+<div data-am-widget="navbar" class="am-navbar am-cf am-navbar-default "
+     id="">
+    <ul class="am-navbar-nav am-cf am-avg-sm-4">
+        <li>
+            <a href="{:U('forum/forumtype')}" class="">
+                <i class="am-menu-toggle-icon am-icon-th-large"></i>
+                版块
+            </a>
+        </li>
+        <li>
+            <a href="{:U('forum/addpost')}" class="">
+                <i class="am-menu-toggle-icon am-icon-edit"></i>
+                发帖
+            </a>
+        </li>
+    </ul>
+</div>
+<if condition="$title.pid neq 1">
+<div class="am-list-news-ft">
+    <a class=" am-btn am-btn-secondary am-btn-block look-more" id="getmore"
+       href="javascript:nextpage();">查看更多 &raquo;</a>
+</div>
+</if>
+<if condition="$title.pid eq 1">
+    <div class="am-list-news-ft">
+        <a class=" am-btn am-btn-secondary am-btn-block look-more" id="getmore"
+           href="javascript:nextpage1();">查看更多 &raquo;</a>
+    </div>
+</if>
+
+<script src="__JS__/amazeui.min.js"></script>
+<script>
+    //查看更多微博
+    var page = 1;
+    function nextpage() {
+
+        $("#getmore").html("查看更多...");
+        $.post("{:U('Mob/forum/addMoreForum')}", {page: page + 1}, function (msg) {
+            if (msg.status) {
+                $(".ulclass").append(msg.html);
+                page++;
+            } else {
+                $("#getmore").hide();
+            }
+        })
+    }
+    var forum_class = "{$title['id']}";
+    function nextpage1() {
+        $("#getmore").html("查看更多...");
+        $.post("{:U('Mob/forum/addMorePostSectionDetail')}", {page: page + 1, id: forum_class}, function (msg) {
+
+            if (msg.status) {
+                $(".ulclass").append(msg.html);
+                page++;
+            } else {
+                $("#getmore").hide();
+            }
+        })
+    }
+</script>
+</body>
+</html>

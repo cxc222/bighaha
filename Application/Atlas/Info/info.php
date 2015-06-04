@@ -25,6 +25,11 @@ return array(
     //开发者网站
     'website' => 'http://www.yhec.cn/',
     //前台入口，可用U函数
-    'entry' => 'Atlas/index/index'
+    'entry' => 'Atlas/index/index',
 
+    'admin_entry' => 'Admin/Atlas/index',
+
+    'icon' => 'map-marker',
+
+    'can_uninstall' => 1
 );

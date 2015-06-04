@@ -1,0 +1,49 @@
+<button title="Close (Esc)" type="button" class="mfp-close" style="display: none;">×</button>
+
+<form id="at_comment" data-url="{:U('Mob/Blog/doAddComment')}">
+    <input type="hidden" name="blogId" value="{$blog.id}">
+    <div class="" id="my-repost" style="width: 95%;margin:0px auto">
+
+        <div class="am-modal-dialog">
+            <div class="am-modal-bd">
+                <label>评论</label>
+                <p>
+                    <textarea style="width: 100%" type="text" class="am-modal-prompt-input" name="content"
+                              placeholder="写点什么吧~~">@{$blog.at_user_id} :</textarea></p>
+                <a href="javascript:" class="" onclick="insertFace($(this))">
+                    <img src="/opensns/Application/Core/Static/images/bq.png"></a>
+            </div>
+            <div class="am-modal-footer am-g">
+                <button class=" am-u-sm-6" type="button" id="cancel"
+                        style="background-color: #f8f8f8;padding: 10px;">
+                    <span>取消</span></button>
+                <button class=" am-u-sm-6" type="button" id="confirm"
+                        style="background-color: #f8f8f8;padding: 10px;">
+                    <span >确认</span></button>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+
+<script>
+    $(function () {
+        $('#cancel').click(function () {
+            $('.mfp-close').click();
+        });
+
+        $('#confirm').click(function () {
+            var data = $("#at_comment").serialize();
+            var url = $("#at_comment").attr('data-url');
+            $.post(url, data, function (msg) {
+                if (msg.status == 1) {
+                    alert('评论成功!');
+                    self.location.reload();
+                } else {
+                    alert(msg.info);
+                }
+            }, 'json');
+        })
+    })
+</script>

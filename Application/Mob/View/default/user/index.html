@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>{:L('weibo')} | {:modC('WEB_SITE_NAME','OpenSNS')}</title>
+    <include file="head/head"/>
+</head>
+<body class="user-body">
+<header data-am-widget="header" class="am-header am-header-default am-header-fixed am-cf">
+    <div class="am-header-left am-header-nav">
+        <a href="{:U('weibo/index')}" class="am-fl">
+            <i class="am-header-icon am-icon-home"></i>
+        </a>
+    </div>
+    <h1 class="am-header-title">
+        个人主页
+    </h1>
+
+    <div class="am-header-right am-header-nav">
+        <a href="{:U('weibo/addweibo')}" class="am-fl">
+            <i class="am-header-icon am-icon-pencil"></i>
+        </a>
+        <a href="#nav-link" class="">
+            <i class="am-menu-toggle-icon am-icon-bars"></i>
+        </a>
+    </div>
+    {:W('Mob/UserMenu/index')}
+
+</header>
+<style>
+    #user-list {
+        display: inline-block;
+
+        margin: 0px 0px 0px 0px;
+        height: 35px;
+    }
+
+    body {
+        background-color: #FFFFFF;
+
+    }
+
+    .user-container {
+        font-size: 12px;
+    }
+
+    #carousel {
+
+    }
+
+    #user-list li a span{
+        width: 100px;
+        line-height: 40px;
+        padding: 0px;
+        display: inline-block;
+        float: left;
+        text-align: center;
+        color: #000;
+    }
+
+    .selected  {
+       color: #6fa7ce;
+
+    }
+
+    .hide {
+        display: none;
+    }
+</style>
+<div class="user-container " style="padding: 0;">
+    <div class="">
+        <div style="width:100%">
+            <div class="bg_cover"
+                 style="background-image:url(Application/Mob/Static/test/551931edeecf0.jpg);width: 100%;height: 200px"></div>
+            <div></div>
+        </div>
+    </div>
+
+    <div class="" style="padding-left: 20px ;font-size: 12px;height: 80px ">
+        <div style="padding:10px;position: relative ;top: -40px;">
+            <div class="am-cf">
+                <div class="am-fl">
+                    <div class="media-main">
+                        <img src="Application/Mob/Static/test/551931edeecf0.jpg" style="width: 80px;height: 80px"></div>
+                    <!-- <div class="item-minor" style="">
+                         <button class="btn btn-normal" style="color: #5d5d5d;background-color: #fdfdfd;">
+                             <i class="iconf iconf_userinfo_edit txt-xl"></i>
+                             <span>编辑资料</span>
+                         </button>
+                     </div>-->
+                </div>
+                <div class="am-fl" style="margin-left: 10px">
+                    <div class="item-main txt-xl txt-cut">
+                        <span>汪思宇www</span><br>
+                        <span>积分：356</span><br>
+                        <span>等级：Lv4 助理</span><br>
+                    <span>
+                        个人标签：
+                        &nbsp;<a>产品人员</a>&nbsp;&nbsp;<a>开发人员</a>&nbsp;
+                    </span>
+                    </div>
+
+                </div>
+            </div>
+            <div class="" style="font-size: 12px">天无定. 人无常</div>
+        </div>
+    </div>
+    <div class="tab">
+        <div class="user-mod " style="height: 40px;width: 100%">
+            <div id="carousel" style="position: relative;height: 37px">
+
+                    <ul id="user-list">
+                        <li class="selected"><a><span>微博</span></a></li>
+                        <li><a><span>资讯</span></a></li>
+                        <li><a><span>头衔</span></a></li>
+                        <li><a><span>资料</span></a></li>
+                        <li><a><span>关注</span></a></li>
+                        <li><a><span>消息</span></a></li>
+                    </ul>
+
+                    <!--       <li><a>问答</a></li>-->
+
+            </div>
+        </div>
+
+        <div id="part-tab-con">
+            <div class="imgshow">
+                <div>
+                    <include file="_myweibo"/>
+                </div>
+                <div class="hide">
+                    <include file="_mybolg"/>
+                </div>
+                <div class="hide">
+                    <include file="_myrank"/>
+                </div>
+                <!--    <div class="hide">
+                        <include file="_myquestion"/>
+                    </div>-->
+                <div class="hide">
+                    <include file="_myinformation"/>
+                </div>
+                <div class="hide">
+                    <include file="_myfollowing"/>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+
+</body>
+<script src="__JS__/iscroll.js"></script>
+<script>
+
+
+    var $carousel = document.getElementById('carousel'),
+            $box = document.getElementById('user-list'),
+
+           liArray = $box.querySelectorAll('a'),
+
+            liNum = liArray.length;
+    console.log(liNum);
+
+    $box.style.width = (liNum * $("#user-list li:first-child").width() + 10 + 'px');
+
+
+    var myScroll = new iScroll('carousel', {
+        hideScrollbar: false,
+        hScroll: true,
+        bounce: true,
+        vScroll: false,
+        hScrollbar: false
+    });
+
+</script>
+<style>
+
+</style>
+<script type="text/javascript">
+    $(function () {
+        var $div_li = $("#user-list li");
+        $div_li.click(function () {
+            $(this).addClass("selected")            //当前<li>元素高亮
+                    .siblings().removeClass("selected");  //去掉其它同辈<li>元素的高亮
+            var index = $div_li.index(this);  // 获取当前点击的<li>元素 在 全部li元素中的索引。
+            $("div.imgshow > div")       //选取子节点。不选取子节点的话，会引起错误。如果里面还有div
+                    .eq(index).show()   //显示 <li>元素对应的<div>元素
+                    .siblings().hide(); //隐藏其它几个同辈的<div>元素
+        })
+    })
+</script>
+
+</html>

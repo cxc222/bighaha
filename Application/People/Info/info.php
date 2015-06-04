@@ -13,7 +13,7 @@ return array(
     //别名
     'alias' => '会员展示',
     //版本号
-    'version' => '1.0.0',
+    'version' => '2.0.0',
     //是否商业模块,1是，0，否
     'is_com' => 0,
     //是否显示在导航栏内？  1是，0否
@@ -25,6 +25,11 @@ return array(
     //开发者网站
     'website' => 'http://www.ourstu.com',
     //前台入口，可用U函数
-    'entry' => 'People/index/index'
+    'entry' => 'People/index/index',
 
+    'admin_entry' => 'People/config',
+
+    'icon' => 'group',
+
+    'can_uninstall' => 1
 );

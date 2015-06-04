@@ -1,0 +1,123 @@
+<extend name="Base/common"/>
+<block name="style">
+    <link href="__CSS__/recharge.css" rel="stylesheet" type="text/css"/>
+</block>
+<block name="header">
+    <include file="Public/_nav"/>
+</block>
+<block name="body">
+    <div class="row">
+        <div class="col-xs-12">
+            <p>&nbsp;</p>
+            <h4>充值中心</h4>
+            <hr class="oneuser-title-hr"/>
+        </div>
+    </div>
+    <include file="_menu"/>
+
+
+
+
+
+    <div style="margin-bottom: 50px">
+        <h3 style="font-size: 16px;font-weight: bold">所有记录</h3>
+
+
+        <ul class="nav nav-secondary">
+            <li class="{$payOk_all}"><a href="{:U('withdrawList')}">全部</a></li>
+            <li class="{$payOk_0}"><a href="{:U('withdrawList',array('payOk'=>0))}">提现中</a></li>
+            <li class="{$payOk_1}"><a href="{:U('withdrawList',array('payOk'=>1))}">已完成</a></li>
+            <li class="{$payOk_2}"><a href="{:U('withdrawList',array('payOk'=>2))}">已取消</a></li>
+        </ul>
+
+
+        <hr/>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>订单号</th>
+                <th>提现数额</th>
+                <th><span class="text-danger">冻结数额</span></th>
+                <th>提现类型</th>
+                <th>支付方式</th>
+                <th>订单状态</th>
+                <th>完成时间</th>
+            </tr>
+            </thead>
+            <volist name="list" id="vo">
+
+                <tr>
+                    <td>{$vo.id}</td>
+                    <td>￥ {$vo.amount|number_format=2} 元</td>
+                    <td><span class="font_grey">{$vo.frozen_amount|number_format=2} {$vo.score_type.unit}</span></td>
+                    <td>{$vo.score_type.title}</td>
+                    <td>{$vo.pay_method}
+                        <button class="account_info btn-xs btn  btn-default "
+                                data-toggle="popover" title="提现账户信息" data-content="{$vo.account_info|default=未填写账户任何资料|htmlspecialchars}"
+                                data-trigger="focus"><i class="icon icon-info" ></i> </button> </td>
+                    <td>
+                        <switch name="vo.payok">
+                            <case value="0">
+                                <a class="btn btn-success" data-role="cancel_withdraw" data-id="{$vo.id}" title="取消提现">提现中...</a>
+                            </case>
+                            <case value="1">
+                                提现完成
+                            </case>
+                            <case value="2">
+                                <span class="text-danger">取消，但未返现</span>
+                            </case>
+                            <case value="-1">
+                                已取消
+                            </case>
+                        </switch>
+                    </td>
+                    <td>
+                        <eq name="vo.pay_time" value="0">
+                            -
+                           <else/>
+                            {$vo.pay_time|friendlyDate}
+                        </eq>
+
+                    </td>
+                </tr>
+
+            </volist>
+
+        </table>
+
+
+        <div class="pull-left">
+            {:getPagination($totalCount,$r)}
+        </div>
+
+    </div>
+
+
+
+
+
+
+<script>
+    $(function(){
+        $('.account_info').popover();
+        $('[data-role="cancel_withdraw"]').click(function(){
+            var $this = $(this)
+            var id = $this.attr('data-id');
+            if (confirm('确定取消该次提现？冻结金额将会返回至账户。')) {
+                $.post(U('recharge/index/cancelWithdraw'), {id: id}, function (msg) {
+                    if (msg.status) {
+                        toast.success(msg.info);
+                        setTimeout('location.reload()', 1500);
+                    } else {
+                        toast.error(msg.info)
+                    }
+                }, 'json');
+            }
+        })
+    })
+</script>
+
+
+
+
+</block>

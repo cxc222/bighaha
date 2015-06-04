@@ -1,26 +1,39 @@
 <extend name="Base/common" />
 <block name="style">
-<link type="text/css" rel="stylesheet" href="__CSS__/atals.css" />
+<link type="text/css" rel="stylesheet" href="__CSS__/atlas.css" />
 </block>
-<block name="header"> </block>
-
+<block name="header">
+    <include file="Public/nav"/>
+</block>
 <block name="body">
-<div class="span9">
-
+<div class="col-xs-6">
 	<div class="web_content_left">
-
 		<volist name="atlas_list" id="atlas"> <include
 			file="Public/atlas-item" /> </volist>
 		<div class="pull-right">
 			{:getPagination($totalCount)}
 		</div>
 	</div>
-
 </div>
-<script src="__JS__/atlas.js"></script>
+<div class="col-xs-3">
+	<!-- 广告位：图集首页右边1-->
+	<script>
+	$(function () {
+		CNZZ_SLOT_Async('383283','ad_index_1');
+	});
+	</script>
+	<div id="ad_index_1"></div>
+</div>
+<div class="col-xs-3">
+	<!-- 广告位：图集首页右边2-->
+	<script>
+	$(function () {
+		CNZZ_SLOT_Async('383302','ad_index_2');
+	});
+	</script>
+	<div id="ad_index_2"></div>
+</div>
 </block>
-
-<block name="side"> <!-- 右侧 nav
-================================================== -->
-<div class="span3">Level 2</div>
+<block name="script">
+<script src="__JS__/atlas.js"></script>
 </block>

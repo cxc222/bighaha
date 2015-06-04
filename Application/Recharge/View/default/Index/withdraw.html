@@ -1,0 +1,138 @@
+<extend name="Base/common"/>
+
+<block name="style">
+    <link href="__CSS__/recharge.css" rel="stylesheet" type="text/css"/>
+</block>
+<block name="header">
+    <include file="Public/_nav"/>
+</block>
+<block name="body">
+    <div class="row">
+        <div class="col-xs-12">
+            <p>&nbsp;</p>
+            <h4>充值中心</h4>
+            <hr class="oneuser-title-hr"/>
+        </div>
+    </div>
+    <include file="_menu"/>
+    <div style="margin-bottom: 50px">
+        <h3 style="font-size: 16px;font-weight: bold">选择提现类型</h3>
+        <hr/>
+        <p>
+        <blockquote>
+            <volist name="fields" id="vo">
+                <br/>
+                <label><input data-role="set_field" type="radio" name="field" value="{$vo.FIELD}"
+                    <eq name="i" value="1">checked</eq> > 当前提现比例  {$vo.UNIT} {$vo.scoreType.unit} {$vo.scoreType.title} = 1 RMB
+                    （账户余额：<span style="color: red">{$vo.have} </span> {$vo.scoreType.unit} {$vo.scoreType.title} ，可提现 ￥ <span style="color: red">{:number_format($vo['have']/$vo['UNIT'], 2, ".", "")} </span> 元 ）</label>
+            </volist>
+        </blockquote>
+        </p>
+    </div>
+    <div style="margin-bottom: 30px">
+        <h3 style="font-size: 16px;font-weight: bold">选择提现面额金额</h3>
+        <hr/>
+        <div>
+            <form class="form-horizontal">
+
+                <php>if($amount){</php>
+
+                <div class="row">
+                    <div class="col-md-2">
+                        提现金额
+                    </div>
+                    <div class="col-md-8">
+                        <div class="radio">
+                            <volist name="amount" id="vo">
+                                <if condition="floatval($vo) neq 0">
+
+                                    <div class="form-group">
+                                        <label><input  data-role="set_amount"   name="amount" type="radio" value="{$vo|floatval}"
+                                            <eq name="i" value="1">checked</eq> > {$vo|floatval}
+                                            元 </label>
+                                    </div>
+
+                                    <else/>
+
+                                </if>
+                            </volist>
+                        </div>
+                    </div>
+
+                </div>
+                <php>}</php>
+
+
+
+                <if condition="modC('CAN_INPUT',1,'recharge')">
+                    <div class="row">
+                        <div class="col-md-2">
+                            任意金额
+                        </div>
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label><input id="other" onfocus="$(this).next().focus()" name="amount" type="radio" value="{$vo|floatval}">&nbsp;&nbsp;
+                                    <input type="text" class="form-control "
+                                           onfocus="$('#other').prop('checked',true);$('#frm_amount').val(0)"
+                                           style="display: inline-block;width: 120px" name="amount" value=""
+                                           placeholder="输入金额"
+                                           onblur="$('#frm_amount').val(parseFloat($(this).val()))"
+                                            >&nbsp; 元
+                                    <if condition="modC('MIN_AMOUNT',0,'recharge') neq 0">
+                                        （最少充值 {:modC('MIN_AMOUNT',0,'recharge')} 元）
+                                    </if>
+
+                                </label>
+
+                            </div>
+                        </div>
+                    </div>
+                </if>
+
+            </form>
+
+        </div>
+
+    </div>
+    <div>
+        <h3 style="font-size: 16px;font-weight: bold">选择支付方式</h3>
+        <hr/>
+        <div style="padding: 20px">
+            <if condition="check_is_in_config('alipay',$method)">
+                <label><input type="radio" name="type" value="alipay" checked>
+                    <img src="__IMG__/alipay.gif"/>
+                </label>
+            </if>
+
+        </div>
+
+    </div>
+    <div style="margin-bottom: 30px">
+        <div class="clearfix">
+            <form action="{:U('withdraw')}" method="post" class="ajax-form">
+                <div class="form-group">
+                    <label >提现账户信息（请输入您的账户详情，银行请提供开户行，开户人和账号，支付宝请提供账号，收款人）</label>
+                    <textarea name="account_info" class="form-control" placeholder="请输入您的账户详情，银行请提供开户行，开户人和账号，支付宝请提供账号，收款人"></textarea>
+                </div>
+                <input id="frm_amount" type="hidden" name="amount" value="{$amount.0|floatval}">
+                <input type="hidden" name="method" value="{$method.0}">
+                <input id="frm_field" type="hidden" name="field" value="{$fields.0.FIELD}">
+                <button class="btn btn-primary pull-left" type="submit">提交订单</button>
+            </form>
+        </div>
+
+    </div>
+    <script>
+        $(function(){
+            $('[data-role="set_field"]').change(function(){
+                $('#frm_field').val($(this).val());
+            })
+
+            $('[data-role="set_amount"]').change(function(){
+                $('#frm_amount').val($(this).val());
+            })
+        })
+
+    </script>
+</block>
+

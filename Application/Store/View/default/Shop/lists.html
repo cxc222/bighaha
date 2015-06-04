@@ -1,0 +1,164 @@
+<extend name="Base/common"/>
+<block name="style">
+    <link href="__CSS__/store.css" type="text/css" rel="stylesheet">
+</block>
+<block name="header">
+    <include file="Public/nav"/>
+</block>
+<block name="body">
+    <div class="container">
+        <div class="common_block_border clearfix" style="padding: 10px;margin-bottom: 10px;line-height: 28px">
+            <div class="pull-left">共 {$list.count} 个店铺已入驻</div>
+            <div class="pull-right"><a class="btn btn-primary"
+                                       href="{:U('store/center/createshop',array('name'=>'shop'))}">我要开店</a>
+            </div>
+        </div>
+        <div style="padding: 7px"></div>
+        <div class="row">
+            <div class="col-xs-9">
+                <div class="col-xs-12 clearfix ">
+                    <div style="display: none" class="hideRoll">
+                        <!-- <h1 class="store_ul_title mb10">查询 <span class="f12px cgrey"> 耗时{$used}s</span></h1>-->
+                        <style>
+                            .store_searh li {
+                                float: left;
+                            }
+                        </style>
+                        <div class="">
+
+                            <volist name="search_fields" id="vo">
+                                <li class="f14px cgrey" style="line-height: 35px">
+                                    <div class="left  mr15">{$vo['alias']}：</div>
+                                    <div class="left" style="margin-top: 5px">
+                                        <input type="hidden" name="entity_id" value="{$entity.entity_id}">
+
+                                        {:W('SearchInputRender',array('field'=>$vo))}
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </li>
+                            </volist>
+
+                        </div>
+
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+
+                <div class="common_block_border">
+
+                    <div class="common_block_title">已入驻的小店</div>
+                    <div class="clearfix" style="min-height: 800px">
+                        <div class="col-xs-12">
+                            <volist name="list.data" id="vo">
+                                <div class="clearfix">
+                                    <div class="col-xs-3 c_s_ul_logo   pd10 mr10" style="">
+                                        <a class="f16px"
+                                           href="{:U('store/shop/detail',array('id'=>$vo['id']))}">
+                                            <img class="img-rounded" src="{:getThumbImageById($vo['logo'],80,80)}">
+                                        </a>
+
+                                        <div class="left" style="width: 140px">
+                                            <p class="mb10">
+                                                <a class="f16px"
+                                                   href="{:U('store/shop/detail',array('id'=>$vo['id']))}">{$vo.title}</a>
+                                            </p>
+
+                                            <p class="mb10">掌柜： <a href="{$vo.user.space_url}" event-node="face_card"
+                                                                   uid="{$vo.user.uid}"><img
+                                                    class="mr5 p16 avatar-img"
+                                                    src="{$vo.user.avatar32}"> {$vo.user.nickname}</a></p>
+
+                                            <p class="mb5">所在地：{$vo.position}</p>
+
+                                            <p class="mb5">
+                                                创店于：{$vo.create_time|date='Y.m.d',###}
+                                            </p>
+
+                                            <p>共{:count($vo['goods'])}件商品</p>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </div>
+
+                                    <div class="col-xs-9  pd10 " style="  height:102px;*height:106px;">
+                                        <if condition="count($vo['goods'])==0"><span
+                                                style="font-size: 32px;line-height: 102px;padding-left: 20px">小店新开张，还没有上传任何商品。</span>
+                                        </if>
+                                        <ul class="c_s_ul_goods">
+                                            <volist name="vo['goods']" id="gd">
+                                                <li style="position: relative;<php>if($i % 4 == 0) echo 'margin-right:0';</php>;margin-bottom: 10px">
+                                                    <a target="_blank"
+                                                       href="{:U('store/Index/info',array('info_id'=>$gd['id']))}">
+                                                        <img src="{$gd.cover_id|getThumbImageById=100,100}"
+                                                             style="width: 100px;height: 100px;">
+
+                                                        <div class="c_tt">
+                                                            ￥{$gd.price|number_format=2}
+                                                        </div>
+                                                    </a>
+
+                                                </li>
+                                            </volist>
+                                        </ul>
+                                    </div>
+                                    <div class="clearfix"></div>
+
+                                </div>
+                                <hr/>
+                            </volist>
+
+
+                            <div class="text-center">
+                                {$list.html}
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-3">
+                <div class="common_block_border">
+                    <include file="Shop/_hot_shop_sell"/>
+                </div>
+            </div>
+            <!--导航栏end-->
+
+        </div>
+    </div>
+    <script>
+        $(document).ready(function () {
+            $('.store_search_input').keydown(function (e) {
+                key = e.which;
+                if (key == 13) {
+                    //alert($(this).attr('data'));
+                    store_search($(this).attr('data'));
+                    return false;
+
+                }
+            });
+
+        });
+
+        function store_search(frm) {
+            var d = $('#frm_' + frm).serialize();
+            var url = $('#frm_' + frm).attr('data-url');
+            // alert(url);
+            location.href = url + '&' + frm + '=' + $('#i_' + frm).val();
+        }
+
+        $(document).ready(function () {
+            $(".hideBar").click(function () {
+                $(".hideRoll").slideToggle("slow", function () {
+                    if ($('.hideBar').text() == '暂时收起') {
+                        $('.hideBar').text('展开搜索');
+                    }
+                    else {
+                        $('.hideBar').text('暂时收起');
+                    }
+
+
+                });
+            });
+        });
+    </script>
+
+</block>

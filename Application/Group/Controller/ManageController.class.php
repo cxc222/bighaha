@@ -1,30 +1,25 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: caipeichao
- * Date: 14-3-8
- * Time: PM4:30
- */
-
 namespace Group\Controller;
-
 use Think\Controller;
-use Weibo\Api\WeiboApi;
 
-define('TOP_ALL', 2);
-define('TOP_Group', 1);
-
-class ManageController extends GroupController
+class ManageController extends BaseController
 {
+
+    private $groupId = '';
 
     public function _initialize()
     {
-        $_REQUEST['group_id']=intval($_REQUEST['group_id']);
+
+        $aGroupId = I('group_id', 0, 'intval');
+        $this->groupId = $aGroupId;
         parent::_initialize();
         //判断是否有权限编辑
-        $this->requireAllowEditGroup($_REQUEST['group_id']);
-        $this->getNotice($_REQUEST['group_id']);
-        $this->assign('group_id',$_REQUEST['group_id']);
+        if(!is_login()){
+            $this->error('请先登陆。');
+        }
+        $this->checkAuth('Group/Manager/*',get_group_admin($this->groupId),'您没有管理群组的权限。');
+        $this->assignNotice($this->groupId);
+        $this->assign('group_id', $this->groupId);
         unset($e);
         $myInfo = query_user(array('avatar128', 'avatar64', 'nickname', 'uid', 'space_url', 'icons_html'), is_login());
         $this->assign('myInfo', $myInfo);
@@ -34,137 +29,73 @@ class ManageController extends GroupController
 
     }
 
-    private function group_detail($group_id){
-        $group_id=intval($group_id);
-        $group = $this->getGroup($group_id);
-        $this->assign('group',$group);
-        return $group;
-    }
-    public function index($group_id)
-    {
-        $group_id=intval($group_id);
-        $this->group_detail($group_id);
 
-        $this->getGroupTypes();
+    public function index()
+    {
+        $this->assignGroup($this->groupId);
+        $this->assignGroupAllType();
         $this->setTitle('群组管理--编辑群组');
         $this->display();
-        //redirect(U('group', array('page' => $page)));
     }
 
-    public function category($group_id)
+    public function member()
     {
-        $group_id=intval($group_id);
-        $this->group_detail($group_id);
-        $this->getGroupTypes();
-        $this->setTitle('群组管理--帖子分类管理');
-        $cate = D('GroupPostCategory')->where(array('group_id'=>$group_id,'status'=>1))->field()->select();
-        $this->assign('cate',$cate);
-
-        $this->display();
-
-    }
-
-
-    public function member($group_id,$status=1){
-        $group_id=intval($group_id);
-        $status=intval($status);
-
-        $this->group_detail($group_id);
-        $member = D('GroupMember')->where(array('group_id'=>$group_id,'status'=>$status))->select();
-        foreach($member as &$v){
+        $aPage = I('get.page', 1, 'intval');
+        $aStatus = I('get.status', 1, 'intval');
+        $this->assignGroup($this->groupId);
+        $member = D('GroupMember')->where(array('group_id' => $this->groupId, 'status' => $aStatus))->page($aPage, 10)->select();
+        $totalCount = D('GroupMember')->where(array('group_id' => $this->groupId, 'status' => $aStatus))->count();
+        foreach ($member as &$v) {
             $v['user'] = query_user(array('avatar128', 'avatar64', 'nickname', 'uid', 'space_url', 'icons_html'), $v['uid']);
-            $v['isCreator'] = checkIsCreator($v['uid'],'Group',$v['group_id']);
         }
-        $this->assign('member',$member);
-        $this->assign('status',$status);
-        $this->assign('sh_count',D('GroupMember')->where(array('group_id'=>$group_id,'status'=>1))->count());
-        $this->assign('wsh_count',D('GroupMember')->where(array('group_id'=>$group_id,'status'=>0))->count());
+        $this->assign('member', $member);
+        $this->assign('status', $aStatus);
+        $this->assign('totalCount', $totalCount);
+        $this->assign('sh_count', D('GroupMember')->where(array('group_id' => $this->groupId, 'status' => 1))->count());
+        $this->assign('wsh_count', D('GroupMember')->where(array('group_id' => $this->groupId, 'status' => 0))->count());
         $this->setTitle('群组管理--群组成员');
         $this->display();
     }
-    public function notice($group_id , $notice = ''){
-        $group_id=intval($group_id);
-        $notice=op_h($notice);
 
-         $this->group_detail($group_id);
-        if(IS_POST){
-            $data['group_id'] = $group_id;
-            $data['content'] = $notice;
-            $data['create_time'] = time();
-            $res =   D('GroupNotice')->add($data,array(),true);
-            $this->clearcache($group_id);
-            if($res){
-                $this->success('添加成功','refresh');
 
-            }else{
+    public function notice()
+    {
+
+
+        $this->assignGroup($this->groupId);
+        if (IS_POST) {
+            $aNotice = I('post.notice', '', 'text');
+            $data['group_id'] = $this->groupId;
+            $data['content'] = $aNotice;
+            $res = D('GroupNotice')->addNotice($data);
+            if ($res) {
+                $this->success('添加成功', 'refresh');
+            } else {
                 $this->error('添加失败');
             }
-        }
-        else{
+        } else {
 
-            $this->assign('group_id',$group_id);
+            $this->assign('group_id', $this->groupId);
             $this->setTitle('群组管理--公告');
             $this->display();
         }
     }
 
-
-public function remove_group($uid,$group_id){
-    $uid=intval($uid);
-    $group_id=intval($group_id);
-   $res = D('GroupMember')->where(array('uid'=>$uid,'group_id'=>$group_id))->delete();
-
-    $dynamic['group_id'] = $group_id;
-    $dynamic['uid'] = $uid;
-    $dynamic['type'] = 'remove';
-    $dynamic['create_time'] = time();
-    D('GroupDynamic')->add($dynamic);
-
-    if($res){
-        $group =$this->getGroup($group_id);
-        D('Message')->sendMessage($uid, get_nickname(is_login()) . "将您移出了群组【{$group['title']}】",  '移出群组', U('group/index/group',array('id'=>$group_id)), is_login());
-
-        $this->clearcache($group_id);
-        $this->success('删除成功','refresh');
-    }else{
-        $this->error('删除失败');
-    }
-}
-
-    public function attend_group($uid,$group_id){
-        $uid=intval($uid);
-        $group_id=intval($group_id);
-
-        $res = D('GroupMember')->where(array('uid'=>$uid,'group_id'=>$group_id))->save(array('status'=>1,'update_time'=>time()));
-
-        $dynamic['group_id'] = $group_id;
-        $dynamic['uid'] = $uid;
-        $dynamic['type'] = 'attend';
-        $dynamic['create_time'] = time();
-        D('GroupDynamic')->add($dynamic);
-        if($res){
-
-            $group =$this->getGroup($group_id);
-            D('Message')->sendMessage($uid, get_nickname(is_login()) . "通过了您加入群组【{$group['title']}】的请求",  '群组审核通过', U('group/index/group',array('id'=>$group_id)), is_login());
-
-            $this->clearcache($group_id);
-            $this->success('审核成功','refresh');
-        }else{
-            $this->error('审核失败');
-        }
-    }
-
-
-    public function dismiss($group_id)
+    public function category()
     {
-        $group_id=intval($group_id);
-        
-        //设置相关数据状态
-        $res = D('Group')->where(array('id' => $group_id))->setField('status',-1);
-      /*   D('GroupMember')->where(array('group_id' => $group_id))->setField('status',-1);
-         D('GroupPost')->where(array('group_id' => $group_id))->setField('status',-1);*/
+        $this->assignGroup($this->groupId);
+        $this->assignGroupTypes();
+        $this->setTitle('群组管理--帖子分类管理');
+        $cate = D('GroupPostCategory')->where(array('group_id' => $this->groupId, 'status' => 1))->select();
+        $this->assign('cate', $cate);
+        $this->display();
+    }
 
-        $this->clearcache($group_id);
+
+    public function dismiss()
+    {
+        $this->checkAuth('Group/Manager/dismiss',get_group_creator($this->groupId),'您没有解散群组的权限。');
+        $res = D('Group')->delGroup($this->groupId);
         if ($res) {
             $this->success('解散成功', U('group/index/index'));
         } else {
@@ -172,31 +103,82 @@ public function remove_group($uid,$group_id){
         }
     }
 
-    public function editCate($group_id,$cate_id = 0,$title=''){
-        $cate_id = intval($cate_id);
-        $title=op_t($title);
-        if($title==''){
+
+    public function receiveMember()
+    {
+
+        $aUid = I('post.uid', 0, 'intval');
+        $res = D('GroupMember')->setStatus($aUid, $this->groupId, 1);
+        $dynamic['group_id'] = $this->groupId;
+        $dynamic['uid'] = $aUid;
+        $dynamic['type'] = 'attend';
+        $dynamic['create_time'] = time();
+        D('GroupDynamic')->add($dynamic);
+        if ($res) {
+            $group = D('Group')->getGroup($this->groupId);
+            D('Message')->sendMessage($aUid,'群组审核通过', get_nickname(is_login()) . "通过了您加入群组【{$group['title']}】的请求",  'group/index/group', array('id' => $this->groupId), is_login());
+            S('group_member_count_' . $group['id'],null);
+            S('group_is_join_' . $group['id'] . '_' . $aUid, null);
+            $this->success('审核成功', 'refresh');
+        } else {
+            $this->error('审核失败');
+        }
+    }
+
+
+    public function removeGroupMember()
+    {
+        $aUid = I('post.uid', 0, 'intval');
+        $res = D('GroupMember')->where(array('uid' => $aUid, 'group_id' => $this->groupId))->delete();
+        $dynamic['group_id'] = $this->groupId;
+        $dynamic['uid'] = $aUid;
+        $dynamic['type'] = 'remove';
+        $dynamic['create_time'] = time();
+        D('GroupDynamic')->add($dynamic);
+        if ($res) {
+            $group = D('Group')->getGroup($this->groupId);
+            D('Message')->sendMessage($aUid, '移出群组', get_nickname(is_login()) . "将您移出了群组【{$group['title']}】", 'group/index/group', array('id' => $this->groupId), is_login());
+            S('group_member_count_' . $group['id'],null);
+            S('group_is_join_' . $group['id'] . '_' . $aUid, null);
+            $this->success('删除成功', 'refresh');
+        } else {
+            $this->error('删除失败');
+        }
+    }
+
+
+    public function editCate()
+    {
+        $aCateId = I('post.cate_id', 0, 'intval');
+        $aTitle = I('post.title', '', 'text');
+        if (empty($aTitle)) {
             $this->error('分类名不能为空');
         }
-        if($cate_id == 0){
-            $res = D('GroupPostCategory')->add(array('group_id'=>$group_id,'title'=>$title,'create_time'=>time(),'status'=>1,'sort'=>0));
-            $res&& $this->success('添加分类成功','refresh');
-            !$res&& $this->error('添加分类失败');
-        }else{
-            $res = D('GroupPostCategory')->where(array('id'=>$cate_id))->save(array('title'=>$title));
-            $res&& $this->success('编辑分类成功','refresh');
-            !$res&& $this->error('编辑分类失败');
+        if ($aCateId == 0) {
+            $res = D('GroupPostCategory')->add(array('group_id' => $this->groupId, 'title' => $aTitle, 'create_time' => time(), 'status' => 1, 'sort' => 0));
+            if (!$res) {
+                $this->error('添加分类失败');
+            }
+            $this->success('添加分类成功', 'refresh');
+        } else {
+            $res = D('GroupPostCategory')->where(array('id' => $aCateId))->save(array('title' => $aTitle));
+            if (!$res) {
+                $this->error('编辑分类失败');
+            }
+            $this->success('编辑分类成功', 'refresh');
         }
-
     }
 
 
-    public function delCate($group_id,$cate_id = 0){
-        $cate_id = intval($cate_id);
-        $res = D('GroupPostCategory')->where(array('id'=>$cate_id))->setField('status',0);
-        $res&& $this->success('删除分类成功','refresh');
-        !$res&& $this->error('删除分类失败');
-
+    public function delCate()
+    {
+        $aCateId = I('post.cate_id', 0, 'intval');
+        $res = D('GroupPostCategory')->where(array('id' => $aCateId))->setField('status', 0);
+        if (!$res) {
+            $this->error('删除分类失败');
+        }
+        $this->success('删除分类成功', 'refresh');
     }
+
 
 }

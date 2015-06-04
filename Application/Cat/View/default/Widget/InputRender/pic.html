@@ -1,0 +1,6 @@
+<if condition="$info_id neq 0">
+    {:W('Common/UploadImage/render',array(array('id'=>$field['name'],'name'=>$field['name'],'value'=>$field_value,'args'=>$field['args'])))}
+    <else/>
+    {:W('Common/UploadImage/render',array(array('id'=>$field['name'],'name'=>$field['name'],'args'=>$field['args'],'value'=>$field['default_value'])))}
+</if>
+

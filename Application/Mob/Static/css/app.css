@@ -1,0 +1,6 @@
+/* Write your styles */
+.am-menu-offcanvas1 .am-menu-toggle{
+    z-index: 1030;
+    position: fixed;
+    top:4px;
+}

@@ -1,0 +1,34 @@
+
+    <volist name="infos" id="vo">
+        <div class="c_def_dv" style="border-top:none;">
+            <div class="lh28">
+                <if condition="$vo['top']">
+                    <div class="c_top">顶</div>
+                </if>
+                <if condition="$vo['recom']">
+                    <div class="c_recom">荐</div>
+                </if>
+                <dt class="ofh dsblock noflo"> <!--{:W('FavBtn',array('info_id'=>$vo['info_id']))}-->
+                    <a target="_blank" class="c333 f14px text-more" style="width: 100%"
+                       href="{:U('cat/Index/info',array('info_id'=>$vo['id']))}">{$vo.title|op_t}</a>
+                </dt>
+
+                <div class="clearfix row">
+                    <div class="col-xs-4">
+                        {$vo.create_time|date="m.d",###}
+                    </div>
+                    <div class="col-xs-4">
+                        <a class="c666 text-more" style="width: 100%" href="{$vo.user.space_url}"
+                           ucard="{$vo.user.uid}">{$vo.user.nickname}</a>
+
+                    </div>
+                    <div class="col-xs-4">
+                        {$vo.rate| number_format=1}评分
+                    </div>
+                </div>
+            </div>
+            <dd style="clear: right"></dd>
+            <div class="clearfix"></div>
+        </div>
+    </volist>
+

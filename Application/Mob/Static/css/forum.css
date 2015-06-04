@@ -1,0 +1,64 @@
+ul,
+li {
+  list-style: none;
+  margin-left: 0;
+  padding-left: 0;
+}
+.avatar-img {
+  border-radius: 100%;
+}
+.forum-body {
+  background: #FFFFFF;
+}
+.small-btn {
+  padding: 0px 10px;
+}
+.forum-type-list .type-list .forum-type .type {
+  padding: 10px 65px 10px 10px;
+  background-color: #FFFFFF;
+  border-bottom: 1px solid #e5e5e5;
+}
+/*帖子详情页*/
+.post-container {
+  background-color: #FFFFFF;
+}
+.post-container .post .post-box {
+  background-color: #FFFFFF;
+  padding: 10px;
+  border: 1px solid #e5e5e5;
+}
+.post-container .post .post-box .info .part {
+  font-size: 13px;
+  text-align: right;
+}
+.post-container .post .post-box .interact-button {
+  text-align: right;
+}
+.post-container .post .post-box .interact-button .small-btn {
+  padding: 0 10px;
+}
+.post-container .post .post-box .content {
+  padding: 10px;
+}
+.post-container #comment {
+  border: 1px solid #f5f5f5;
+  background-color: #F1F1F1;
+  padding: 10px;
+}
+.post-container #comment .info {
+  font-size: 13px;
+}
+.post-container #comment .info .part {
+  text-align: right;
+}
+.post-container #comment .interact-button {
+  text-align: right;
+}
+.post-container #comment .interact-button .small-btn {
+  padding: 0 10px;
+}
+.post-container #comment .content {
+  padding: 10px;
+  height: 5em;
+  width: 100%;
+}

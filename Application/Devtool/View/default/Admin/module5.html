@@ -1,0 +1,102 @@
+<extend name="Public/base"/>
+<block name="body">
+    <div class="main-title">
+        <h2>最后一步.完成导出
+            <small>（恭喜，所有步骤已经成功完成。）</small>
+        </h2>
+    </div>
+
+    <div class="with-padding">
+        <div class="alert alert-success">
+            恭喜，所有步骤已经成功完成！您可以选择操作。
+        </div>
+        <div class="clearfix">
+
+            <div class="alert alert-info col-xs-6">
+                当前打包模块：<strong>{$module.alias}-{$_SESSION.module}</strong>
+            </div>
+        </div>
+        <form id="form_main" action="{:U('module5')}" method="post">
+            <div class="clearfix">
+
+                <p class="lead">guide.json引导文件内容</p>
+                <p>以下为自动生成的引导文件内容</p>
+                <neq name="guide" value="">
+                        <textarea name="guide" class="form-control" style="height: 200px">{:json_encode($guide)}</textarea>
+                    <else/>
+                    <div class="alert alert-success col-xs-6">未检测到任何的和模块相关的数据表，如果确定不需要数据表，可直接跳过本步骤。</div>
+                </neq>
+
+            </div>
+            <div class="clearfix">
+                <p class="lead">install.sql脚本</p>
+
+                <p>以下为自动生成的install.sql内容</p>
+                <neq name="install" value="">
+
+                        <textarea name="install" class="form-control" style="height: 200px">{$install}</textarea>
+
+                    <else/>
+                    <div class="alert alert-success col-xs-6">由于没有相关表，所以install.sql文件为空。</div>
+                </neq>
+                <script>
+                    $(function () {
+                        $('[data-role=check_table]').change(function () {
+                            $.post(U('Admin/Devtool/backup_rows'),$('#form_main').serialize(),function(msg){
+                                $('[name=sql_rows]').val(msg)
+                            })
+                        })
+                    })
+                </script>
+
+            </div>
+            <div class="clearfix">
+                <p class="lead">cleanData.sql脚本</p>
+
+                <p>以下为自动生成的cleanData.sql内容</p>
+                <neq name="cleanData" value="">
+
+                    <textarea name="install" class="form-control" style="height: 200px">{$cleanData}</textarea>
+
+                    <else/>
+                    <div class="alert alert-success col-xs-6">由于没有相关表，所以cleanData.sql文件为空。</div>
+                </neq>
+                <script>
+                    $(function () {
+                        $('[data-role=check_table]').change(function () {
+                            $.post(U('Admin/Devtool/backup_rows'),$('#form_main').serialize(),function(msg){
+                                $('[name=sql_rows]').val(msg)
+                            })
+                        })
+                    })
+                </script>
+
+            </div>
+            <div class="with-padding">
+                <label class="text-danger">自动替换模块下的对应文件，如果模块目录无写权限将不会自动备份。如果具备权限则会生成.bk文件作为备份。！</label>
+            </div>
+            <div class="with-padding">
+                <a class="btn  btn-default" href="{:U('module4')}">
+                    上一步
+                </a>
+                <neq name="havent_created" value="">
+                    <php>$str='disabled="disabled"';</php>
+                </neq>
+                <a href="{:U('module')}" class="btn btn-warning" >
+                    重新打包
+                </a>
+                <a target="_blank" href="{:U('replace')}" class="btn btn-danger" style="width: 200px">
+                    替换安装文件
+                </a>
+                <a href="{:U('download')}" target="_blank" id="next_step" style="width: 300px" title="{$title}" {$str}
+                       class="btn  btn-info">下载压缩包</a>
+
+                </input>
+
+
+            </div>
+        </form>
+
+
+    </div>
+</block>

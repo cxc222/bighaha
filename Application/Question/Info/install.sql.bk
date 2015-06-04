@@ -1,0 +1,109 @@
+-- phpMyAdmin SQL Dump
+-- version phpStudy 2014
+-- http://www.phpmyadmin.net
+--
+-- 主机: localhost
+-- 生成日期: 2014 年 11 月 18 日 13:30
+-- 服务器版本: 5.5.38
+-- PHP 版本: 5.3.28
+
+SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
+
+
+DROP TABLE IF EXISTS `ocenter_question`;
+CREATE TABLE IF NOT EXISTS `ocenter_question` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `uid` int(11) NOT NULL,
+  `category` int(11) NOT NULL COMMENT '问题分类',
+  `title` varchar(200) NOT NULL COMMENT '问题标题',
+  `description` text NOT NULL COMMENT '问题描述',
+  `answer_num` int(10) NOT NULL DEFAULT '0' COMMENT '回答数',
+  `best_answer` int(11) NOT NULL COMMENT '最佳答案id',
+  `good_question` int(10) NOT NULL DEFAULT '0' COMMENT '好问题（用于好问题排序：数值=支持-反对）',
+  `status` tinyint(4) NOT NULL,
+  `is_recommend` tinyint(2) NOT NULL DEFAULT '0' COMMENT '是否被推荐',
+  `create_time` int(11) NOT NULL COMMENT '创建时间',
+  `update_time` int(11) NOT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='问题表' AUTO_INCREMENT=1 ;
+
+DROP TABLE IF EXISTS `ocenter_question_answer`;
+CREATE TABLE IF NOT EXISTS `ocenter_question_answer` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `uid` int(11) NOT NULL,
+  `question_id` int(11) NOT NULL,
+  `content` text NOT NULL COMMENT '回答内容',
+  `support` int(10) NOT NULL DEFAULT '0' COMMENT '支持数',
+  `oppose` int(10) NOT NULL DEFAULT '0' COMMENT '反对数',
+  `status` tinyint(4) NOT NULL,
+  `update_time` int(11) NOT NULL,
+  `create_time` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='问题回答表' AUTO_INCREMENT=1 ;
+
+
+DROP TABLE IF EXISTS `ocenter_question_category`;
+CREATE TABLE IF NOT EXISTS `ocenter_question_category` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(25) NOT NULL,
+  `pid` int(11) NOT NULL,
+  `sort` int(11) NOT NULL,
+  `status` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='问题分类表';
+
+INSERT INTO `ocenter_question_category` (`id`, `title`, `pid`, `sort`, `status`) VALUES
+(1, '默认分类', 0, 1, 1);
+
+DROP TABLE IF EXISTS `ocenter_question_support`;
+CREATE TABLE IF NOT EXISTS `ocenter_question_support` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `uid` int(11) NOT NULL,
+  `tablename` varchar(25) NOT NULL COMMENT '表名：question；question_answer',
+  `row` int(11) NOT NULL COMMENT '行号',
+  `type` int(11) NOT NULL COMMENT '类型：0：反对，1：支持',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='问题支持反对表' AUTO_INCREMENT=1 ;
+
+
+INSERT INTO `ocenter_menu` (`title`, `pid`, `sort`, `url`, `hide`, `tip`, `group`, `is_dev`, `icon`) VALUES
+( '问答', 0, 22, 'Question/index', 1, '', '', 0,'question');
+
+set @tmp_id=0;
+select @tmp_id:= id from `ocenter_menu` where title = '问答';
+
+INSERT INTO `ocenter_menu` ( `title`, `pid`, `sort`, `url`, `hide`, `tip`, `group`, `is_dev`, `icon`) VALUES
+( '问题列表', @tmp_id, 0, 'Question/index', 0, '', '问答管理', 0, ''),
+( '回答列表', @tmp_id, 0, 'Question/answer', 0, '', '问答管理', 0, ''),
+( '基础配置', @tmp_id, 0, 'Question/config', 0, '', '配置管理', 0, ''),
+( '分类管理', @tmp_id, 0, 'Question/category', 0, '', '配置管理', 0, ''),
+( '编辑、添加分类', @tmp_id, 0, 'Question/add', 1, '', '', 0, ''),
+( '设置分类状态', @tmp_id, 0, 'Question/setStatus', 1, '', '', 0, ''),
+( '设置问题状态（审核、启用、禁用、删除）', @tmp_id, 0, 'Question/setQuestionStatus', 1, '', '', 0, ''),
+( '设置回答状态（启用、禁用、删除）', @tmp_id, 0, 'Question/setAnswerStatus', 1, '', '', 0, '');
+
+Delete from `ocenter_action` where module = 'Question';
+Delete from `ocenter_action_limit` where module = 'Question';
+Delete from `ocenter_auth_rule` where module = 'Question';
+
+INSERT INTO `ocenter_action` (`name`, `title`, `remark`, `rule`, `log`, `type`, `status`, `update_time`, `module`) VALUES
+('add_question', '提问', '用户提出问题', 'N;', '', 2, 1, 1428479582, 'Question'),
+('edit_question', '编辑问题', '用户编辑问题', 'N;', '', 2, 1, 1428479582, 'Question'),
+('add_answer', '回答', '用户发布答案', 'N;', '', 2, 1, 1428479582, 'Question'),
+('edit_answer', '编辑回答', '用户编辑答案', 'N;', '', 2, 1, 1428479582, 'Question'),
+('support_answer', '支持、反对回答', '用户支持、反对答案', 'N;', '', 2, 1, 1428479582, 'Question');
+
+INSERT INTO `ocenter_action_limit` (`title`, `name`, `frequency`, `time_number`, `time_unit`, `punish`, `if_message`, `message_content`, `action_list`, `status`, `create_time`, `module`) VALUES
+('add_question', '提问', 1, 1, 'minute', 'warning', 1, '操作太频繁！', '[add_question]', 1, 0, 'Question'),
+('edit_question', '编辑问题', 1, 1, 'minute', 'warning', 1, '操作太频繁！', '[edit_question]', 1, 0, 'Question'),
+('add_answer', '回答', 1, 1, 'minute', 'warning', 1, '操作太频繁！', '[add_answer]', 1, 0, 'Question'),
+('edit_answer', '编辑回答', 1, 1, 'minute', 'warning', 1, '操作太频繁！', '[edit_answer]', 1, 0, 'Question'),
+('support_answer', '支持、反对回答', 1, 1, 'minute', 'warning', 1, '操作太频繁！', '[support_answer]', 1, 0, 'Question');
+
+INSERT INTO `ocenter_auth_rule` (`module`, `type`, `name`, `title`, `status`, `condition`) VALUES
+('Question', 1, 'Question/Index/add', '提问', 1, ''),
+('Question', 1, 'Question/Index/edit', '编辑问题（管理）', 1, ''),
+('Question', 1, 'Question/Answer/add', '回答', 1, ''),
+('Question', 1, 'Question/Answer/edit', '编辑答案（管理）', 1, ''),
+('Question', 1, 'Question/Answer/setBest', '设为最佳答案（管理）', 1, '');

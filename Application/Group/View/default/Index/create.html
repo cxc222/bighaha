@@ -1,8 +1,8 @@
-<extend name="Public/group"/>
+<extend name="Public/base"/>
 
 <block name="body">
         <div class="">
-            <div class="fourm-top common_block_border" style="padding: 15px 20px;margin-top: 0;margin-bottom: 15px">
+            <div class="fourm-top common-block" style="padding: 15px 20px;margin-top: 0;margin-bottom: 15px">
                 <h4>
                     <if condition="$isEdit">
                         编辑群组
@@ -12,7 +12,7 @@
                 </h4>
                 <hr/>
                 <section id="contents">
-                    <form class="form-horizontal ajax-form" role="form" action="{:U('Group/Index/doAddGroup')}" method="post" id="edit-article-form">
+                    <form class="form-horizontal ajax-form" role="form" action="{:U('Group/Index/create')}" method="post" id="edit-article-form">
                         <input type="hidden" name="group_id" value="{$group.id}"/>
 
                         <div class="row">
@@ -30,9 +30,8 @@
                                         <select name="group_type" class="form-control" id="inputType">
                                             <option value="-1">请选择</option>
                                             <volist name="groupTypeAll" id="groupType">
-                                                <option value="{$groupType['id']}">{$groupType['title']|parseWeiboContent}</option>
+                                                <option value="{$groupType['id']}">{$groupType['title']}</option>
                                             </volist>
-
                                         </select>
                                     </div>
                                 </div>
@@ -62,38 +61,26 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="upload_picture_cover" class="col-sm-2 control-label">群组形象</label>
+                                    <label  class="col-sm-2 control-label">群组形象</label>
                                     <div  class="col-sm-10">
-                                    <input type="file" id="upload_picture_cover"  >
-                                    <div style="color: #999">
-                                        （图片尺寸至少：300像素 * 300像素）
+                                        {:W('Common/UploadImage/render',array(array('id'=>'cover_id_cover','name'=>'logo','value'=>'','width'=>200,'height'=>200,'isLoadScript'=>1)))}
                                     </div>
+                                </div>
+                               <!-- <div class="form-group">
+                                    <label  class="col-sm-2 control-label">背景图片</label>
 
-                                    <input type="hidden" name="logo" id="cover_id_cover" value=""/>
-
-                                    <div class="col-sm-10 upload-img-box" style="margin-top: 10px;width: 250px;">
-
-                                    </div>
-                                    </div>
+                                    <div  class="col-sm-10">
+                                        {:W('Common/UploadImage/render',array(array('id'=>'background','name'=>'background','value'=>'','width'=>200,'height'=>200,'isLoadScript'=>1)))}
+                                </div>-->
                                 </div>
                                 <div class="form-group">
-                                    <label for="upload_picture_cover" class="col-sm-2 control-label">背景图片</label>
-
-                                    <div  class="col-sm-10">
-                                    <input type="file" id="upload_picture_background"  >
-                                    <div style="color: #999;">
-                                        （图片建议尺寸：1050像素 * 200像素）
-                                    </div>
-                                    <input type="hidden" name="background" id="background" value=""/>
-
-                                    <div class="col-sm-10 upload-background-box" style="margin-top: 10px;width: 350px;">
-
+                                    <label for="inputTitle" class="col-sm-2 control-label">*群成员的别称</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" name="member_alias" class="form-control" id="inputMember" placeholder="群成员的别称，默认为“成员”" value="">
                                     </div>
                                 </div>
-                                </div>
-
                             </div>
-                        </div>
+
                         <p class="pull-right">
                             <button type="submit" class="btn btn-large btn-primary" id="submit-button">
                                 <span class="glyphicon glyphicon-edit"></span>
@@ -116,135 +103,10 @@
                     </form>
                 </section>
             </div>
-        </div>
-
+    </div>
 </block>
 
 <block name="script">
-    <script type="text/javascript" src="__PUBLIC__/Core/js/ext/atwho/atwho.js"></script>
-    <link type="text/css" rel="stylesheet" href="__PUBLIC__/Core/js/ext/atwho//atwho.css"/>
-    <script type="text/javascript" src="__STATIC__/uploadify/jquery.uploadify.min.js"></script>
-
-
-    <script>
-        $("#upload_picture_cover").uploadify({
-            "height": 30,
-            "swf": "__STATIC__/uploadify/uploadify.swf",
-            "fileObjName": "download",
-            "buttonText": "上传封面",
-            "buttonClass": "uploadcover",
-            "uploader": "{:U('Home/File/uploadPicture',array('session_id'=>session_id()))}",
-            "width": 100,
-            'removeTimeout': 1,
-            'fileTypeExts': '*.jpg; *.png; *.gif;',
-            "onUploadSuccess": uploadPicturecover,
-            'overrideEvents': ['onUploadProgress', 'onUploadComplete', 'onUploadStart', 'onSelect'],
-            'onFallback': function () {
-                alert('未检测到兼容版本的Flash.');
-            }, 'onUploadProgress': function (file, bytesUploaded, bytesTotal, totalBytesUploaded, totalBytesTotal) {
-                $("#cover_id_cover").parent().find('.upload-img-box').html(totalBytesUploaded + ' bytes uploaded of ' + totalBytesTotal + ' bytes.');
-            }, 'onUploadComplete': function (file) {
-                //alert('The file ' + file.name + ' finished processing.');
-            }, 'onUploadStart': function (file) {
-                $('.upload-img-box').html(
-                        '<div class="upload-pre-item">上传中...</div>'
-                );
-                //alert('Starting to upload ' + file.name);
-            }, 'onQueueComplete': function (queueData) {
-                // alert(queueData.uploadsSuccessful + ' files were successfully uploaded.');
-            }
-        });
-        function uploadPicturecover(file, data) {
-            var data = $.parseJSON(data);
-            var src = '';
-            if (data.status) {
-                $("#cover_id_cover").val(data.id);
-                src = data.url ||  data.path
-                $('.upload-img-box').html(
-                        '<div class="upload-pre-item"><img src="' + src + '"/></div>'
-                );
-            } else {
-                toast.error('封面上传失败。', '温馨提示');
-            }
-        }
-
-
-
-        $("#upload_picture_background").uploadify({
-            "height": 30,
-            "swf": "__STATIC__/uploadify/uploadify.swf",
-            "fileObjName": "download",
-            "buttonText": "上传背景",
-            "buttonClass": "uploadcover",
-            "uploader": "{:U('Home/File/uploadPicture',array('session_id'=>session_id()))}",
-            "width": 100,
-            'removeTimeout': 1,
-            'fileTypeExts': '*.jpg; *.png; *.gif;',
-            "onUploadSuccess": uploadbackground,
-            'overrideEvents': ['onUploadProgress', 'onUploadComplete', 'onUploadStart', 'onSelect'],
-            'onFallback': function () {
-                alert('未检测到兼容版本的Flash.');
-            }, 'onUploadProgress': function (file, bytesUploaded, bytesTotal, totalBytesUploaded, totalBytesTotal) {
-                $("#background").parent().find('.upload-background-box').html(totalBytesUploaded + ' bytes uploaded of ' + totalBytesTotal + ' bytes.');
-            }, 'onUploadComplete': function (file) {
-                //alert('The file ' + file.name + ' finished processing.');
-            }, 'onUploadStart': function (file) {
-                $('.upload-background-box').html(
-                        '<div class="upload-pre-item">上传中...</div>'
-                );
-                //alert('Starting to upload ' + file.name);
-            }, 'onQueueComplete': function (queueData) {
-                // alert(queueData.uploadsSuccessful + ' files were successfully uploaded.');
-            }
-        });
-        function uploadbackground(file, data) {
-            var data = $.parseJSON(data);
-            var src = '';
-            if (data.status) {
-                $("#background").val(data.id);
-                src = data.url ||  data.path
-                $('.upload-background-box').html(
-                        '<div class="upload-pre-item"><img src="' + src + '"/></div>'
-                );
-            } else {
-                toast.error('背景上传失败。', '温馨提示');
-            }
-        }
-
-
-    </script>
-
-    <script>
-        //点击编辑或发表按钮之后
-        $(function () {
-
-            var submitCount = 0;
-
-
-            function showSubmitError(message) {
-                $('#submit-button').removeClass('disabled');
-                var isEdit = $('#isEdit').val();
-                var text = '';
-                if (isEdit) {
-                    text = '编辑帖子';
-                } else {
-                    text = '发表帖子';
-                }
-                $('#submit-content').text(text);
-                toast.error(message, '错误');
-            }
-
-            function showSubmitSuccess(message, url) {
-                toast.success(message, '温馨提示');
-                setTimeout(function () {
-                    location.href = url;
-                }, 1500);
-            }
-
-            function showSubmitting() {
-                $('#submit-button').attr('class', 'btn btn-primary disabled');
-                $('#submit-content').text('正在提交');
-            }
-        })
-    </script>
+    <script type="text/javascript" charset="utf-8" src="__PUBLIC__/js/ext/webuploader/js/webuploader.js"></script>
+    <link href="__PUBLIC__/js/ext/webuploader/css/webuploader.css" type="text/css" rel="stylesheet">
 </block>

@@ -71,18 +71,7 @@ return array(
         'callback' => false, //检测文件是否存在回调函数，如果存在返回文件信息数组
     ), //图片上传相关配置（文件上传类配置）
 
-    /* 模板相关配置 */
-    'TMPL_PARSE_STRING' => array(
-        '__STATIC__' => __ROOT__ . '/Public/static',
-        '__ADDONS__' => __ROOT__ . '/Public/' . MODULE_NAME . '/Addons',
-        '__IMG__'    => __ROOT__ . '/Public/' . MODULE_NAME . '/images',
-        '__CSS__'    => __ROOT__ . '/Public/' . MODULE_NAME . '/css',
-        '__JS__'     => __ROOT__ . '/Public/' . MODULE_NAME . '/js',
-    ),
 
-    /* SESSION 和 COOKIE 配置 */
-    'SESSION_PREFIX' => 'onethink_home', //session前缀
-    'COOKIE_PREFIX'  => 'onethink_home_', // Cookie前缀 避免冲突
 
     /**
      * 附件相关配置
@@ -110,5 +99,14 @@ return array(
         'hash'     => true, //是否生成hash编码
         'callback' => false, //检测文件是否存在回调函数，如果存在返回文件信息数组
     ), //附件上传配置（文件上传类配置）
+    /* 模板相关配置 */
+    'TMPL_PARSE_STRING' => array(
+        '__STATIC__' => __ROOT__ . '/Public/static',
+        '__ADDONS__' => __ROOT__ . '/Public/' . MODULE_NAME . '/Addons',
+        '__IMG__' => __ROOT__ . '/Application/Home'   . '/Static/images',
+        '__CSS__' => __ROOT__ . '/Application/Home'   . '/Static/css',
+        '__JS__' => __ROOT__ . '/Application/Home'  . '/Static/js',
+        '__ZUI__' => __ROOT__ . '/Public/zui'
+    ),
 
 );

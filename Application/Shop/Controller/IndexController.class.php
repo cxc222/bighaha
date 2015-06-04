@@ -12,7 +12,7 @@ use Think\Controller;
  */
 class IndexController extends Controller
 {
-    protected $goods_info = 'id,goods_name,goods_ico,goods_introduct,tox_money_need,goods_num,changetime,status,createtime,category_id,is_new,sell_num';
+    protected $goods_info = 'id,goods_name,goods_ico,goods_introduct,money_need,goods_num,changetime,status,createtime,category_id,is_new,sell_num';
 
     /**
      * 商城初始化
@@ -22,25 +22,39 @@ class IndexController extends Controller
     {
         $tree = D('shopCategory')->getTree();
         $this->assign('tree', $tree);
+        $score_type=modC('SHOP_SCORE_TYPE','1','Shop');
+        $money_type=D('Ucenter/Score')->getType(array('id'=>$score_type));
         if (is_login()) {
-            $this->assign('my_tox_money', getMyToxMoney());
-        }
-        $this->assign('tox_money_name', getToxMoneyName());
-        $hot_num = D('shop_config')->where(array('ename' => 'min_sell_num'))->getField('cname');
-        $this->assign('hot_num', $hot_num);
-        $menu_list = array(
-            'left' =>
-                array(
-                    array('tab' => 'home', 'title' => '首页', 'href' => U('shop/index/index')),
-                    array('tab' => 'all', 'title' => '所有商品', 'href' => U('shop/index/goods')),
-                ),
-            'right' =>
-                array(
-                    array('tab' => 'orders', 'title' => '我的订单', 'href' => U('shop/index/mygoods'), 'icon' => 'list-alt'),
-                    array('tab' => 'money', 'title' => '当前' . getToxMoneyName() . '：' . getMyToxMoney(), 'icon' => 'stats',
+            $money=query_user('score'.$score_type);
+            $this->assign('my_money', $money);
+            $menu_list = array(
+                'left' =>
+                    array(
+                        array('tab' => 'all', 'title' => '全部', 'href' => U('shop/index/goods')),
+                    ),
+                'right' =>
+                    array(
+                        array('tab' => 'orders', 'title' => '我的订单', 'href' => U('shop/index/mygoods'), 'icon' => 'list-alt'),
+                        array('tab' => 'money', 'title' => '当前' . $money_type['title'] . '：' . $money.' '.$money_type['unit'], 'icon' => 'stats')
                     )
-                )
-        );
+            );
+        }else{
+            $menu_list = array(
+                'left' =>
+                    array(
+                        array('tab' => 'all', 'title' => '全部', 'href' => U('shop/index/goods')),
+                    ),
+                'right' =>
+                    array(
+                        array('tab' => 'orders', 'title' => '我的订单', 'href' => U('shop/index/mygoods'), 'icon' => 'list-alt')
+                    )
+            );
+        }
+        $this->assign('money_type', $money_type);
+
+        $hot_num = modC('SHOP_HOT_SELL_NUM',10,'Shop');
+        $this->assign('hot_num', $hot_num);
+
         foreach ($tree as $category) {
             $menu = array('tab' => 'category_' . $category['id'], 'title' => $category['title'], 'href' => U('shop/index/goods', array('category_id' => $category['id'])));
             if ($category['_']) {
@@ -81,7 +95,7 @@ class IndexController extends Controller
         $this->assign('contents_new', $goods_list_new);
 
         //热销商品
-        $hot_num = D('shop_config')->where(array('ename' => 'min_sell_num'))->getField('cname');
+        $hot_num = modC('SHOP_HOT_SELL_NUM',10,'Shop');
         $map_hot['sell_num'] = array('egt', $hot_num);
         $map_hot['status'] = 1;
         $goods_list_hot = D('shop')->where($map_hot)->order('sell_num desc')->limit(8)->field($this->goods_info)->select();
@@ -214,6 +228,8 @@ class IndexController extends Controller
         if (!is_login()) {
             $this->error('请先登录！');
         }
+        $this->checkAuth('Shop/Index/goodsBuy',-1,'你没有购买、兑换商品的权限！');
+        $this->checkActionLimit('shop_goods_buy','shop',$id,is_login());
         $goods = D('shop')->where('id=' . $id)->find();
         if ($goods) {
             if($num<=0){
@@ -225,11 +241,15 @@ class IndexController extends Controller
                 $this->error('商品余量不足');
             }
 
-            //扣tox_money
-            $tox_money_need = $num * $goods['tox_money_need'];
-            $my_tox_money = getMyToxMoney();
-            if ($tox_money_need > $my_tox_money) {
-                $this->error('你的' . getToxMoneyName() . '不足');
+            //扣money
+            $ScoreModel=D('Ucenter/Score');
+            $score_type=modC('SHOP_SCORE_TYPE','1','Shop');
+            $money_type=$ScoreModel->getType(array('id'=>$score_type));
+
+            $money_need = $num * $goods['money_need'];
+            $my_money = query_user('score'.$score_type);
+            if ($money_need > $my_money) {
+                $this->error('你的' . $money_type['title'] . '不足');
             }
 
             //用户地址处理
@@ -268,8 +288,7 @@ class IndexController extends Controller
             $data['uid'] = is_login();
             $data['createtime'] = time();
 
-
-            D('member')->where('uid=' . is_login())->setDec('tox_money', $tox_money_need);
+            $ScoreModel->setUserScore(array(is_login()),$money_need,$score_type,'dec');
             $res = D('shop_buy')->add($data);
             if ($res) {
                 //商品数量减少,已售量增加
@@ -277,7 +296,7 @@ class IndexController extends Controller
                 D('shop')->where('id=' . $id)->setInc('sell_num', $num);
                 //发送系统消息
                 $message = $goods['goods_name'] . "购买成功，请等待发货。";
-                D('Message')->sendMessageWithoutCheckSelf(is_login(), $message, '购买成功通知', U('Shop/Index/myGoods', array('status' => '0')));
+                D('Message')->sendMessageWithoutCheckSelf(is_login(),'购买成功通知', $message,  'Shop/Index/myGoods', array('status' => '0'));
 
                 //商城记录
                 $shop_log['message'] = '用户[' . is_login() . ']' . query_user('nickname', is_login()) . '在' . time_format($data['createtime']) . '购买了商品<a href="index.php?s=/Shop/Index/goodsDetail/id/' . $goods['id'] . '.html" target="_black">' . $goods['goods_name'] . '</a>';
@@ -285,7 +304,9 @@ class IndexController extends Controller
                 $shop_log['create_time'] = $data['createtime'];
                 D('shop_log')->add($shop_log);
 
-                $this->success('购买成功！花费了' . $tox_money_need . getToxMoneyName(), $_SERVER['HTTP_REFERER']);
+                action_log('shop_goods_buy','shop',$id,is_login());
+
+                $this->success('购买成功！花费了' . $money_need . $money_type['title'], $_SERVER['HTTP_REFERER']);
             } else {
                 $this->error('购买失败！');
             }

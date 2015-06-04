@@ -8,11 +8,11 @@ if(function_exists('memcache_init')){
     $mem = memcache_init();
     $mem->flush();
 }
-
+header('Content-Type:text/html;charset=utf-8');
 //清理缓存
 foreach($dirs as $value) {
 	rmdirr($value);
-	echo "<div style='border:2px solid green; background:#f1f1f1; padding:20px;margin:20px;width:800px;font-weight:bold;color:green;text-align:center;'>\"".$value."\" have been cleaned clear! </div> <br /><br />";
+	echo "<div style='border:2px solid green; background:#f1f1f1; padding:20px;margin:20px;width:800px;font-weight:bold;color:green;text-align:center;margin: 50px auto'>\"".$value."\" 已经被删除!缓存清理完毕。 </div> <br /><br />";
 }
 
 @mkdir($dirname,0777,true);

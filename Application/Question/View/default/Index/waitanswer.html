@@ -1,0 +1,64 @@
+<extend name="Base/common"/>
+<block name="header">
+    <include file="Public/nav"/>
+</block>
+<block name="body">
+    <link type="text/css" rel="stylesheet" href="__CSS__/question.css"/>
+    <div class="container" style="min-height: 400px">
+        <div class="row">
+            <div class="col-xs-8">
+                <div class="common_block_border clearfix">
+                    <div class="question_list" style="padding:0 20px">
+                        <notempty name="list">
+                            <volist name="list" id="data">
+                                <div class="one_question clearfix">
+                                    <div class="col-xs-12">
+                                        <h2 class="q_title">
+                                            <img src="__IMG__/question_32.png" class="q_icon"/>
+                                            <a target="_blank" href="{:U('Question/Index/detail',array('id'=>$data['id']))}" class="text-more title">&nbsp;{$data.title}</a>
+                                        </h2>
+                                        <div>
+                                            <a target="_blank" ucard="{$data.uid}" href="{$data.user.space_url}">{$data.user.nickname}</a>
+                                            <span class="q_black_info">添加了问题</span>
+                                        </div>
+                                        <div class="q_detail">
+                                            <div>
+                                                <ins>{$data.title}</ins>
+                                            </div>
+                                            <br>
+                                            <div>
+                                                补充说明：
+                                                <ins>
+                                                    {$data.info}
+                                                    <if condition="$data['img']">
+                                                        <br/>
+                                                        <img src="{$data['img']}" style="margin-top: 10px;"/>
+                                                    </if>
+                                                </ins>
+                                            </div>
+                                        </div>
+                                        <div class="q_black_info">
+                                            <!--回答数：{$data.answer_num}&nbsp;&nbsp;-->
+                                            <!--支持数：{$data.support}&nbsp;&nbsp;-->
+                                            创建时间：{$data.create_time|friendlyDate}
+                                        </div>
+                                    </div>
+                                </div>
+                            </volist>
+                            <else/>
+                            <div style="font-size:3em;padding:2em 0;color: #ccc;text-align: center">没有待回答的问题吆~</div>
+                        </notempty>
+                        <div class="text-right">
+                            {:getPagination($totalCount,20)}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-4">
+                {:W('Question/RightBlock/recommend')}
+            </div>
+        </div>
+    </div>
+
+    </div>
+</block>

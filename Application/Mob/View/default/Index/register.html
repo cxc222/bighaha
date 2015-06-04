@@ -1,0 +1,71 @@
+
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>{:L('login')} | {:modC('WEB_SITE_NAME','OpenSNS')}</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="alternate icon" type="image/png" href="assets/i/favicon.png">
+    <link rel="stylesheet" href="__CSS__/amazeui.min.css"/>
+    <style>
+        .header {
+            text-align: center;
+        }
+        .header h1 {
+            font-size: 200%;
+            color: #333;
+            margin-top: 30px;
+        }
+        .header p {
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+<div class="header">
+    <div class="am-g">
+        <h1>{:modC('WEB_SITE_NAME','OpenSNS')}</h1>
+        <p>{:modC('SUMMARY','')}</p>
+    </div>
+    <hr />
+</div>
+<div class="am-g">
+    <div class="am-u-lg-6 am-u-md-8 am-u-sm-centered">
+        <form action="" class="am-form" data-am-validator>
+            <fieldset>
+
+                <div class="am-form-group">
+                    <label for="username">用户名：</label>
+                    <input type="text" id="username" minlength="4" placeholder="输入用户名（至少 4 个字符）" required/>
+                </div>
+                <div class="am-form-group">
+                    <label for="nickname">昵称：</label>
+                    <input type="text" id="nickname" minlength="4" placeholder="昵称（至少 4 个字符）" required/>
+                </div>
+                <div class="am-form-group">
+                    <label for="email">邮箱：</label>
+                    <input type="email" id="email" placeholder="输入邮箱" required/>
+                </div>
+
+
+                <div class="am-form-group">
+                    <label for="doc-vld-pwd-1">密码：</label>
+                    <input type="password" id="doc-vld-pwd-1" placeholder="6位密码" pattern="^/^[\@A-Za-z0-9\!\#\$\%\^\&\*\.\~]{6,22}$/" required/>
+                </div>
+
+                <div class="am-form-group">
+                    <label for="CAPT">验证码</label>
+                    <input id="CAPT" >
+                </div>
+
+                <button class="am-btn am-btn-secondary" type="submit">提交</button>
+            </fieldset>
+        </form>
+    </div>
+</div>
+</body>
+</html>

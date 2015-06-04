@@ -1,0 +1,75 @@
+<extend name="Center/base"/>
+<block name="main_content">
+    <link href="__CSS__/center.css" type="text/css" rel="stylesheet">
+    <div class=" common_block_border">
+        <h2 class="common_block_title">订单详情</h2>
+        <div class="pd10">
+            <table class="c_m_order_detail" style="width: 100%">
+                <tr style="background: #eee">
+                    <td>订单编号：{$order.id}</td>
+                    <td colspan="2">下单日期：{$order.create_time|friendlyDate}</td>
+                    <td>订单状态：{$order.condition|getOrderCondition}</td>
+                </tr>
+                <tr>
+                    <td>订单总价：￥{$order.total_cny|number_format=2}元
+                    </td>
+                    <td colspan="2">商品总数：{$order.total_count}</td>
+                    <td>买家：<a href="{$order.user.space_url}" target="_blank" ucard="{$order.uid}">{$order.user.nickname}</a>
+                        &&
+                        卖家：<a href="{$order.s_user.space_url}" target="_blank" ucard="{$order.s_uid}">{$order.s_user.nickname}</a></td>
+                </tr>
+                <tr style="background: #eee">
+                    <td colspan="4">商品列表</td>
+                </tr>
+                <volist name="order.items" id="vo">
+                    <tr>
+
+                        <td><img style="width: 32px;height: 32px" src="{$vo.h_pic|getThumbImageById=32,32}">
+                            <a target="_blank"
+                               href="{:U('store/index/info',array('info_id'=>$vo['good_id']))}">{$vo.h_name}</a>
+                        </td>
+                        <td>成交单价：￥{$vo.h_price|number_format=2}元</td>
+                        <td>成交数量：{$vo.count}</td>
+                        <td>成交总价：￥
+                            <php>echo number_format($vo['h_price']*$vo['count'],2);</php>
+                            元
+                        </td>
+                    </tr>
+                </volist>
+                <tr style="background: #f8f8f8">
+                    <td>合计：
+                    </td>
+                    <td></td>
+                    <td>成交总数：{$order.total_count}</td>
+                    <td>成交总价：￥{$order.total_cny|number_format=2}元&nbsp;&nbsp;
+                    </td>
+                </tr>
+                <tr style="background: #f8f8f8">
+                    <td>买家备注：
+                        <if condition="$order['attach'] neq ''">
+                            {$order.attach}
+                            <else/>
+                            无
+                        </if>
+                    </td>
+                    <td>其他：
+                    </td>
+
+                    <td>调价：￥{$order.adj_cny}元</td>
+                    <td>最终价：￥
+                        <php>echo number_format($order['total_cny']-$order['adj_cny'],2);</php>
+                        元&nbsp;&nbsp;
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+
+    <div class="clearfix"></div>
+
+    <style>
+
+    </style>
+
+</block>

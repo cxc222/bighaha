@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>{:L('blog')} | {:modC('WEB_SITE_NAME','OpenSNS')}</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="renderer" content="webkit">
+    <script src="__JS__/jquery.min.js"></script>
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel="alternate icon" type="image/png" href="assets/i/favicon.png">
+    <link rel="stylesheet" href="__CSS__/amazeui.min.css"/>
+    <link rel="stylesheet" href="__CSS__/forum.css"/>
+    <link rel="stylesheet" href="__CSS__/app.css"/>
+    <link rel="stylesheet" href="__CSS__/amazeui.datetimepicker.css"/>
+    <link rel="stylesheet" href="  Application/Mob/Static/js/webuploader/css/webuploader.css"/>
+    <script src="Application/Mob/Static/js/webuploader/js/webuploader.js"></script>
+    <script src="Public/Static/ueditor/lang/zh-cn/zh-cn.js"></script>
+    <style>
+        .header h1 {
+            font-size: 200%;
+            color: #333;
+            margin-top: 30px;
+        }
+
+        .header p {
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<header data-am-widget="header" class="am-header am-header-default am-header-fixed">
+    <div class="am-header-left am-header-nav">
+        <a href="javascript:history.go(-1);"><span class="am-icon-chevron-left"></span></a>
+    </div>
+    <h1 class="am-header-title">
+        发帖子
+    </h1>
+
+    <div class="am-header-right am-header-nav">
+
+    </div>
+</header>
+
+<div class="addpost-container" style="padding: 10px;">
+
+    <form  class="am-form" data-am-validator id="send_blog"  data-url="{:U('Mob/blog/doSendBlog')}">
+
+        <input type="hidden" id="img_ids" name="attach_ids" value="">
+        <!--选择图片-->
+        <div id="uploader-demo">
+            <!--用来存放item-->
+            <div id="fileList" class="uploader-list"></div>
+            <div class="am-cf" style="padding: 10px;">
+                <div id="filePicker" style="float: left">
+                    <i class="am-icon-plus" style="font-size: 25px;padding: 12px 20px;"></i>
+                </div>
+                <div class="show_cover" style="display:none;float: left;margin-left: 10px;">
+                    <div id="cover_url">
+                        <img class="cover_img" src="">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--选择图片结束-->
+        <!--标题-->
+        <div class="am-form-group">
+            <label>标题</label>
+            <input type="text" name="title" minlength="1" placeholder="标题" class="am-form-field" required/>
+        </div>
+
+        <!--选择模块-->
+        <div class="am-form-group am-form-inline">
+            <label>分类</label>
+            <select id="category" name="category" class="form-control">
+                <volist name="category" id="top">
+                    <option value="{$top.id}" <eq name="data['category']" value="$top['id']"> selected</eq>>
+                    {$top.title}
+                    </option>
+                </volist>
+            </select>
+            <span class="am-form-caret"></span>
+        </div>
+
+        <div class="am-form-group">
+            <label>来源</label>
+            <input type="text" minlength="1" placeholder="选文地址（选填）" name="source" class="am-form-field" required/>
+        </div>
+
+        <!--有效期-->
+
+        <div class="form-group has-feedback">
+            <label class=" control-label">有效期</label>
+            <php>
+                if(!isset($data['dead_line'])){
+                $data['dead_line']=time()+604800;
+                }
+            </php>
+
+            <input type="text" value="{:date('Y-m-d H:i',$data['dead_line'])}" id="datetimepicker"  name="dead_line" class="am-form-field">
+
+        </div>
+
+        <div class="am-form-group">
+            <label>摘要</label>
+            <textarea class="" type="text" name="description" placeholder="简单描述一下资讯的内容（选填）"
+                      style="width: 100%;padding: 5px"></textarea>
+        </div>
+
+
+        <div class="am-form-group">
+            <label>详情</label>
+            <php>
+                $config="toolbars:[['emotion','insertimage']]";
+            </php>
+
+            {:W('Mob/Ueditor/editor',array('myeditor_edit','content',$data['detail']['content'],'100%','250px',$config))}
+        </div>
+        <button type="button"  id="confirm" class="am-btn am-btn-primary am-btn-block" style="margin: 20px 0px">发表</button>
+    </form>
+
+
+
+</div>
+
+
+<script src="__JS__/amazeui.min.js"></script>
+
+<script src="__JS__/amazeui.datetimepicker.min.js"></script>
+<script type="text/javascript">
+    var ext;
+    $(function () {
+        var uploader = WebUploader.create({
+
+            // 选完文件后，是否自动上传。
+            auto: true,
+
+            // swf文件路径
+            swf: 'Application/Mob/Static/js/webuploader/js/Uploader.swf',
+
+            // 文件接收服务端。
+            server: "{:U('Core/File/uploadPicture')}",
+
+            // 选择文件的按钮。可选。
+            // 内部根据当前运行是创建，可能是input元素，也可能是flash.
+            pick: '#filePicker',
+
+            //是否同是上传多个文件
+            multiple: true,
+            // 只允许选择图片文件。
+            accept: {
+                title: 'Images',
+                extensions: 'jpg,jpeg,bmp,png',
+                mimeTypes: 'image'
+            }
+        });
+        // 当有文件添加进来的时候
+        uploader.on('fileQueued', function (file) {
+            uploader.upload();
+        });
+        // 缩略图展示
+        uploader.on('uploadSuccess', function (file, ret) {
+
+
+            if (ret.status == 0) {
+                alert('上传失败。');
+            } else {
+
+                // $("#avatar_" + "{$uid}" + "_original img").attr('src', ret.data.file.path );
+                ext = ret.data.file.ext;
+                var src = ret.data.file.path + '?time=' + ret.data.file.time;
+
+                $('#img_ids').val(ret.data.file.id);
+                var ids = $('#img_ids').val();
+                if (!ids == null) {
+                    $('.show_cover').hide();
+                } else {
+                    $('.show_cover').show();
+                }
+                $("#cover_url").html('');
+                $("#cover_url").html('<img src="' + src + '"style="width:71px;height:71px"data-role="issue_cover" >');
+            }
+
+        });
+
+
+
+    });
+    $('#datetimepicker').datetimepicker({
+        format: 'yyyy-mm-dd hh:ii'
+    });
+
+    $('#confirm').click(function () {
+        var data = $("#send_blog").serialize();
+       // alert(data);
+        var url = $("#send_blog").attr('data-url');
+
+        $.post(url, data, function (msg) {
+            if (msg.status == 1) {
+                alert('发布帖子成功!');
+                window.location.href = document.referrer
+            } else {
+                alert(msg.info);
+            }
+        }, 'json');
+    });
+
+
+</script>
+
+<script>
+    $(function () {
+        var ids = $('#img_ids').val();
+        if (ids == '') {
+            $('.show_cover').hide();
+        } else {
+
+            $('.show_cover').show();
+            $(".cover_img").css({"width": "71px", "height": "71px"})
+        }
+    });
+
+</script>
+</body>
+</html>

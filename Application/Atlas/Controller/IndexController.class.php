@@ -18,14 +18,14 @@ use Common\Exception\ApiException;
  * 前台首页控制器
  * 主要获取首页聚合数据
  */
-class IndexController extends AtlasController {
+class IndexController extends FrontBaseController {
 	private $atlasModel;
 	private $atlasApi;
 	
 	public function _initialize(){
 		$this->atlasModel = D('Atlas');
-		
 		$this->atlasApi = new AtlasApi();
+		parent::_initialize();
 	}
 	
 	public function index($page = 1) {
@@ -38,6 +38,7 @@ class IndexController extends AtlasController {
 		$atlas_list = $this->getAtlasByIds($list_ids);
 		$this->assign('atlas_list', $atlas_list);
 		$this->assign('totalCount', $totalCount);
+		$this->assign('current','new');
 		$this->display ();
 	}
 	
@@ -59,6 +60,75 @@ class IndexController extends AtlasController {
 	    $likeCountArray = $this->atlasApi->dolike($id,$type);
 	    //返回成功结果
 	    $this->ajaxReturn(apiToAjax($likeCountArray));
+	}
+	
+	/**
+	 * 发布图集
+	 * 
+	 */
+	function publish(){
+	    $this->checkAuth('Atlas/Index/publish', -1, '您无图文发布权限。');
+        $this->setTitle('投稿尿点 ' . '——图集');
+        $this->setKeywords('投稿' . ',图集');
+	    $this->display();
+	}
+	
+	/**
+	 * 发布图集
+	 * @param int $id
+	 * @param int $image_id
+	 * @param string $content
+	 * autor:zff
+	 */
+	public function doPost($id = 0, $image_id = 0, $content = ''){
+	    if (!is_login()) {
+	        $this->error('请登陆后再投稿。',U('Atlas\Index\publish'));
+	    }
+	    if (!$image_id) {
+	        $this->error('请上传糗图。',U('Atlas\Index\publish'));
+	    }
+	    if (trim(op_t($content)) == '') {
+	        $this->error('请输入内容。',U('Atlas\Index\publish'));
+	    }
+	    $item = D('Atlas')->create();
+	    if ($id) {
+	        //编辑
+	    	$content_temp = D('Atlas')->find($id);
+	    	!$content_temp && $this->error('内容已经不存在。',U('Atlas\Index'));
+	    	$this->checkAuth('Atlas/Index/publish', $content_temp['uid'], '您无该活动编辑权限。');
+	    	$item['uid'] = $content_temp['uid']; //权限矫正，防止被改为管理员
+	    	$rs = D('Atlas')->save($item);
+	    	if (D('Common/Module')->isInstalled('Weibo')) { //安装了微博模块
+	    		$postUrl = "http://$_SERVER[HTTP_HOST]" . U('Atlas/Index/detail', array('id' => $id));
+	    		$weiboModel = D('Weibo/Weibo');
+	    		$weiboModel->addWeibo("我修改了尿点图【" . $title . "】：" . $postUrl);
+	    	}
+	    	if ($rs) {
+	    		$this->success('编辑成功。', U('detail', array('id' => $item['id'])));
+	    	} else {
+	    		$this->success('编辑失败。', '');
+	    	}
+	   } else {
+	       $this->checkActionLimit('add_atlas', 'atlas', 0, is_login(), true);
+	       $this->checkAuth('Atlas/Index/publish', -1, '您无图文发布权限。');
+	       if (modC('NEED_VERIFY', 0) && !is_administrator()) //需要审核且不是管理员
+            {
+	           $item['status'] = 0;
+	           $tip = '但需管理员审核通过后才会显示在列表中，请耐心等待。';
+	       }
+	       $rs = D('Atlas')->add($item);
+	       if (D('Common/Module')->isInstalled('Weibo')) { //安装了微博模块
+	           //同步到微博
+	           $postUrl = "http://$_SERVER[HTTP_HOST]" . U('Atlas/Index/detail', array('id' => $rs));
+	           $weiboModel = D('Weibo/Weibo');
+	           $weiboModel->addWeibo("我发布了一个新的尿点图【" . $content . "】：" . $postUrl);
+	       }
+	       if ($rs) {
+	           $this->success('发布成功。' . $tip, U('Atlas/Index/detail',array('id'=>$rs)));
+	       } else {
+	           $this->success('发布失败。', '');
+	       }
+	   }
 	}
 	
 	/**

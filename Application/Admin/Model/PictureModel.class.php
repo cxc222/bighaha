@@ -10,7 +10,6 @@
 namespace Admin\Model;
 use Think\Model;
 use Think\Upload;
-use Think\Upload\Driver\Qiniu\QiniuStorage;
 
 /**
  * 图片模型
@@ -39,17 +38,17 @@ class PictureModel extends Model{
         /* 上传文件 */
         $setting['callback'] = array($this, 'isFile');
 		$setting['removeTrash'] = array($this, 'removeTrash');
-        /*加水印处理*/
+        $Upload = new Upload($setting, $driver, $config);
+
         foreach ($files as $key => $file) {
             $ext = strtolower($file['ext']);
             if(in_array($ext, array('jpg','jpeg','bmp','png'))){
                 hook('dealPicture',$file['tmp_name']);
             }
         }
-        /*加水印处理*/
-        $Upload = new Upload($setting, $driver, $config);
+
         $info   = $Upload->upload($files);
-        
+
         if($info){ //文件上传成功，记录文件信息
             foreach ($info as $key => &$value) {
                 /* 已经存在文件记录 */
@@ -61,7 +60,10 @@ class PictureModel extends Model{
                 if(strtolower($driver)=='sae'){
                     $value['path'] = $config['rootPath'].'Picture/'.$value['savepath'].$value['savename']; //在模板里的url路径
                 }else{
-                    if(strtolower($driver) != 'local'){
+                	if(strtolower($driver) == 'qiniu'){
+                		$value['path'] = (substr($setting['rootPath'], 1).$value['savepath'].$value['savename']);
+                	}
+                    elseif(strtolower($driver) != 'local'){
                         $value['path'] =$value['url'];
                     }
                     else{
@@ -181,60 +183,5 @@ class PictureModel extends Model{
 	public function removeTrash($data){
 		$this->where(array('id'=>$data['id'],))->delete();
 	}
-	
-	/**
-	 * 移动文件上传
-	 * 
-	 */
-	public function moveUpload($files, $setting, $driver = 'Qiniu', $config = null){
-	    
-		$qiniuConfig = C('QINIU_CONFIG');
-	    /* $qiniuConfig = array(
-	        'accessKey'=>'WPWs-mQSibJXZd7m_kL_cM0hwTIMCyFjzvgTFeRq',
-	        'secrectKey'=>'TTUZUuWL8jug5LzxtQGwCPuVmN8-9DXMeFSrDzBa',
-	        'bucket'=>'bighaha',
-	        'domain'=>'7xih3v.com1.z0.glb.clouddn.com'
-	    ); */
-		
-	    $qiniuStorage = new QiniuStorage($qiniuConfig);
-	    
-	    $savepath = 'Uploads/atlas/';
-	    
-	    $file = array(
-	        'name'=>'file',
-	        'fileName'=>$savepath.basename($files['name']),
-	        'fileBody'=>file_get_contents(iconv('UTF-8','GB2312',$files['tmp_name']))
-	    );
-	    
-	    //$config = array();
-	    $info = $qiniuStorage->upload($config, $file);
-	    if($info['key']){
-	        $value['md5']  = md5_file($file['tmp_name']);
-	        $value['sha1'] = sha1_file($file['tmp_name']);
-	        
-	        /* 记录文件信息 */
-	        if(strtolower($driver)=='sae'){
-	            $value['path'] = $config['rootPath'].'Picture/'.$savepath.basename($files['name']); //在模板里的url路径
-	        }else{
-	            if(strtolower($driver) != 'local'){
-	                $value['path'] =$savepath.basename($files['name']);
-	            }
-	            else{
-	                $value['path'] = (substr($setting['rootPath'], 1).$savepath.basename($files['name']));	//在模板里的url路径
-	            }
-	        }
-	        $value['type'] = strtolower($driver);
-	        
-	        if($this->create($value) && ($id = $this->add())){
-	            $info['id'] = $id;
-	        } else {
-	            //TODO: 文件上传成功，但是记录文件信息失败，需记录日志
-	            unset($info[$key]);
-	        }
-	        return $info; //文件上传成功
-	    }else{
-	        $this->error = '七牛上传失败';
-	        return false;
-	    }
-	}
+
 }

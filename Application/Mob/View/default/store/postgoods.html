@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>{:L('store')} | {:modC('WEB_SITE_NAME','OpenSNS')}</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel="alternate icon" type="image/png" href="assets/i/favicon.png">
+    <link rel="stylesheet" href="__CSS__/amazeui.min.css"/>
+    <link rel="stylesheet" href="__CSS__/store.css"/>
+    <link rel="stylesheet" href="__CSS__/app.css"/>
+    <style>
+        .header {
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 200%;
+            color: #333;
+            margin-bottom: 0px;
+        }
+
+        .header p {
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<header data-am-widget="header" class="am-header am-header-default am-header-fixed">
+
+
+    <div class="am-header-left am-header-nav">
+        <a href="javascript:history.go(-1);"><span class="am-icon-chevron-left"></span></a>
+        <a href="#phone-link" class="">
+            <i class="am-header-icon am-icon-bell-o"></i>
+        </a>
+    </div>
+    <h1 class="am-header-title">
+      发布商品
+    </h1>
+
+    <div class="am-header-right am-header-nav">
+
+        <a href="#nav-link" class="">
+            <i class="am-menu-toggle-icon am-icon-bars"></i>
+        </a>
+    </div>
+
+</header>
+
+
+<div class="postgoods-container">
+
+
+    <form action="" class="am-form">
+        <fieldset>
+            <div class="am-form-group ">
+
+                <label class=" am-form-label">*商品名</label>
+                <input type="text" id="name" minlength="1"  placeholder="" class="am-form-field"
+                       required/>
+                <span>必须输入</span>
+
+            </div>
+
+            <div class="am-form-group">
+                <label for="doc-select-1">下拉多选框</label>
+                <select id="doc-select-1">
+                    <option value="option1">选项一...</option>
+                    <option value="option2">选项二.....</option>
+                    <option value="option3">选项三........</option>
+                </select>
+                <span>顶级分类必选</span>
+            </div>
+            <div class="am-form-group">
+                <label for="doc-select-2">下拉多选框</label>
+                <select id="doc-select-2">
+                    <option value="option1">选项一...</option>
+                    <option value="option2">选项二.....</option>
+                    <option value="option3">选项三........</option>
+                </select>
+                <span>二级分类必选</span>
+            </div>
+            <div class="am-form-group">
+                <label for="doc-select-3">下拉多选框</label>
+                <select id="doc-select-3">
+                    <option value="option1">选项一...</option>
+                    <option value="option2">选项二.....</option>
+                    <option value="option3">选项三........</option>
+                </select>
+                <span>三级分类必选</span>
+            </div>
+            <div class="am-form-group ">
+
+                <label class=" am-form-label">*价格</label>
+                <input type="number" id="number"   placeholder="" class="am-form-field" required/>
+                <span>仅可输入数字</span>
+
+            </div>
+            <div class="am-form-group">
+                <label class=" am-form-label">*图标</label>
+
+                <div class="am-form-group am-form-file">
+
+                    <button type="button" class="am-btn am-btn-default am-btn-sm">
+                        <i class="am-icon-cloud-upload"></i> 选择要上传的文件
+                    </button>
+                    <input type="file" style="position: relative;top: -30px;width: 160px;opacity: 0;">
+                </div>
+            </div>
+
+            <div class="am-form-group">
+                <label class=" am-form-label">*图标</label>
+
+                <div class="am-form-group am-form-file">
+
+                    <button type="button" class="am-btn am-btn-default am-btn-sm">
+                        <i class="am-icon-cloud-upload"></i> 选择要上传的文件
+                    </button>
+                    <input type="file" style="position: relative;top: -30px;width: 160px;opacity: 0;">
+                </div>
+            </div>
+
+            <div class="am-form-group am-form-group-sm">
+
+                <label class="am-form-label">*商品描述</label>
+                <textarea data-role="comment_content" type="text" name="name" placeholder=""></textarea>
+                <span></span>
+
+            </div>
+
+            <div class="am-form-group am-g">
+                <label class="am-form-label">*是否包邮</label></br>
+                <div class="am-radio-inline">
+                    <input type="radio"  value="" name="docInlineRadio"> 买家承担
+                </div>
+                <div class="am-radio-inline">
+                    <input type="radio" name="docInlineRadio"> 卖家承担
+               </div>
+
+            </div>
+
+        </fieldset>
+    </form>
+    <button type="button" class="am-btn am-btn-primary am-btn-block">发布</button>
+</div>
+
+
+<script src="__JS__/jquery.min.js"></script>
+<script src="__JS__/amazeui.min.js"></script>
+
+</body>
+</html>

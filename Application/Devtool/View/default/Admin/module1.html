@@ -1,0 +1,131 @@
+<extend name="Public/base"/>
+<block name="body">
+    <div class="main-title">
+        <h2>第一步.导出后台菜单
+            <small>（请先在后台为模块建立完整的菜单结构树）</small>
+        </h2>
+    </div>
+
+    <div class="with-padding">
+        <div class="clearfix">
+
+            <div class="alert alert-info col-xs-6">
+                当前打包模块：<strong>{$module.alias}-{$_SESSION.module}</strong>
+            </div>
+        </div>
+        <form action="{:U('module2')}" method="post">
+            <div class="clearfix">
+                <eq name="created" value="1">
+                    <div class="col-xs-4">
+                        <p class="lead">系统检测到的菜单结构树</p>
+                        <blockquote>
+                            <volist name="menus" id="one">
+                                <eq name="one.hide" value="1">
+                                    <php>$class='text-mute';</php>
+                                    <else/>
+                                    <php>$class='text-primary';</php>
+                                </eq>
+                                <span class="{$class}"> <p>【1级】{$one.id}-{$one.title}-{$one.url}</p></span>
+                                <empty name="one._">
+                                    <else/>
+                                    <volist name="one._" id="two">
+                                        <eq name="two.hide" value="1">
+                                            <php>$class1='text-mute';</php>
+                                            <else/>
+                                            <php>$class1='text-primary';</php>
+                                        </eq>
+                                    <span class="{$class1}"><p>
+                                        &nbsp; &nbsp; &nbsp; &nbsp;【2级】{$two.id}-{$two.title}-{$two.url}
+                                    </p></span>
+                                        <volist name="two._" id="three">
+                                            <eq name="three.hide" value="1">
+                                                <php>$class1='text-mute';</php>
+                                                <else/>
+                                                <php>$class1='text-primary';</php>
+                                            </eq>
+                                    <span class="{$class1}"><p>
+                                        &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;【3级】{$three.id}-{$three.title}-{$three.url}
+                                    </p></span>
+                                        </volist>
+                                    </volist>
+                                </empty>
+
+
+                            </volist>
+                        </blockquote>
+                        <neq name="havent_created" value="">
+                            <p class="lead">系统检测到可能遗漏的菜单结构树</p>
+
+                            <blockquote>
+
+                                <volist name="havent_created" id="vo">
+                                    <p class="text-danger">{$_SESSION.module}Controller->{$vo.name}()</p>
+                                </volist>
+
+
+                            </blockquote>
+
+                            <div class="clearfix">
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label>
+                                            <input id="ignore" type="checkbox" value="1"> 忽略，不添加
+                                        </label>
+                                        <script>
+                                            $(function () {
+                                                $('#ignore').change(function () {
+                                                    if ($('#ignore').prop('checked')) {
+                                                        $('#next_step').removeAttr("disabled");
+                                                    } else {
+                                                        $('#next_step').attr("disabled", true);
+                                                    }
+                                                })
+                                            })
+                                        </script>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <a target="_blank" href="{:U('menu/index')}" class="btn btn-default">补全菜单</a>
+                                </div>
+
+                            </div>
+                            <neq name="havent_created" value="">
+                                <span class="text-danger">存在可能遗漏的菜单项，必须勾选忽略方可进入下一步。</span>
+                            </neq>
+                        </neq>
+                    </div>
+                    <div class="col-xs-4">
+                        <p class="lead">导出的引导脚本预览</p>
+                    <textarea name="menus" class="form-control" style="height: 200px">{:json_encode($menus)}</textarea>
+                    </div>
+                    <else/>
+                    <div class="alert alert-success col-xs-6">模块的管理控制器未创建，此步骤可跳过。</div>
+                </eq>
+
+            </div>
+
+            <div class="with-padding">
+                <a class="btn  btn-default" href="{:U('module')}">
+                    上一步
+                </a>
+                <a class="btn btn-default" href="{:U('module1')}">
+                    <i class="icon-refresh"></i> 重新检测
+                </a>
+                <neq name="havent_created" value="">
+                    <php>$str='disabled="disabled"';</php>
+                    </ph>
+                </neq>
+
+                <input type="submit" id="next_step" style="width: 300px" title="{$title}" {$str} class="btn  btn-success"
+                   value="下一步">
+
+                </input>
+
+
+            </div>
+        </form>
+
+
+
+    </div>
+</block>

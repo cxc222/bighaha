@@ -1,0 +1,30 @@
+<extend name="Base/common"/>
+<block name="header">
+    <include file="Public/nav"/>
+</block>
+<block name="body">
+    <link type="text/css" rel="stylesheet" href="__CSS__/question.css"/>
+    <div class="container" style="min-height: 400px">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="common_block_border clearfix">
+                    <div class="question_list" style="padding:0 20px">
+                        <notempty name="list">
+                            <volist name="list" id="data">
+                                <include file="Public/_default_list"/>
+                            </volist>
+                            <else/>
+                            <div style="font-size:3em;padding:2em 0;color: #ccc;text-align: center">该类型下没有问题吆~</div>
+                        </notempty>
+                        <div class="text-right">
+                            {:getPagination($totalCount,20)}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    </div>
+</block>

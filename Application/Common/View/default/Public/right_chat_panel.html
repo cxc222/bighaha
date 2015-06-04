@@ -1,0 +1,29 @@
+<script src="__PUBLIC__/js/com/com.talker.class.js"></script>
+<if condition="(is_login()) ">
+    <a class="btn-pull" onclick="talker.show()"><i class="icon-chat-dot"> </i>
+        <i id="friend_has_new"
+        <php>
+            $map_mid=is_login();
+            $modelTP=D('talk_push');
+            $has_talk_push=$modelTP->where("(uid = ".$map_mid." and status = 1) or (uid = ".$map_mid." and status =
+            0)")->count();
+            $has_message_push=D('talk_message_push')->where("uid= ".$map_mid." and (status=1 or status=0)")->count();
+
+
+            if($has_talk_push || $has_message_push){
+        </php>
+        style="display: inline-block"
+        <php>}</php>
+        ></i>
+
+    </a>
+
+    <div id="talker">
+
+    </div>
+    <else/>
+    <div id="right_panel" class="friend_panel visible-md visible-lg" style="display: none;">
+        <a class="btn-pull" onclick="toast.error('请登陆后使用好友面板。')"> <i class="icon-chat-dot"> </i>
+        </a>
+    </div>
+</if>

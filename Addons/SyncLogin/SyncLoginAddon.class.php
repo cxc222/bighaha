@@ -3,7 +3,6 @@
 namespace Addons\SyncLogin;
 
 use Common\Controller\Addon;
-use Weibo\Api\WeiboApi;
 
 /**
  * 同步登陆插件
@@ -44,12 +43,12 @@ class SyncLoginAddon extends Addon
 
     public function uninstall()
     {
-        //$prefix = C("DB_PREFIX");
-        //D('')->execute("DROP TABLE IF EXISTS {$prefix}sync_login;");
+        $prefix = C("DB_PREFIX");
+        D('')->execute("DROP TABLE IF EXISTS {$prefix}sync_login;");
         return true;
     }
 
-    //登录按钮钩子
+    //登陆按钮钩子
     public function syncLogin($param)
     {
         $this->assign($param);
@@ -85,7 +84,6 @@ class SyncLoginAddon extends Addon
         $config = $this->getConfig();
         $this->assign('config', $config);
 
-
         $arr = array();
         foreach ($config['type'] as &$v) {
             $arr[$v]['name'] = strtolower($v);
@@ -99,10 +97,8 @@ class SyncLoginAddon extends Addon
         unset($v);
 
         $this->assign('list', $arr);
-
         $this->assign('addon_config', $config);
         $this->assign('tabHash', 'bind');
-
 
         $this->display('syncbind');
 

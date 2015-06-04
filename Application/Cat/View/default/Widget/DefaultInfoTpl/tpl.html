@@ -1,0 +1,240 @@
+<script src="__JS__/raty/raty.js"></script>
+
+        <div class="row">
+        <div class="col-xs-8">
+        <div class="common_block_border">
+
+            <h1 class="common_block_title">查看详情</h1>
+
+            <div class="pd10">
+                <div class="">
+                    <h2 class="mb10"><span class="mr10">{$info['title']|default='未设置标题'}</span>
+                        {:W('FavBtn/display',array(array('info'=>$info)))}
+                        <span
+                                class="cgrey f14px">已有<span id="c_info_fav_num_{$info.id}"
+                                                            class="f16px c333"><php>echo
+                            D('cat_fav')->where('info_id='.$info['id'])->count()
+                        </php></span>人收藏</span></h2>
+                    <div class="clearfix"></div>
+                    <div class="row">
+                        <div class="col-xs-8 f14px cgrey mb10 lh28">
+                            浏览次数：{$info.read}<br/>
+                            发布日期：{$info.create_time|friendlyDate}
+                            <br/>
+                            <if condition="$entity['can_over']">
+                                截止时间：
+                                <if condition="$info['over_time'] gt time()">
+                            <span class="cgreen"> {$info.over_time|date="Y-m-d",###}【<strong>进行中</strong>】&nbsp;&nbsp;剩余<span
+                                    class="c_last"> {:getDaysPass($info['over_time'])}天</span></span>
+                                    <else/>
+                                    <span class="cred"> {$info.over_time|date="Y-m-d",###}【<strong>已过期</strong>】</span>
+                                </if>
+                            </if>
+
+                        </div>
+
+                        <div class="col-xs-4" style="margin-bottom: 1px"><span
+                                class="corange bld f18px">{$info.rate| number_format=1}</span>分
+                            [&nbsp;<span class="corange bld f16px"><php>echo
+                                D('cat_rate')->where('info_id='.$info['id'])->count()
+                            </php></span> &nbsp;人打分]
+                            <div id="rate" data-score="{$info.rate}"></div>
+                        </div>
+                    </div>
+
+                    <div style="padding: 10px"></div>
+                    <script>
+                        var info_id = "{$info.id}";
+                        $('#rate').raty({path: "__JS__/raty/img", half: true,
+                            score: function () {
+                                return ($(this).attr('data-score'));
+                            },
+                            click: function (p_score, evt) {
+                                if (MID == 0) {
+                                    toast.error('请登录后评分。');
+                                    return;
+                                }
+                                $.post(U('cat/Index/doScore'), {info_id: info_id, score: p_score}, function (msg) {
+                                    if (msg.status) {
+                                        toast.success('打分成功！');
+                                        setTimeout(function () {
+                                            location.reload();
+                                        }, 1000);
+
+                                    }
+                                    else {
+                                        toast.error(msg.info);
+                                    }
+                                }, 'json');
+
+                            }
+                        });
+                    </script>
+
+                    <div class="clearfix" style="position: relative">
+                        <ul class="c_tab">
+                            <li id="tab_n_info" onclick="setInfo()" class="c_active cpointer">
+                                详情
+                            </li>
+                            <li id="tab_n_read" class="cpointer" onclick="setRead()">足迹</li>
+
+                        </ul>
+                        <if condition="check_auth('Cat/Index/editInfo',$info['uid'])">
+                            <div class="tab_n_manage c666 " id="tab_n_manage">
+                                管理
+                                <div class="arrow_r c_menu"></div>
+                                <ul class="right c_ddm c_menu">
+                                    <li><a
+                                           href="{:U('cat/Index/post',array('entity_id'=>$entity['id'],'info_id'=>$info['id']))}">编辑</a>
+                                    </li>
+                                    <li><a class="cpointer cred" event-node="del_info"
+                                           event-args="id={$info.id}&entity={$entity.name}">删除</a></li>
+
+                                </ul>
+                            </div>
+                        </if>
+                        <script>
+                            $(document).ready(function () {
+                                $('#tab_n_manage').hover(function () {
+                                    $('.c_menu').show();
+                                }, function () {
+                                    $('.c_menu').hide();
+                                });
+                            })
+                        </script>
+                        <style>
+
+                        </style>
+                    </div>
+                    <div class="underline mb10"></div>
+                    <div id="tab_read" style="min-height:400px;display: none">
+                        <h2 class="f14px c333 mb20">最近到过</h2>
+
+                        <div class="pd20">
+                            <ul class="c_read_user clearfix mb10">
+                                <volist name="info.reads" id="vo">
+                                    <li class="mb20">
+                                        <a target="_blank" ucard="{$vo.uid}" class="c666" event-node="face_card" uid="{$vo.user.uid}"
+                                           href="{$vo.user.space_url}">
+                                            <img class="mb5 avatar-img" src="{$vo.user.avatar64}">
+
+                                            <div class="lh16">{$vo.user.nickname}
+                                                <br/>
+                                                {$vo.cTime|friendlyDate}
+                                            </div>
+                                        </a>
+                                    </li>
+                                </volist>
+                            </ul>
+
+                        </div>
+                    </div>
+                    <div id="tab_info" class=" clearfix" style="min-height:400px">
+
+
+                        <div class=" cat_det ">
+                            <ul>
+                                <volist name="fields" id="vo">
+                                    <if condition="($vo['input_type'] neq IT_EDITOR) && $vo['input_type'] neq IT_MULTI_TEXT">
+                                        <li>{:W('DisplayRender/render',array(array('field'=>$vo,'overed'=>($info['over_time']
+                                            <=time()),'data'=>$data[$vo['name']])))}
+                                        </li>
+                                    </if>
+                                </volist>
+                            </ul>
+
+                            <div class="clearfix"></div>
+                        </div>
+
+
+                        <volist name="fields" id="vo">
+
+                            <if condition="($vo['input_type'] eq IT_EDITOR) || $vo['input_type'] eq IT_MULTI_TEXT">
+                                <div class=" cat_det f14px lh28">
+                                    {:W('DisplayRender/render',array(array('field'=>$vo,'overed'=>($info['over_time']<=time()),'data'=>$data[$vo['name']])))}
+                                </div>
+                            </if>
+
+                        </volist>
+                        <div class="mt10"></div>
+
+                    </div>
+
+
+
+                    <div class="clearfix"></div>
+
+                    <div style="text-align: right" class="mb10">{:W('SendInfoBtn/render',array(array('entity'=>$entity,'info'=>$info)))}
+                    </div>
+                </div>
+            </div>
+            <div class="mb10 clearfix" >
+                <div class="col-xs-12" >
+                    {:hook('localComment', array('path'=>"Cat/index/$info[id]", 'uid'=>$content['uid']))}
+                </div>
+            </div>
+        </div>
+
+
+        </div>
+
+        <div   class="col-xs-4" >
+            <div class="common_block_border">
+                <div class="mb10 ">
+                    <h1 class="common_block_title_right text-more" style="width: 100%">发布者：<a ucard="{$info['uid']}">{$user.nickname|op_t}</a></h1>
+
+                    <div class="pd10 ">
+                            TA发布的信息： {$user.info_count}
+                    </div>
+
+                </div>
+
+
+            </div>
+            <div class="mb10 common_block_border">
+                {:W('InfoList/render',array(array('name'=>$entity['name'],'map'=>null,'class'=>'cat_ul_info','type'=>'limit','recom'=>true,'tpl'=>'recom')))}
+
+            </div>
+            <div class="mb10 common_block_border">
+                <h1 class="common_block_title_right">温馨提示</h1>
+
+                <div class="pd10">
+                    {:W('EntityProfile/render',array(array('entity_id'=>$entity['id'],'p_name'=>'des2')))}
+                </div>
+
+            </div>
+        </div>
+        </div>
+
+<script>
+
+    function setInfo() {
+        $('#tab_info').show();
+        $('#tab_read').hide();
+        $('.c_tab li').removeClass('c_active');
+        $('#tab_n_info').addClass('c_active');
+    }
+    function setRead() {
+        $('#tab_read').show();
+        $('#tab_info').hide();
+        $('.c_tab li').removeClass('c_active');
+        $('#tab_n_read').addClass('c_active');
+    }
+    $(function(){
+        $('.pic_field').magnificPopup({
+            type: 'image',
+            closeOnContentClick: true,
+            mainClass: 'mfp-img-mobile',
+            gallery: {
+                enabled: true,
+                navigateByImgClick: true,
+                preload: [0,1] // Will preload 0 - before current, and 1 after the current image
+            },
+            image: {
+                verticalFit: false
+            }
+
+        });
+
+    })
+</script>

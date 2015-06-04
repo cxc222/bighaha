@@ -1,132 +1,127 @@
-<extend name="Base/common"/>
+<!DOCTYPE HTML>
+<html>
+<head>
+    <include file="Public/head"/>
+    <link href="__CSS__/home.css" type="text/css" rel="stylesheet">
+    <php> D('Member')->need_login();</php>
+</head>
+<body>
+<include file="Public/header"/>
+<!-- 头部 -->
+<style>
+    .container{
+        width:1140px;max-width: 1140px
+    }
+</style>
+<include file="Index/_nav"/>
 
-<block name="body">
-    <link type="text/css" rel="stylesheet" href="__CSS__/home.css"/>
+<div id="main-container" class="top-bar ">
+    <script>
+        adjust_navbar();
+    </script>
+    <volist name="showBlocks" id="v">
+        <php>if($v=='slider'){</php>
+        <div class="container">
+            <div class="row">
 
-    <!-- 主体 -->
-    <!--顶部Banner-->
-    <div class="container  home_container"
-         style="border-radius: 3px;border: 1px solid #dedede;background-color: #ffffff;width: 1080px">
-        <div class="row" style="padding:15px">
-            <div class="col-md-9" style="padding-left: 0px;padding-right: 30px;">
-                {:hook('imageSlider')}
+                <div class="col-xs-12">
+                    <div class="carousel-bar margin-bottom-15" style="position: relative">
 
-                <!--幻灯片结束-->
+                        <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+                            <ol class="carousel-indicators">
+                                <if condition="modC('PIC2',0,'Home') neq 0">
+                                    <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+                                </if>
+                                <if condition="modC('PIC2',0,'Home') neq 0">
+                                    <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+                                </if>
+                                <if condition="modC('PIC3',0,'Home') neq 0">
+                                    <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+                                </if>
+                            </ol>
+                            <div class="carousel-inner">
 
-                <!-- 新鲜事-->
-                <div class=" row hot_activity">
-                    <div class="col-md-12">
-                        <h2>新鲜事</h2>
-                    </div>
+                                <if condition="modC('PIC1',0,'Home') neq 0">
+                                    <div class="item active">
+                                        <if condition="modC('URL1','','Home') neq ''">
+                                            <a href="{:modC('URL1','','Home')}" target="{:modC('TARGET1','_self','Home')}">
+                                        </if>
+                                        <img alt="First slide" src="{:get_cover(modC('PIC1',0,'Home'),'path')}">
 
-                    <div class="col-md-4">
-                        <img src="__IMG__/pp.png">
-                    </div>
+                                        <div class="carousel-caption">
+                                            <h3>{:modC('TITLE1','','Home')}</h3>
+                                        </div>
+                                        <if condition="modC('URL1','','Home') neq ''">
+                                            </a> </if>
+                                    </div>
+                                </if>
 
-                    <div class="col-md-8">
-                        <div class="square_weibo">
-                            <p><b>微博</b></p>
+                                <if condition="modC('PIC2',0,'Home') neq 0">
+                                    <div class="item ">
+                                        <if condition="modC('URL2','','Home') neq ''">
+                                            <a href="{:modC('URL2','','Home')}" target="{:modC('TARGET2','_self','Home')}">
+                                        </if>
+                                        <img alt="First slide" src="{:get_cover(modC('PIC2',0,'Home'),'path')}">
 
-                            <ul class="plaza_ul clearfix">
-                                <volist name="weibos" id="vo">
-                                    <li class="col-md-6">
-                                        <span class="black-squareIcon"></span>
-                                        <a class="text-more" title="{$vo.content|op_t}" target="_blank"
-                                           href="{:U('weibo/index/weibodetail',array('id'=>$vo['id']))}">{$vo.content|op_t}
-                                        </a>
-                                    </li>
-                                </volist>
+                                        <div class="carousel-caption">
+                                            <h3>{:modC('TITLE2','','Home')}</h3>
+                                        </div>
+                                        <if condition="modC('URL2','','Home') neq ''">
+                                            </a>
+                                        </if>
+                                    </div>
+                                </if>
+                                <if condition="modC('PIC3',0,'Home') neq 0">
+                                    <div class="item ">
+                                        <if condition="modC('URL3','','Home') neq ''">
+                                            <a href="{:modC('URL3','','Home')}" target="{:modC('TARGET3','_self','Home')}">
+                                        </if>
+                                        <img alt="First slide" src="{:get_cover(modC('PIC3',0,'Home'),'path')}">
 
-                            </ul>
+                                        <div class="carousel-caption">
+                                            <h3>{:modC('TITLE3','','Home')}</h3>
+                                        </div>
+                                        <if condition="modC('URL3','','Home') neq ''">
+                                            </a></if>
+                                    </div>
+                                </if>
+                            </div>
+                            <if condition="modC('PIC2',0,'Home') neq 0">
+                                <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
+                                    <span class="icon-chevron-left"></span>
+                                </a>
+                                <a class="right carousel-control" href="#carousel-example-generic" data-slide="next">
+                                    <span class="icon-chevron-right"></span>
+                                </a>
+                            </if>
 
                         </div>
-
-                        <div class="square_tieba">
-
-                            <p><b>帖子</b></p>
-
-                            <ul class="plaza_ul clearfix">
-
-                                <volist name="posts" id="vo">
-                                    <li class="col-md-6">
-                                        <span class="black-squareIcon"></span>
-                                        <a class="text-more" title="{$vo.title|op_t}" target="_blank"
-                                           href="{:U('forum/index/detail',array('id'=>$vo['id']))}">{$vo.title|op_t}
-                                        </a>
-                                    </li>
-                                </volist>
-
-                            </ul>
-
-                        </div>
-
-
                     </div>
-
-
-                </div>
-
-
-                <!--新鲜事-->
-
-                <!--广告位-->
-                <div class="square_ad hidden-xs " style="padding: 0px;">
-                    {:hook('Advs', 'home_ad1')}
-                </div>
-                <!--广告位-->
-
-                <!-- 热门活动-->
-                <div class="row hot_activity">
-                    <div class="col-md-12">
-                        <h2 style="">热门活动</h2>
-                    </div>
-
-                    <volist name="events" id="event">
-                        <div class="col-md-4">
-                            <a target="_blank" href="{:U('event/index/detail',array('id'=>$event['id']))}"><img
-                                    class="cover" src="{$event.cover_id|getThumbImageById=230,150}"></a>
-
-                            <p><h4><a title="{$event.title|op_t}" class="text-more" style="width: 100%" target="_blank" href="{:U('event/index/detail',array('id'=>$event['id']))}">{$event.title|op_t}</a>
-                        </h4></p>
-                            <p><img src="__IMG__/er.png">&nbsp;&nbsp;<a>{$event.attentionCount}</a>&nbsp;&nbsp;&nbsp;&nbsp;
-                                <img src="__IMG__/see.png">&nbsp;&nbsp;<a>{$event.view_count}</a></p>
-                        </div>
-                    </volist>
-                </div>
-                <!-- 热门活动-->
-
-
-                <div class="row col-md-12">
-
-                    {:Hook('friendLink')}
                 </div>
 
             </div>
 
 
-            <div class="col-md-3">
-                <div class="square_sider_top">
-                    <p><img src="__IMG__/ww_01.png"><a target="_blank"
-                                                       href="{:U('weibo/index/index')}">{$weibo_count}</a>&nbsp;&nbsp;篇微博
-                    </p>
-                    <hr>
-                    <p><img src="__IMG__/ww_02.png"><a target="_blank"
-                                                       href="{:U('forum/index/index')}">{$post_count}</a>&nbsp;&nbsp;个帖子
-                    </p>
-                    <hr>
-                    <p><img src="__IMG__/ww_03.png"><a target="_blank"
-                                                       href="{:U('event/index/index')}">{$event_count}</a>&nbsp;&nbsp;个活动
-                    </p>
-
-                </div>
-
-
-                {:W('Weibo/TopUserList/lists',array(null,'score desc','活跃用户','top_home',6))}
-                {:W('Weibo/UserList/lists',array(null, 'id desc','最新加入','latest_home',6))}
-            </div>
         </div>
 
 
-    </div>
+        <php>}else{</php>
+        {:W($v.'/HomeBlock/render')}
+        <php>}</php>
 
-</block>
+    </volist>
+</div>
+
+
+
+<!-- /头部 -->
+
+<!-- 主体 -->
+
+<!-- /主体 -->
+
+<!-- 底部 -->
+<include file="Public/footer"/>
+<!-- /底部 -->
+</body>
+</html>

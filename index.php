@@ -36,20 +36,21 @@ if (get_magic_quotes_gpc()) {
 
 
 defined('ROOT_PATH') or define('ROOT_PATH', dirname(__FILE__));
-
 /**
  * 系统调试设置
  * 项目正式部署后请设置为false
  */
 define ('APP_DEBUG', true);
 
-/**
- * 应用目录设置
- * 安全期间，建议安装调试完成后移动到非WEB目录
- */
 define ('APP_PATH', './Application/');
 
-if (!is_file(APP_PATH . 'User/Conf/config.php')) {
+/**
+ *  主题目录 OpenSNS模板地址 （与ThinkPHP中的THEME_PATH不同）
+ *  @author 郑钟良<zzl@ourstu.com>
+ */
+define ('OS_THEME_PATH', './Theme/');
+
+if (!is_file( 'Conf/user.php')) {
     header('Location: ./install.php');
     exit;
 }

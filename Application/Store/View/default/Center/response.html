@@ -1,0 +1,105 @@
+<extend name="Center/base"/>
+<block name="main_content">
+    <div class="common_block_border clearfix ">
+        <if condition="$_GET['s']">
+            <h2 class="common_block_title">收到的评价</h2>
+            <else/>
+            <h2 class="common_block_title">给出的评价</h2>
+        </if>
+        <div class="col-xs-12 mb10" style="min-height: 600px">
+            <table class="c_m_r_tb " style="width: 100%">
+                <thead>
+                <tr>
+                    <th>
+                        订单编号
+                    </th>
+                    <th>
+                        买家
+                    </th>
+                    <th>
+                        卖家
+                    </th>
+                    <th>
+                        评价时间
+                    </th>
+                    <th>
+                        评价状况
+                    </th>
+                    <th>评语</th>
+                </tr>
+                </thead>
+                <if condition="$responses['count'] eq 0">
+                    <tr>
+                        <td colspan="6">暂无任何评价记录。</td>
+                    </tr>
+                </if>
+                <volist name="responses.data" id="vo">
+                    <tr class=" mb10 ">
+                        <td>
+                            <a href="{:U('center/order',array('id'=>$vo['id']))}">{$vo.id}</a>
+                        </td>
+                        <td>
+                            <a href="{$vo.user.space_url}" event-node="face_card" uid="{$vo.uid}" target="_blank">{$vo.user.nickname|default=买家不存在}</a>
+                        </td>
+                        <td>
+                            <a href="{$vo.s_user.space_url}" event-node="face_card" uid="{$vo.s_uid}" target="_blank">{$vo.s_user.nickname|default=卖家不存在}</a>
+                        </td>
+                        <td>
+                            <if condition="intval($vo['response_time']) neq 0">
+                                {$vo.response_time|friendlyDate}
+                                <else/>
+                                <b>尚未评价</b>
+                            </if>
+
+                        </td>
+                        <td>
+                            <if condition="intval($vo['response_time']) neq 0">
+                                <switch name="vo['response']">
+                                    <case value="1" break="1">
+                                        <b>好评</b>
+                                    </case>
+                                    <case value="0" break="1">
+                                        <b>中评</b>
+                                    </case>
+                                    <case value="-1" break="1">
+                                        <b>差评</b>
+                                    </case>
+                                </switch>
+                                <else/>
+                                <b>尚未评价</b>
+                            </if>
+
+                        </td>
+                        <td>
+                            <if condition="intval($vo['response_time']) neq 0">
+                                {$vo.content}
+                                <else/>
+                                <b>尚未评价</b>
+                            </if>
+                        </td>
+                    </tr>
+                </volist>
+            </table>
+
+        </div>
+
+        <style>
+            .c_m_r_tb {
+                border: 1px #ccc solid;
+            }
+
+            .c_m_r_tb td, .c_m_r_tb th {
+                padding: 10px;
+                margin-right: 5px;
+                border-top: 1px #ddd solid;
+                border-bottom: 1px #ddd solid;
+                background: white;
+            }
+
+            .c_m_r_tb th {
+                background: #f6f6f6;
+            }
+        </style>
+    </div>
+
+</block>

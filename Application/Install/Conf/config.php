@@ -15,7 +15,7 @@ define('INSTALL_APP_PATH', realpath('./') . '/');
 
 return array(
 
-    'ORIGINAL_TABLE_PREFIX' => 'opensns_', //默认表前缀
+    'ORIGINAL_TABLE_PREFIX' => 'ocenter_', //默认表前缀
 
     /* 模板相关配置 */
     'TMPL_PARSE_STRING' => array(
@@ -24,9 +24,14 @@ return array(
         '__IMG__' => __ROOT__ . '/Public/' . MODULE_NAME . '/images',
         '__CSS__' => __ROOT__ . '/Public/' . MODULE_NAME . '/css',
         '__JS__' => __ROOT__ . '/Public/' . MODULE_NAME . '/js',
+        '__ZUI__'=>__ROOT__.'/Public/zui',
+        '__NAME__'=>'OpenSNS',
+        '__COMPANY__'=>'嘉兴想天信息科技有限公司',
+        '__WEBSITE__'=>'www.opensns.cn',
+        '__COMPANY_WEBSITE__'=>'www.ourstu.com'
     ),
     /* URL配置 */
     'URL_MODEL' => 3, //URL模式
-
+    'DEFAULT_THEME' =>  'default',  // 默认模板主题名称
 
 );

@@ -1,0 +1,41 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <include file="Public/head"/>
+    <link href="__CSS__/store.css" type="text/css" rel="stylesheet">
+</head>
+<body>
+<!-- 头部 -->
+<include file="Public/header"/>
+<!-- /头部 -->
+<include file="Public/nav"/>
+<!-- 主体 -->
+<div style="padding: 7px"></div>
+<div id="main-container" class="container">
+    <script>
+        adjust_navbar();
+    </script>
+    <div class="container">
+        <div class="row">
+            <include file="Center/_left"/>
+            <div class="col-xs-10">
+                <block name="main_content"></block>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function(){
+        $(window).resize(function(){
+            $("#main-container").css("min-height", $(window).height() - 343);
+        }).resize();
+    })
+</script>
+<!-- /主体 -->
+<script src="__JS__/store.js"></script>
+<!-- 底部 -->
+<include file="Public/footer"/>
+<!-- /底部 -->
+</body>
+</html>

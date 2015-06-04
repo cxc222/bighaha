@@ -45,10 +45,8 @@ class LzlController extends Controller
         //写入数据库
         $model = D('ForumLzlReply');
         $before=getMyScore();
-        $tox_money_before=getMyToxMoney();
         $result = $model->addLZLReply($post_id, $to_f_reply_id, $to_reply_id, $to_uid, op_t($content),$p);
         $after=getMyScore();
-        $tox_money_after=getMyToxMoney();
         if (!$result) {
             $this->error('发布失败：' . $model->getError());
         }
@@ -56,7 +54,7 @@ class LzlController extends Controller
         $totalCount = D('forum_lzl_reply')->where('is_del=0 and to_f_reply_id=' . $to_f_reply_id)->count();
         $limit = 5;
         $pageCount = ceil($totalCount / $limit);
-        exit(json_encode(array('status'=>1,'info'=>'回复成功。'.getScoreTip($before,$after).getToxMoneyTip($tox_money_before,$tox_money_after),'url'=>$pageCount)));
+        exit(json_encode(array('status'=>1,'info'=>'回复成功。'.getScoreTip($before,$after),'url'=>$pageCount)));
     }
 
     private function requireLogin()

@@ -1,0 +1,13 @@
+DROP TABLE IF EXISTS `ocenter_store_category`;
+DROP TABLE IF EXISTS `ocenter_store_com`;
+DROP TABLE IF EXISTS `ocenter_store_data`;
+DROP TABLE IF EXISTS `ocenter_store_entity`;
+DROP TABLE IF EXISTS `ocenter_store_fav`;
+DROP TABLE IF EXISTS `ocenter_store_field`;
+DROP TABLE IF EXISTS `ocenter_store_goods`;
+DROP TABLE IF EXISTS `ocenter_store_item`;
+DROP TABLE IF EXISTS `ocenter_store_order`;
+DROP TABLE IF EXISTS `ocenter_store_rate`;
+DROP TABLE IF EXISTS `ocenter_store_read`;
+DROP TABLE IF EXISTS `ocenter_store_send`;
+DROP TABLE IF EXISTS `ocenter_store_shop`;

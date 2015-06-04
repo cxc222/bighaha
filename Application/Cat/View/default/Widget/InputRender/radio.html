@@ -1,0 +1,26 @@
+<if condition="$info_id neq 0">
+    <volist name="field.values" id="vo">
+        <label for="{$field.name}_{$vo}" class="radio-inline"><input name="{$field.name}" class="cat_radio "
+                                                                     id="{$field.name}_{$vo}"
+                                                                     type="radio"
+                                                value="{$vo}"
+            <if condition="$field_value neq ''">
+                <if condition="$vo eq $field_value"> checked</if>
+
+            </if>
+            >{$vo}</label>
+    </volist>
+    <else/>
+    <volist name="field.values" id="vo">
+        <label for="{$field.name}_{$vo}" class="radio-inline"><input name="{$field.name}" class="cat_radio "
+                                                                     id="{$field.name}_{$vo}"
+                                                                     type="radio"
+                                                value="{$vo}"
+            <if condition="$field['default_value'] neq ''">
+                <if condition="$vo eq $field['default_value']"> checked</if>
+                <else/>
+                <if condition="$i eq 1"> checked</if>
+            </if>
+            >{$vo}</label>
+    </volist>
+</if>

@@ -34,7 +34,7 @@ class UcenterMemberModel extends Model
     /* 用户模型自动验证 */
     protected $_validate = array(
         /* 验证用户名 */
-        array('username', '4,30', -1, self::EXISTS_VALIDATE, 'length'), //用户名长度不合法
+        array('username', '4,32', -1, self::EXISTS_VALIDATE, 'length'), //用户名长度不合法
         array('username', 'checkDenyMember', -2, self::EXISTS_VALIDATE, 'callback'), //用户名禁止注册
         array('username', 'checkUsername', -20, self::EXISTS_VALIDATE, 'callback'),
         array('username', '', -3, self::EXISTS_VALIDATE, 'unique'), //用户名被占用
@@ -49,7 +49,7 @@ class UcenterMemberModel extends Model
         array('email', '', -8, self::EXISTS_VALIDATE, 'unique'), //邮箱被占用
 
         /* 验证手机号码 */
-        array('mobile', '//', -9, self::EXISTS_VALIDATE), //手机格式不正确 TODO:
+        array('mobile', '/^(1[3|4|5|8])[0-9]{9}$/', -9, self::EXISTS_VALIDATE), //手机格式不正确 TODO:
         array('mobile', 'checkDenyMobile', -10, self::EXISTS_VALIDATE, 'callback'), //手机禁止注册
         array('mobile', '', -11, self::EXISTS_VALIDATE, 'unique'), //手机号被占用
     );
@@ -64,13 +64,22 @@ class UcenterMemberModel extends Model
     );
 
     /**
-     * 检测用户名是不是被禁止注册
+     * 检测用户名是不是被禁止注册(保留用户名)
      * @param  string $username 用户名
      * @return boolean          ture - 未禁用，false - 禁止注册
      */
     protected function checkDenyMember($username)
     {
-        return true; //TODO: 暂不限制，下一个版本完善
+        $denyName=M("Config")->where(array('name' => 'USER_NAME_BAOLIU'))->getField('value');
+        if($denyName!=''){
+            $denyName=explode(',',$denyName);
+            foreach($denyName as $val){
+                if(!is_bool(strpos($username,$val))){
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     /**
@@ -90,7 +99,7 @@ class UcenterMemberModel extends Model
         if (strpos($username, ' ') !== false) {
             return false;
         }
-        preg_match("/^[a-zA-Z0-9_]{1,30}$/", $username, $result);
+        preg_match("/^[a-zA-Z0-9_]{4,32}$/", $username, $result);
 
         if (!$result) {
             return false;
@@ -127,52 +136,40 @@ class UcenterMemberModel extends Model
      * @param  string $mobile 用户手机号码
      * @return integer          注册成功-用户信息，注册失败-错误编号
      */
-    public function register($username, $nickname, $password, $email, $mobile)
+    public function register($username, $nickname, $password, $email='', $mobile='', $type=1)
     {
+
         $data = array(
             'username' => $username,
             'password' => $password,
             'email' => $email,
             'mobile' => $mobile,
+            'type' => $type,
         );
 
         //验证手机
         if (empty($data['mobile'])) unset($data['mobile']);
+        if (empty($data['username'])) unset($data['username']);
+        if (empty($data['email'])) unset($data['email']);
 
         /* 添加用户 */
         $usercenter_member = $this->create($data);
-
         if ($usercenter_member) {
-
-            $result = D('Home/Member')->registerMember($nickname);
+            $result = D('Common/Member')->registerMember($nickname);
             if ($result > 0) {
                 $usercenter_member['id'] = $result;
                 $uid = $this->add($usercenter_member);
-
-                $this->setDefaultGroup($uid);//设置默认用户组
+                if ($uid === false) {
+                    //如果注册失败，则回去Memeber表删除掉错误的记录
+                    D('Common/Member')->where(array('uid' => $result))->delete();
+                }
+                action_log('reg','ucenter_member',1,1);
                 return $uid ? $uid : 0; //0-未知错误，大于0-注册成功
             } else {
-
                 return $result;
             }
         } else {
             return $this->getError(); //错误详情见自动验证注释
-        }
-    }
-
-    /**设置默认用户组
-     * @param $uid UID
-     * @auth 陈一枭
-     */
-    public function setDefaultGroup($uid){
-        //将该用户加入用户组
-        $defaultGroup = modC('DEFAULT_GROUP', '1', 'User');
-        $authGroupAccessModel = M('AuthGroupAccess');
-        $defaultGroupArray = explode(',', $defaultGroup);
-        foreach ($defaultGroupArray as $g) {
-            $access['uid'] = $uid;
-            $access['group_id'] = $g;
-            $authGroupAccessModel->add($access);
         }
     }
 
@@ -185,6 +182,10 @@ class UcenterMemberModel extends Model
      */
     public function login($username, $password, $type = 1)
     {
+
+        if (UC_SYNC && $username != get_username(1) && $type == 1) {
+            return $this->ucLogin($username, $password);
+        }
         $map = array();
         switch ($type) {
             case 1:
@@ -202,20 +203,84 @@ class UcenterMemberModel extends Model
             default:
                 return 0; //参数错误
         }
-
         /* 获取用户数据 */
         $user = $this->where($map)->find();
+
+        $return = check_action_limit('input_password','ucenter_member',$user['id'],$user['id']);
+        if($return && !$return['state']){
+            return $return['info'];
+        }
+
         if (is_array($user) && $user['status']) {
             /* 验证用户密码 */
             if (think_ucenter_md5($password, UC_AUTH_KEY) === $user['password']) {
                 $this->updateLogin($user['id']); //更新用户登录信息
                 return $user['id']; //登录成功，返回用户ID
             } else {
+                action_log('input_password','ucenter_member',$user['id'],$user['id']);
                 return -2; //密码错误
             }
         } else {
             return -1; //用户不存在或被禁用
         }
+    }
+
+
+    public function ucLogin($username, $password)
+    {
+        include_once './api/uc_client/client.php';
+        //Ucenter 内数据
+        $uc_user = uc_user_login($username, $password, 0);
+        //关联表内数据
+        $uc_user_ref = tox_get_ucenter_user_ref('', $uc_user['0'], '');
+        //登录
+        if ($uc_user_ref['uid'] && $uc_user_ref['uc_uid'] && $uc_user[0] > 0) {
+            return $uc_user_ref['uid'];
+        }
+        //本地帐号信息
+        $tox_user = $this->model->getLocal($username, $password);
+        // 关联表无、UC有、本地无的
+        if ($uc_user[0] > 0 && !$tox_user['id']) {
+            $uid = $this->register($uc_user[1], $uc_user[1], $uc_user[2], $uc_user[3], '', 1);
+            if ($uid <= 0) {
+                return A('Home/User')->showRegError($uid);
+            }
+            $result = tox_add_ucenter_user_ref($uid, $uc_user[0], $uc_user[1], $uc_user[3]);
+            if (!$result) {
+                return '用户不存在或密码错误';
+            }
+            return $uid;
+        }
+        // 关联表无、UC有、本地有的
+        if ($uc_user[0] > 0 && $tox_user['id'] > 0) {
+            $result = tox_add_ucenter_user_ref($tox_user['id'], $uc_user[0], $uc_user[1], $uc_user[3]);
+            if (!$result) {
+                return '用户不存在或密码错误';
+            }
+            return $tox_user['id'];
+        }
+        // 关联表无、UC无、本地有
+        if ($uc_user[0] < 0 && $tox_user['id'] > 0) {
+            //写入UC
+            $uc_uid = uc_user_register($tox_user['username'], $password, $tox_user['email'], '', '', get_client_ip());
+            if ($uc_uid <= 0) {
+                return 'UC帐号注册失败，请联系管理员';
+            }
+            //写入关联表
+            if (M('ucenter_user_link')->where(array('uid' => $tox_user['id']))->find()) {
+                $result = tox_update_ucenter_user_ref($tox_user['id'], $uc_uid, $tox_user['username'], $tox_user['email']);
+            } else {
+                $result = tox_add_ucenter_user_ref($tox_user['id'], $uc_uid, $tox_user['username'], $tox_user['email']);
+            }
+            if (!$result) {
+                return '用户不存在或密码错误';
+            }
+            return $tox_user['id'];
+        }
+
+        //关联表无、UC无、本地无的
+        return '用户不存在';
+
     }
 
 
@@ -436,22 +501,118 @@ class UcenterMemberModel extends Model
     }
 
 
-    public function addSyncData()
+
+
+    /**修改密码
+     * @param $old_password
+     * @param $new_password
+     * @return bool
+     * @auth 陈一枭
+     */
+    public function changePassword($old_password, $new_password)
+    {
+        //检查旧密码是否正确
+        if (!$this->verifyUser(get_uid(), $old_password)) {
+            $this->error = -41;
+            return false;
+        }
+        //更新用户信息
+        $model = $this;
+        $data = array('password' => $new_password);
+        $data = $model->create($data);
+        if (!$data) {
+            $this->error = $model->getError();
+            return false;
+        }
+        $model->where(array('id' => get_uid()))->save($data);
+        //返回成功信息
+        clean_query_user_cache(get_uid(), 'password');//删除缓存
+        D('user_token')->where('uid=' . get_uid())->delete();
+        return true;
+    }
+
+    public function getErrorMessage($error_code = null)
     {
 
-        $data['username'] = $this->rand_username();
-        $data['email'] = $this->rand_email();
-        $data['password'] = $this->create_rand(10);
-        $data1 = $this->create($data);
+        $error = $error_code == null ? $this->error : $error_code;
+        switch ($error) {
+            case -1:
+                $error = '用户名长度必须在32个字符以内！';
+                break;
+            case -2:
+                $error = '用户名被禁止注册！';
+                break;
+            case -3:
+                $error = '用户名被占用！';
+                break;
+            case -4:
+                $error = '密码长度必须在6-30个字符之间！';
+                break;
+            case -41:
+                $error = '用户旧密码不正确';
+                break;
+            case -5:
+                $error = '邮箱格式不正确！';
+                break;
+            case -6:
+                $error = '邮箱长度必须在1-32个字符之间！';
+                break;
+            case -7:
+                $error = '邮箱被禁止注册！';
+                break;
+            case -8:
+                $error = '邮箱被占用！';
+                break;
+            case -9:
+                $error = '手机格式不正确！';
+                break;
+            case -10:
+                $error = '手机被禁止注册！';
+                break;
+            case -11:
+                $error = '手机号被占用！';
+                break;
+            case -12:
+                $error = '用户名必须以中文或字母开始，只能包含拼音数字，字母，汉字！';
+                break;
+            case -31:
+                $error = '昵称禁止注册';
+                break;
+            case -33:
+                $error = '昵称长度不合法';
+                break;
+            case -32:
+                $error = '昵称不合法';
+                break;
+            case -30:
+                $error = '昵称已被占用';
+                break;
 
-        $uid = $this->add($data1);
-        $this->setDefaultGroup($uid);//设置默认用户组
+            default:
+                $error = '未知错误';
+        }
+        return $error;
+    }
+
+
+    /**
+     * addSyncData
+     * @return mixed
+     * @author:xjw129xjt(肖骏涛) xjt@ourstu.com
+     */
+    public function addSyncData()
+    {
+        $data['email'] = $this->rand_email();
+        $data['password'] = create_rand(10);
+        $data['type'] = 2;  // 视作用邮箱注册
+        $data = $this->create($data);
+        $uid = $this->add($data);
         return $uid;
     }
 
-    public function rand_email()
+    protected  function rand_email()
     {
-        $email = $this->create_rand(10) . '@opensns.com';
+        $email = create_rand(10) . '@ocenter.com';
         if ($this->where(array('email' => $email))->select()) {
             $this->rand_email();
         } else {
@@ -459,25 +620,10 @@ class UcenterMemberModel extends Model
         }
     }
 
-    public function rand_username()
-    {
-        $username = $this->create_rand(10);
-        if ($this->where(array('username' => $username))->select()) {
-            $this->rand_username();
-        } else {
-            return $username;
-        }
-    }
 
-    function create_rand($length = 8)
-    {
-        $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-        $password = '';
-        for ($i = 0; $i < $length; $i++) {
-            $password .= $chars[mt_rand(0, strlen($chars) - 1)];
-        }
-        return $password;
-    }
+
+
+
 
 
 }

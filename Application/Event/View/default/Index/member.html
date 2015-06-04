@@ -2,12 +2,13 @@
 
 <block name="style">
     <link href="__CSS__/event.css" rel="stylesheet" type="text/css"/>
-    <link type="text/css" rel="stylesheet" href="__PUBLIC__/Core/js/ext/magnific/magnific-popup.css"/>
 </block>
-
+<block name="header">
+    <include file="_nav"/>
+</block>
 <block name="body">
 
-    <include file="_nav"/>
+
     
     <div class="btn-group btn-group-sm">
         <a class="btn btn-default  <if condition="$tip eq all">active</if>" href="{:U('member',array('id'=>$content['id']))}">全部成员 <span class="badge">{$all_count}</span></a>
@@ -21,23 +22,23 @@
 
 <div class="event_member_list" style="margin-top: 15px;">
     <volist name="content['member']" id="vo">
-        <div class="col-md-2" style="height: 180px;">
+        <div class="col-xs-2" style="height: 180px;">
             <div style="width: 128px;">
                 <img ucard="{$vo.id}" src="{$vo.avatar128}" class="avatar-img" style="width: 128px;float: left"/>
                 <div style="text-align: center;">
                     <div><a href="{$vo.space_url}"> {$vo.nickname} </a></div>
-                    <php>if($content['uid'] == is_login()  ){</php>
+                    <php>if(check_auth('Event/Index/shenhe',$content['uid'])){</php>
 
-                    <a class="event_see_info" title="查看姓名联系方式"><span class="glyphicon glyphicon-hand-up"></span></a>
+                    <a class="event_see_info" title="查看姓名联系方式"><span class="icon-eye-open"></span></a>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <span>
+                    <span>
                     <if condition="$vo['status'] eq 0">
-                        <a data-eventID="{$content['id']}" data-uid="{$vo.id}" onclick="shenhe($(this))" title="通过审核"><span class="glyphicon glyphicon-ok"></span></a>
+                        <a data-eventID="{$content['id']}" data-uid="{$vo.id}" onclick="shenhe($(this))" title="通过审核"><span class="icon-ok"></span></a>
                         <else/>
-                         <a data-eventID="{$content['id']}" data-uid="{$vo.id}"  onclick="qushenhe($(this))"  title="取消审核"><span class="glyphicon glyphicon-remove"></span></a>
+                         <a data-eventID="{$content['id']}" data-uid="{$vo.id}"  onclick="qushenhe($(this))"  title="取消审核"><span class="icon-off"></span></a>
                     </if>
 
-                </span>
+                    </span>
                     <div class="event_member_info"
                          style="position: absolute;z-index: 999;border: 1px solid #ccc ;background: #FFFFFF;text-align: left;width: 99%;padding: 5px 0 5px 10px;display: none">
                         <a class="event_member_info_close" style="float: right;margin-top: -5px;margin-right: 5px">X</a>
@@ -55,7 +56,6 @@
 
 <block name="script">
     <script type="text/javascript" src="__STATIC__/uploadify/jquery.uploadify.min.js"></script>
-    <script type="text/javascript" src="__PUBLIC__/Core/js/ext/magnific/jquery.magnific-popup.min.js"></script>
     <script type="text/javascript" src="__JS__/event.js"></script>
     <script>
         $(function () {
@@ -63,7 +63,6 @@
                 $('.children_nav').hide();
                 $('#children_' + $(this).attr('data')).show();
             });
-            bindSupport();
 
             $('.event_see_info').click(function () {
                 $('.event_member_info').hide();

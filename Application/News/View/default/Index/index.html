@@ -1,0 +1,50 @@
+<extend name="Base/common"/>
+<block name="header">
+    <include file="Public/_nav"/>
+</block>
+<block name="body">
+    <link type="text/css" rel="stylesheet" href="__CSS__/news.css"/>
+    <div class="container" style="min-height: 400px">
+        <div class="row">
+            <div class="col-xs-8">
+                <div class="common_block_border">
+                    <notempty name="now_category">
+                        <div class="common_block_title">{$now_category.title}
+                            <div class="pull-right children_blog">
+                                <volist name="now_category['_']" id="cat">
+                                    &nbsp;&nbsp;<a href="{:U('News/index/index',array('category'=>$cat['id']))}" style="text-decoration: underline;color: #949494;">{$cat.title}</a>
+                                </volist>
+                            </div>
+                        </div>
+                        <else/>
+                        <div class="common_block_title">新视野</div>
+                    </notempty>
+                    <div style="padding:0 20px">
+                        <section id="contents">
+                            <notempty name="list">
+                                <volist name="list" id="data">
+                                    <include file="Public/_default_list"/>
+                                </volist>
+                                <else/>
+                                <div style="font-size:3em;padding:2em 0;color: #ccc;text-align: center">该类型下没有资讯~</div>
+                            </notempty>
+
+                        </section>
+                        <div class="text-right">
+                            {:getPagination($totalCount,20)}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-4">
+                <php>if(isset($now_category['id'])){</php>
+                {:W('Position/lists',array('position'=>'4','category'=>$now_category['id']))}
+                <php>}else{</php>
+                {:W('Position/lists',array('position'=>'2'))}
+                <php>}</php>
+                {:W('Hot/lists',array('category'=>$now_category['id']))}
+            </div>
+        </div>
+
+    </div>
+</block>

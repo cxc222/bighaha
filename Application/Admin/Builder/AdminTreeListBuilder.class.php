@@ -11,6 +11,7 @@ namespace Admin\Builder;
 class AdminTreeListBuilder extends AdminBuilder
 {
     private $_title;
+    private $_suggest;
     private $_keyList = array();
     private $_buttonList = array();
     private $_pagination = array();
@@ -25,9 +26,20 @@ class AdminTreeListBuilder extends AdminBuilder
     public function title($title)
     {
         $this->_title = $title;
+        $this->meta_title=$title;
         return $this;
     }
 
+    /**
+     * suggest  页面标题边上的提示信息
+     * @param $suggest
+     * @return $this
+     * @author:xjw129xjt(肖骏涛) xjt@ourstu.com
+     */
+    public function suggest($suggest){
+        $this->_suggest = $suggest;
+        return $this;
+    }
     /**
      * @param $url string 已被U函数解析的地址
      * @return $this
@@ -341,6 +353,7 @@ class AdminTreeListBuilder extends AdminBuilder
 
         //显示页面
         $this->assign('title', $this->_title);
+        $this->assign('suggest', $this->_suggest);
         $this->assign('keyList', $this->_keyList);
         $this->assign('buttonList', $this->_buttonList);
         $this->assign('pagination', $paginationHtml);
@@ -445,15 +458,15 @@ class AdminTreeListBuilder extends AdminBuilder
         return $this;
     }
 
-    public function disableMove()
+    public function showMove()
     {
-        $this->_move = false;
+        $this->_move = true;
         return $this;
     }
 
-    public function disableMerge()
+    public function showMerge()
     {
-        $this->_merge = false;
+        $this->_merge = true;
         return $this;
     }
 }

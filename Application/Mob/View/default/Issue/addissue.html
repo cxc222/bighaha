@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>{:L('addissue')} | {:modC('WEB_SITE_NAME','OpenSNS')}</title>
+    <include file="head/head"/>
+</head>
+<body>
+
+<header data-am-widget="header" class="am-header am-header-default am-header-fixed">
+    <div class="am-header-left am-header-nav">
+        <a href="javascript:history.go(-1);"><span class="am-icon-chevron-left"></span></a>
+    </div>
+    <if condition="$issue.is_edit eq 1">
+        <h1 class="am-header-title">
+            编辑专辑
+        </h1>
+    </if>
+    <if condition="$issue.is_edit eq 0">
+        <h1 class="am-header-title">
+            发专辑
+        </h1>
+    </if>
+
+    <div class="am-header-right am-header-nav">
+
+    </div>
+</header>
+
+<div class="addissue-container ">
+    <div class="addissue " id="article-post">
+        <form class="am-form " id="send_issue" data-am-validator data-url="{:U('Mob/Issue/doSendIssue')}">
+            <input type="hidden" id="img_ids" name="attach_ids" value="{$issue.cover_id}">
+            <input type="hidden" name="issueId" value="{$issue.id}">
+
+            <!--插入图片-->
+            <div class="am-cf " style="padding: 10px;">
+                <div class="am-fl">
+                    <div class="img_btn">
+                        <i class="am-icon-plus" style="font-size: 25px;padding: 12px 20px;"></i>
+                    </div>
+
+                    <input type="file" name="files" id="fileupload" class=" am-btn"
+                           style="left:10px;top: 60px;position:absolute;z-index: 1;width: 72px;height:72px;opacity: 0;cursor: pointer;"
+                           data-url="{:U('Core/File/uploadPicture')}">
+                </div>
+                <div class="show_cover am-fl" style="display:none;margin-left: 10px;">
+                    <div id="cover_url">
+                        <img class="cover_img" src="{$issue.cover_url}">
+                    </div>
+                </div>
+
+            </div>
+            <!--插入图片表情结束-->
+            <fieldset>
+                <div class="am-form-group">
+                    <label for="title">标题：</label>
+                    <input type="text" id="title" name="title" minlength="3" placeholder="" value="{$issue.title}"
+                           required/>
+                </div>
+
+                <!--专辑分类-还有个JS联动-->
+                <div class="am-cf">
+                    <div><label for="issue_top">分类</label></div>
+
+                    <select id="issue_top" name="issue" class="form-control " style="width: 50%;float: left">
+                        <volist name="tree" id="top">
+                            <option value="{$top.id}">
+                                {$top.title}
+                            </option>
+                        </volist>
+                    </select>
+
+                    <select id="issue_second" name="issue_id" class="form-control " style="width: 50%">
+                        <volist name="tree" id="top">
+                            <option value="{$top.id}">
+                                {$top.title}
+                            </option>
+                        </volist>
+                    </select>
+                </div>
+                <!--专辑分类-还有个JS联动end-->
+
+                <div class="am-form-group">
+                    <label for="url">网址：</label>
+                    <if condition="$issue.is_edit eq 1">
+                        <input type="url" id="url" name="url" placeholder="输入以http://开头的网址" value="{$issue.url}"
+                               required/>
+                    </if>
+                    <if condition="$issue.is_edit  eq 0">
+                        <input type="url" id="url" name="url" placeholder="输入以http://开头的网址" value="http://" required/>
+                    </if>
+                </div>
+                <div class="am-form-group">
+                    <label for="present">介绍：</label>
+                    <textarea id="present" minlength="10" name="content" maxlength="100">{$issue.content}</textarea>
+                </div>
+
+                <button type="button" id="confirm" class="am-btn am-btn-primary am-btn-block">发表</button>
+            </fieldset>
+        </form>
+
+    </div>
+</div>
+
+
+
+<script type="text/javascript">
+
+    $('#fileupload').fileupload({
+
+        acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
+        maxNumberOfFiles: 9,
+        maxFileSize: 5000000,
+        uploadTemplate: true,
+        downloadTemplate: true,
+
+        done: function (e, result) {
+            var $fileInput = $(this);
+            var src = result.result.data.file.path;
+
+            var ids = $('#img_ids').val(result.result.data.file.id);
+
+            if (!ids == null) {
+                $('.show_cover').hide();
+            } else {
+                $('.show_cover').show();
+            }
+            $("#cover_url").html('');
+            $("#cover_url").html('<img src="' + src + '"style="width:72px;height:72px"  data-role="issue_cover" >');
+        }
+    });
+    //创建文件操作div;
+    function createBox(result, $fileInput) {
+        var file_id = result.result.data.file.id;
+        var $parentFileBox = $fileInput.next('.parentFileBox');
+        var src = result.result.data.file.path;
+
+        //添加父系容器;
+        if ($parentFileBox.length <= 0) {
+
+            var div = '<div class="parentFileBox"> \
+						<ul class="fileBoxUl"></ul>\
+					</div>';
+            $fileInput.after(div);
+            $parentFileBox = $fileInput.next('.parentFileBox');
+
+        }
+
+        //添加子容器;
+        var li = '<li id="fileBox_' + file_id + '" class="diyUploadHover"> \
+					<div class="viewThumb">\
+					<img src="' + src + '">\
+					</div> \
+				</li>';
+
+        $parentFileBox.children('.fileBoxUl').append(li);
+
+        //父容器宽度;
+        var $width = $('.fileBoxUl>li').length * 180;
+        var $maxWidth = $fileInput.parent().width();
+        $width = $maxWidth > $width ? $width : $maxWidth;
+        $parentFileBox.width($width);
+    }
+
+
+    $('#confirm').click(function () {
+        var data = $("#send_issue").serialize();
+        var url = $("#send_issue").attr('data-url');
+        $.post(url, data, function (msg) {
+            if (msg.status == 1) {
+                alert('发布专辑成功!');
+                window.location.href = document.referrer
+            } else {
+                alert(msg.info);
+            }
+        }, 'json');
+    });
+
+
+</script>
+
+
+
+<script>
+    $(function () {
+
+        $('#issue_top').change(function () {
+            var pid = $(this).val();
+            $.post("{:U('Mob/Issue/selectDropdown')}", {pid: pid}, function (data) {
+                $('#issue_second').html('');
+                $.each(data, function (index, element) {
+
+                            $('#issue_second').append('<option value="' + element.id + '">' + element.title + '</option>')
+                        }
+                )
+            }, 'json');
+        });
+        $('#issue_top').change();
+    })
+</script>
+<script>
+    $(function () {
+        var ids = $('#img_ids').val();
+        if (ids == '') {
+            $('.show_cover').hide();
+        } else {
+
+            $('.show_cover').show();
+            $(".cover_img").css({"width": "71px", "height": "71px"})
+        }
+    });
+
+</script>
+
+</body>
+</html>

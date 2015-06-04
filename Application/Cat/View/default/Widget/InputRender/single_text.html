@@ -1,0 +1,13 @@
+<if condition="$info_id neq 0">
+
+
+    <input id="{$field.name}" name="{$field.name}"
+    <if condition="$field.args neq ''"> event-node="input_text" event-args="{$field.args}"</if>
+    value="{$field_value}" class="cat_input_txt form-control" type="text">
+    <else/>
+
+    <input id="{$field.name}" name="{$field.name}"
+    <if condition="$field.args neq ''"> event-node="input_text" event-args="{$field.args}"</if>
+    value="{$field.default_value}" class="cat_input_txt form-control" type="text">
+
+</if>

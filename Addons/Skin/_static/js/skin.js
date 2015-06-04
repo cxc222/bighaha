@@ -9,13 +9,14 @@ $(function(){
     });
     $('[data-role="USelectSkin"]').click(function(){
         $('[data-role="skin_link"]').attr('href',DefaultSkinHref);
+        $('[data-dismiss="modal"]').click();
     });
     $('[data-role="SelectSkin"]').click(function(){
         var skin=$('#default').val();
         var url=$('#saveAddonUrl').val();
         $.post(url,{skin:skin},function(msg){
             if(msg.status){
-                $('.mfp-close').click();
+                $('[data-dismiss="modal"]').click();
                 toast.success(msg.info);
             }else{
                 handleAjax(msg);
@@ -26,10 +27,9 @@ $(function(){
         var url=$('#saveAddonUrl').val();
         $.post(url,{set_default:1},function(msg){
             if(msg.status){
-                $('.mfp-close').click();
+                $('[data-dismiss="modal"]').click();
                 var href=root+'/Addons/Skin/Skins/'+msg.defaultSkin+'/style.css';
                 $('[data-role="skin_link"]').attr('href',href);
-
                 toast.success(msg.info);
             }else{
                 handleAjax(msg);

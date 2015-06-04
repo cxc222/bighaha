@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+
+    <title>{:L('event')} | {:modC('WEB_SITE_NAME','OpenSNS')}</title>
+
+    <title>{:L('weibo')} | {:modC('WEB_SITE_NAME','OpenSNS')}</title>
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel="alternate icon" type="image/png" href="assets/i/favicon.png">
+    <link rel="stylesheet" href="__CSS__/amazeui.min.css"/>
+    <link rel="stylesheet" href="__CSS__/event.css"/>
+    <link rel="stylesheet" href="__CSS__/app.css"/>
+</head>
+<body>
+
+<header data-am-widget="header" class="am-header am-header-default am-header-fixed">
+    <div class="am-header-left am-header-nav">
+        <a href="javascript:history.go(-1);"><span class="am-icon-chevron-left"></span></a>
+        <a href="#msg" class="">
+            <i class="am-header-icon am-icon-bell-o"></i>
+        </a>
+    </div>
+    <h1 class="am-header-title">
+        活动详情
+    </h1>
+
+    <div class="am-header-right am-header-nav">
+        <a href="{:U('event/addevent')}" class="">
+            <i class="am-header-icon am-icon-pencil"></i>
+        </a>
+        <a href="#nav-link" class="">
+            <i class="am-menu-toggle-icon am-icon-bars"></i>
+        </a>
+    </div>
+
+</header>
+<div id="demo-view" class="" data-backend-compiled="" style="z-index: 1040">
+    <nav data-am-widget="menu" class="am-menu am-menu-offcanvas1 am-no-layout" data-am-menu-offcanvas=""><a
+            href="javascript: void(0)" class="am-menu-toggle"><i class="am-menu-toggle-icon am-icon-bars"></i></a>
+
+        <div class="am-offcanvas "
+             style="touch-action: pan-y; -webkit-user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
+            <div class="am-offcanvas-bar am-offcanvas-bar-flip">
+                <div class="am-text-center">
+                    <img class="avatar-img" style="width:64px;" src="Public/images/default_avatar_128_128.jpg">
+
+                    <div class="am-text-center">
+                        <a>李小龙</a>
+                    </div>
+                </div>
+
+
+                <ul class="am-menu-nav am-avg-sm-1">
+                    <li class=""><a href="{:U('weibo/index')}" class="">微博</a></li>
+                    <li class=""><a href="{:U('issue/index')}" class="">专辑</a></li>
+
+                    <li class=""><a href="{:U('blog/index')}" class="">资讯</a></li>
+
+                    <li class=""><a href="##" class="">资讯</a></li>
+
+                    <li class=""><a href="{:U('forum/index')}" class="">论坛</a></li>
+                    <li class=""><a href="{:U('group/index')}" class="">群组</a></li>
+                    <li class=""><a href="{:U('event/index')}" class="">活动</a></li>
+                    <li class=""><a href="##" class="">签到</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</div>
+
+<div class="event-container ">
+
+
+    <div class="event-detail" id="article_list">
+
+        <div class="am-g event-detail-box ">
+            <div class="cover" style="text-align: center">
+
+                <img class="" style="width:100%;" src="Application/Mob/Static/test/5519323d2b61a.jpg">
+
+                <div class="event_detail_type">乱七八糟</div>
+
+                <div class="event_state" style="background: #d61f39;">
+                    正在进行
+                </div>
+            </div>
+            <div class="content"style="text-align: center">
+                <div class="top-box">
+                    <div class="am-dropdown" data-am-dropdown style="float: right">
+                        <i class="am-icon-gear am-icon-spin am-dropdown-toggle"></i>
+
+                        <div class="am-dropdown-content" style="padding:3px;width: 225px;text-align: center">
+
+                            <button type="button" class="am-btn-default am-btn-xs">
+                                编辑活动
+                            </button>
+                            <button type="button" class="am-btn-secondary am-btn-xs">
+                                结束活动
+                            </button>
+                            <button type="button" class="am-btn-warning am-btn-xs">
+                                删除活动
+                            </button>
+
+                        </div>
+                    </div>
+                    <div class="title">
+                        <span> 世界杯</span>
+                        <span class="nickname fs12">by 汪汪汪</span>
+                          <span class="small-btn fs12">
+                            <i class="am-icon-eye"></i>10
+                      </span>
+                    </div>
+                </div>
+                <div class="time fs12 tb6">
+                    <span>时间： 2015-04-24--2015-05-10</span>
+                </div>
+                <div class="address fs12 tb6">
+                    <span> 地址：艾泽拉斯</span>
+                </div>
+                <div class="deadline fs12 tb6">
+                    <span> 报名截止时间： 2015-03-29</span>
+                </div>
+                <div class="info fs12 tb6">
+                    <span> 简介： 女王大人啊</span>
+                </div>
+                <div class="num fs12 tb6 ">
+                    <span class="limitCount">人数限制8人</span>
+                    <span class="signCount"> 已报名0人</span>
+                    <span class="attentionCount">已参加0人</span>
+                </div>
+
+            </div>
+            <div class="am-btn-group" style="padding: 10px;margin:0 auto">
+                <button type="button" class="am-btn-default am-btn-xs am-radius">我要报名
+                </button>
+                <button type="button" class="am-btn-default am-btn-xs am-radius">提前结束
+                </button>
+                <button type="button" class="am-btn-default am-btn-xs am-radius">编辑活动
+                </button>
+                <button type="button" class="am-btn-default am-btn-xs am-radius">删除活动
+                </button>
+                <button type="button" class="am-btn-default am-btn-xs am-radius">报名已截止
+                </button>
+            </div>
+
+            <div class="detail" style="margin-top: 10px">
+                <h6>活动详情</h6>
+                <span style="font-size: 15px">老子曰:“人法地 地法天 天法道 道法自然”</span>
+
+                <div class="time fs12 tb6" style="text-align: right;margin-top: 10px;">
+                    <span class="create">发布时间：5分钟前</span>
+                    <span class="updata">更新时间：5分钟前</span>
+                </div>
+            </div>
+        </div>
+        <div class="spliter "></div>
+        <div class="am-form-group" style="padding: 10px">
+            <h6>评论</h6>
+            <textarea class="" rows="5" id="doc-ta-1" style="height: 8em; width: 100%;"></textarea>
+
+            <p>
+                <button type="submit" class="am-btn am-btn-default am-round">提交</button>
+            </p>
+        </div>
+    </div>
+
+    <div class="comment-list">
+        <php>for($i=1;$i<10;$i++){</php>
+        <div class="comment-item"
+             style="background-color: #ffffff;padding: 10px;margin-bottom: 5px;border: 1px solid #F2F2F2;">
+            <div class="am-g avatar-img">
+                <div class="am-u-sm-6 avatar">
+                    <img class="avatar-img" style="width: 32px" src="Public/images/default_avatar_128_128.jpg">
+                    <span><a href="##">爱德华</a></span>
+                </div>
+
+
+                <div class="am-u-sm-6 time" style="font-size: 13px;text-align: right">
+                    5分钟前
+                </div>
+            </div>
+            <div class="am-g content" style="padding: 10px">
+                你™的在逗我~！~！~
+
+
+            </div>
+            <div class="am-g">
+                <div class="am-u-sm-2 am-text-center" style="float: right">
+                    <a><i class="am-icon-trash" id="doc-confirm-toggle"></i></a>
+                </div>
+                <div class="am-u-sm-2 am-text-center">
+                    <i class="am-icon-comment-o" id="doc-prompt-toggle"></i>
+                </div>
+            </div>
+        </div>
+        <php>}</php>
+    </div>
+</div>
+
+
+<div class="am-list-news-ft">
+    <a class=" am-btn am-btn-secondary am-btn-block" href="###">查看更多 &raquo;</a>
+</div>
+<div class="am-modal " tabindex="-1" id="my-comment">
+    <div class="am-modal-dialog">
+        <div class="am-modal-bd">
+            点评
+            <input type="text" class="am-modal-prompt-input">
+        </div>
+        <div class="am-modal-footer">
+            <span class="am-modal-btn" data-am-modal-cancel>取消</span>
+            <span class="am-modal-btn" data-am-modal-confirm>提交</span>
+        </div>
+    </div>
+</div>
+
+<div class="am-modal am-modal-confirm" tabindex="-1" id="my-confirm">
+    <div class="am-modal-dialog">
+        <div class="am-modal-bd">
+            你，确定要删除这条记录吗？
+        </div>
+        <div class="am-modal-footer">
+            <span class="am-modal-btn" data-am-modal-cancel>取消</span>
+            <span class="am-modal-btn" data-am-modal-confirm>确定</span>
+        </div>
+    </div>
+</div>
+
+
+
+<script src="__JS__/jquery.min.js"></script>
+<script src="__JS__/amazeui.min.js"></script>
+<script>
+    /*回复弹出框*/
+    $(function () {
+        $('#doc-prompt-toggle').on('click', function () {
+            $('#my-comment').modal({
+                relatedTarget: this,
+                onConfirm: function (e) {
+                    alert('你输入的是：' + e.data || '')
+                }
+            });
+        });
+    });
+    /*删除弹出框*/
+    $(function () {
+        $('#doc-modal-list').find('.am-icon-trash').add('#doc-confirm-toggle').
+                on('click', function () {
+                    $('#my-confirm').modal({
+                        relatedTarget: this,
+                        onConfirm: function (options) {
+                            var $link = $(this.relatedTarget).prev('a');
+                            var msg = $link.length ? '你要删除的链接 ID 为 ' + $link.data('id') :
+                                    '确定了，但不知道要整哪样';
+                            alert(msg);
+                        },
+                        onCancel: function () {
+                            alert('算求，不弄了');
+                        }
+                    });
+                });
+    });
+</script>
+</body>
+</html>

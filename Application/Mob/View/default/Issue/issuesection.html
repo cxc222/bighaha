@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>{:L('issuetype')} | {:modC('WEB_SITE_NAME','OpenSNS')}</title>
+    <include file="head/head"/>
+</head>
+<body>
+
+<header data-am-widget="header" class="am-header am-header-default am-header-fixed am-cf">
+    <div class="am-header-left am-header-nav">
+        <a class="am-fl" href="javascript:history.go(-1);"><span class="am-icon-chevron-left"></span></a>
+    </div>
+    <h1 class="am-header-title">专辑分类
+    </h1>
+
+    <div class="am-header-right am-header-nav">
+        <a href="#nav-link" class="am-fr">
+            <i class="am-menu-toggle-icon am-icon-bars"></i>
+        </a>
+    </div>
+</header>
+{:W('Mob/UserMenu/index')}
+<div class="issue-type-list" style="padding: 10px;">
+    <div class="am-panel-group" id="accordion">
+
+        <volist name="issue_top" id="vo">
+            <div class="am-panel am-panel-default type-list" style="border-bottom: none">
+                <div class="am-panel-hd">
+                    <h4 class="am-panel-title" href="#do-not-say-{$vo.id}" data-am-collapse="{parent: '#accordion'}">
+                        {$vo.title}
+                    </h4>
+                    <span>专辑数：{$vo.count}</span>
+                </div>
+
+                <div id="do-not-say-{$vo.id}" class="am-panel-collapse am-collapse am-in">
+                    <volist name="vo['lever_two']" id="vl">
+                        <ul class="issue-type">
+                            <a href="{:U('Mob/Issue/issueLeverDetail',array('id'=>$vl['id']))}" class="">
+                                <li class="type">{$vl.title}</br>
+                                    <span>专辑数：{$vl.count_content}</span>
+                                </li>
+                            </a>
+                        </ul>
+                    </volist>
+                </div>
+            </div>
+        </volist>
+    </div>
+</div>
+</body>
+</html>

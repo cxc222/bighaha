@@ -74,6 +74,7 @@ class MenuController extends AdminController {
             $menus = M('Menu')->field(true)->select();
             $menus = D('Common/Tree')->toFormatTree($menus);
             $menus = array_merge(array(0=>array('id'=>0,'title_show'=>'顶级菜单')), $menus);
+            $this->assign('Modules',D('Module')->getAll());
             $this->assign('Menus', $menus);
             $this->meta_title = '新增菜单';
             $this->display('edit');
@@ -109,6 +110,7 @@ class MenuController extends AdminController {
 
             $menus = array_merge(array(0=>array('id'=>0,'title_show'=>'顶级菜单')), $menus);
             $this->assign('Menus', $menus);
+            $this->assign('Modules',D('Module')->getAll());
             if(false === $info){
                 $this->error('获取后台菜单信息错误');
             }

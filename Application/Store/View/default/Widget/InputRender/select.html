@@ -1,0 +1,26 @@
+<if condition="$info_id neq 0">
+
+    <select name="{$field.name}" id="{$field.name}" class="form-control"
+    <if condition="$field.args neq ''"> event-node="input_select" event-args="{$field.args}"</if>
+    >
+    <option value="-1">——请选择——</option>
+    <volist name="field.values" id="vo">
+        <option value="{$vo}"
+        <if condition="$field_value eq $vo">selected</if>
+        >{$vo}</option>
+    </volist>
+    </select>
+
+    <else/>
+
+    <select name="{$field.name}" id="{$field.name}" class="form-control"
+    <if condition="$field.args neq ''"> event-node="input_select" event-args="{$field.args}"</if>
+    >
+    <option value="-1">——请选择——</option>
+    <volist name="field.values" id="vo">
+        <option value="{$vo}"
+        <if condition="$vo eq $field['default_value']">selected</if>
+        >{$vo}</option>
+    </volist>
+    </select>
+</if>

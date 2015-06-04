@@ -1,0 +1,76 @@
+<link href="Application/Mob/Static/js/toastr/toastr.min.css" rel="stylesheet"/>
+
+<div id="demo-view" class="" data-backend-compiled="" style="z-index: 1040">
+    <nav data-am-widget="menu" class="am-menu am-menu-offcanvas1 am-no-layout" data-am-menu-offcanvas=""><a
+            href="javascript: void(0)" class="am-menu-toggle"><i class="am-menu-toggle-icon am-icon-bars"></i></a>
+
+        <div class="am-offcanvas "
+             style="touch-action: pan-y; -webkit-user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
+            <div class="am-offcanvas-bar am-offcanvas-bar-flip">
+                <volist name="user" id="vo">
+                    <div class="am-text-center" id="user" style="display: none">
+                        <img class="avatar-img" style="width:64px;margin-top:20px " src="{$vo.avatar64}">
+
+                        <div class="am-text-center">
+                            <a style="color: #fff">{$vo.nickname}</a>
+                        </div>
+                    </div>
+                </volist>
+                <div class="am-text-center" id="signin" style="display: block;font-size: 18px ; height: 44px;line-height: 44px;">
+                    <a href="{:U('index/index')}">登录</a>
+                </div>
+                <ul class="am-menu-nav am-avg-sm-1 am-text-center">
+
+
+                    <li><a style="text-indent: 0px;" href="{:U('weibo/index')}"><i class="am-icon-quote-left"></i>微博</a></li>
+                    <li><a style="text-indent: 0px;" href="{:U('issue/index')}"><i class="am-icon-th-large"></i>专辑</a></li>
+                    <li><a style="text-indent: 0px;" href="{:U('blog/index')}">资讯</a></li>
+                   <!-- <li><a style="text-indent: 0px;" href="{:U('forum/index')}"><i class="am-icon-leaf"></i>论坛</a></li>-->
+                    <!--<li class=""><a href="{:U('group/index')}" class="">群组</a></li>-->
+                    <!--<li class=""><a href="{:U('event/index')}" class="">活动</a></li>-->
+                    <!--<li class=""><a href="##" class="">签到</a></li>-->
+
+                </ul>
+                <div class="am-text-center" id="signout" style="display: none">
+                    <a>退出</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+</div>
+<script src="Application/Mob/Static/js/toastr/toastr.min.js"></script>
+<script src="Application/Mob/Static/js/toast.js"></script>
+<script>
+    var uid = '{:is_login()}';
+    $(document).ready(function () {
+        signout();
+        if (uid > 0) {
+            $('#user').show()
+            $('#signin').hide()
+            $('#signout').show()
+        } else {
+            $('#user').hide()
+            $('#signin').show()
+            $('#signout').hide()
+        }
+
+    });
+
+
+    var signout = function () {
+        $('#signout').click(function () {
+            $.post("{:U('Mob/Member/logout')}", {}, function (msg) {
+                if (msg.status == 1) {
+                    setTimeout(function () {
+                        window.location.reload();
+                    }, 2000);
+                    toast.success('退出成功!');
+                } else {
+                    toast.error(msg.info);
+                }
+            }, 'json')
+        });
+    }
+
+
+</script>

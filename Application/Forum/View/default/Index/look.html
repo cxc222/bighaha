@@ -1,0 +1,35 @@
+<extend name="Public/forum"/>
+<block name="body">
+    <div>
+        <div class="with-padding margin-bottom-15 margin-top-15">
+            <button onclick="rand()" class="btn btn-default btn-block btn-lg">
+                <i class="icon-refresh"></i> 换一换
+            </button>
+        </div>
+
+
+        <div id="posts_list">
+            <volist name="posts" id="vo">
+                <include file="Public/post_item_look"/>
+
+                <if condition="$i neq count($list)">
+                    <hr class="forum-list-hr"/>
+                    <else/>
+                    <div class="forum-list-no-hr"></div>
+                </if>
+            </volist>
+        </div>
+    </div>
+
+    <script>
+        function rand(){
+            toast.showLoading();
+            $.post("__SELF__",function(data){
+
+                $('#posts_list').html(data);
+                toast.hideLoading();
+            });
+
+        }
+    </script>
+</block>

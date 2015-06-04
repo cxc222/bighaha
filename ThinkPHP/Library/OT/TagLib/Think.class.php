@@ -29,13 +29,14 @@ class Think extends TagLib{
         $field  = empty($tag['field']) ? 'true' : $tag['field'];
         $tree   =   empty($tag['tree'])? false : true;
         $parse  = $parse   = '<?php ';
-        $parse .= '$__NAV__ = M(\'Channel\')->field('.$field.')->where("status=1")->order("sort")->select();';
+        $parse .= '$__NAV__ = D(\'Channel\')->lists('.$field.');';
         if($tree){
             $parse .= '$__NAV__ = list_to_tree($__NAV__, "id", "pid", "_");';
         }
         $parse .= '?><volist name="__NAV__" id="'. $tag['name'] .'">';
         $parse .= $content;
         $parse .= '</volist>';
+
         return $parse;
     }
 

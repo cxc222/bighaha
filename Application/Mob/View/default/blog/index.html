@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>{:L('blog')} | {:modC('WEB_SITE_NAME','OpenSNS')}</title>
+    <include file="head/head"/>
+    <script src="__JS__/blog.js"></script>
+    <style>
+        .header h1 {
+            font-size: 200%;
+            color: #333;
+            margin-top: 30px;
+        }
+
+        .header p {
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<header data-am-widget="header" class="am-header am-header-default am-header-fixed">
+    <div class="am-header-left am-header-nav">
+        <a href="{:U('weibo/index')}" class="">
+            <i class="am-header-icon am-icon-home"></i>
+        </a>
+       <!-- <a href="#msg" class="">
+            <i class="am-header-icon am-icon-bell-o"></i>
+        </a>-->
+    </div>
+    <if condition="$blogmark.mark eq 0">
+        <h1 class="am-header-title">
+            热点资讯
+        </h1>
+    </if>
+    <if condition="$blogmark.mark eq 1">
+        <h1 class="am-header-title">
+            全站资讯
+        </h1>
+    </if>
+    <div class="am-header-right am-header-nav">
+        <a href="{:U('blog/addblog')}" class="">
+            <i class="am-icon-pencil"></i>
+        </a>
+        <a href="#nav-link" class="">
+            <i class="am-menu-toggle-icon am-icon-bars"></i>
+        </a>
+
+    </div>
+
+
+</header>
+{:W('Mob/UserMenu/index')}
+
+<div class="blog-container ">
+
+    <div class="blog-box-list">
+        <volist name="hotblog" id="vl">
+            <include file="_bloglist"/>
+
+        </volist>
+    </div>
+
+    <div class="am-list-news-ft look-more">
+        <a class="" id="getmore"
+                >查看更多 &raquo;</a>
+    </div>
+
+</div>
+
+<div data-am-widget="navbar" class="am-navbar am-cf am-navbar-default"
+     id="">
+    <ul class="am-navbar-nav am-cf am-avg-sm-4">
+        <if condition="$blogmark.mark eq 0">
+            <li>
+                <a href="{:U('blog/index',array('mark'=>1))}" class="am-icon-qrcode">
+                    全站资讯
+                </a>
+            </li>
+        </if>
+        <if condition="$blogmark.mark eq 1">
+            <li>
+                <a href="{:U('blog/index')}" class="am-icon-qrcode">
+                    热点资讯
+                </a>
+            </li>
+        </if>
+        <li>
+            <a href="{:U('blog/blogtype')}" class="am-icon-th-large">
+                更多资讯分类
+            </a>
+        </li>
+    </ul>
+</div>
+
+<!--<script src="__JS__/iscroll.js"></script>-->
+
+<script src="__JS__/amazeui.min.js"></script>
+<!--<script src="__JS__/iscroll.js"></script>
+
+<script>
+/*        var $carousel = document.getElementById('carousel'),
+         $box = document.getElementById('blog-list'),
+    $(function () {
+        var $div_a = $("#blog-list li");
+        $div_a.click(function () {
+                    $(this).addClass("selected").siblings().removeClass("selected");
+                    //当前<li>元素高亮
+
+                    $('.second',this).show();
+                }
+        )
+    });
+    var $carousel = document.getElementById('carousel'),
+            $box = document.getElementById('blog-list'),
+
+            liArray = $box.querySelectorAll('li'),
+
+            aNum = liArray.length;
+
+        $box.style.width =(aNum*$("#blog-list a:first-child").width()+100+'px');
+        var myScroll = new iScroll('carousel', {
+            hideScrollbar:false,
+            hScroll: true,
+            bounce:true,
+            vScroll:false,
+            hScrollbar:false
+        });*/
+    $box.style.width = (aNum * $("#blog-list li:first-child").width() + 100 + 'px');
+    var myScroll = new iScroll('carousel', {
+        hideScrollbar: false,
+        hScroll: true,
+        bounce: true,
+        vScroll: false,
+        hScrollbar: false
+    });
+
+
+</script>
+</script>-->
+</body>
+</html>

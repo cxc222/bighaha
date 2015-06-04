@@ -1,0 +1,126 @@
+<extend name="Base/common"/>
+
+<block name="body">
+
+    <include file="Public/_cat_header"/>
+    <!--导航栏-->
+    <include file="Public/_navbar"/>
+    <div class="container">
+
+        <!--导航栏end-->
+        <div class="mb10 clearfix">
+            <div class="row">
+                <div class="col-xs-8 ">
+                    <div class="common_block_border clearfix">
+                        <div class="clearfix ">
+                            <h1 class="common_block_title mb10">搜索</h1>
+
+                            <div class="clearfix">
+                                <form class="form-horizontal" action="__SELF__" role="form" method="post">
+                                    <div class="form-group">
+                                        <label for="title" class="col-xs-2 control-label" style="font-weight: normal;">标题</label>
+
+                                        <div class="col-xs-7">
+                                            <input type="text" class="form-control" id="title" name="title"
+                                                   value="{:I('post.title','','op_t')}"
+                                                   placeholder="输入标题">
+                                        </div>
+                                        <div class="col-xs-2">
+                                            <input class="btn btn-primary" type="submit" value="查找">
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="hideRoll clearfix" style="display: none">
+
+
+                                <div class="pd10 cat_search_form">
+
+
+                                    <volist name="search_fields" id="vo">
+                                        <li class="f14px cgrey" style="line-height: 35px">
+                                            <div class="col-xs-2  mr15">{$vo['alias']}：</div>
+                                            <div class="col-xs-10" style="margin-top: 5px">
+                                                {:W('SearchInputRender/render',array($vo))}
+                                            </div>
+                                            <div class="clearfix"></div>
+                                        </li>
+                                    </volist>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                            <div class="hideBar cpointer">
+                                <a>展开搜索</a>
+                            </div>
+                        </div>
+                        <h1 class="common_block_title mb10">最新</h1>
+
+                        <div>
+                            {:W('InfoList/render',array(array('name'=>op_t($_GET['name']),'map'=>$_REQUEST,'class'=>'cat_ul_info','type'=>'list')))}
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+
+                </div>
+                <div class="col-xs-4">
+                    <div class="clearfix"></div>
+                    <div class="clearfix mb10"></div>
+                    <div class="mb10">
+                        <div class="{$class} mb10  common_block_border">
+                            <h1 class="common_block_title_right">最新{$entity['alias']}</h1>
+                        {:W('InfoList/render',array(array('name'=>I('get.name','','op_t'),'map'=>null,'class'=>'cat_ul_info','type'=>'limit','num'=>5,'tpl'=>'recom')))}
+                    </div>
+                    </div>
+                    <div class="mb10">
+                        <div class="{$class} mb10  common_block_border">
+                            <h1 class="common_block_title_right">推荐{$entity['alias']}</h1>
+                            {:W('InfoList/render',array(array('name'=>I('get.name','','op_t'),'map'=>null,'class'=>'cat_ul_info','type'=>'limit','recom'=>true,'tpl'=>'recom')))}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+    <script>
+        $(document).ready(function () {
+            $('.cat_search_input').keydown(function (e) {
+                key = e.which;
+                if (key == 13) {
+                    //alert($(this).attr('data'));
+                    cat_search($(this).attr('data'));
+                    return false;
+
+                }
+            });
+
+        });
+
+        function cat_search(frm) {
+            var data = JSON.parse($('#' + frm).html());
+            data[frm] = $('input[name=' + frm + ']').val();
+            var parms = [];
+            for (var s in data) {
+                parms.push(encodeURIComponent(s));
+                parms.push(encodeURIComponent(data[s]));
+            }
+            location.href = U('Cat/index/li', parms);
+        }
+
+        $(document).ready(function () {
+            $(".hideBar").click(function () {
+                $(".hideRoll").slideToggle("slow", function () {
+                    if ($('.hideBar').text() == '暂时收起') {
+                        $('.hideBar').text('展开搜索');
+                    }
+                    else {
+                        $('.hideBar').text('暂时收起');
+                    }
+
+
+                });
+            });
+        });
+    </script>
+</block>

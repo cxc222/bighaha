@@ -20,17 +20,20 @@
 					class="web_size">{$atlas.content|parseWeiboContent}</p>
 				<p style="margin-top: 20px;">
 					<a href="{:U('atlas/index/detail',array('id'=>$atlas['id']))}" target="_blank"> <img
-						alt="{$atlas.content|parseWeiboContent}" id="pic-{$atlas.id}"
-						src="{$atlas.image_id|getThumbImageById=300,300}">
+						alt="{$atlas.content|parseWeiboContent}" id="pic-{$atlas.id}" class="img-responsive lazy"
+						 data-original="{$atlas.image_id|getAtlasThumbImageById=720}">
+						 <noscript>
+						 	<img src="{$atlas.image_id|getAtlasThumbImageById=720}" class="img-responsive">
+						</noscript>
 					</a>
 				</p>
 			</div>
 			
 			<div class="budejie_mutual clearfix">
 				<ul class="pull-left interactive list-unstyled">
-					<li><a class="dolove no_love" data-postid="{$atlas.id}" > <span id="loveNum-{$atlas.id}" class="num">{$atlas.like_count}</span>
+					<li><a class="dolove no_love" data-postid="{$atlas.id}" data-login="quick_login"> <span id="loveNum-{$atlas.id}" class="num">{$atlas.like_count}</span>
 					</a></li>
-					<li><a class="notlove no_cai" data-postid="{$atlas.id}" > <span id="noloveNum-{$atlas.id}" class="num">{$atlas.unlike_count}</span>
+					<li><a class="notlove no_cai" data-postid="{$atlas.id}" data-login="quick_login"> <span id="noloveNum-{$atlas.id}" class="num">{$atlas.unlike_count}</span>
 					</a></li>
 					<!-- <li style="height: 50px;"><a style="display: none;"
 						class="bookmark" onclick="do_cancelBookmark('', '14006007')">
@@ -43,7 +46,7 @@
 					<!-- <li><a class="share-content"> <span id="repost-14006007">3</span>
 					</a></li> -->
 					<li style="margin-right: 0px;"><a class="comment_button"
-						href="{:U('atlas/index/detail',array('id'=>$atlas['id']))}" target="_blank"> <span>{$atlas.comment_count}</span>
+						href="{:U('atlas/index/detail',array('id'=>$atlas['id']))}" target="_blank" > <span>{$atlas.comment_count}</span>
 					</a></li>
 				</ul>
 			</div>

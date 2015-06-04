@@ -1,0 +1,77 @@
+<extend name="Base/common"/>
+<block name="style">
+    <link href="__CSS__/question.css" rel="stylesheet" type="text/css"/>
+</block>
+<block name="header">
+    <include file="Public/nav"/>
+</block>
+<block name="body">
+    <div class="col-xs-12">
+        <div id="frm-post-popup" class="white-popup1 boxShadowBorder col-xs-9">
+            <h2>{$edit_title}</h2>
+            <div class="aline" style="margin-bottom: 10px"></div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <form class="form-horizontal ajax-form" role="form" action="{:U('Question/Index/edit')}" method="post">
+                        <input type="hidden" name="id" id="id" value="{$data.id}"/>
+                        <div class="form-group has-feedback">
+                            <label for="title" class="col-xs-2 control-label">标题</label>
+
+                            <div class="col-xs-8">
+                                <input id="title" name="title" class="form-control form_check" check-type="Text" value="{$data.title}" placeholder="标题"/>
+                            </div>
+
+                        </div>
+
+                        <div class="form-group">
+                            <label for="category" class="col-xs-2 control-label">分类</label>
+
+                            <div class="col-xs-5">
+                                <select id="category" name="category" class="form-control">
+                                    <volist name="category" id="top">
+                                        <option value="{$top.id}" <eq name="data['category']" value="$top['id']"> selected</eq>>
+                                        {$top.title}
+                                        </option>
+                                    </volist>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-xs-2 control-label">补充说明</label>
+
+                            <div class="col-xs-10">
+
+                                <php>
+                                    $config="toolbars:[['source','|','bold','italic','underline','fontsize','forecolor','justifyleft','fontfamily','|','map','emotion','insertimage','insertcode']]";
+                                </php>
+
+                                {:W('Common/Ueditor/editor',array('myeditor_edit','description',$data['description'],'90%','250px',$config))}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-offset-2 col-xs-1">
+                                <button type="submit" class="btn btn-primary ">提交
+                                </button>
+
+                            </div>
+                            <div class="col-xs-8">
+                                <button type="button" onclick="history.go(-1);" class="btn btn-default ">返回
+                                </button>
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-3">
+            <div class="boxShadowBorder" style="padding: 10px;font-size: 18px;line-height: 30px;color: #BBB;">
+                <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;提问前请先在上面的搜索框中搜索一下看看有没有相关的问题吆~</p>
+                <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;说不定站内已经有你想要的答案了呢^_^~~</p>
+            </div>
+        </div>
+    </div>
+
+    <link href="__CORE_CSS__/form_check.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="__CORE_JS__/form_check.js"></script>
+</block>

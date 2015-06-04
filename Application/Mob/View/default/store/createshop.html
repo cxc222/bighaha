@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>{:L('store')} | {:modC('WEB_SITE_NAME','OpenSNS')}</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel="alternate icon" type="image/png" href="assets/i/favicon.png">
+    <link rel="stylesheet" href="__CSS__/amazeui.min.css"/>
+    <link rel="stylesheet" href="__CSS__/store.css"/>
+    <link rel="stylesheet" href="__CSS__/app.css"/>
+    <style>
+        .header {
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 200%;
+            color: #333;
+            margin-bottom: 0px;
+        }
+
+        .header p {
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<header data-am-widget="header" class="am-header am-header-default am-header-fixed">
+
+
+    <div class="am-header-left am-header-nav">
+        <a href="javascript:history.go(-1);"><span class="am-icon-chevron-left"></span></a>
+        <a href="#phone-link" class="">
+            <i class="am-header-icon am-icon-bell-o"></i>
+        </a>
+    </div>
+    <h1 class="am-header-title">
+        创建店铺
+    </h1>
+
+    <div class="am-header-right am-header-nav">
+
+        <a href="#nav-link" class="">
+            <i class="am-menu-toggle-icon am-icon-bars"></i>
+        </a>
+    </div>
+
+</header>
+
+
+<div class="createshop-container">
+
+
+    <form action="" class="am-form">
+        <fieldset>
+            <div class="am-form-group ">
+
+                <label class=" am-form-label">*店名</label>
+                <input type="text" id="name" minlength="3" maxlength="40" placeholder="" class="am-form-field"
+                       required/>
+                <span>必须输入店铺名称，不超过40个字</span>
+
+            </div>
+            <div class="am-form-group">
+                <label class=" am-form-label">*图标</label>
+
+                <div class="am-form-group am-form-file">
+
+                    <button type="button" class="am-btn am-btn-default am-btn-sm">
+                        <i class="am-icon-cloud-upload"></i> 选择要上传的文件
+                    </button>
+                    <input type="file" style="position: relative;
+top: -30px;width: 160px;
+                    opacity: 0;
+                            ">
+                </div>
+            </div>
+            <div class="am-form-group am-form-group-sm">
+
+                <label class="am-form-label">*简介</label>
+
+
+                <textarea data-role="comment_content" type="text" name="name" placeholder=""></textarea>
+                <span></span>
+
+            </div>
+            <div class="am-form-group am-form-group-sm">
+
+                <label class="am-form-label">*店铺所在地</label>
+
+
+                <textarea data-role="comment_content" type="text" name="name" placeholder="浙江嘉兴"></textarea>
+                <span>如浙江嘉兴 </span>
+
+            </div>
+        </fieldset>
+    </form>
+    <button type="button" class="am-btn am-btn-primary am-btn-block">发表</button>
+</div>
+
+
+<script src="__JS__/jquery.min.js"></script>
+<script src="__JS__/amazeui.min.js"></script>
+
+</body>
+</html>

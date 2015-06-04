@@ -59,7 +59,10 @@ class FileModel extends Model{
                 }
                 if(strtolower($driver) != 'local'){
                     $value['savepath'] =$value['url'];
+                }else{
+                    $value['savepath'] = str_replace('.','',$setting['rootPath']).$value['savepath'];
                 }
+
                 $value['driver'] = strtolower($driver);
                 /* 记录文件信息 */
                 if($this->create($value) && ($id = $this->add())){

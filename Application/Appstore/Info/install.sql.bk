@@ -1,0 +1,191 @@
+SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
+INSERT INTO `ocenter_menu` (`title`, `pid`, `sort`, `url`, `hide`, `tip`, `group`, `is_dev`, `icon`) VALUES
+( '云市场服务端', 0, 0, 'Appstore/index', 1, '', '', 0, '');
+
+set @tmp_id=0;
+select @tmp_id:= id from `ocenter_menu` where `title` = '云市场服务端';
+
+INSERT INTO `ocenter_menu` ( `title`, `pid`, `sort`, `url`, `hide`, `tip`, `group`, `is_dev`, `icon`) VALUES
+( '商品审核', @tmp_id, 0, 'Appstore/verify', 0, '', '商品管理', 0, ''),
+( '全部商品', @tmp_id, 0, 'Appstore/goods', 0, '', '商品管理', 0, ''),
+( '商品回收站', @tmp_id, 0, 'Appstore/trash', 0, '', '商品管理', 0, ''),
+( '设置商品状态', @tmp_id, 0, 'Appstore/setStatus', 1, '', '商品管理', 0, '');
+
+
+
+
+
+
+CREATE TABLE IF NOT EXISTS `ocenter_appstore_developer` (
+  `uid` int(11) NOT NULL,
+  `qq` varchar(20) NOT NULL,
+  `des` varchar(5000) NOT NULL,
+  `goodat` varchar(200) NOT NULL,
+  `phone` varchar(11) NOT NULL,
+  `name` varchar(20) NOT NULL,
+  `status` tinyint(4) NOT NULL,
+  `refuse_message` tinyint(4) NOT NULL COMMENT ' 拒绝接收下载消息 ',
+  PRIMARY KEY (`uid`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='开发者资料表';
+
+INSERT INTO `ocenter_appstore_developer` (`uid`, `qq`, `des`, `goodat`, `phone`, `name`, `status`, `refuse_message`) VALUES
+(2, '1989098212', '开发者', 'php，js,html', '18205839158', '陈一枭', 0, 0),
+(736, '324834500', '从业4年，一直秉承语言是相通的进行开发。喜欢自学！', 'PHP、C#、Java、jquery等', '15682019629', '周瑞', 0, 0),
+(433, '627840892', '杜城', '网站', '18610276007', '杜城', 0, 0),
+(81, '', '', '', '', '', 0, 0),
+(459, '3407125', '非典型宅男，技术宅,喜欢用PHP编写程序，希望能找到志同道合的朋友。', 'PHP', '15563843789', '王朋涛', 0, 0),
+(1794, '', '', '', '', '', 0, 0),
+(1718, '28815508', '接触thinkox一段时间，正将thinkox二次开发成本地网站', '.net php', '13822844177', '蔡旭', 0, 0),
+(1974, '964279742', '屌丝程序猿', 'php/html5/css3/js', '15151408661', '何海宝', 0, 0),
+(2217, '19682007294', '我是封残', 'php', '13237312050', '封残', 0, 0),
+(2320, '381028585', 'thinkox', '前端开发', '18710025296', '王伟', 0, 0),
+(1899, '173477240', '一个小白', '卖萌', '13200000000', '李木子', 0, 0),
+(2327, '381028585', '希望thinkox越来越好，贡献自己的微薄力量！', 'thinkox 前台美工设计，小的程序改进', '18710025296', '王伟', 0, 0),
+(2643, '654565450', 'LAMP+Drupal', 'drupal', '18601025580', '李华', 0, 0),
+(2564, '308971430', '我就是一程序猿', 'java；php；html5；android', '13277913878', '刘震', 0, 0),
+(3077, '399709335', 'phper  5年以上php经验1年python经验\r\n现在做政府收入支出项目', 'php开发', '18678337102', '刘峰', 0, 0),
+(3165, '175668967', '目前纯后台程序猿,希望拯救下短板--前端', 'j2ee,asp.net MVC,php,js,jQuery等', '15333349527', '王雪涛', 0, 0);
+
+CREATE TABLE IF NOT EXISTS `ocenter_appstore_goods` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(50) NOT NULL COMMENT '名称',
+  `summary` varchar(50) NOT NULL COMMENT '摘要，简介',
+  `cover` int(11) NOT NULL COMMENT '封面',
+  `uid` int(11) NOT NULL COMMENT '作者',
+  `compat` varchar(100) NOT NULL COMMENT '兼容版本',
+  `rate` int(11) NOT NULL COMMENT '打分，评级，1-10',
+  `view_count` int(11) NOT NULL COMMENT '浏览量',
+  `type_id` int(11) NOT NULL COMMENT '分类',
+  `create_time` int(11) NOT NULL,
+  `update_time` int(11) NOT NULL,
+  `status` tinyint(4) NOT NULL,
+  `entity` tinyint(4) NOT NULL COMMENT '1.插件 2.模块 3.主题 4.服务',
+  `author` varchar(20) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='商品基础表' AUTO_INCREMENT=45 ;
+
+INSERT INTO `ocenter_appstore_goods` (`id`, `title`, `summary`, `cover`, `uid`, `compat`, `rate`, `view_count`, `type_id`, `create_time`, `update_time`, `status`, `entity`, `author`) VALUES
+(33, '图片轮播插件tox修改版', '插件由birdy提供原版，奕潇针对thinkox升级', 0, 2, '[5],[4],[3]', 0, 0, 1, 1407987121, 1407987587, 1, 1, 'birdy'),
+(35, '积分金币快速设置插件0.1', '提供给不会代码的朋友快速设置积分和金币的插件', 0, 736, '[5],[4],[3],[-2],[-1]', 0, 0, 1, 1408001829, 1408440591, 1, 1, ''),
+(36, '黑板报', '一个记录平台更新流程的插件', 0, 736, '[5],[4],[3]', 0, 0, 1, 1408002451, 1408002481, 1, 1, ''),
+(37, '众筹', '众筹，既然能够筹资金，那么为什么不能筹商品呢', 0, 736, '[5],[4],[3]', 0, 0, 1, 1408003060, 1408003126, 1, 1, ''),
+(38, '广告位插件tox修改版', '广告位插件，最早发布在onethink，tox扩', 730, 2, '[5],[4],[3],[2],[1],[-2],[-1]', 0, 0, 1, 1408006381, 1408096234, 1, 1, '逸秋'),
+(39, '附件微博插件', '发布附件形式微博，对压缩包、图片、文档等都适用', 0, 736, '[5],[4],[3]', 0, 0, 1, 1408068899, 1408254269, 1, 1, ''),
+(40, '敏感词过滤', '可以进行敏感词的过滤哟亲！', 0, 29, '[5],[4],[3]', 0, 0, 5, 1408104195, 1409121649, 1, 1, ''),
+(41, '话题发布插件', '作为微博怎么能没有话题呢', 0, 736, '[5],[4],[3]', 0, 0, 1, 1408254124, 1408265189, 1, 1, ''),
+(42, '建议与反馈错误插件', '给平台提建议与反馈平台系统错误', 0, 736, '[5],[4],[3]', 0, 0, 1, 1408410703, 1408410731, 1, 1, ''),
+(43, '热门话题', '使用话题的朋友赶紧下载吧，让你的用户们掌握平台的当天热门话题', 0, 736, '[5],[4],[3]', 0, 0, 5, 1408588970, 1408589013, 1, 1, ''),
+(44, '邮件订阅', '支持前台邮箱订阅，后台发送邮件。', 0, 29, '[5],[4],[3]', 0, 0, 1, 1409104880, 1409109586, 1, 1, '');
+
+CREATE TABLE IF NOT EXISTS `ocenter_appstore_module` (
+  `id` int(11) NOT NULL COMMENT '与goods表id统一',
+  `rely` varchar(20) NOT NULL COMMENT '依赖模块',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `ocenter_appstore_plugin` (
+  `id` int(11) NOT NULL COMMENT '与goods统一',
+  `hook` varchar(50) NOT NULL COMMENT '用到的钩子',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='插件表';
+
+INSERT INTO `ocenter_appstore_plugin` (`id`, `hook`) VALUES
+(33, 'imageSlider'),
+(34, 'AdminIndex'),
+(35, 'AdminIndex'),
+(36, 'pageFooter'),
+(37, 'pageFooter'),
+(38, 'adv'),
+(39, 'weiboType'),
+(40, 'parseContent'),
+(41, 'weiboType beforeSendRepost'),
+(42, 'Rank'),
+(43, 'Rank'),
+(44, 'mailSubscribe');
+
+CREATE TABLE IF NOT EXISTS `ocenter_appstore_resource` (
+  `id` int(11) NOT NULL COMMENT '与goods的id对应',
+  `screensnap` varchar(100) NOT NULL COMMENT '截图，id，逗号分隔',
+  `latest_version` varchar(20) NOT NULL COMMENT '最新的版本号',
+  `etitle` varchar(50) NOT NULL COMMENT '英文名',
+  `instruction` varchar(5000) NOT NULL COMMENT '使用说明',
+  `total_download_count` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+INSERT INTO `ocenter_appstore_resource` (`id`, `screensnap`, `latest_version`, `etitle`, `instruction`, `total_download_count`) VALUES
+(33, '', '0.1', 'ImageSlider', '<p>图片轮播，需要先通过 <a href="http://www.onethink.cn/topic/2153.html" target="_blank">http://www.onethink.cn/topic/2153.html</a> 的方法，让配置支持多图片上传<br/>插件使用了　FlexSlider　Jquery图片轮播插件，可能会产生版权问题。<br/>后台配置界面：<img data-toggle="fancybox" data-fancybox-group="gallery" href="http://yun.topthink.com/Uploads/Editor/2014-07-28/53d5fea67525b.jpg" src="http://yun.topthink.com/Uploads/Editor/2014-07-28/53d5fea67525b.jpg" alt=""/><br/>效果显示：<img data-toggle="fancybox" data-fancybox-group="gallery" href="http://yun.topthink.com/Uploads/Editor/2014-07-28/53d5fea68bb84.jpg" src="http://yun.topthink.com/Uploads/Editor/2014-07-28/53d5fea68bb84.jpg" alt=""/></p>', 227),
+(35, '', '0.2', 'QuickRule', '<p>提供给不会代码的朋友快速设置积分和金币的插件</p><p>不懂就问我   群里也可以找到我 ：QQ昵称为  逸秋</p><p><br/></p><p><br/></p><p>列表</p><p><img src="http://tox.ourstu.com/tox/Uploads/Picture/2014-08-14/53ec66fdd4239.jpg" _src="http://tox.ourstu.com/tox/Uploads/Picture/2014-08-14/53ec66fdd4239.jpg"/></p><p><br/></p><p>添加</p><p><img src="http://tox.ourstu.com/tox/Uploads/Picture/2014-08-14/53ec67119868f.jpg" _src="http://tox.ourstu.com/tox/Uploads/Picture/2014-08-14/53ec67119868f.jpg"/></p><p><br/></p><p>编辑</p><p><img src="http://tox.ourstu.com/tox/Uploads/Picture/2014-08-14/53ec67202988e.jpg" _src="http://tox.ourstu.com/tox/Uploads/Picture/2014-08-14/53ec67202988e.jpg"/></p>', 614),
+(36, '', '0.1', 'Bboard', '<p>一个记录平台更新流程的插件</p><p>前端</p><p><img src="http://tox.ourstu.com/tox/Uploads/Picture/2014-08-14/53ec693a4d61e.jpg" _src="http://tox.ourstu.com/tox/Uploads/Picture/2014-08-14/53ec693a4d61e.jpg"/></p><p><br/></p><p>管理</p><p><img src="http://tox.ourstu.com/tox/Uploads/Picture/2014-08-14/53ec694dd0901.jpg" _src="http://tox.ourstu.com/tox/Uploads/Picture/2014-08-14/53ec694dd0901.jpg"/></p><p><br/></p><p>使用方式：</p><p>1、上传至网站根目录</p><p>2、到后台扩展中安装跟新日志插件即可使用</p>', 324),
+(37, '', '0.1', 'Crowdfunding', '<p>众筹，既然能够筹资金，那么为什么不能筹商品呢</p><p>这里的众筹就是筹资卖商品而已，说白点就是团购的另一种方式</p><p><br/></p><p>先更新后台管理吧，下一个版本就更新前端！  感谢支持！</p><p><br/></p><p><br/></p><p>使用方式：</p><p>      解压上传至addons目录，然后去后台扩展栏目进行安装</p>', 662),
+(38, '', '0.1', 'adv', '<p>后台新增广告位之后，在该广告位下添加广告</p><p><br/></p><p>复制广告位管理页面的 广告位代码 ，放到任意thinkox网站页面上即可完成调用。</p><p>注意，广告时间必须填写，否则不会显示。</p><p><br/></p><p><br/></p>', 182),
+(39, '', '0.4', 'InsertFile', '<p>上传至Addons目录，然后去后台扩展目录安装上传附件插件即可使用</p><p><br/></p><p><br/></p><p>前端效果展示</p><p><img src="http://tox.ourstu.com/tox/Uploads/Picture/2014-08-15/53ed6d0cea0ca.jpg" _src="http://tox.ourstu.com/tox/Uploads/Picture/2014-08-15/53ed6d0cea0ca.jpg" style=""/></p><p><img src="http://tox.ourstu.com/tox/Uploads/Picture/2014-08-15/53ed6d0fc4a95.jpg" _src="http://tox.ourstu.com/tox/Uploads/Picture/2014-08-15/53ed6d0fc4a95.jpg" style=""/></p><p><img src="http://tox.ourstu.com/tox/Uploads/Picture/2014-08-15/53ed6d11ddd54.jpg" _src="http://tox.ourstu.com/tox/Uploads/Picture/2014-08-15/53ed6d11ddd54.jpg" style=""/></p><p><img src="http://tox.ourstu.com/tox/Uploads/Picture/2014-08-15/53ed6d1648d2a.jpg" _src="http://tox.ourstu.com/tox/Uploads/Picture/2014-08-15/53ed6d1648d2a.jpg" style=""/></p><p><br/></p>', 479),
+(40, '', '0.1.1', 'Sensitive', '<p>一、安装步骤：</p><p>1. 后台新增钩子 parseContent</p><p><img src="/tox/Uploads/Picture/2014-08-15/53edf552d9b7e.png" _src="/tox/Uploads/Picture/2014-08-15/53edf552d9b7e.png"/></p><p>2.在Application/Common/Common/parse.php 中的 parse_weibo_content 函数的 return之前调用  <span style="line-height: 24px; white-space: normal;">parse_content</span><span style="line-height: 24px; white-space: normal;">  函数</span></p><p><span style="line-height: 24px;">添加 parse_content</span>  函数   </p><p><span style="white-space: nowrap;">function parse_content($content){</span></p><p><span style="white-space: nowrap; font-family: inherit;">    hook(''parseContent'',array(''content''=>&$content));</span><br/></p><p><span style="white-space: nowrap;">    return $content;</span></p><p><span style="white-space: nowrap;">}</span></p><p><img src="/tox/Uploads/Picture/2014-08-27/53fd7d4d2086c.png" _src="/tox/Uploads/Picture/2014-08-27/53fd7d4d2086c.png"/></p><p>其他需要调用的地方请在模版中加入调用</p><p>3. 将插件放在指定文件下，并安装。</p><p><img src="/tox/Uploads/Picture/2014-08-15/53edf57203567.png" _src="/tox/Uploads/Picture/2014-08-15/53edf57203567.png"/></p><p><br/></p><p>二、插件的使用</p><p>1. 插件设置 可以开启或关闭敏感词过滤功能。</p><p><img src="/tox/Uploads/Picture/2014-08-15/53edf5f0dc892.png" _src="/tox/Uploads/Picture/2014-08-15/53edf5f0dc892.png"/></p><p>2.敏感词列表可以进行敏感词的操作</p><p><img src="/tox/Uploads/Picture/2014-08-15/53edf6c593e6e.png" _src="/tox/Uploads/Picture/2014-08-15/53edf6c593e6e.png"/></p><p>注意：本插件暂不支持屏蔽html标签的功能，即过滤时会将html标签内符合的词也过滤掉，请谨慎添加敏感词。</p>', 317),
+(41, '', '0.3', 'InsertTopic', '<p>什么都不说了   解压后看说明文档使用      另：上传附件微博也更新了</p>', 810),
+(42, '', '0.1', 'Advice', '<p>此插件需要在安装了话题微博插件的情况下方可使用</p><p><br/></p><p>上图：</p><p>插件UI</p><p><img src="http://tox.ourstu.com/tox/Uploads/Picture/2014-08-19/53f2a42c41947.jpg" _src="http://tox.ourstu.com/tox/Uploads/Picture/2014-08-19/53f2a42c41947.jpg" style=""/></p><p>提建议</p><p><img src="http://tox.ourstu.com/tox/Uploads/Picture/2014-08-19/53f2a42e5d1d8.jpg" _src="http://tox.ourstu.com/tox/Uploads/Picture/2014-08-19/53f2a42e5d1d8.jpg" style=""/></p><p>反馈BUG</p><p><img src="http://tox.ourstu.com/tox/Uploads/Picture/2014-08-19/53f2a430b41ce.jpg" _src="http://tox.ourstu.com/tox/Uploads/Picture/2014-08-19/53f2a430b41ce.jpg" style=""/></p><p><br/></p>', 371),
+(43, '', '0.1', 'Retopic', '<p>神马都不说了，安装好话题的就使用吧    不用会后悔的！！</p>', 529),
+(44, '', '0.1.1', 'Mail', '<p><span style="font-family: inherit;">1. 安装插件 Mail</span><br/></p><p>2.安装完成后，填写邮箱的信息<img src="/tox/Uploads/Picture/2014-08-27/53fd3a7e93031.png" _src="/tox/Uploads/Picture/2014-08-27/53fd3a7e93031.png"/></p><p><img src="/tox/Uploads/Picture/2014-08-27/53fd3b6927118.png" _src="/tox/Uploads/Picture/2014-08-27/53fd3b6927118.png"/></p><p><img src="/tox/Uploads/Picture/2014-08-27/53fd3b91ae2b4.png" _src="/tox/Uploads/Picture/2014-08-27/53fd3b91ae2b4.png"/></p><p><img src="/tox/Uploads/Picture/2014-08-27/53fd3ba0ca7da.png" _src="/tox/Uploads/Picture/2014-08-27/53fd3ba0ca7da.png"/></p><p><img src="/tox/Uploads/Picture/2014-08-27/53fd3bd9645a9.png" _src="/tox/Uploads/Picture/2014-08-27/53fd3bd9645a9.png"/></p><p><img src="/tox/Uploads/Picture/2014-08-27/53fd3be7d5e1a.png" _src="/tox/Uploads/Picture/2014-08-27/53fd3be7d5e1a.png"/></p><p><br/></p><p><img src="/tox/Uploads/Picture/2014-08-27/53fd3d29c89c1.png" _src="/tox/Uploads/Picture/2014-08-27/53fd3d29c89c1.png"/></p>', 276);
+
+CREATE TABLE IF NOT EXISTS `ocenter_appstore_theme` (
+  `id` int(11) NOT NULL,
+  `color` varchar(50) NOT NULL COMMENT '颜色搭配，色系',
+  `style` varchar(50) NOT NULL COMMENT '设计风格',
+  `fit` varchar(50) NOT NULL COMMENT '适用网站',
+  `is_response` tinyint(4) NOT NULL COMMENT '是否支持响应式',
+  `response_cover` int(11) NOT NULL COMMENT '响应式截图',
+  `compatible` varchar(100) NOT NULL COMMENT '兼容的浏览器',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='主题表';
+
+CREATE TABLE IF NOT EXISTS `ocenter_appstore_type` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `pid` int(11) NOT NULL,
+  `sort` int(11) NOT NULL,
+  `title` varchar(20) NOT NULL,
+  `entity` tinyint(4) NOT NULL COMMENT '1.插件 2.模块 3.主题 4.服务',
+  `status` tinyint(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='商品分类表' AUTO_INCREMENT=6 ;
+
+INSERT INTO `ocenter_appstore_type` (`id`, `pid`, `sort`, `title`, `entity`, `status`) VALUES
+(1, 0, 0, '运营插件', 1, 1),
+(2, 0, 0, '后台插件', 1, 1),
+(3, 0, 0, '娱乐插件', 1, 1),
+(4, 0, 0, '行业插件', 1, 1),
+(5, 0, 0, '系统插件', 1, 1);
+
+CREATE TABLE IF NOT EXISTS `ocenter_appstore_version` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(20) NOT NULL COMMENT '版本号',
+  `create_time` int(11) NOT NULL COMMENT '创建时间',
+  `log` varchar(500) NOT NULL COMMENT '更新日志',
+  `status` tinyint(4) NOT NULL,
+  `update_time` int(11) NOT NULL COMMENT '更新时间',
+  `goods_id` int(11) NOT NULL COMMENT '对应的商品ID',
+  `fee` decimal(20,2) NOT NULL COMMENT '费用',
+  `pack` int(11) NOT NULL,
+  `download_count` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='版本表' AUTO_INCREMENT=69 ;
+
+INSERT INTO `ocenter_appstore_version` (`id`, `title`, `create_time`, `log`, `status`, `update_time`, `goods_id`, `fee`, `pack`, `download_count`) VALUES
+(48, '0.1', 1407987587, '1.去除了无用的文件，体积大大减小\r\n2.更适合thinkox使用', 1, 1407987587, 33, '0.00', 169, 227),
+(51, '0.1', 1408001861, '上传文件', 1, 1408001861, 35, '0.00', 170, 100),
+(52, '0.1', 1408002481, '更新日志中图片也能显示', 1, 1408002481, 36, '0.00', 171, 324),
+(53, '0.1', 1408003126, '后台插件先更新', 1, 1408003126, 37, '0.00', 172, 662),
+(54, '0.1', 1408006490, '兼容thinkox\r\n扩展了部分类型\r\n实现了轮播广告位', 1, 1408006490, 38, '0.00', 173, 182),
+(55, '0.1', 1408068965, '给OX新增附件微博的发布插件', 1, 1408068965, 39, '0.00', 174, 61),
+(56, '0.1', 1408069419, '更新样式与图片', 1, 1408069419, 39, '0.00', 175, 85),
+(57, '0.3', 1408084325, '更新删除功能与兼容快速发布(感谢奕潇对该插件js的编写)', 1, 1408084325, 39, '0.00', 176, 71),
+(58, '1.0', 1408104392, '第一次上传', 1, 1408104392, 40, '0.00', 177, 89),
+(59, '0.1', 1408254186, '更新beforeSendRepost钩子    官方提出的用两个钩子的问题暂时不清楚是怎样的逻辑    就目前而言估计一个就可以了', 1, 1408254186, 41, '0.00', 178, 96),
+(60, '0.4', 1408254269, '更新使用beforeSendRepost钩子来添加微博的发布类型   和话题插件无缝结合', 1, 1408254269, 39, '0.00', 179, 262),
+(61, '0.2', 1408257427, '更新发布时的展示不解析问题', 1, 1408257427, 41, '0.00', 180, 89),
+(62, '0.3', 1408265189, '更新数据库与jquery冲突问题', 1, 1408265189, 41, '0.00', 181, 625),
+(63, '0.1', 1408410731, '更新对话题的扩展使用', 1, 1408410731, 42, '0.00', 182, 371),
+(64, '0.2', 1408440591, '更新设置后无法产生规则逻辑的bug', 1, 1408440591, 35, '0.00', 183, 514),
+(65, '0.1.1', 1408520819, '新增添加时名称为空的判断\r\n新增是否存在判断', 1, 1408520819, 40, '0.00', 184, 228),
+(66, '0.1', 1408589013, '更新话题推荐的展示插件(热门话题)', 1, 1408589013, 43, '0.00', 185, 529),
+(67, '0.1', 1409104947, '邮件插件第一次提交', 1, 1409104947, 44, '0.00', 186, 79),
+(68, '0.1.1', 1409109475, '【修改】将钩子修改为pageFooter', 1, 1409109475, 44, '0.00', 187, 197);

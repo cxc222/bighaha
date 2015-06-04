@@ -1,16 +1,19 @@
 <extend name="Base/common"/>
 <block name="style">
     <link href="__CSS__/event.css" rel="stylesheet" type="text/css"/>
-    <link href="__STATIC__/datetimepickerV3/css/bootstrap-datetimepicker.min.css" rel="stylesheet" type="text/css">
+    <link href="__ZUI__/lib/datetimepicker/datetimepicker.min.css" rel="stylesheet" type="text/css">
+</block>
+<block name="header">
+    <include file="_nav"/>
 </block>
 <block name="body">
-    <div id="frm-post-popup " class="white-popup1 boxShadowBorder col-md-12" style="">
+    <div id="frm-post-popup " class="white-popup1 boxShadowBorder col-xs-12" style="">
         <h2>发起活动</h2>
 
         <div class="aline" style="margin-bottom: 35px"></div>
         <div>
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-xs-4">
                     <div class="controls">
                         <input type="file" id="upload_picture_cover" >
 
@@ -20,7 +23,7 @@
                     </div>
 
                 </div>
-                <div class="col-md-8">
+                <div class="col-xs-8">
                     <form class="form-horizontal ajax-form" role="form" action="{:U('Event/Index/doPost')}"
                           method="post">
                         <div class="form-group has-feedback">
@@ -55,11 +58,11 @@
                             <label for="" class="col-sm-2 control-label">时间</label>
 
                             <div class="col-sm-3">
-                                <input id="sTime" name="sTime" class="time_d form-control form_check" check-type="Date" value="" placeholder="开始时间" required/>
+                                <input type="text" id="sTime" name="sTime" class="time_d form-control form_check" readonly check-type="Date" value="" placeholder="开始时间" required/>
                             </div>
 
                             <div class="col-sm-3">
-                                  <input id="eTime" name="eTime" class="time_d form-control form_check" check-type="Date"  value="" placeholder="结束时间" required/>
+                                  <input type="text" id="eTime" name="eTime" class="time_d form-control form_check" readonly check-type="Date"  value="" placeholder="结束时间" required/>
                             </div>
                         </div>
                         <div class="form-group  has-feedback">
@@ -83,7 +86,7 @@
                             <label for="deadline" class="col-sm-2 control-label">截止</label>
 
                             <div class="col-sm-4">
-                                <input id="deadline" name="deadline" class="time form-control form_check" check-type="Text" value="" placeholder="报名截止" required/>
+                                <input type="text" id="deadline" name="deadline" readonly class="time form-control form_check " check-type="Text" value="" placeholder="报名截止" required/>
                             </div>
 
                         </div>
@@ -91,10 +94,11 @@
                             <label for="explain" class="col-sm-2 control-label">介绍</label>
 
                             <div class="col-sm-10">
-
-                                <php>$config='toolbar:[\'bold italic underline fontsize forecolor justifyleft | map image emotion link \']';
+                                <php>
+                                    $config="toolbars:[['source','|','bold','italic','underline','fontsize','forecolor','justifyleft','fontfamily','|','map','emotion','insertimage','insertcode']]";
                                 </php>
-                                {:W('UeditorMini/editor',array('myeditor_edit','explain','','550px','250px',$config))}
+
+                                {:W('Common/Ueditor/editor',array('myeditor_edit','explain',$content['content'],'400px','250px',$config))}
                             </div>
                         </div>
                         <div class="form-group">
@@ -116,19 +120,20 @@
         </div>
     </div>
     <script type="text/javascript" src="__STATIC__/uploadify/jquery.uploadify.min.js"></script>
-    <script type="text/javascript" src="__JS__/form_check.js"></script>
-    <script type="text/javascript" src="__STATIC__/datetimepickerV3/js/bootstrap-datetimepicker.js"></script>
-    <script type="text/javascript" src="__STATIC__/datetimepickerV3/js/locales/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
+    <link href="__CORE_CSS__/form_check.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="__CORE_JS__/form_check.js"></script>
+    <script type="text/javascript" src="__ZUI__/lib/datetimepicker/datetimepicker.min.js" charset="UTF-8"></script>
 
     <script>
+
         $("#upload_picture_cover").uploadify({
             "height": 30,
             "swf": "__STATIC__/uploadify/uploadify.swf",
             "fileObjName": "download",
             "buttonText": "上传封面",
             "buttonClass": "uploadcover",
-            "uploader": "{:U('Home/File/uploadPicture',array('session_id'=>session_id()))}",
-            "width": 350,
+            "uploader": "{:U('Core/File/uploadPicture',array('session_id'=>session_id()))}",
+            "width": 250,
             'removeTimeout': 1,
             'fileTypeExts': '*.jpg; *.png; *.gif;',
             "onUploadSuccess": uploadPicturecover,
@@ -140,9 +145,6 @@
             }, 'onUploadComplete': function (file) {
                 //alert('The file ' + file.name + ' finished processing.');
             }, 'onUploadStart': function (file) {
-                $('.upload-img-box').html(
-                        '<div class="upload-pre-item">上传中...</div>'
-                );
                 //alert('Starting to upload ' + file.name);
             }, 'onQueueComplete': function (queueData) {
                 // alert(queueData.uploadsSuccessful + ' files were successfully uploaded.');
@@ -153,7 +155,7 @@
             var src = '';
             if (data.status) {
                 $("#cover_id_cover").val(data.id);
-                src = data.url ||  data.path
+                src = data.url || data.path
                 $('.upload-img-box').html(
                         '<div class="upload-pre-item"><img src="' + src + '"/></div>'
                 );

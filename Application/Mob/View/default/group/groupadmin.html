@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>{:L('group')} | {:modC('WEB_SITE_NAME','OpenSNS')}</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="renderer" content="webkit">
+    <script src="__JS__/jquery.min.js"></script>
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel="alternate icon" type="image/png" href="assets/i/favicon.png">
+    <link rel="stylesheet" href="__CSS__/amazeui.min.css"/>
+    <link rel="stylesheet" href="__CSS__/group.css"/>
+    <link rel="stylesheet" href="__CSS__/app.css"/>
+    <link rel="stylesheet" href="  Application/Mob/Static/js/webuploader/css/webuploader.css"/>
+    <link href="Application/Mob/Static/js/toastr/toastr.min.css" rel="stylesheet"/>
+
+    <style>
+        .header h1 {
+            font-size: 200%;
+            color: #333;
+            margin-top: 30px;
+        }
+
+        .header p {
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<header data-am-widget="header" class="am-header am-header-default am-header-fixed">
+    <div class="am-header-left am-header-nav">
+        <a href="javascript:history.go(-1);">
+            <span class="am-icon-chevron-left">
+            </span>
+        </a>
+    </div>
+    <h1 class="am-header-title">编辑群资料
+    </h1>
+
+    <div class="am-header-right am-header-nav">
+
+        <a href="#nav-link" class="" data-am-modal="{target: '#my-actions'}">
+            <i class="am-menu-toggle-icon am-icon-bars"></i>
+        </a>
+    </div>
+</header>
+
+<div class="group-admin" style="padding: 10px;">
+
+
+    <div class="am-tabs am-nav am-nav-tabs" data-am-tabs="{noSwipe: 1}">
+        <ul class="am-tabs-nav am-nav am-nav-tabs am-avg-sm-3 am-text-center">
+            <li class="am-active"><a href="#tab1">基本信息</a></li>
+            <li><a href="#tab2">帖子分类管理</a></li>
+            <li><a href="#tab3">公告发布</a></li>
+
+        </ul>
+
+        <div class="am-tabs-bd">
+            <div class="am-tab-panel am-fade am-in am-active" id="tab1">
+                <!--基本信息-->
+                <form class="am-form" id="edit_group"data-am-validator data-url="{:U('Mob/group/createGroup')}">
+                    <input type="hidden" id="bg_ids" name="background" value="{$editGroup.background}">
+                    <input type="hidden" id="logo_ids" name="logo" value="{$editGroup.logo}">
+                    <input type="hidden"  name="group_id" value="{$editGroup.id}">
+
+                    <div class="am-form-group" style="padding-left: 10px">
+                        <label>群组形象</label>
+
+                        <p class="am-form-help">请选择要上传的群组图片...</p>
+                        <!--选择图片-->
+                        <!--用来存放item-->
+                        <div class="am-cf" style="padding: 10px;">
+                            <div class="filePicker" style="float: left">
+                                <i class="am-icon-plus" style="font-size: 25px;padding: 12px 20px;"></i>
+                            </div>
+
+                                <div class="show_cover" style="float: left;margin-left: 10px;">
+                                    <div id="logo_url">
+                                        <img class="cover_img"  style="width:71px;height:71px" src="{$editGroup.logo_id}">
+                                    </div>
+                                </div>
+
+                        </div>
+                        <!--选择图片结束-->
+                    </div>
+
+                    <div class="am-form-group" style="padding-left: 10px">
+                        <label>上传背景</label>
+
+                        <p class="am-form-help">请选择要上传的背景文件...</p>
+                        <!--选择图片-->
+                        <!--     用来存放item-->
+                        <div class="am-cf" style="padding: 10px;">
+                            <div class="filePicker2" style="float: left">
+                                <i class="am-icon-plus" style="font-size: 25px;padding: 12px 20px;"></i>
+                            </div>
+                                <div class="show_cover" style="float: left;margin-left: 10px;">
+                                    <div id="bg_url">
+                                        <img class="cover_img" style="width:71px;height:71px" src="{$editGroup.background_id}">
+                                    </div>
+                                </div>
+                        </div>
+                        <!-- 选择图片结束-->
+                    </div>
+
+                    <div class="am-form-group">
+                        <label for="title">群组名称：</label>
+                        <input type="text" id="title" minlength="1" placeholder="输入群组名" name="title" value="{$editGroup.title}" required/>
+                    </div>
+                    <div class="am-form-group">
+                        <label>分类：</label>
+                        <select name="group_type" class="form-control" id="inputType">
+                            <option value="-1">请选择</option>
+                            <volist name="groupTypeAll" id="groupType">
+                                <option <if condition="$group['type_id'] eq $groupType['id']">selected</if> value="{$groupType['id']}">{$groupType['title']}</option>
+                            </volist>
+
+                        </select>
+                        <span class="am-form-caret"></span>
+                    </div>
+                    <div class="am-form-group">
+                        <label for="info">群组介绍：</label>
+                        <input type="text" name="detail" id="info" minlength="1" placeholder="群组介绍（至少 3 个字符）" value="{$editGroup.detail}"
+                               required/>
+                    </div>
+                    <div class="am-form-group">
+                        <label>群组类型： </label>
+                        <label class="am-radio-inline">
+                            <input type="radio" name="type" value="1" checked>公共群组
+                        </label>
+                        <label class="am-radio-inline">
+                            <input type="radio" name="type" value="0">私有群组
+                        </label>
+
+                        <div>（加入公共群组不需要管理员审核，加入私有群组需管理员审核）</div>
+                    </div>
+                    <div class="am-form-group">
+                        <label >*群成员的别称：</label>
+                        <div >
+                            <input type="text" name="member_alias" class="form-control" id="inputMember" placeholder="群成员的别称，默认为“成员”" value="{$editGroup.member_alias}">
+                        </div>
+                    </div>
+                    <button type="button" id="save"  class="am-btn am-btn-primary am-btn-block"><i
+                            class="am-menu-toggle-icon am-icon-save"></i>保存
+                    </button>
+
+
+                </form>
+            </div>
+
+            <!--帖子分类-->
+            <div class="am-tab-panel am-fade" id="tab2">
+                <div class="post-type-box">
+                    <label>添加分类： </label>
+
+                    <form action="" class="am-form" data-am-validator>
+                        <div class="am-form-group">
+                            <input type="text" id="type" minlength="1" placeholder="添加分类" required/>
+                        </div>
+                    </form>
+                    <button type="button" class="am-btn am-btn-primary am-radius am-btn-block">
+                        <i class="am-menu-toggle-icon am-icon-save"></i>保存
+                    </button>
+
+                </div>
+
+                <div class="type-list" style="margin-top: 5px">
+                    <span>已有分类： </span>
+                    <ul class="am-list" style="">
+
+                        <li>
+                            <div class="am-g">
+                                <div class="type-title am-u-sm-6">
+                                    如意金箍棒
+                                </div>
+                                <div class="shortcut-btn am-u-sm-6" style="text-align: right">
+                                    <a href="#">编辑</a>
+
+                                    <a href="#">删除</a>
+                                </div>
+                            </div>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+            <!--公告-->
+            <div class="am-tab-panel am-fade" id="tab3">
+
+                <div class="notice-box">
+                    <form action="" class="am-form" data-am-validator>
+                        <label>添加公告： </label>
+                        <textarea data-role="" type="text" placeholder="公告内容"
+                                  style="width: 100%;height:150px;padding: 5px;margin-bottom: 5px">
+
+                        </textarea>
+                    </form>
+                    <button type="button" class="am-btn am-btn-primary am-radius am-btn-block"><i
+                            class="am-menu-toggle-icon am-icon-save"></i>保存
+                    </button>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+</div>
+<!--侧边弹出框-->
+<div class="am-modal-actions" id="my-actions">
+    <div class="am-modal-actions-group">
+        <ul class="am-list">
+            <li class="am-modal-actions-header">成员管理</li>
+
+            <li>
+                <a href="#">默认排序</a>
+            </li>
+            <li>
+                <a href="#">按最后活跃时间排序</a>
+            </li>
+            <li>
+                <a href="#">邀请好友加入</a>
+            </li>
+            <li class="am-modal-actions-danger">
+                <a href="#">删除群组成员</a>
+            </li>
+        </ul>
+    </div>
+    <div class="am-modal-actions-group">
+        <button class="am-btn am-btn-secondary am-btn-block" data-am-modal-close>取消</button>
+    </div>
+</div>
+
+
+<script src="Application/Mob/Static/js/toastr/toastr.min.js"></script>
+<script src="Application/Mob/Static/js/toast.js"></script>
+<script src="__JS__/amazeui.min.js"></script>
+<script type="text/javascript" src="Application/Mob/Static/js/webuploader/js/webuploader.js"></script>
+<script>
+    var ext;
+    $(function () {
+        var uploader = WebUploader.create({
+
+            // 选完文件后，是否自动上传。
+            auto: true,
+
+            // swf文件路径
+            swf: 'Application/Mob/Static/js/webuploader/js/Uploader.swf',
+
+            // 文件接收服务端。
+            server: "{:U('Core/File/uploadPicture')}",
+
+            // 选择文件的按钮。可选。
+            // 内部根据当前运行是创建，可能是input元素，也可能是flash.
+            pick: '.filePicker',
+
+            //是否同是上传多个文件
+            multiple: true,
+            // 只允许选择图片文件。
+            accept: {
+                title: 'Images',
+                extensions: 'jpg,jpeg,bmp,png',
+                mimeTypes: 'image'
+            }
+        });
+        // 当有文件添加进来的时候
+        uploader.on('fileQueued', function (file) {
+            uploader.upload();
+        });
+
+
+        // 缩略图展示
+        uploader.on('uploadSuccess', function (file, ret) {
+
+
+            if (ret.status == 0) {
+                alert('上传失败。');
+            } else {
+
+                // $("#avatar_" + "{$uid}" + "_original img").attr('src', ret.data.file.path );
+                ext = ret.data.file.ext;
+                var src = ret.data.file.path + '?time=' + ret.data.file.time;
+
+                $('#logo_ids').val(ret.data.file.id);
+                var ids = $('#logo_ids').val();
+                if (!ids == null) {
+                    $('.show_cover').hide();
+                } else {
+                    $('.show_cover').show();
+                }
+                $("#logo_url").html('');
+                $("#logo_url").html('<img src="' + src + '"style="width:71px;height:71px"data-role="issue_cover" >');
+            }
+
+        });
+
+
+    });
+</script>
+<script>
+    var ext;
+    $(function () {
+        var uploader = WebUploader.create({
+
+            // 选完文件后，是否自动上传。
+            auto: true,
+
+            // swf文件路径
+            swf: 'Application/Mob/Static/js/webuploader/js/Uploader.swf',
+
+            // 文件接收服务端。
+            server: "{:U('Core/File/uploadPicture')}",
+
+            // 选择文件的按钮。可选。
+            // 内部根据当前运行是创建，可能是input元素，也可能是flash.
+
+            pick: '.filePicker2',
+
+            //是否同是上传多个文件
+            multiple: true,
+            // 只允许选择图片文件。
+            accept: {
+                title: 'Images',
+                extensions: 'jpg,jpeg,bmp,png',
+                mimeTypes: 'image'
+            }
+        });
+        // 当有文件添加进来的时候
+        uploader.on('fileQueued', function (file) {
+            uploader.upload();
+        });
+
+
+        // 缩略图展示
+        uploader.on('uploadSuccess', function (file, ret) {
+
+
+            if (ret.status == 0) {
+                alert('上传失败。');
+            } else {
+
+                // $("#avatar_" + "{$uid}" + "_original img").attr('src', ret.data.file.path );
+                ext = ret.data.file.ext;
+                var src = ret.data.file.path + '?time=' + ret.data.file.time;
+
+                $('#bg_ids').val(ret.data.file.id);
+                var ids = $('#bg_ids').val();
+                if (!ids == null) {
+                    $('.show_cover').hide();
+                } else {
+                    $('.show_cover').show();
+                }
+                $("#bg_url").html('');
+                $("#bg_url").html('<img src="' + src + '"style="width:71px;height:71px"data-role="issue_cover" >');
+            }
+
+        });
+
+
+    });
+</script>
+<script>
+    $('#save').click(function () {
+        var data = $("#edit_group").serialize();
+        var url = $("#edit_group").attr('data-url');
+        $.post(url, data, function (msg) {
+            if (msg.status == 1) {
+
+                toast.success('编辑成功!');
+                setTimeout(function(){window.location.href=document.referrer;},1000);
+
+            } else {
+                alert(msg.info);
+            }
+        }, 'json');
+    });
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,281 @@
+<script src="__APP__/raty/raty.js"></script>
+<div id="col3" class="right" style="width: 260px">
+    <div>
+        <div class="mb10 c_panel">
+            <h1 class="">发布者</h1>
+
+            <div class="pd10">
+                {:W('CUserInformation',array('uid'=>$info['uid'],'tpl'=>'right'))}
+            </div>
+
+        </div>
+        <div class="mb10 c_panel">
+            <h1>温馨提示</h1>
+
+            <div class="pd10">
+                {:W('EntityProfile',array('entity_id'=>$entity['id'],'p_name'=>'des2'))}
+            </div>
+
+        </div>
+        <div class="mb10">
+            {:W('InfoList',array('name'=>$entity['name'],'type'=>'limit','order'=>'cTime desc',num=>'5',recom=>true,
+            'tpl'=>'recom'))}
+        </div>
+    </div>
+</div>
+<div class="left" style="width: 678px">
+<div class="c_panel">
+
+    <h1 class="cat_ul_title mb10">查看详情</h1>
+    <div class="pd10">
+        <div class="">
+            <h2 class="mb10"><span class="mr10">{:getInfoFirstValue($info['id'])}</span>
+                {:W('FavBtn',array('info'=>$info))}<span
+                        class="cgrey f14px">已有<span id="c_info_fav_num_{$info.id}"
+                                                    class="f16px c333"><php>echo
+                    D('cat_fav')->where('info_id='.$info['info_id'])->count()
+                </php></span>人收藏</span></h2>
+            <div class="clearfix"></div>
+            <div class="f12px cgrey mb10 left lh16">
+                浏览次数：{$info.read}<br/>
+                发布日期：{$info.cTime|friendlyDate}
+                <br/>
+                <if condition="$entity['can_over']">
+                    截止时间：
+                    <if condition="$info['over_time'] gt time()">
+                            <span class="cgreen"> {$info.over_time|date="Y-m-d",###}【<strong>进行中</strong>】&nbsp;&nbsp;剩余<span
+                                    class="c_last"> {:getDaysPass($info['over_time'])}天</span></span>
+                        <else/>
+                        <span class="cred"> {$info.over_time|date="Y-m-d",###}【<strong>已过期</strong>】</span>
+                    </if>
+                </if>
+
+            </div>
+
+            <div class="right" style="margin-bottom: 1px"><span
+                    class="corange bld f18px">{$info.rate| number_format=1}</span>分
+                [&nbsp;<span class="corange bld f16px"><php>echo
+                    D('cat_rate')->where('info_id='.$info['info_id'])->count()
+                </php></span> &nbsp;人打分]
+                <div id="rate" data-score="{$info.rate}"></div>
+            </div>
+            <div class="clearfix"></div>
+            <script>
+                var info_id = "{$info.id}";
+                $('#rate').raty({path: "__APP__/raty/img", half: true,
+                    score: function () {
+                        return ($(this).attr('data-score'));
+                    },
+                    click: function (p_score, evt) {
+                        if (MID == 0) {
+                            toast.error('请登录后评分。');
+                            return;
+                        }
+                        $.post(U('cat/Index/_doScore'), {info_id: info_id, score: p_score}, function (msg) {
+                            if (msg.status) {
+                                toast.success('打分成功。');
+                                setTimeout(function () {
+                                    location.reload();
+                                }, 1000);
+
+                            }
+                            else {
+                                toast.error('不能重复打分。');
+                            }
+                        }, 'json');
+
+                    }
+                });
+            </script>
+
+            <div class="clearfix" style="position: relative">
+                <ul class="c_tab">
+                    <li id="tab_n_info" onclick="setInfo()" class="c_active cpointer">
+                        详情
+                    </li>
+                    <li><span class="c333 hcblue cpointer"
+                              onclick="$('html,body').animate({scrollTop: $('#c_all_com').offset().top}, 1000);">评论</span>
+                    </li>
+                    <li id="tab_n_read" class="cpointer" onclick="setRead()">足迹</li>
+
+                </ul>
+                <if condition="check_auth('Cat/Index/editInfo',$info['uid'])">
+                    <div class="tab_n_manage c666 " id="tab_n_manage">
+                        管理
+                        <div class="arrow_r c_menu"></div>
+                        <ul class="right c_ddm c_menu">
+                            <li><a target="_blank"
+                                   href="{:U('cat/Index/post',array('entity_id'=>$entity['id'],'info_id'=>$info['info_id']))}">编辑</a>
+                            </li>
+                            <li><a class="cpointer cred" event-node="del_info"
+                                   event-args="id={$info.info_id}&entity={$entity.name}">删除</a></li>
+
+                        </ul>
+                    </div>
+                </if>
+                <script>
+                    $(document).ready(function () {
+                        $('#tab_n_manage').hover(function () {
+                            $('.c_menu').show();
+                        }, function () {
+                            $('.c_menu').hide();
+                        });
+                    })
+                </script>
+                <style>
+
+                </style>
+            </div>
+            <div class="underline mb10"></div>
+            <div id="tab_read" style="min-height:400px;display: none">
+                <h2 class="f14px c333 mb20">最近到过</h2>
+
+                <div class="pd20">
+                    <ul class="c_read_user clearfix mb10">
+                        <volist name="info.reads" id="vo">
+                            <li class="mb20">
+                                <a class="c666" event-node="face_card" uid="{$vo.user.uid}"
+                                   href="{$vo.user.space_url}">
+                                    <img class="mb5" src="{$vo.user.avatar_small}">
+
+                                    <div class="lh16">{$vo.user.uname}
+                                        <br/>
+                                        {$vo.cTime|friendlyDate}
+                                    </div>
+                                </a>
+                            </li>
+                        </volist>
+                    </ul>
+
+                </div>
+            </div>
+            <div id="tab_info" class=" clearfix" style="min-height:400px">
+
+                <div class=" cat_det ">
+                    <ul>
+                        <volist name="fields" id="vo">
+                            <if condition="($vo['input_type'] neq IT_EDITOR) && $vo['input_type'] neq IT_MULTI_TEXT">
+                                <li>{:W('DisplayRender',array('field'=>$vo,'overed'=>($info['over_time']
+                                    <=time()),'data'=>$data[$vo['name']]))}
+                                </li>
+                            </if>
+                        </volist>
+                    </ul>
+
+                    <div class="clearfix"></div>
+                </div>
+
+
+                <volist name="fields" id="vo">
+
+                    <if condition="($vo['input_type'] eq IT_EDITOR) || $vo['input_type'] eq IT_MULTI_TEXT">
+                        <div class=" cat_det f14px lh28">
+                            {:W('DisplayRender',array('field'=>$vo,'overed'=>($info['over_time']<=time()),'data'=>$data[$vo['name']]))}
+                        </div>
+                    </if>
+
+                </volist>
+                <div class="mt10"></div>
+
+            </div>
+
+
+            <!-- Baidu Button BEGIN -->
+            <div id="bdshare" class="bdshare_t bds_tools get-codes-bdshare">
+                <span class="bds_more">分享到：</span>
+                <a class="bds_qzone"></a>
+                <a class="bds_tsina"></a>
+                <a class="bds_tqq"></a>
+                <a class="bds_renren"></a>
+                <a class="bds_t163"></a>
+                <a class="shareCount"></a>
+            </div>
+            <script type="text/javascript" id="bdshare_js" data="type=tools&amp;uid=751590"></script>
+            <script type="text/javascript" id="bdshell_js"></script>
+            <script type="text/javascript">
+                document.getElementById("bdshell_js").src = "http://bdimg.share.baidu.com/static/js/shell_v2.js?cdnversion=" + Math.ceil(new Date() / 3600000)
+            </script>
+            <!-- Baidu Button END -->
+            <div class="right f16px cgrey" style="line-height: 36px"> {:W('ShareToFeed',array('title'=>'分享',
+                'initHTML'=>urlencode('我分享了一条信息《'.getInfoFirstValue($info['info_id']).'》，赶紧来看看吧！'),
+                'url'=>U('cat/Index/info',array('info_id'=>$info['info_id'])),'from'=>'cat'))}
+            </div>
+            <div class="clearfix"></div>
+
+            <div style="text-align: right" class="mb10">{:W('SendInfoBtn',array('entity'=>$entity,'info'=>$info))}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mb10" id="c_all_com"></div>
+
+<div class="c_panel mb10">
+    <h1 class="f16px  mb10">全部评论</h1>
+
+    <div class="pd10 clearfix">
+        <if condition="$info['com']['count'] eq 0">
+            <div id="c_no_com">还没有评论，赶紧抢占沙发吧！</div>
+        </if>
+        <ul id="c_com">
+            <volist name="info.com.data" id="vo">
+                <li class="clearfix pd10 ">
+                    <div style="float: left;margin-right: 10px;width:50px;">
+                        <a event-node="face_card" uid="{$vo.uid}" href="{$vo.user.space_url}">
+                            <img src="{$vo.user.avatar_small}">
+                        </a>
+                    </div>
+                    <div class="left cgrey " style="width: 520px">
+                        <div class="mb10 cgrey lh14">
+                            <a event-node="face_card" uid="1"
+                               href="{$vo.user.space_url}">
+                                {$vo.user.uname} </a>
+                            <span class="c333"> &nbsp;&nbsp;&nbsp;评论于：{$vo.cTime|friendlyDate}</span>
+                        </div>
+                        <div>
+                            <p class="c333 lh18">{$vo.content}</p>
+                        </div>
+                    </div>
+
+                </li>
+            </volist>
+        </ul>
+
+    </div>
+    <div class="page">{$info.com.html}</div>
+</div>
+
+
+<div class="c_panel mb10">
+    <h1 class="f16px  mb10">发表评论</h1>
+
+    <div class="pd10">
+        <div class="mb10">{:W('UEditor',array('id'=>'editor'))}</div>
+        <div><span class="f16px cgrey">亲，请用心评论哦。</span>
+
+            <div class="right mb10"><a event-node="post_com" event-args="id={$info.info_id}"
+                                       class="btn-grey-white">发表</a>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+</div>
+
+</div>
+
+
+<script>
+
+    function setInfo() {
+        $('#tab_info').show();
+        $('#tab_read').hide();
+        $('.c_tab li').removeClass('c_active');
+        $('#tab_n_info').addClass('c_active');
+    }
+    function setRead() {
+        $('#tab_read').show();
+        $('#tab_info').hide();
+        $('.c_tab li').removeClass('c_active');
+        $('#tab_n_read').addClass('c_active');
+    }
+</script>

@@ -88,8 +88,8 @@ use Common\Controller\Addon;
          */
         public function sql_split($sql, $tablepre) {
 
-            if ($tablepre != "opensns_")
-                $sql = str_replace("opensns_", $tablepre, $sql);
+            if ($tablepre != "thinkox_")
+                $sql = str_replace("thinkox_", $tablepre, $sql);
                 $sql = preg_replace("/TYPE=(InnoDB|MyISAM|MEMORY)( DEFAULT CHARSET=[^; ]+)?/", "ENGINE=\\1 DEFAULT CHARSET=utf8", $sql);
 
             if ($r_tablepre != $s_tablepre)

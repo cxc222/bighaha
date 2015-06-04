@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>{:L('cat')} | {:modC('WEB_SITE_NAME','OpenSNS')}</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel="alternate icon" type="image/png" href="assets/i/favicon.png">
+    <link rel="stylesheet" href="__CSS__/amazeui.min.css"/>
+    <link rel="stylesheet" href="__CSS__/cat.css"/>
+    <link rel="stylesheet" href="__CSS__/app.css"/>
+    <script src="__JS__/jquery.min.js"></script>
+    <script src="Application/Mob/Static/js/raty/raty.js"></script>
+    <style>
+        .header {
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 200%;
+            color: #333;
+            margin-bottom: 0px;
+        }
+
+        .header p {
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body onload="initEvent()">
+
+<header data-am-widget="header" class="am-header am-header-default am-header-fixed">
+
+
+    <div class="am-header-left am-header-nav">
+        <a href="javascript:history.go(-1);"><span class="am-icon-chevron-left"></span></a>
+        <a href="#phone-link" class="">
+            <i class="am-header-icon am-icon-bell-o"></i>
+        </a>
+    </div>
+    <h1 class="am-header-title">
+        分类信息
+    </h1>
+
+    <div class="am-header-right am-header-nav">
+        <a href="#nav-link" class="">
+            <i class=" am-icon-star"></i>
+        </a>
+        <a href="#nav-link" class="">
+            <i class="am-menu-toggle-icon am-icon-bars"></i>
+        </a>
+    </div>
+
+</header>
+
+
+<div class="housedetail-container ">
+
+    <div class="user-info"style="font-size: 13px">
+        <div class=" avatar" >
+            <img class="avatar-img" style="width:45px" src="Public/images/default_avatar_128_128.jpg">
+        </div>
+        <div class="">
+            <span><a href="##">爱德华</a></span></br>
+            <span>
+                发布信息： 0 条
+            </span>
+             <span>
+                收藏信息： 0 条
+            </span>
+        </div>
+    </div>
+    <div data-am-widget="slider" class="am-slider am-slider-default"
+         data-am-slider='{animation:slide,slideshow:false}'>
+        <ul class="am-slides">
+            <li>
+                <img src="Application/Mob/Static/test/551931edeecf0.jpg">
+
+                <div class="am-slider-desc">美女</div>
+            </li>
+            <li>
+                <img src="Application/Mob/Static/test/551931edeecf0.jpg">
+
+                <div class="am-slider-desc">美女</div>
+            </li>
+            <li>
+                <img src="Application/Mob/Static/test/551931edeecf0.jpg">
+
+                <div class="am-slider-desc">美女</div>
+            </li>
+            <li>
+                <img src="Application/Mob/Static/test/551931edeecf0.jpg">
+
+                <div class="am-slider-desc">美女</div>
+            </li>
+        </ul>
+    </div>
+    <div class="house-detail-head">
+        <h4>紧靠上海金山 5月交房 最低单价3980起 学区房 港口城市
+        </h4>
+
+        <div class="tips-info" style="font-size: 12px;padding: 10px;border: 1px solid #c8c6c4;">
+            <div class="publish-time am-text-left ">
+                <span>发布时间</span>04-27 17:21
+                </br>
+                <span>截止时间</span>04-27 17:21【已过期】</br><span>浏览量</span>59
+                <a class="keep-item am-text-right"
+                   style=" padding-right: 0;background: #fff;border-radius: 4px;border: 1px solid #c8c6c4;height: 24px;line-height: 24px;">
+                    <span data-role="text">收藏该帖</span>
+                </a>
+            </div>
+            <div class="right" style="margin-bottom: 1px"><span
+                    class="corange">{$info.rate| number_format=1}</span>分
+                [&nbsp;<span class="corange"><php>echo
+                    D('cat_rate')->where('info_id='.$info['info_id'])->count()
+                </php></span> &nbsp;人打分]
+                <div id="rate" data-score="2.5"></div>
+            </div>
+            <div class="am-cf"></div>
+            <script>
+                var info_id = "{$info.info_id}";
+                $('#rate').raty({path: "Application/Mob/Static/js/raty/img", half: true,
+                    score: function () {
+                        return ($(this).attr('data-score'));
+                    },
+                    click: function (p_score, evt) {
+                        if (MID == 0) {
+                            ui.error('请登录后评分。');
+                            return;
+                        }
+                        $.post(U('cat/Index/_doScore'), {info_id: info_id, score: p_score}, function (msg) {
+                            if (msg.status) {
+                                ui.success('打分成功。');
+                                setTimeout(function () {
+                                    location.reload();
+                                }, 1000);
+
+                            }
+                            else {
+                                ui.error('不能重复打分。');
+                            }
+                        }, 'json');
+
+                    }
+                });
+            </script>
+
+        </div>
+    </div>
+    <div class="house-mian-info" style="font-size: 12px;padding: 10px;border: dashed 1px #000">
+        <ul class="am-avg-sm-2">
+            <li class=""><span>身份：</span>个人</li>
+            <li class=""><span>小区名称：</span>别墅</li>
+            <li class=""><span>厅：</span>1</li>
+            <li class=""><span>大小：</span>70</li>
+            <li class=""><span>朝向：</span>南</li>
+            <li class=""><span>支付方式：</span>支付宝 付一押三</li>
+            <li class=""><span>出租方式：</span>单间出租</li>
+            <li class=""><span>室：</span>1</li>
+            <li class=""><span>卫：</span>1</li>
+            <li class=""><span>楼层：</span>第 1 层，共 1 层</li>
+            <li class=""><span>装修情况：</span>简单装修</li>
+            <li class=""><span>租金：</span>面议</li>
+            <li class=""><span>一句话广告：</span>走的哪里那里都是家</li>
+            <li class=""><span>联系人：</span>guojia@qq.com</li>
+        </ul>
+    </div>
+    <div class="comm-area" style="font-size:12px;padding: 10px;border: 1px solid #c8c6c4;">
+        <p class="">信息详情</p>
+
+        <p>
+            <span class="full-text">
+                    距上海最近的双地铁双生态房，位于浙江接轨上海第一站的浙江嘉兴平湖市全塘镇新区（仅距上海金山区5公里）也被称为独山港区（全塘镇和黄姑镇），紧接上海地铁22号线和9号线，上海报纸已经报到22号线延伸段，距小区步行5分钟，楼盘对门就是镇中学，本小区周边总4个学校，1个幼儿园，2个小学，1个中学，都是对口学校，学校师资力量雄厚，小区单价3980-4500，地铁房振港苑属于上海周边超性价比的房产原始股，是可遇不可求兼具投资度假休闲养老的高档综合人文住宅区，升值潜力极其巨大。
+                </span>
+        </p>
+    </div>
+    <div class="am-form-group"style="padding: 10px">
+        <h6>评论</h6>
+        <textarea class="content" rows="5" id="doc-ta-1" style="height: 8em; width: 100%;"></textarea>
+        <p class="submit"  url="{:U('Mob/Weibo/doAddComment')}">
+            <button  type="submit" class="am-btn am-btn-default am-round">提交</button>
+        </p>
+    </div>
+    <div class="comment-list">
+        <php>for($i=1;$i<10;$i++){</php>
+        <div class="comment-item"
+             style="background-color: #ffffff;padding: 10px;margin-bottom: 5px;border: 1px solid #F2F2F2;">
+            <div class="am-g avatar-img">
+                <div class="am-u-sm-6 avatar">
+                    <img class="avatar-img" style="width: 32px" src="Public/images/default_avatar_128_128.jpg">
+                    <span><a href="##">爱德华</a></span>
+                </div>
+
+
+                <div class="am-u-sm-6 time" style="font-size: 13px;text-align: right">
+                    5分钟前
+                </div>
+            </div>
+            <div class="am-g content" style="padding: 10px">
+                你™的在逗我~！~！~
+            </div>
+            <div class="am-g">
+                <div class="am-u-sm-2 am-text-center" style="float: right">
+                    <a><i class="am-icon-trash" id="doc-confirm-toggle"></i></a>
+                </div>
+                <div class="am-u-sm-2 am-text-center">
+                    <i class="am-icon-comment-o" id="doc-prompt-toggle"></i>
+                </div>
+            </div>
+        </div>
+        <php>}</php>
+    </div>
+</div>
+
+<div data-am-widget="navbar" class="am-navbar am-cf am-navbar-default" id="">
+    <ul class="am-navbar-nav am-cf am-avg-sm-5" style="font-size: 12px">
+        <li>
+            <a href="{:U('')}" class="">
+                我
+            </a>
+        </li>
+
+        <li>
+            <a href="{:U('')}" class="">
+                发布
+            </a>
+        </li>
+
+    </ul>
+</div>
+
+
+
+<script src="__JS__/amazeui.min.js"></script>
+
+<script type="text/javascript">
+/*
+    var isclick = false;
+    function initEvent() {
+        alert(111)
+        var tablestar = document.getElementById("tablestar");
+        var tds = tablestar.getElementsByTagName("td");
+        for (var i = 0; i < tds.length; i++) {
+            var td = tds[i];
+            td.onmouseover = change;
+            td.onmouseout = repeal;
+            td.onclick = change1;
+        }
+    }
+    function change() {
+        alert(221)
+        if (!isclick) {
+            var tablestar = document.getElementById("tablestar");
+            var tds = tablestar.getElementsByTagName("td");
+            var index = indexof(tds, this);
+            for (var i = 0; i < index + 1; i++) {
+                var td = tds[i];
+                td.innerText = "★";
+            }
+        }
+    }
+    function repeal() {
+        alert(333)
+        if (!isclick) {
+            var tablestar = document.getElementById("tablestar");
+            var tds = tablestar.getElementsByTagName("td");
+            var index = indexof(tds, this);
+            for (var i = 0; i < index + 1; i++) {
+                var td = tds[i];
+                td.innerText = "☆";
+            }
+        }
+    }
+    function indexof(arr, ele) {
+        alert(444)
+        for (var i = 0; i < arr.length; i++) {
+            if (arr[i] == ele) {
+                return i;
+            }
+        }
+        return -1;
+    }
+    function change1() {
+        alert(555)
+        if (!isclick) {
+            change();
+            isclick = true;
+        }
+        else {
+            alert("已经评分过" );
+        }
+    }*/
+</script>
+</body>
+</html>

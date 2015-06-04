@@ -72,10 +72,8 @@ class ForumLzlReplyModel extends Model
         $user = query_user(array('nickname', 'space_url'), $uid);
         $title = $user['nickname'] . '回复了您的评论。';
         $content = '回复内容：' . mb_substr($content, 0, 20);
-        $url = U('Forum/Index/detail', array('id' => $post_id,'page'=>$p,'sr'=>$to_f_reply_id,'sp'=>$pageCount)).'#'.$to_f_reply_id;
-        $from_uid = $uid;
-        $type = 2;
-        D('Message')->sendMessage($to_uid, $content, $title, $url, $from_uid, $type, '', '', $post_id, $result);
+
+        D('Message')->sendMessage($to_uid,$title,  $content, 'Forum/Index/detail#'.$to_f_reply_id,array('id' => $post_id,'page'=>$p,'sr'=>$to_f_reply_id,'sp'=>$pageCount), $uid, 2);
 
     }
 
@@ -122,8 +120,7 @@ class ForumLzlReplyModel extends Model
         $count = D('ForumLzlReply')->where($map)->count();
         $pageCount = ceil($count / $limit);
         //增加微博的评论数量
-        $url = U('Forum/Index/detail', array('id' => $post_id, 'page' => $p, 'sr' => $to_f_reply_id, 'sp' => $pageCount)) . '#' . $to_f_reply_id;
-        D('ContentHandler')->handleAtWho($content, $url,'',1);
+        D('ContentHandler')->handleAtWho($content, 'Forum/Index/detail#'.$to_f_reply_id,array('id' => $post_id, 'page' => $p, 'sr' => $to_f_reply_id, 'sp' => $pageCount) ,'',1);
     }
 
 

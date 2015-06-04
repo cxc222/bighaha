@@ -23,6 +23,9 @@ function op_cache($key, $func, $interval)
     return $result;
 }
 
+/**清理全部缓存
+ * @auth 陈一枭
+ */
 function clean_all_cache()
 {
     $dirname = './Runtime/';
@@ -56,6 +59,22 @@ function rmdirr($dirname)
     }
     $dir->close();
     return rmdir($dirname);
+}
+
+/**
+ * 清理指定位置缓存
+ * @param $dirname
+ * @author 郑钟良<zzl@ourstu.com>
+ */
+function clean_cache($dirname='./Runtime/')
+{
+//清文件缓存
+    $dirs = array($dirname);
+//清理缓存
+    foreach ($dirs as $value) {
+        rmdirr($value);
+    }
+    @mkdir($dirname, 0777, true);
 }
 
 

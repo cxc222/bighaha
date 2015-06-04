@@ -1,0 +1,170 @@
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>{:L('blog')} | {:modC('WEB_SITE_NAME','OpenSNS')}</title>
+    <include file="head/head"/>
+    <script src="__JS__/blog.js"></script>
+</head>
+<body>
+
+<header data-am-widget="header" class="am-header am-header-default am-header-fixed">
+
+    <div class="am-header-left am-header-nav">
+        <a href="javascript:history.go(-1);">
+                <span class="am-icon-chevron-left">
+                </span>
+        </a>
+    </div>
+
+
+    <h1 class="am-header-title">
+        资讯详情
+    </h1>
+
+    <div class="am-header-right am-header-nav">
+        <a href="{:U('blog/addblog')}">
+            <i class="am-header-icon am-icon-pencil"></i>
+        </a>
+        <a href="#nav-link">
+            <i class="am-menu-toggle-icon am-icon-bars"></i>
+        </a>
+    </div>
+
+</header>
+{:W('Mob/UserMenu/index')}
+
+<div class="blog-detail-container ">
+    <div class="blog-detail">
+
+        <div class="blog-box">
+
+            <div class="blog">
+                <div class="blog-content">
+                    <img style="width: 100%;" src="{$blogdetail.cover_url}">
+                    <div class="title">
+                        <h3>{$blogdetail.title}</h3>
+                        <div class="content">
+                            {$blogdetail.description}
+                        </div>
+
+                        <div class="am-cf info">
+
+                            <div class="name am-fl">
+                                <span>{$blogdetail.user.nickname}</span>
+                                <span>{$blogdetail.create_time|friendlyDate}</span>
+                            </div>
+
+                            <div class="am-fr hot">
+                                <i class="am-icon-fire"></i>{$blogdetail.view}
+                                <i class="am-icon-comment-o"style="margin-left: 10px"></i>{$blogdetail.count}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="spliter"></div>
+                    <div class="content-box">
+                        <div class="content">
+                            {$blogcontent.content}
+                        </div>
+
+                    </div>
+                    <div class="spliter"></div>
+
+
+                    <div class="am-form-group am-cf weibo_post_box" id="comment"
+                         style="padding: 10px;margin-bottom: 35px">
+                        <h6>评论</h6>
+
+                        <textarea class="content " rows="5" id="comment_content_text" style="height: 8em; width: 100%;"></textarea>
+                        <!--表情-->
+                        <a href="javascript:" class="am-fl" data-url=" {:U('Core/Expression/getSmile')}"
+                           onclick="insertFace($(this))">
+                            <img src="Application/Core/Static/images/bq.png"style="margin: 10px 0px"></a>
+
+                        <div id="emot_content" class="emot_content"></div>
+                        <!--表情end-->
+
+                        <p class="submit" blog_id="{$blogdetail.id}" url="{:U('Mob/Blog/doAddComment')}">
+                            <button  type="submit"
+                                    class="am-btn-warning am-btn am-btn-block am-round ">评论
+                            </button>
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--资讯评论-->
+    <div class="comment-list addmore">
+        <volist name="blogcomment" id="vl">
+            <include file="_blogcomment"/>
+        </volist>
+    <div class="comment-list">
+        <volist name="blogcomment" id="vl">
+            <div class="comment-item">
+                <div class="am-g avatar-img user-info">
+                    <div class="am-u-sm-6 avatar">
+                        <img class="avatar-img" style="width: 32px" src="{$vl.user.avatar32}">
+                        <span><a href="##">{$vl.user.nickname}</a></span>
+                    </div>
+                    <div class="am-u-sm-6 time">
+                        {$vl.create_time|friendlyDate}
+                    </div>
+                </div>
+                <div class="am-g content">
+                    {$vl.content}
+                </div>
+                <div class="am-g">
+                    <div class="am-u-sm-2 am-text-center" style="float: right">
+                        <a class="delete" comment_id="{$vl.id}" blog_id="{$vl.row_id}"
+                           url="{:U('Mob/Blog/delBlogComment')}">
+                            <i class="am-icon-trash" id="doc-confirm-toggle"></i></a>
+                    </div>
+                    <div class="am-u-sm-2 t_center">
+                        <a class="atcomment"
+                           href="{:U('Mob/Blog/atComment',array('id'=>$vl['row_id'],'user'=>$vl['user']['nickname']))}">
+                            <i class="am-icon-comment-o"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </volist>
+    </div>
+    <!--资讯评论END-->
+
+    <div class="am-list-news-ft look-more">
+        <a class="" id="getmorecomment"
+                >查看更多 &raquo;</a>
+    </div>
+
+</div>
+
+
+<script>
+    comment();
+    //查看更多评论
+    var page = 1;
+    var blog_id = "{$blogdetail['id']}";
+    function nextpage() {
+        $("#getmorecomment").html("查看更多...");
+        $('#getmorecomment').click(function () {
+            alert(11111);
+            $.post("{:U('Mob/blog/addMoreComment')}", {page: page + 1, id: blog_id}, function (msg) {
+                if (msg.status) {
+                    $(".addmore").append(msg.html);
+                    page++;
+                    del();
+                    comment();
+                } else {
+                    $("#getmorecomment").html("全部加载完成！");
+                    $(".look-more").delay(2000).hide(0);
+                }
+            })
+        });
+    }
+
+
+</script>
+
+</body>
+</html>

@@ -34,6 +34,7 @@ return array(
 'URL_MODEL'            => 3, //URL模式  默认关闭伪静态
 'VAR_URL_PARAMS'       => '', // PATHINFO URL参数变量
 'URL_PATHINFO_DEPR'    => '/', //PATHINFO URL分割符
+'URL_HTML_SUFFIX'       => 'html',  // URL伪静态后缀设置
 
 /* 全局过滤配置 */
 'DEFAULT_FILTER' => '', //全局过滤函数
@@ -102,5 +103,12 @@ return array(
 'replace'  => false, //存在同名是否覆盖
 'hash'     => true, //是否生成hash编码
 'callback' => false, //检测文件是否存在回调函数，如果存在返回文件信息数组
+),
+'DEFAULT_THEME' => 'default', // 默认模板主题名称
+/* 模板相关配置 */
+'TMPL_PARSE_STRING' => array(
+'__STATIC__' => __ROOT__ . '/Public/static',
+'__ZUI__'=>__ROOT__.'/Public/zui'
+
 ),
 );

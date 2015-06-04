@@ -4,7 +4,18 @@
     <ul>
       <volist name="list" id="vo">
         <li>
-        	<p><a href="{:U('Weibo/Topic/index',array('topk'=>urlencode($vo['name'])))}">{$vo.name}</a>（{$vo.reCount}）</p>
+        	<p>
+
+                <php>
+                    if(modC('HIGH_LIGHT_TOPIC',1,'Weibo')){
+                </php>
+                <a class="label label-badge label-info" href="{:U('Weibo/Topic/index',array('topk'=>urlencode($vo['name'])))}">#{$vo.name}#</a>
+
+                <php>}else{</php>
+                <a  href="{:U('Weibo/Topic/index',array('topk'=>urlencode($vo['name'])))}">#{$vo.name}#</a>
+                <php>}</php>
+
+                （{$vo.reCount}）</p>
         	<div class="topic-tips"><div class="hot-topic-info">{$vo.intro|default=话题推荐}</div></div>
         </li>
       </volist>

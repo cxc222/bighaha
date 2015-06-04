@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>{:L('store')} | {:modC('WEB_SITE_NAME','OpenSNS')}</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel="alternate icon" type="image/png" href="assets/i/favicon.png">
+    <link rel="stylesheet" href="__CSS__/amazeui.min.css"/>
+    <link rel="stylesheet" href="__CSS__/store.css"/>
+    <link rel="stylesheet" href="__CSS__/app.css"/>
+    <style>
+        .header {
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 200%;
+            color: #333;
+            margin-bottom: 0px;
+        }
+
+        .header p {
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<header data-am-widget="header" class="am-header am-header-default am-header-fixed">
+
+
+    <div class="am-header-left am-header-nav">
+        <a href="javascript:history.go(-1);"><span class="am-icon-chevron-left"></span></a>
+        <a href="#phone-link" class="">
+            <i class="am-header-icon am-icon-bell-o"></i>
+        </a>
+    </div>
+    <h1 class="am-header-title">
+        搜索
+    </h1>
+
+    <div class="am-header-right am-header-nav">
+
+        <a href="#nav-link" class="">
+            <i class="am-menu-toggle-icon am-icon-bars"></i>
+        </a>
+    </div>
+</header>
+
+
+<div class="search-container ">
+    <div class="am-tabs" data-am-tabs>
+        <ul class="am-tabs-nav am-nav am-nav-tabs">
+            <li class="am-active"><a href="#tab1">商品</a></li>
+            <li><a href="#tab2">店铺</a></li>
+        </ul>
+
+        <div class="am-tabs-bd">
+            <div class="am-tab-panel am-fade am-in am-active" id="tab1">
+                <div class="am-input-group">
+                    <input type="text" class="am-form-field">
+                    <span class="am-input-group-label">
+                       <a class="am-icon-search"></a>
+                    </span>
+                </div>
+                <div class="search-words" id="search-words">
+
+                    <ul>
+                        <li data-key="下拉导航" class="overflow"><span>下拉导航</span>
+                        <li data-key="下拉导航" class="overflow"><span>下拉导航</span>
+                        <li data-key="下拉导航" class="overflow"><span>下拉导航</span>
+                        <li data-key="下拉导航" class="overflow"><span>下拉导航</span>
+                        <li data-key="下拉导航" class="overflow"><span>下拉导航</span>
+                        <li data-key="下拉导航" class="overflow"><span>下拉导航</span>
+                    </ul>
+
+                </div>
+                <div class="seach-list" style="margin-top: 20px">
+                    <ul class="am-g  group-list am-avg-sm-2 am-avg-md-4 am-avg-lg-5">
+                        <php>for($i=1;$i<11;$i++){</php>
+                        <li class="am-text-center" style="padding: 5px">
+                            <div class="goods-box" style="border:  1px solid #F2F2F2;">
+                                <div class="am-text-center cover">
+                                    <a href="{:U('store/goodsdetail')}"><img
+                                            src="Application/Mob/Static/test/551931edeecf0.jpg"
+                                            style="width:100%;height: 100%"></a>
+                                </div>
+                                <div class="am-text-center content">
+                                    <a href="{:U('store/goodsdetail')}" class="title">商品名</a>
+                                </div>
+                                <div class="spliter "></div>
+                                <div class="am-text-center">
+                                    <b class="f14px cgrey">￥</b>
+                                    <span class="">1,500.00</span>
+                                </div>
+                            </div>
+                        </li>
+                        <php>}</php>
+                    </ul>
+
+                </div>
+
+            </div>
+            <div class="am-tab-panel am-fade" id="tab2">
+                <div class="am-input-group">
+                    <input type="text" class="am-form-field">
+                    <span class="am-input-group-label">
+                        <a class="am-icon-search"></a>
+                    </span>
+                </div>
+                <div class="seach-list" style="margin-top: 20px">
+                    <ul class="am-g  group-list am-avg-sm-2 am-avg-md-4 am-avg-lg-5">
+                        <php>for($i=1;$i<11;$i++){</php>
+                        <li class="am-text-center" style="padding: 5px">
+                            <div class="goods-box" style="border:  1px solid #F2F2F2;">
+                                <div class="am-text-center cover">
+                                    <a href="{:U('store/goodsdetail')}"><img
+                                            src="Application/Mob/Static/test/551931edeecf0.jpg"
+                                            style="width:100%;height: 100%"></a>
+                                </div>
+                                <div class="am-text-center content">
+                                    <a href="{:U('store/goodsdetail')}" class="title">商品名</a>
+                                </div>
+                                <div class="spliter "></div>
+                                <div class="am-text-center">
+                                    <b class="f14px cgrey">¥</b>
+                                    <span class="">1,500.00</span>
+                                </div>
+                            </div>
+                        </li>
+                        <php>}</php>
+                    </ul>
+                </div>
+                <div class="recommended-list" style="margin-top: 45px">
+                    <div><h3>掌柜推荐</h3></div>
+                    <div class="seach-list" style="margin-top: 20px">
+                        <ul class="am-g  group-list am-avg-sm-2 am-avg-md-4 am-avg-lg-5">
+                            <php>for($i=1;$i<11;$i++){</php>
+                            <li class="am-text-center" style="padding: 5px">
+                                <div class="goods-box" style="border:  1px solid #F2F2F2;">
+                                    <div class="am-text-center cover">
+                                        <a href="{:U('store/goodsdetail')}"><img
+                                                src="Application/Mob/Static/test/551931edeecf0.jpg"
+                                                style="width:100%;height: 100%"></a>
+                                    </div>
+                                    <div class="am-text-center content">
+                                        <a href="{:U('store/goodsdetail')}" class="title">商品名</a>
+                                    </div>
+                                    <div class="spliter "></div>
+                                    <div class="am-text-center">
+                                        <b class="f14px cgrey">￥</b>
+                                        <span class="">1,500.00</span>
+                                    </div>
+                                </div>
+                            </li>
+                            <php>}</php>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+<script src="__JS__/jquery.min.js"></script>
+<script src="__JS__/amazeui.min.js"></script>
+<script>
+ /*   $(function () {
+var words=document.getElementById('search-words');
+        words.style.width = $('.am-input-group').width() +'px';
+
+                alert($('.am-input-group').width() + 'px');
+        $('#search input[name="k"]').keyup(function () {
+            $.post('search_auto.php', {'value': $(this).val()}, function (data) {
+                if (data == '0') $('#search_auto').html('').css('display', 'none');
+                else $('#search_auto').html(data).css('display', 'block');
+            });
+        });
+
+    });*/
+ $(function () {
+     var words = document.getElementById('search-words');
+     words.style.width = $('.am-input-group').width() + 'px';
+
+
+     if (data == '0') {
+         $('#search_auto').html('').css('display', 'none');
+     }
+     else {
+         $('#search_auto').html(data).css('display', 'block');
+     }
+ });
+</script>
+</body>
+</html>

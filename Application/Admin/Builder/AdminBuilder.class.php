@@ -26,7 +26,7 @@ use Admin\Controller\AdminController;
 abstract class AdminBuilder extends AdminController {
     public function display($templateFile='',$charset='',$contentType='',$content='',$prefix='') {
         //获取模版的名称
-        $template = dirname(__FILE__) . '/../View/Builder/' . $templateFile . '.html';
+        $template = dirname(__FILE__) . '/../View/default/Builder/' . $templateFile . '.html';
 
         //显示页面
         parent::display($template);

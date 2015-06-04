@@ -17,11 +17,11 @@ return array(
 		'title'=>'显示宽度:',
 		'type'=>'select',
 		'options'=>array(
-			'1'=>'1格',
-			'2'=>'2格',
-			'4'=>'4格'
+			'3'=>'3格',
+			'4'=>'4格',
+			'6'=>'6格'
 		),
-		'value'=>'2'
+		'value'=>'6'
 	),
 	'display'=>array(
 		'title'=>'是否显示:',

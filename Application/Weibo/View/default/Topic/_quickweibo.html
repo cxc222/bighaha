@@ -1,16 +1,12 @@
-<if condition="is_login() && check_auth('sendWeibo')">
+<if condition="is_login() && check_auth('Weibo/Index/doSend')">
     <div class="row">
         <div class="col-xs-12">
             <div class="col-md-2 col-sm-2 col-xs-12 text-center" style="position: relative">
-                <a class="s_avatar" href="{$self.space_url}" ucard="{$self.uid}">
-                    <img src="{$self.avatar128}"
-                         class="avatar-img"
-                         style="width: 64px;"/>
-                </a>
+
                 <br/>
 
             </div>
-            <div class="col-md-10 col-sm-8 col-xs-12">
+            <div class="col-xs-12">
                 <div class="weibo_content weibo_post_box">
 
                     <p class="pull-left">
@@ -28,7 +24,7 @@
                             </if>
                         </volist>
                     </p>
-                    <div class="pull-right show_num_quick">还可以输入{:C('WEIBO_WORDS_COUNT')}个字</div>
+                    <div class="pull-right show_num_quick">还可以输入{:modC('WEIBO_NUM',140,'WEIBO')}个字</div>
                     <div class="weibo_content_p">
                         <div class="row">
                             <div class="col-xs-12">
@@ -38,16 +34,17 @@
                                              onblur="endCheckNum_quick()">#{$topic['name']}#</textarea></p>
 
                                 <a href="javascript:" onclick="insertFace($(this))"><img class="weibo_type_icon"
-                                                                                         src="__STATIC__/image/bq.png"/></a>
-                                <script>
-                                    $(function () {
-                                        $('.weibo_content_quick').atwho(atwho_config);
-                                    })
-                                </script>
+                                                                                         src="__CORE_IMAGE__/bq.png"/></a>
+
+                                <if condition="modC('CAN_IMAGE',1)">
+                                    <a href="javascript:" id="insert_image" onclick="insert_image.insertImage(this)">
+                                        <img class="weibo_type_icon" src="__IMG__/image.png"/>
+                                    </a>
+                                </if>
+
                                 {:hook('weiboType')}
-                                <p class="pull-right"><input type="submit" value="发表 Ctrl+Enter"
-                                                             class="btn btn-primary send_weibo_button"
-                                                             data-url="{:U('Weibo/Index/doSend')}"/>
+                                <p class="pull-right">
+                                    <input type="submit" value="发表 Ctrl+Enter" data-role="send_weibo" class="btn btn-primary" data-url="{:U('Weibo/Index/doSend')}"/>
                                 </p>
                             </div>
                         </div>
@@ -59,6 +56,7 @@
         </div>
     </div>
     <script>
+        send_weibo();
         var ID_setInterval;
         function checkNum_quick(obj) {
             var value = obj.val();

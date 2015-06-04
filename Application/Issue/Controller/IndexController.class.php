@@ -16,10 +16,57 @@ class IndexController extends Controller
     {
         $tree = D('Issue')->getTree();
         $this->assign('tree', $tree);
+
+
+        $sub_menu =
+            array(
+                'left' =>
+                    array(
+                        array('tab' => 'home', 'title' => '首页', 'href' => U('Issue/index/index')),
+                    ),
+            );
+        if (check_auth('addIssueContent')) {
+            $sub_menu['right'] = array(
+                array('tab' => 'post', 'title' => '发布', 'href' => '#frm-post-popup','a_class'=>'open-popup-link')
+            );
+        }
+        foreach ($tree as $cat) {
+            if ($cat['_']) {
+                $children = array();
+                $children[] = array('tab' => 'cat_' . $cat['id'], 'title' => '全部', 'href' => U('Issue/index/index', array('issue_id' => $cat['id'])));
+                foreach ($cat['_'] as $child) {
+                    $children[] = array('tab' => 'cat_' . $cat['id'], 'title' => $child['title'], 'href' => U('Issue/index/index', array('issue_id' => $child['id'])));
+                }
+
+            }
+            $menu_item = array('children' => $children, 'tab' => 'cat_' . $cat['id'], 'title' => $cat['title'], 'href' => U('blog/article/lists', array('category' => $cat['id'])));
+            $sub_menu['left'][] = $menu_item;
+            unset($children);
+        }
+        $this->assign('sub_menu', $sub_menu);
+
     }
 
     public function index($page = 1, $issue_id = 0)
     {
+        //设置展示方式 列表；瀑布流
+        $aDisplay_type=I('display_type','','text');
+        $cookie_type=cookie('issue_display_type');
+        if($aDisplay_type==''){
+            if($cookie_type){
+                $aDisplay_type=$cookie_type;
+            }else{
+                $aDisplay_type=modC('DISPLAY_TYPE','list','Issue');
+                cookie('issue_display_type',$aDisplay_type);
+            }
+        }else{
+            if($cookie_type!=$aDisplay_type){
+                cookie('issue_display_type',$aDisplay_type);
+            }
+        }
+        $this->assign('display_type',$aDisplay_type);
+        //设置展示方式 列表；瀑布流 end
+
         $issue_id = intval($issue_id);
         $issue = D('Issue')->find($issue_id);
         if (!$issue_id == 0) {
@@ -37,6 +84,12 @@ class IndexController extends Controller
         foreach ($content as &$v) {
             $v['user'] = query_user(array('id', 'nickname', 'space_url', 'space_link', 'avatar128', 'rank_html'), $v['uid']);
             $v['issue'] = D('Issue')->field('id,title')->find($v['issue_id']);
+            if($aDisplay_type=='masonry'){
+                $cover = M('Picture')->where(array('status' => 1))->getById($v['cover_id']);
+                $imageinfo = getimagesize('.'.$cover['path']);
+                $v['cover_height']=$imageinfo[1]*255/$imageinfo[0];
+                $v['cover_height']=$v['cover_height']?$v['cover_height']:253;
+            }
         }
         unset($v);
         $this->assign('contents', $content);
@@ -100,7 +153,7 @@ class IndexController extends Controller
                 $user = query_user(array('nickname'), is_login());
                 $admin_uids = explode(',', C('USER_ADMINISTRATOR'));
                 foreach ($admin_uids as $admin_uid) {
-                    D('Common/Message')->sendMessage($admin_uid, "{$user['nickname']}向专辑投了一份稿件，请到后台审核。", $title = '专辑投稿提醒', U('Admin/Issue/verify'), is_login(), 2);
+                    D('Common/Message')->sendMessage($admin_uid, $title = '专辑投稿提醒',"{$user['nickname']}向专辑投了一份稿件，请到后台审核。",  'Admin/Issue/verify', array(),is_login(), 2);
                 }
             }
             $rs = D('IssueContent')->add($content);

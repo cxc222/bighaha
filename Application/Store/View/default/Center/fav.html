@@ -1,0 +1,77 @@
+<extend name="Center/base"/>
+<block name="main_content">
+    <link href="__CSS__/center.css" type="text/css" rel="stylesheet">
+    <div class="common_block_border" style="min-height: 600px">
+        <h2 class="common_block_title">我的收藏</h2>
+        <div style="padding-left: 20px">
+            <ul class="nav nav-pills " role="tablist">
+                <li
+                <if condition="$current_entity eq $vo['id']"> class="active"</if>
+                ><a
+
+                    href="{:U('store/Center/fav',array('id'=>$vo['id']))}">商品</a></li>
+
+            </ul>
+        </div>
+
+        <div class="mb10 ">
+            <if condition="$list['count'] eq 0">
+                <div class="pd20 text-center" style="font-size: 32px;color: grey">暂无收藏内容。</div>
+            </if>
+            <div class="pull-right text-right" style="padding: 10px;">
+                共 {$list.count} 件商品
+            </div>
+            <div class="clearfix {$class} mb10 c_def_frm">
+                <ul class="c_s_ul_good" style="padding-left: 25px">
+                    <volist name="list.data" id="vo">
+                        <li class="pull-left" style="margin:0 15px 0 15px;width: 152px">
+                            <div>
+                                <div class="">
+                                    <a target="_blank" href="{:U('store/Index/info',array('info_id'=>$vo['id']))}"><img style="width: 150px;height: 150px"
+                                                                                                                       class="" src="{:getThumbImageById($vo['cover_id'],150,150)}"></a>
+                                </div>
+                                <div class="pd10" style="height: 70px">
+                                    <div class=" c_tt">
+                                        <a class="text-more" style="width: 100%" target="_blank" href="{:U('store/Index/info',array('info_id'=>$vo['id']))}">{$vo.title}</a>
+                                    </div>
+                                    <div class="">
+                                        <b class="f14px cgrey">￥</b> <span class="cred f14px bld">{$vo.price|number_format=2}</span>
+                                    </div>
+                                    <div class="">
+                                        <a target="_blank" href="{:U('store/Index/info',array('info_id'=>$vo['shop']['id']))}">{$vo.shop.title}</a>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </li>
+                    </volist>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <div class="page text-right" style="padding-right: 15px">
+                {$list.html}
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <style>
+            .c_m_r_tb {
+                border: 1px #ccc solid;
+            }
+
+            .c_m_r_tb td, .c_m_r_tb th {
+                padding: 10px;
+                margin-right: 5px;
+                border-top: 1px #ccc solid;
+                border-bottom: 1px #ccc solid;
+                background: white;
+            }
+
+            .c_m_r_tb th {
+                background: #eee;
+            }
+        </style>
+
+
+    </div>
+
+</block>

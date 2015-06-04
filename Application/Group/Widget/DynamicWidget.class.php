@@ -9,25 +9,23 @@
 
 namespace Group\Widget;
 
-use Think\Action;
+use Think\Controller;
 
 /**
  * Class DynamicWidget  群组动态
  * @package Group\Widget
  * @author:xjw129xjt xjt@ourstu.com
  */
-class DynamicWidget extends Action
+class DynamicWidget extends Controller
 {
 
     /* 显示指定分类的同级分类或子分类列表 */
-    public function lists($dynamic='')
+    public function lists($dynamic_id='')
     {
-
-
+        $dynamic = D('GroupDynamic')->getDynamic($dynamic_id);
         $user= query_user(array('avatar128','avatar64','nickname','uid','space_url','icons_html'),$dynamic['uid']);
         $this->assign('dynamic', $dynamic);
         $this->assign('user', $user);
-
         $this->display('Widget/dynamic');
 
     }

@@ -1,0 +1,186 @@
+<extend name="Base/common"/>
+<block name="header">
+    <include file="Public/nav"/>
+</block>
+<block name="body">
+    <!--模板详情-->
+    <div class="container templet">
+        <ol class="breadcrumb">
+            <li><a href="{:U('index/index')}">首页</a></li>
+            <li><a href="{:U('my')}">开发者中心</a></li>
+            <li class="active">控制面板</li>
+        </ol>
+        <include file="Admin/_info"/>
+        <div class="col-md-2">
+
+          <include file="_side"/>
+        </div>
+
+
+        <div class="col-md-10">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <!-- Default panel contents -->
+                    <div class="panel-heading">我的地盘
+
+                    </div>
+                    <table class="table">
+                        <tbody>
+                        <tr>
+                            <td><strong>开发者资料</strong></td>
+                            <td><a href="{:U('verify')}"><i class="glyphicon glyphicon-edit"></i>
+                                完善资料</a></td>
+                            <td colspan="2"><strong>系统设置</strong></td>
+
+                        </tr>
+                        <tr>
+                            <td style="width: 200px">真实姓名</td>
+                            <td style="width:150px">{$dev.name|default=未填}</td>
+                            <td>下载消息</td>
+                            <td>
+
+                                <label class="radio-inline">
+                                    <input type="radio" id="inlineCheckbox1" name="tip" value="1"
+                                    <if condition="is_tip()">checked</if>
+                                    > 开启
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" id="inlineCheckbox2" name="tip" value="0"
+                                    <if condition="is_tip()">
+                                        <else/>
+                                        checked
+                                    </if>
+                                    > 关闭
+                                </label>
+                                <script>
+                                    $(function () {
+                                        $('input[name=tip]').change(function () {
+                                            $.post(U('appstore/admin/settip'), {tip: $(this).val()});
+                                        })
+                                    })
+
+                                </script>
+
+                        </tr>
+                        <tr>
+                            <td>qq</td>
+                            <td colspan="3">{$dev.qq|default=未填}</td>
+                        </tr>
+                        <tr>
+                            <td>电话</td>
+                            <td colspan="3">{$dev.phone|default=未填}</td>
+                        </tr>
+
+                        <tr>
+                            <td>擅长</td>
+                            <td colspan="3">{$dev.goodat|default=未填}</td>
+                        </tr>
+                        <tr>
+                            <td>自我介绍</td>
+                            <td colspan="3">{$dev.des|default=未填}</td>
+                        </tr>
+                        <tr>
+                            <td>开发者等级</td>
+                            <td colspan="3"><i style="color: red" class="glyphicon glyphicon-exclamation-sign"></i>
+                                非认证开发者
+                            </td>
+                        </tr>
+                        <tr>
+
+                        </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+            <if condition="count($verifing) neq 0">
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <!-- Default panel contents -->
+                        <div class="panel-heading">审核中</div>
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>图标</th>
+                                <th style="width: 200px;">名称</th>
+
+                                <th>最后更新</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            <volist name="verifing" id="vo">
+                                <tr>
+                                    <td class="cover">{$vo.cover|display_cover=60,60}</td>
+                                    <td><a target="_blank" href="{:U('index/goodsDetail',array('id'=>$vo['id']))}">{$vo.title}</a>
+                                    </td>
+                                    <td>{$vo.update_time|date='Y-m-d H:i',###}</td>
+                                    <td>
+                                        <div class="btn-group">
+                                            <a target="_blank" href="{:U('admin/addversion',array('id'=>$vo['id']))}"
+                                               class="btn btn-success">更新</a>
+                                            <a target="_blank" href="{:U('admin/add',array('id'=>$vo['id']))}"
+                                               class="btn btn-info">编辑</a>
+                                            <a class="btn btn-danger" disabled="disabled">删除</a>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                            </volist>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </if>
+
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <!-- Default panel contents -->
+                    <div class="panel-heading">销售中</div>
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>图标</th>
+                            <th style="width: 200px;">名称</th>
+                            <th>最后更新</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        <volist name="selling" id="vo">
+                            <tr>
+                                <td class="cover">{$vo.cover|display_cover=60,60}</td>
+                                <td><a target="_blank" href="{:U('index/goodsDetail',array('id'=>$vo['id']))}">{$vo.title}</a>
+                                </td>
+                                <td>{$vo.update_time|date='Y-m-d H:i',###}</td>
+                                <td>
+                                    <div class="btn-group">
+                                        <a target="_blank" href="{:U('admin/addversion',array('id'=>$vo['id']))}"
+                                           class="btn btn-success">更新</a>
+                                        <a target="_blank" href="{:U('admin/add',array('id'=>$vo['id']))}"
+                                           class="btn btn-info">编辑</a>
+                                        <a class="btn btn-danger" disabled="disabled">删除</a>
+                                        <a class="btn btn-warning " disabled="disabled">下架</a>
+                                    </div>
+                                </td>
+
+
+                            </tr>
+
+                        </volist>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <style>
+        .cover {
+            width: 60px;
+            height: 60px;
+            min-width: 60px;
+        }
+    </style>
+</block>

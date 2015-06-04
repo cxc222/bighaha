@@ -1,0 +1,91 @@
+<extend name="Base/common"/>
+<block name="style">
+    <link href="__CSS__/store.css" type="text/css" rel="stylesheet">
+</block>
+<block name="header">
+    <include file="Public/nav"/>
+</block>
+<block name="body">
+    <div id="page-wrap">
+        <div id="main-wrap">
+            <div class="mb10 clearfix bgwhite">
+                <div id="col3" class="st-index-right" style="background: white;">
+                    <div style="margin: 20px">
+                        <ul class="store_ul_post">
+                            <li>{:W('PostButton',array('name'=>$_GET['name'],'title'=>'我要发布'))}</li>
+                        </ul>
+                    </div>
+                </div>
+                <div id="col5" class="st-index-main">
+                    <div style="margin: 20px;margin-bottom: 10px;display: none" class="hideRoll">
+                        <!-- <h1 class="store_ul_title mb10">查询 <span class="f12px cgrey"> 耗时{$used}s</span></h1>-->
+                        <style>
+                            .store_searh li {
+                                float: left;
+                            }
+                        </style>
+                        <div class="">
+
+                            <volist name="search_fields" id="vo">
+                                <li class="f14px cgrey" style="line-height: 35px">
+                                    <div class="left  mr15">{$vo['alias']}：</div>
+                                    <div class="left" style="margin-top: 5px">
+                                        {:W('SearchInputRender',array('field'=>$vo))}
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </li>
+                            </volist>
+
+                        </div>
+
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="right hideBar cpointer">展开搜索</div>
+                    <div class="clearfix"></div>
+                    <div style="margin: 20px">
+                        <h1 class="store_ul_title mb10">全部</h1>
+
+                        <div>
+                            {:W('InfoList',array('name'=>$_GET['name'],'map'=>$_GET,'class'=>'store_ul_info','type'=>'list'))}
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <script>
+            $(document).ready(function () {
+                $('.store_search_input').keydown(function (e) {
+                    key = e.which;
+                    if (key == 13) {
+                        //alert($(this).attr('data'));
+                        store_search($(this).attr('data'));
+                        return false;
+                    }
+                });
+
+            });
+
+            function store_search(frm) {
+                var d = $('#frm_' + frm).serialize();
+                var url = $('#frm_' + frm).attr('data-url');
+                // alert(url);
+                location.href = url + '&' + frm + '=' + escape($('#i_' + frm).val());
+            }
+
+            $(document).ready(function () {
+                $(".hideBar").click(function () {
+                    $(".hideRoll").slideToggle("slow", function () {
+                        if ($('.hideBar').text() == '暂时收起') {
+                            $('.hideBar').text('展开搜索');
+                        }
+                        else {
+                            $('.hideBar').text('暂时收起');
+                        }
+                    });
+                });
+            });
+        </script>
+    </div>
+</block>

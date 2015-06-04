@@ -129,29 +129,7 @@ class AuthManagerController extends AdminController
     }
 
 
-    /**
-     * 访问授权页面
-     * @author 朱亚杰 <zhuyajie@topthink.net>
-     */
-    public function access()
-    {
-        $this->updateRules();
-        $auth_group = M('AuthGroup')->where(array('status' => array('egt', '0'), 'module' => 'admin', 'type' => AuthGroupModel::TYPE_ADMIN))
-            ->getfield('id,id,title,rules');
-        $node_list = $this->returnNodes();
-        $map = array('module' => 'admin', 'type' => AuthRuleModel::RULE_MAIN, 'status' => 1);
-        $main_rules = M('AuthRule')->where($map)->getField('name,id');
-        $map = array('module' => 'admin', 'type' => AuthRuleModel::RULE_URL, 'status' => 1);
-        $child_rules = M('AuthRule')->where($map)->getField('name,id');
 
-        $this->assign('main_rules', $main_rules);
-        $this->assign('auth_rules', $child_rules);
-        $this->assign('node_list', $node_list);
-        $this->assign('auth_group', $auth_group);
-        $this->assign('this_group', $auth_group[(int)$_GET['group_id']]);
-        $this->meta_title = '访问授权';
-        $this->display('managergroup');
-    }
 
     /**
      * 管理员用户组数据写入/更新
@@ -235,23 +213,7 @@ class AuthManagerController extends AdminController
         $this->display();
     }
 
-    /**
-     * 将分类添加到用户组的编辑页面
-     * @author 朱亚杰 <zhuyajie@topthink.net>
-     */
-    public function category()
-    {
-        $auth_group = M('AuthGroup')->where(array('status' => array('egt', '0'), 'module' => 'admin', 'type' => AuthGroupModel::TYPE_ADMIN))
-            ->getfield('id,id,title,rules');
-        $group_list = D('Category')->getTree();
-        $authed_group = AuthGroupModel::getCategoryOfGroup(I('group_id'));
-        $this->assign('authed_group', implode(',', (array)$authed_group));
-        $this->assign('group_list', $group_list);
-        $this->assign('auth_group', $auth_group);
-        $this->assign('this_group', $auth_group[(int)$_GET['group_id']]);
-        $this->meta_title = '分类授权';
-        $this->display();
-    }
+
 
     public function tree($tree = null)
     {
@@ -442,12 +404,37 @@ class AuthManagerController extends AdminController
             $this->error('必须选择节点。');
         }
     }
+    /**
+     * 访问授权页面
+     * @author 朱亚杰 <zhuyajie@topthink.net>
+     */
+    public function access()
+    {
+        $this->updateRules();
+        $auth_group = M('AuthGroup')->where(array('status' => array('egt', '0'), 'module' => 'admin', 'type' => AuthGroupModel::TYPE_ADMIN))
+            ->getfield('id,id,title,rules');
+        $node_list = $this->returnNodes();
+        $map = array('module' => 'admin', 'type' => AuthRuleModel::RULE_MAIN, 'status' => 1);
+        $main_rules = M('AuthRule')->where($map)->getField('name,id');
+        $map = array('module' => 'admin', 'type' => AuthRuleModel::RULE_URL, 'status' => 1);
+        $child_rules = M('AuthRule')->where($map)->getField('name,id');
+
+        $this->assign('main_rules', $main_rules);
+        $this->assign('auth_rules', $child_rules);
+        $this->assign('node_list', $node_list);
+        $this->assign('auth_group', $auth_group);
+        $this->assign('this_group', $auth_group[(int)$_GET['group_id']]);
+        $this->meta_title = '访问授权';
+        $this->display('');
+    }
+
     public function accessUser()
     {
         $aId = I('get.group_id', 0, 'intval');
 
         if (IS_POST) {
-            $aOldRule = I('post.old_rules', '', 'op_t');
+            $aId = I('id', 0, 'intval');
+            $aOldRule = I('post.old_rules', '', 'text');
             $aRules = I('post.rules', array());
             $rules = $this->getMergedRules($aOldRule, $aRules);
             $authGroupModel = M('AuthGroup');
@@ -462,7 +449,7 @@ class AuthManagerController extends AdminController
 
         }
         $this->updateRules();
-        $auth_group = M('AuthGroup')->where(array('status' => array('egt', '0'), 'module' => array('neq', 'admin'), 'type' => AuthGroupModel::TYPE_ADMIN))
+        $auth_group = M('AuthGroup')->where(array('status' => array('egt', '0'), 'type' => AuthGroupModel::TYPE_ADMIN))
             ->getfield('id,id,title,rules');
         $node_list = $this->getNodeListFromModule(D('Common/Module')->getAll());
 
@@ -479,6 +466,7 @@ class AuthManagerController extends AdminController
         $this->assign('node_list', $node_list);
         $this->assign('auth_group', $auth_group);
         $this->assign('this_group', $group);
+
         $this->meta_title = '用户前台授权';
         $this->display('');
     }
@@ -506,7 +494,7 @@ class AuthManagerController extends AdminController
     }
 
     //预处理规则，去掉未安装的模块
-    private function getNodeListFromModule($modules)
+    public function getNodeListFromModule($modules)
     {
         $node_list = array();
         foreach ($modules as $module) {

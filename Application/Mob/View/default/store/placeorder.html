@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>{:L('store')} | {:modC('WEB_SITE_NAME','OpenSNS')}</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel="alternate icon" type="image/png" href="assets/i/favicon.png">
+    <link rel="stylesheet" href="__CSS__/amazeui.min.css"/>
+    <link rel="stylesheet" href="__CSS__/store.css"/>
+    <link rel="stylesheet" href="__CSS__/app.css"/>
+    <style>
+
+        header {
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 200%;
+            color: #333;
+            margin-bottom: 0px;
+        }
+
+        header p {
+            font-size: 14px;
+        }
+
+    </style>
+</head>
+<body>
+
+<header data-am-widget="header" class="am-header am-header-default am-header-fixed">
+
+
+    <div class="am-header-left am-header-nav">
+        <a href="javascript:history.go(-1);"><span class="am-icon-chevron-left"></span></a>
+        <a href="#phone-link" class="">
+            <i class="am-header-icon am-icon-bell-o"></i>
+        </a>
+    </div>
+    <h1 class="am-header-title">
+        收货地址确认
+    </h1>
+
+    <div class="am-header-right am-header-nav">
+
+        <a href="#nav-link" class="">
+            <i class="am-menu-toggle-icon am-icon-bars"></i>
+        </a>
+    </div>
+
+</header>
+
+
+<div class="placeorder-container ">
+    <div class="">
+        <form action="" class="am-form" id="doc-vld-msg">
+            <fieldset>
+                <div class="am-form-group">
+                    <label>收货人姓名</label>
+                    <input type="text" id="title" minlength="1" placeholder="收货人姓名" class="am-form-field" required/>
+                </div>
+                <div class="am-form-group">
+                    <label>邮政编码</label>
+                    <input type="password" placeholder="收件人所在邮政编码" pattern="/^\d{6}$/" required/>
+                </div>
+                <div class="am-form-group">
+                    <label>手机号码</label>
+                    <input type="password" placeholder="填写收货人的手机号码，用于快递签收。" pattern="^/^1((3|5|8){1}\d{1}|70)\d{8}$/"
+                           required/>
+                </div>
+                <div class="am-form-group">
+                    <label>评论：</label>
+                    <textarea minlength="10" maxlength="100"></textarea>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    <div class="goods-list">
+        <h4>确认订单</h4>
+        <ul>
+               <php>for($i=1;$i<3;$i++){</php>
+            <li>
+                <div class="goods-box am-cf" style="border: 1px solid #F2f2f2;padding: 10px">
+                    <div class="goods-info am-fl"style="margin-right: 10px">
+                        <img style="width: 50px;height: 50px" src="Public/images/default_avatar_128_128.jpg">
+                    </div>
+                    <div class="title am-fl">
+                        <a style="font-size: 14px;max-width: 100%" class="text-more" href="/cat/info.html" target="_blank">三国天然叶脉书签</a>
+                    </div>
+                    <br>
+                    <div >
+                        <div class="price am-fl">
+                            <span>￥<span>0.10</span>元</span>
+                            <b>X</b>
+                            <span>1</span>
+                        </div>
+                        <div class="am-fr">
+                            <span class="total "> = ￥ <span class="comput">0.10</span>元 </span>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <php>}</php>
+        </ul>
+            <div class="am-text-center">总价：<span class="all-total">5000</span></div>
+    </div>
+    <div>
+        <button type="button" class="am-btn am-btn-primary am-btn-block">下单</button>
+    </div>
+</div>
+
+<script src="__JS__/jquery.min.js"></script>
+<script src="__JS__/amazeui.min.js"></script>
+
+</body>
+</html>

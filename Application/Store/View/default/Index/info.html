@@ -1,0 +1,23 @@
+<extend name="Base/common"/>
+<block name="style">
+    <link href="__CSS__/store.css" type="text/css" rel="stylesheet">
+</block>
+<block name="header">
+    <include file="Public/nav"/>
+</block>
+<block name="body">
+    <div class="container">
+        <div class="row">
+            <!--导航栏end-->
+            <div class="mb10 clearfix ">
+                <if condition="$entity['use_detail'] eq -1">
+                    {:W('DefaultInfoTpl/show',array(array('fields'=>$fields,'info'=>$info)))}
+                    <else/>
+                    <div class="">
+                    {$tpl}
+                    </div>
+                </if>
+            </div>
+        </div>
+    </div><script src="__JS__/store.js"></script>
+</block>

@@ -9,14 +9,14 @@
                 <div class="col-xs-3">
 
                     <php> if($my['logo']){</php>
-                    <img class="logo" src="{$my.logo|getThumbImageById=48,48}" alt="{$my.title|op_t|parseWeiboContent}">
+                    <img class="logo" src="{$my.logo|getThumbImageById=48,48}" alt="{$my.title|op_t}">
                     <php>}else{</php>
-                    <img class=" logo" src="__IMG__/icon.jpg" alt="{$my.title|op_t|parseWeiboContent}">
+                    <img class=" logo" src="__IMG__/icon.jpg" alt="{$my.title|op_t}">
                     <php>}</php>
 
                 </div>
                 <div class="col-xs-9"  style="margin-left: -15px;">
-                    <h3><a target="_blank" href="{:U('group/index/group',array('id'=>$my['id']))}">{$my.title|parseWeiboContent}</a></h3>
+                    <h3><a target="_blank" href="{:U('group/index/group',array('id'=>$my['id']))}">{$my.title}</a></h3>
 
                     <p>成员：{$my.member_count}人</p>
                 </div>

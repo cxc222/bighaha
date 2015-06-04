@@ -1,0 +1,191 @@
+ul,
+li {
+  list-style: none;
+  margin-left: 0;
+  padding-left: 0;
+}
+.avatar-img {
+  border-radius: 100%;
+}
+.blog-container {
+  background: #FFFFFF;
+}
+.spliter {
+  border-top: 1px solid #a2a2a2;
+  width: 100%;
+  margin-bottom: 5px;
+  margin-top: 5px;
+}
+.post-thumb {
+  height: 60px;
+  width: 80px;
+}
+.pull-action {
+  text-align: center;
+  height: 45px;
+  line-height: 45px;
+  color: #999;
+}
+.pull-action .am-icon-spin {
+  display: none;
+}
+.pull-action.loading .am-icon-spin {
+  display: block;
+}
+.pull-action.loading .pull-label {
+  display: none;
+}
+.blog-container {
+  width: 100%;
+}
+.blog-container .blog-type {
+  background-color: #F2f2f2;
+}
+.blog-container .blog-type #carousel {
+  position: relative;
+  height: 35px;
+}
+.blog-container .blog-type #carousel #blog-list {
+  display: inline-block;
+  margin: 0px 0px 0px 0px;
+}
+.blog-container .blog-type #carousel #blog-list li {
+  width: 100px;
+  line-height: 35px;
+  padding: 0 5px;
+  display: inline-block;
+  float: left;
+  text-align: center;
+  overflow: hidden;
+}
+.blog-container .blog-type #carousel #blog-list .selected {
+  background-color: #FFFFFF;
+}
+.blog-box-list {
+  top: 49px;
+  bottom: 0;
+  overflow: hidden;
+  margin: 0;
+  width: 100%;
+  /*position:relative;*/
+}
+.blog-box-list .blog-box {
+  padding: 10px;
+  display: block;
+  margin: 0;
+  overflow: hidden;
+  position: relative;
+  text-decoration: none;
+}
+.blog-box-list .blog-box .blog {
+  border: 1px solid #a2a2a2;
+  margin-bottom: 5px;
+  background-color: #FFFFFF;
+}
+.blog-box-list .blog-box .blog .title {
+  text-align: center;
+}
+.blog-box-list .blog-box .blog .title h3 {
+  height: 56px;
+  font-weight: 500;
+  margin: 0px;
+}
+.blog-box-list .blog-box .blog .info {
+  padding: 10px;
+  margin-top: 10px;
+}
+.blog-box-list .blog-box .blog .info .box-foot {
+  font-size: 12px;
+  color: #999;
+}
+.blog-box-list .blog-box .blog .info .box-foot .name {
+  font-size: 13px;
+  padding: 2px;
+}
+.blog-box-list .blog-box .blog .info .box-foot .hot {
+  font-size: 13px;
+  padding: 2px;
+}
+.blog-box-list .blog-box .blog .entry-content {
+  padding: 0px;
+  line-height: 150%;
+  margin: 10px 0;
+  word-break: normal;
+  word-wrap: break-word;
+  text-align: center;
+}
+.blog-box-list .blog-box .blog .entry-content .content-box {
+  padding: 5px;
+}
+.blog-box-list .blog-box .blog .entry-content .content-box .content {
+  line-height: 40px;
+  width: 100%;
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/*资讯详情*/
+.blog-detail-container .blog-detail .blog-box {
+  background: #F2F2F2;
+  border-bottom: 1px solid #ddd;
+  display: block;
+  margin: 0;
+  overflow: hidden;
+  position: relative;
+  text-decoration: none;
+}
+.blog-detail-container .blog-detail .blog-box .blog {
+  margin-bottom: 5px;
+  background-color: #FFFFFF;
+}
+.blog-detail-container .blog-detail .blog-box .blog .blog-content {
+  line-height: 150%;
+  margin: 10px 0;
+  word-break: normal;
+  word-wrap: break-word;
+}
+.blog-detail-container .blog-detail .blog-box .blog .blog-content .title {
+  text-align: center;
+}
+.blog-detail-container .blog-detail .blog-box .blog .blog-content .title h3 {
+  margin: 0px;
+}
+.blog-detail-container .blog-detail .blog-box .blog .blog-content .title .info {
+  padding: 0px 10px;
+}
+.blog-detail-container .blog-detail .blog-box .blog .blog-content .title .info .name {
+  font-size: 13px;
+  padding: 2px;
+}
+.blog-detail-container .blog-detail .blog-box .blog .blog-content .title .info .hot {
+  font-size: 13px;
+  padding: 2px;
+}
+.blog-detail-container .blog-detail .blog-box .blog .blog-content .content-box {
+  padding: 5px;
+}
+.blog-detail-container .blog-detail .blog-box .blog .blog-content .content-box .content {
+  padding: 10px;
+}
+.blog-detail-container .comment-list {
+  margin-top: 20px;
+}
+.blog-detail-container .comment-list .comment-item {
+  background-color: #ffffff;
+  padding: 10px;
+  margin-bottom: 5px;
+  border: 1px solid #F2F2F2;
+}
+.blog-detail-container .comment-list .comment-item .user-info .time {
+  font-size: 13px;
+  text-align: right;
+}
+.blog-detail-container .comment-list .comment-item .content {
+  padding: 10px;
+}
+.blog-type-list .type-list .blog-type .type {
+  padding: 10px 65px 10px 10px;
+  background-color: #FFFFFF;
+  border-bottom: 1px solid #e5e5e5;
+}

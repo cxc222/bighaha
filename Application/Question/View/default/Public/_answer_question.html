@@ -1,0 +1,46 @@
+<div class="one_question clearfix">
+    <div class="col-xs-8">
+        <h2 class="q_title">
+            <img src="__IMG__/question_32.png" class="q_icon"/>
+            <a target="_blank" href="{:U('Question/Index/detail',array('id'=>$data['question']['id']))}" class="text-more title">&nbsp;{$data.question.title}</a>
+        </h2>
+        <div>
+            <a target="_blank" ucard="{$data.question.uid}" href="{$data.question.user.space_url}">{$data.question.user.nickname}</a>
+            <span class="q_black_info">添加了问题</span>
+        </div>
+        <div class="q_detail">
+            <div>
+                <ins>{$data.question.title}</ins>
+            </div>
+            <br>
+            <div>
+                补充说明：
+                <ins>
+                    {$data.question.info}
+                    <if condition="$data['question']['img']">
+                        <br/>
+                        <img src="{$data['question']['img']}" style="margin-top: 10px;"/>
+                    </if>
+                </ins>
+            </div>
+        </div>
+        <div class="q_black_info">
+            回答数：{$data.question.answer_num}&nbsp;&nbsp;
+            <!--支持数：{$data.support}&nbsp;&nbsp;-->
+            创建时间：{$data.question.create_time|friendlyDate}
+        </div>
+    </div>
+    <div class="col-xs-4 best_answer">
+        <div class="a_title">
+                <span class="q_black_info" style="line-height: 24px;vertical-align: middle;">
+                        <img src="__IMG__/answer_24.png"/>&nbsp;我的回答
+                </span>
+        </div>
+        <div class="a_content">
+            <ins>
+                {$data['content']}
+                <div class="clearfix"></div>
+            </ins>
+        </div>
+    </div>
+</div>

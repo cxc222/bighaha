@@ -18,9 +18,9 @@ use Think\Model;
 class IssueModel extends Model {
 
     protected $tableName='issue';
-	protected $_validate = array(
-		array('url','require','url必须填写'), //默认情况下用正则进行验证
-	);
+    protected $_validate = array(
+        array('url','require','url必须填写'), //默认情况下用正则进行验证
+    );
     protected $_auto = array(
         array('create_time', NOW_TIME, self::MODEL_INSERT),
         array('update_time', NOW_TIME, self::MODEL_UPDATE),

@@ -1,0 +1,14 @@
+<ul class="nav nav-pills nav-stacked" role="tablist" style="max-width: 300px;">
+    <li id="side_verify" role="presentation"><a href="{:U('verify')}">开发者认证</a></li>
+    <li id="side_my" role="presentation"><a href="{:U('my')}">控制面板</a></li>
+    <li id="side_myplugin"  role="presentation"><a href="{:U('myplugin')}">我的插件</a></li>
+    <li id="side_mymodule"  role="presentation"><a href="{:U('mymodule')}">我的模块</a></li>
+    <!--    <li role="presentation"><a href="#">已上架</a></li>
+        <li role="presentation"><a href="#">审核中</a></li>-->
+    <!--         <li role="presentation"><a href="#">我的模块</a></li>
+             <li role="presentation"><a href="#">我的主题</a></li>-->
+
+</ul>
+<script>
+    $('#side_<php>echo ACTION_NAME</php>').addClass('active')
+</script>

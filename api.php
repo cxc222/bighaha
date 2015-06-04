@@ -25,5 +25,11 @@ if($_REQUEST['session_id']) {
 // 绑定访问Admin模块
 define('BIND_MODULE','App');
 define ( 'APP_PATH', './Application/' );
+/**
+ *  主题目录 OpenSNS模板地址 （与ThinkPHP中的THEME_PATH不同）
+ *  @author 郑钟良<zzl@ourstu.com>
+ */
+define ('OS_THEME_PATH', './Theme/');
+
 define ( 'RUNTIME_PATH', './Runtime/' );
 require './ThinkPHP/ThinkPHP.php';

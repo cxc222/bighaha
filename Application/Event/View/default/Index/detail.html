@@ -2,23 +2,23 @@
 
 <block name="style">
     <link href="__CSS__/event.css" rel="stylesheet" type="text/css"/>
-    <link type="text/css" rel="stylesheet" href="__PUBLIC__/Core/js/ext/magnific/magnific-popup.css"/>
 </block>
-
+<block name="header">
+    <include file="_nav"/>
+</block>
 <block name="body">
 
 <!--导航-->
-<include file="_nav"/>
 
 
 
 
-    <div class="col-md-3 pull-right" style="z-index: 99">
+    <div class="col-xs-3 pull-right" style="z-index: 99">
         <include file="_right"/>
     </div>
 
 
-    <div class="col-md-9">
+    <div class="col-xs-9">
 
         <div class="forum_module " style="width: 100%; min-height: 500px;padding: 0;padding-top: 10px">
             <div class="clearfix">
@@ -49,7 +49,7 @@
                     </if>
 
                 </div>
-                <div class="pull-left col-xs-12 col-md-6" >
+                <div class="pull-left col-xs-6" >
 
                     <div class="event_fq_count pull-left">
 
@@ -152,7 +152,7 @@
 
             <div class="clearfix"></div>
             <div style="padding: 5px 20px 50px 20px;">
-                {:hook('localComment', array('path'=>"Event/event/$content[id]", 'uid'=>$content['uid']))}
+                {:hook('localComment', array('path'=>"Event/event/$content[id]", 'uid'=>$content['uid'],'count_model'=>'event','count_field'=>'reply_count'))}
             </div>
 
         </div>
@@ -163,7 +163,6 @@
 
 <block name="script">
     <script type="text/javascript" src="__STATIC__/uploadify/jquery.uploadify.min.js"></script>
-    <script type="text/javascript" src="__PUBLIC__/Core/js/ext/magnific/jquery.magnific-popup.min.js"></script>
     <script>
         $(function () {
             $('#top_nav >li >a ').mouseenter(function () {
@@ -184,7 +183,7 @@
             });
 
 
-            bindSupport();
+
             /**
              * 取消报名
              * */

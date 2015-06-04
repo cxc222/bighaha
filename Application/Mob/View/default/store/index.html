@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>{:L('store')} | {:modC('WEB_SITE_NAME','OpenSNS')}</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel="alternate icon" type="image/png" href="assets/i/favicon.png">
+    <link rel="stylesheet" href="__CSS__/amazeui.min.css"/>
+    <link rel="stylesheet" href="__CSS__/store.css"/>
+    <link rel="stylesheet" href="__CSS__/app.css"/>
+    <style>
+        .header {
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 200%;
+            color: #333;
+            margin-bottom: 0px;
+        }
+
+        .header p {
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<header data-am-widget="header" class="am-header am-header-default am-header-fixed">
+
+
+
+    <div class="am-header-left am-header-nav">
+        <a href="javascript:history.go(-1);"><span class="am-icon-chevron-left"></span></a>
+        <a href="#phone-link" class="">
+            <i class="am-header-icon am-icon-bell-o"></i>
+        </a>
+    </div>
+    <h1 class="am-header-title">
+        微店
+    </h1>
+
+    <div class="am-header-right am-header-nav">
+
+        <a href="#nav-link" class="">
+            <i class="am-menu-toggle-icon am-icon-bars"></i>
+        </a>
+    </div>
+
+</header>
+
+
+<div class="store-container ">
+
+
+    <div>
+        <a href="{:U('store/search')}" style="margin-top: 0px">
+            <input type="text" class="am-form-field am-input-sm "
+                   placeholder="搜索宝贝、店铺">
+        </a>
+    </div>
+    <!--此组件根据图片尺寸生成 后端固定尺寸-->
+    <div data-am-widget="slider" class="am-slider am-slider-default"
+         data-am-slider='{animation:slide,slideshow:false}'>
+        <ul class="am-slides">
+            <li>
+                <img src="Application/Mob/Static/test/551931edeecf0.jpg">
+
+                <div class="am-slider-desc">美女</div>
+            </li>
+            <li>
+                <img src="Application/Mob/Static/test/551931edeecf0.jpg">
+
+                <div class="am-slider-desc">美女</div>
+            </li>
+            <li>
+                <img src="Application/Mob/Static/test/551931edeecf0.jpg">
+
+                <div class="am-slider-desc">美女</div>
+            </li>
+            <li>
+                <img src="Application/Mob/Static/test/551931edeecf0.jpg">
+
+                <div class="am-slider-desc">美女</div>
+            </li>
+        </ul>
+    </div>
+    <!--店铺街链接-->
+
+    <div class="am-g">
+        <div class="am-u-sm-12 am-text-center" style="border: dashed 1px #f5f5f5">
+            <a href="{:U('store/store')}" style="line-height: 200px">店铺街</a>
+        </div>
+    </div>
+    <!--热门商品与热门店铺链接-->
+    <div class="am-g">
+        <div class="am-u-sm-6 am-text-center" style="border: dashed 1px #f5f5f5">
+            <a href="{:U('store/goods')}" style="line-height: 200px">热门商品</a>
+        </div>
+        <div class="am-u-sm-6 am-text-center" style="border: dashed 1px #f5f5f5">
+            <a href="{:U('store/shop')}" style="line-height: 200px">热门店铺</a>
+        </div>
+    </div>
+</div>
+
+
+<div data-am-widget="navbar" class="am-navbar am-cf am-navbar-default" id="">
+    <ul class="am-navbar-nav am-cf am-avg-sm-5">
+        <li>
+            <a>
+                微店首页
+            </a>
+        </li>
+        <li>
+            <a href="{:U('store/shop')}" class="">
+                我的店铺
+            </a>
+        </li>
+        <li>
+            <a href="{:U('store/order')}" class="">
+                我的订单
+            </a>
+        </li>
+
+        <li>
+            <a href="{:U('store/mycar')}" class="">
+                购物车
+            </a>
+        </li>
+        <li>
+            <a href="￥}" class="">
+                个人中心
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+<script src="__JS__/jquery.min.js"></script>
+<script src="__JS__/amazeui.min.js"></script>
+
+</body>
+</html>

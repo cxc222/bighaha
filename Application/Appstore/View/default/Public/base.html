@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <include file="Public/seo"/>
+    <script>
+        //全局内容的定义
+        var _ROOT_ = "__ROOT__";
+        var MID = "{:is_login()}";
+        var MODULE_NAME="<php>echo MODULE_NAME;</php>";
+        var ACTION_NAME="<php>echo ACTION_NAME;</php>";
+        var initNum = "{:C('WEIBO_WORDS_COUNT')}";
+    </script>
+    <include file="Public/var"/>
+    <link rel="stylesheet" href="__CSS__/bootstrap.css">
+    <!-- 全局css -->
+    <link rel="stylesheet" href="__CSS__/common.css">
+
+
+    <!-- 增强IE兼容性 -->
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+    <script src="__STATIC__/bootstrap/js/html5shiv.js"></script>
+    <script src="__STATIC__/bootstrap/js/respond.js"></script>
+    <![endif]-->
+
+    <!-- jQuery库 -->
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="__STATIC__/jquery-1.10.2.min.js"></script>
+    <![endif]-->
+    <!--[if gte IE 9]><!-->
+    <script type="text/javascript" src="__STATIC__/jquery-2.0.3.min.js"></script>
+    <!--<![endif]-->
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="__JS__/bootstrap.min.js"></script>
+    <script src="__JS__/appstore.js"></script>
+    <meta charset="utf-8">
+</head>
+<body>
+<!--顶部导航开始-->
+<include file="Public/nav"/>
+<!--顶部导航结束-->
+<div style="padding-top: 60px"></div>
+<block name="body"></block>
+
+<!--底部版权部分-->
+<div class="container footer" >
+    <php>$config = api('Config/lists');
+        C($config);</php>
+    © 2003-2014 <a target="_blank" href="http://www.ourstu.com">嘉兴想天信息科技有限公司</a> 版权所有 {:C('COUNT_CODE')}
+
+</div>
+
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/Core/js/ext/toastr/toastr.min.css"/>
+<script type="text/javascript" src="__PUBLIC__/Core/js/ext/toastr/toastr.min.js"></script>
+</body>
+</html>

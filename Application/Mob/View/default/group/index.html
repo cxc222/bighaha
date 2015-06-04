@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>{:L('group')} | {:modC('WEB_SITE_NAME','OpenSNS')}</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="renderer" content="webkit">
+    <script src="__JS__/jquery.min.js"></script>
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel="alternate icon" type="image/png" href="assets/i/favicon.png">
+    <link rel="stylesheet" href="__CSS__/amazeui.min.css"/>
+    <link rel="stylesheet" href="__CSS__/group.css"/>
+    <link rel="stylesheet" href="__CSS__/app.css"/>
+    <style>
+        .header h1 {
+            font-size: 200%;
+            color: #333;
+            margin-top: 30px;
+        }
+
+        .header p {
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<header data-am-widget="header" class="am-header am-header-default am-header-fixed">
+    <div class="am-header-left am-header-nav">
+        <a href="javascript:history.go(-1);"><span class="am-icon-chevron-left"></span></a>
+        <a href="#phone-link" class="">
+            <i class="am-header-icon am-icon-bell-o"></i>
+        </a>
+    </div>
+    <h1 class="am-header-title">
+        群组
+    </h1>
+
+    <div class="am-header-right am-header-nav">
+        <a href="{:U('group/addgroup')}" class="">
+            <i class="am-header-icon am-icon-pencil"></i>
+        </a>
+        <a href="#nav-link" class="">
+            <i class="am-menu-toggle-icon am-icon-bars"></i>
+        </a>
+    </div>
+</header>
+{:W('Mob/UserMenu/index')}
+<div class="group-container ">
+    <ul class="am-g  group-list am-avg-sm-2 am-avg-md-4 am-avg-lg-5" style="margin:0 auto">
+        <volist name="group" id="vl">
+        <li class="group-Box ">
+            <div class="group">
+                <div class="group-info-box">
+                    <div class="am-text-center cover">
+                        <a href="{:U('group/groupdetail')}"><img class=""
+                                                                 src="{$vl.logo}" style="width: 100%"></a>
+                    </div>
+                    <div class="am-text-center content">
+                        <a href="{:U('group/groupdetail')}" class="title">{$vl.title}</a>
+
+                        <div class="substance">{$vl.detail}</div>
+                    </div>
+                    <div class="spliter "></div>
+                    <div class="am-text-center record am-g">
+                        <span class="am-text-center post-count am-u-sm-6"><i class=" am-icon-file-text-o">
+                        </i>{$vl.post_count}</span>
+
+                        <span class="am-text-center sign-count am-u-sm-6">  <i class=" am-icon-group">
+                        </i>{$vl.member_count}</span>
+                    </div>
+                    <div class="spliter "></div>
+                    <div class="foot-box am-g">
+                        <div class="admin-info am-u-sm-6">
+                            <img class="avatar-img" style="width: 32px" src="Public/images/default_avatar_128_128.jpg">
+                            <span class="name"><a href="##">{$vl.user.nickname}</a></span>
+
+                        </div>
+                        <if condition="$vl.is_login eq 1">
+                        <div class="attend-btn am-u-sm-6" style="text-align: right">
+                            <a class="am-btn-xs diy-btn am-btn-primary am-radius" data-group-id href="{:U('Mob/group/groupAdmin',array('id'=>$vl['id']))}">管理</a>
+                        </div>
+                        </if>
+                        <if condition="$vl.is_login eq 0">
+                        <div class="attend-btn am-u-sm-6" style="text-align: right">
+                            <a class="am-btn-xs diy-btn am-btn-primary am-radius" data-group-id href="###">+加入</a>
+                        </div>
+                            </if>
+                    </div>
+
+                </div>
+            </div>
+
+
+        </li>
+        </volist>
+    </ul>
+</div>
+
+<div data-am-widget="navbar" class="am-navbar am-cf am-navbar-default "
+     id="">
+    <ul class="am-navbar-nav am-cf am-avg-sm-4">
+        <li>
+            <a href="{:U('Mob/group/index')}">
+                全部群组
+            </a>
+        </li>
+        <li>
+            <a href="{:U('Mob/group/hotGroup')}">
+                热门群组
+            </a>
+        </li>
+        <li>
+            <a href="{:U('Mob/group/myGroup')}">
+                我的群组
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+<script src="__JS__/amazeui.min.js"></script>
+</body>
+</html>

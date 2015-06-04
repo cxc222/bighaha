@@ -99,7 +99,8 @@ class AtlasApi extends Api
         }
     }
 
-    /**获取到我关注的人的UID列表，包括了自己
+    /**
+     * 获取到我关注的人的UID列表，包括了自己
      * @return array
      * @auth 陈一枭
      */
