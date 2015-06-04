@@ -79,7 +79,8 @@ class Qiniu{
      */
     public function save(&$file,$replace=true) {
         //$file['name'] = $file['savepath'] . $file['savename'];
-        $key = str_replace('/', '_', $file['name']);
+       // $key = str_replace('/', '_', $file['name']);
+    	$key =$this->rootPath.$file['savepath'] . $file['savename'];
         $upfile = array(
             'name'=>'file',
             'fileName'=>$key,
@@ -102,5 +103,12 @@ class Qiniu{
     public function info($key){
         return $this->qiniu->info($key);
     }
-
+    
+    /**
+     * 删除源文件
+     * @param unknown $key	七牛文件key, 数据库中的path
+     */
+    public function del($key){
+    	return $this->qiniu->del($key);
+    }
 }

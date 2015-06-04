@@ -19,6 +19,7 @@ class AtlasController extends AdminController
 {
 	protected $atlasModel;
 	protected $atlasCollectionModel;
+	protected $atlasPictureModel;
 	protected $qiniu;
 	public $error;
 	
@@ -27,14 +28,14 @@ class AtlasController extends AdminController
 		$this->meta_title = '图集管理';
 		$this->atlasModel = D('Atlas/Atlas');
 		$this->atlasCollectionModel = D('Atlas/Atlas_collection');
-		
-		$config = array(
+		$this->atlasPictureModel = D('Atlas/AtlasPicture');
+		/* $config = array(
 				'accessKey'=>'WPWs-mQSibJXZd7m_kL_cM0hwTIMCyFjzvgTFeRq',
 				'secrectKey'=>'TTUZUuWL8jug5LzxtQGwCPuVmN8-9DXMeFSrDzBa',
 				'bucket'=>'bighaha',
 				'domain'=>'7xih3v.com1.z0.glb.clouddn.com'
-		);
-		$this->qiniu = new QiniuStorage($config);
+		); */
+		$this->qiniu = new QiniuStorage(C("UPLOAD_QINIU_CONFIG"));
 		parent::_initialize();
 	}
 	
@@ -55,14 +56,12 @@ class AtlasController extends AdminController
 	
 		$builder->title('内容管理')
 		->buttonNew(U('Atlas/editAtlas'))
-		->setStatusUrl(U('setEventContentStatus'))
+		->setStatusUrl(U('setAtlasStatus'))
 		->buttonDisable('', '审核不通过')
 		->buttonDelete()
 		->button('设为推荐', array_merge($attr, array('url' => U('doRecommend', array('tip' => 1)))))
 		->button('取消推荐', array_merge($attr, array('url' => U('doRecommend', array('tip' => 0)))))
-	
-		->button('采集数据',array('href'=>U('collection')))	//采集数据
-	
+		
 		->keyId()->keyLink('content', '内容', 'Atlas/Index/detail?id=###')
 		->keyUid()->keyCreateTime('addtime')->keyStatus()
 		->keyMap('is_recommend', '是否推荐', array(0 => '否', 1 => '是'))
@@ -382,23 +381,35 @@ class AtlasController extends AdminController
 	 * @param $status
 	 * autor:xjw129xjt
 	 */
-	public function setEventContentStatus($ids, $status)
+	public function setAtlasStatus($ids, $status)
 	{
 		$builder = new AdminListBuilder();
 		if ($status == 1) {
 			foreach ($ids as $id) {
-				$content = D('Event')->find($id);
-				D('Common/Message')->sendMessage($content['uid'], "管理员审核通过了您发布的内容。现在可以在列表看到该内容了。", $title = '专辑内容审核通知', U('Event/Index/detail', array('id' => $id)), is_login(), 2);
+				$content = D('Atlas')->find($id);
+				D('Common/Message')->sendMessage($content['uid'], "管理员审核通过了您发布的内容。现在可以在列表看到该内容了。", $title = '图集内容审核通知', U('Atlas/Index/detail', array('id' => $id)), is_login(), 2);
 				/*同步微博*/
 				$user = query_user(array('username', 'space_link'), $content['uid']);
-				$weibo_content = '管理员审核通过了@' . $user['username'] . ' 的内容：【' . $content['title'] . '】，快去看看吧：' . "http://$_SERVER[HTTP_HOST]" . U('Event/Index/detail', array('id' => $content['id']));
+				$weibo_content = '管理员审核通过了@' . $user['username'] . ' 的内容：【' . $content['content'] . '】，快去看看吧：' . "http://$_SERVER[HTTP_HOST]" . U('Atlas/Index/detail', array('id' => $content['id']));
 				$model = D('Weibo/Weibo');
 				$model->addWeibo(is_login(), $weibo_content);
 				/*同步微博end*/
 			}
-	
-		}
-		$builder->doSetStatus('Event', $ids, $status);
+		}else if ($status == -1) { //（真删除）
+			$ids = is_array($ids) ? $ids : explode(',', $ids);
+			foreach ($ids as $atlas_id) {
+				$atlas = $this->atlasModel->find($atlas_id);
+				//移除 内容
+				$this->atlasModel->delete($atlas_id);
+				//移除图片
+				$this->atlasPictureModel->del($atlas['image_id']);
+				//删除对应的点赞记录
+				M('atlas_like')->where('atlas_id = '.$atlas_id)->delete();
+				//移除对应的评论
+				M('local_comment')->where(array('app'=>'Atlas','row_id'=>$atlas_id))->delete();
+			}
+        }
+		$builder->doSetStatus('Atlas', $ids, $status);
 	
 	}
 	
