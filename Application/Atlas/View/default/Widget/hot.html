@@ -1,0 +1,16 @@
+<if condition="$lists neq false">
+<section class="cards">
+
+	<volist name="lists" id="atlas">
+		<div class="col-md-6 col-sm-6 col-lg-6">
+			<div class="card">
+				<a href="{:U('atlas/index/detail',array('id'=>$atlas['id']))}" class="media-wrapper img-responsive">
+					<img src="{$atlas.image_id|getAtlasQiniuImageById=###,1,'gravity/Center/crop/!300x300'}" 
+					alt="{$atlas.content|parseWeiboContent}"></a> <a
+					href="{:U('atlas/index/detail',array('id'=>$atlas['id']))}" class="card-heading">{$atlas.content|parseWeiboContent}</a>
+			</div>
+		</div>
+	</volist>
+	
+</section>
+</if>

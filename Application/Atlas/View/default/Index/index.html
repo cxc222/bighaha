@@ -6,7 +6,17 @@
     <include file="Public/nav"/>
 </block>
 <block name="body">
-<div class="col-xs-6">
+<!-- <div class="col-xs-3">
+	广告位：图集首页左边1
+	<script>
+	$(function () {
+		CNZZ_SLOT_Async('383283','ad_index_1');
+	});
+	</script>
+	<div id="ad_index_1"></div>
+	
+</div> -->
+<div class="col-xs-8">
 	<div class="web_content_left">
 		<volist name="atlas_list" id="atlas"> <include
 			file="Public/atlas-item" /> </volist>
@@ -15,16 +25,7 @@
 		</div>
 	</div>
 </div>
-<div class="col-xs-3">
-	<!-- 广告位：图集首页右边1-->
-	<script>
-	$(function () {
-		CNZZ_SLOT_Async('383283','ad_index_1');
-	});
-	</script>
-	<div id="ad_index_1"></div>
-</div>
-<div class="col-xs-3">
+<div class="col-xs-4">
 	<!-- 广告位：图集首页右边2-->
 	<script>
 	$(function () {
@@ -32,6 +33,7 @@
 	});
 	</script>
 	<div id="ad_index_2"></div>
+	{:W('Hot/lists')}
 </div>
 </block>
 <block name="script">
