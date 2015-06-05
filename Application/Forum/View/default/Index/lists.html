@@ -25,15 +25,15 @@
                         <div class="common-block-body">
                             <div class="row">
                                 <volist name="t.forums" id="f">
-                                    <div class="col-md-4">
+                                    <div class="col-xs-4">
                                         <div class="one_forum margin_bottom_10 clearfix">
                                             <div class="row forum_bg">
-                                                <div class="col-md-3">
+                                                <div class="col-xs-3">
                                                     <a href="{:U('forum/index/forum',array('id'=>$f['id']))}"><img
                                                             class="logo"
                                                             src="{$f.logo}"/></a>
                                                 </div>
-                                                <div class="col-md-6">
+                                                <div class="col-xs-6">
                                                     <div>
                                                         <h3><a href="{:U('forum/index/forum',array('id'=>$f['id']))}"
                                                                class="">{$f.title}</a>

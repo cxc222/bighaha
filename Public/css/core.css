@@ -1433,7 +1433,10 @@ General list for item with image
   float: left;
 }
 #sub_nav .navbar-default .navbar-nav > li > a:hover,
-#sub_nav .navbar-default .navbar-nav > li > a:focus {
+#sub_nav .navbar-default .navbar-nav > li > a:focus,
+#sub_nav .navbar-default .navbar-nav > .open > a,
+#sub_nav .navbar-default .navbar-nav > .open > a:hover,
+#sub_nav .navbar-default .navbar-nav > .open > a:focus {
   background: none;
 }
 #sub_nav .logo {
@@ -1545,6 +1548,11 @@ General list for item with image
 }
 #nav_bar .nav > li {
   float: left;
+}
+#nav_bar .navbar-default .navbar-nav > .open > a,
+#nav_bar .navbar-default .navbar-nav > .open > a:hover,
+#nav_bar .navbar-default .navbar-nav > .open > a:focus {
+  background: none;
 }
 /*导航栏end*/
 /*底部栏*/

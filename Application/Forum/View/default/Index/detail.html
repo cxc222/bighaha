@@ -66,7 +66,7 @@
                         <a class="ribbion-green">楼主</a>
 
                         <div style="padding: 10px"></div>
-                        <div class="col-md-12 post_title">
+                        <div class="col-xs-12 post_title">
                             <h2>{$post.title|op_t}
                             </h2>
 
@@ -80,7 +80,7 @@
                     </div>
                 </div>
                 <div style="padding: 10px"></div>
-                <div class="col-md-12 main_content">
+                <div class="col-xs-12 main_content">
                     {$post.content|parse_popup|parse_at_users}
                 </div>
                 <div>
@@ -218,7 +218,7 @@
                     </p>
                     {:W('Common/Ueditor/editor',array('myeditor','content','','100%','350px',$config))}
 
-                    <p class="pull-right">
+                    <p class="pull-right" style="margin-top: 10px;">
                         <input type="submit" id="reply_button" class="btn btn-primary" value="发表 Ctrl+Enter"/>
                     </p>
                 </form>

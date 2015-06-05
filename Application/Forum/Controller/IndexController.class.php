@@ -292,9 +292,11 @@ class IndexController extends Controller
     public function doFollowing()
     {
         $aId = I('id', 0, 'intval');
+        $this->checkActionLimit('forum_follow','forum',$aId,get_uid());
         $forumModel = D('Forum');
         list ($result, $follow) = D('Forum')->following($aId);
         if ($result) {
+            action_log('forum_follow','forum',$aId,get_uid());
             $this->ajaxReturn(array('status' => 1, 'info' => $follow == 1 ? '关注成功。' : '取消关注成功。', 'follow' => $follow));
         } else {
             $this->error($forumModel->getError());
@@ -445,8 +447,11 @@ class IndexController extends Controller
         if ($isEdit) {
             $post = D('ForumPost')->where(array('id' => intval($post_id), 'status' => 1))->find();
             $this->requireAllowEditPost($post_id);
+            $this->checkActionLimit('forum_edit_post','Forum',$post_id,get_uid());
         } else {
             $post = array('forum_id' => $forum_id);
+            $this->checkAuth('Forum/Index/addPost',-1,'没有权限发表帖子！');
+            $this->checkActionLimit('forum_add_post','Forum',null,get_uid());
         }
         //获取论坛编号
         $forum_id = $forum_id ? intval($forum_id) : $post['forum_id'];
@@ -485,6 +490,10 @@ class IndexController extends Controller
         //如果是编辑模式，确认当前用户能编辑帖子
         if ($isEdit) {
             $this->requireAllowEditPost($post_id);
+            $this->checkActionLimit('forum_edit_post','Forum',$post_id,get_uid());
+        }else{
+            $this->checkAuth('Forum/Index/addPost',-1,'没有权限发表帖子！');
+            $this->checkActionLimit('forum_add_post','Forum',null,get_uid());
         }
 
         //确认当前论坛能发帖
@@ -514,6 +523,7 @@ class IndexController extends Controller
             if (!$result) {
                 $this->error('编辑失败：' . $model->getError());
             }
+            action_log('forum_edit_post','Forum',$post_id,get_uid());
         } else {
             $data = array('uid' => is_login(), 'title' => $title, 'content' => $content, 'parse' => 0, 'forum_id' => $forum_id);
 
@@ -523,6 +533,7 @@ class IndexController extends Controller
             if (!$result) {
                 $this->error('发表失败：' . $model->getError());
             }
+            action_log('forum_add_post','Forum',$result,get_uid());
             $post_id = $result;
         }
 
@@ -587,28 +598,19 @@ class IndexController extends Controller
         //确认有权限回复
         $this->requireAllowReply($post_id);
 
+        $this->checkActionLimit('forum_post_reply','Forum',null,get_uid());
 
-        //检测回复时间限制
-        $uid = is_login();
-        $near = D('ForumPostReply')->where(array('uid' => $uid))->order('create_time desc')->find();
-
-        $cha = time() - $near['create_time'];
-        if ($cha > 10) {
-
-            //添加到数据库
-            $model = D('ForumPostReply');
-            $before = getMyScore();
-            $result = $model->addReply($post_id, $content);
-            $after = getMyScore();
-            if (!$result) {
-                $this->error('回复失败：' . $model->getError());
-            }
-            //显示成功消息
-            $this->success('回复成功。' . getScoreTip($before, $after), 'refresh');
-        } else {
-            $this->error('请10秒之后再回复');
-
+        //添加到数据库
+        $model = D('ForumPostReply');
+        $before = getMyScore();
+        $result = $model->addReply($post_id, $content);
+        $after = getMyScore();
+        if (!$result) {
+            $this->error('回复失败：' . $model->getError());
         }
+        //显示成功消息
+        action_log('forum_post_reply','Forum',$result,get_uid());
+        $this->success('回复成功。' . getScoreTip($before, $after), 'refresh');
     }
 
     public function doBookmark($post_id, $add = true)
@@ -644,7 +646,6 @@ class IndexController extends Controller
      */
     public function look()
     {
-
         $prefix = C('DB_PREFIX');
         $post = M('')->query("select * from {$prefix}forum_post order by rand()");
         $post = $this->forumPostModel->assignForumInfo($post);
@@ -705,15 +706,9 @@ class IndexController extends Controller
     {
         $this->requirePostExists($post_id);
         $this->requireLogin();
-
-        if (is_administrator()) {
-            return true;
-        }
         //确认帖子时自己的
         $post = D('ForumPost')->where(array('id' => $post_id, 'status' => 1))->find();
-        if ($post['uid'] != is_login()) {
-            $this->error('没有权限编辑帖子');
-        }
+        $this->checkAuth('Forum/Index/editPost',$post['uid'],'没有权限编辑该帖子！');
     }
 
     private function requireForumAllowView($forum_id)

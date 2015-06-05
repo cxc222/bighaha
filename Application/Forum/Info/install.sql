@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS `ocenter_forum` (
   `type_id` int(11) NOT NULL,
   `last_reply_time` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 
 -- -----------------------------
@@ -77,7 +77,7 @@ CREATE TABLE IF NOT EXISTS `ocenter_forum_post` (
   `reply_count` int(11) NOT NULL,
   `is_top` tinyint(4) NOT NULL COMMENT '是否置顶',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=25 DEFAULT CHARSET=utf8;
 
 
 -- -----------------------------
@@ -93,7 +93,7 @@ CREATE TABLE IF NOT EXISTS `ocenter_forum_post_reply` (
   `update_time` int(11) NOT NULL,
   `status` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 
 -- -----------------------------
@@ -107,13 +107,13 @@ CREATE TABLE IF NOT EXISTS `ocenter_forum_type` (
   `pid` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='论坛分类表';
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='论坛分类表';
 
 -- -----------------------------
 -- 表内记录 `ocenter_forum`
 -- -----------------------------
-INSERT INTO `ocenter_forum` VALUES ('1', '默认版块', '1407114174', '12', '1', '1', '0', '133', '123', '1231', '', '1', '0');
-INSERT INTO `ocenter_forum` VALUES ('2', '官方公告', '1417424922', '0', '1', '1', '0', '134', '117', '官方公告发布区', '', '2', '0');
+INSERT INTO `ocenter_forum` VALUES ('1', '默认版块', '1407114174', '0', '1', '1', '0', '133', '123', '1231', '', '1', '0');
+INSERT INTO `ocenter_forum` VALUES ('2', '官方公告', '1417424922', '2', '1', '1', '0', '134', '117', '官方公告发布区', '', '2', '1433388564');
 -- -----------------------------
 -- 表内记录 `ocenter_forum_type`
 -- -----------------------------

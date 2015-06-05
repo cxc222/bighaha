@@ -32,7 +32,6 @@
 .repost span{background: url('http://img.spriteapp.com/ws/www/img/icon/repost.png') no-repeat;padding:5px 0px 5px 30px;}
 .review{}
 
-
 /* .post-body img, .audio-cont p img {
     height: auto;
     width: 100%;
@@ -44,4 +43,4 @@
 .comment-frame {
 	padding:20px;
 }
-
+.Atlas_hot_widget .card img{max-width: 150px; max-height: 150px;}

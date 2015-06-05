@@ -215,12 +215,17 @@ class ModuleModel extends Model
             }
         }
         $auth_id = getSubByKey($default, 'id');
-        $groups = M('AuthGroup')->select();
-        foreach ($groups as $g) {
-            $old = explode(',', $g['rules']);
-            $new = array_merge($old, $auth_id);
-            $g['rules'] = implode(',', $new);
-            M('AuthGroup')->save($g);
+        if($auth_id){
+            $groups = M('AuthGroup')->select();
+            foreach ($groups as $g) {
+                $old = explode(',', $g['rules']);
+                $new = array_merge($old, $auth_id);
+                dump($old);
+                dump($auth_id);
+                dump($new);exit;
+                $g['rules'] = implode(',', $new);
+                M('AuthGroup')->save($g);
+            }
         }
         return true;
     }

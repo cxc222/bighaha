@@ -38,39 +38,39 @@ class ConfigController extends BaseController
      */
     private function _haveOtherRole()
     {
-        $have=0;
+        $have = 0;
 
-        $roleModel=D('Role');
-        $userRoleModel=D('UserRole');
+        $roleModel = D('Role');
+        $userRoleModel = D('UserRole');
 
-        $register_type=modC('REGISTER_TYPE','normal','Invite');
-        $register_type=explode(',',$register_type);
-        if(!in_array('invite',$register_type)){//开启邀请注册
-            $map['status']=1;
-            $map['invite']=0;
-            if($roleModel->where($map)->count()>1){
-                $have=1;
-            }else{
-                $map_user['uid']=is_login();
-                $map_user['role_id']=array('neq',get_login_role());
-                $map_user['status']=array('egt',0);
-                $role_ids=$userRoleModel->where($map_user)->field('role_id')->select();
-                if($role_ids){
-                    $role_ids=array_column($role_ids,'role_id');
-                    $map_can['status']=1;
-                    $map_can['id']=array('in',$role_ids);
-                    if($roleModel->where($map_can)->count()){
-                        $have=1;
+        $register_type = modC('REGISTER_TYPE', 'normal', 'Invite');
+        $register_type = explode(',', $register_type);
+        if (!in_array('invite', $register_type)) {//开启邀请注册
+            $map['status'] = 1;
+            $map['invite'] = 0;
+            if ($roleModel->where($map)->count() > 1) {
+                $have = 1;
+            } else {
+                $map_user['uid'] = is_login();
+                $map_user['role_id'] = array('neq', get_login_role());
+                $map_user['status'] = array('egt', 0);
+                $role_ids = $userRoleModel->where($map_user)->field('role_id')->select();
+                if ($role_ids) {
+                    $role_ids = array_column($role_ids, 'role_id');
+                    $map_can['status'] = 1;
+                    $map_can['id'] = array('in', $role_ids);
+                    if ($roleModel->where($map_can)->count()) {
+                        $have = 1;
                     }
                 }
             }
-        }else{
-            $map['status']=1;
-            if($roleModel->where($map)->count()>1){
-                $have=1;
+        } else {
+            $map['status'] = 1;
+            if ($roleModel->where($map)->count() > 1) {
+                $have = 1;
             }
         }
-        $this->assign('can_show_role',$have);
+        $this->assign('can_show_role', $have);
     }
 
     private function _setTab($name)
@@ -88,16 +88,16 @@ class ConfigController extends BaseController
     public function score()
     {
 
-        $scoreModel=D('Ucenter/Score');
-        $scores=$scoreModel->getTypeList();
-        foreach($scores as &$v){
-            $v['value']=$scoreModel->getUserScore(is_login(),$v['id']);
+        $scoreModel = D('Ucenter/Score');
+        $scores = $scoreModel->getTypeList();
+        foreach ($scores as &$v) {
+            $v['value'] = $scoreModel->getUserScore(is_login(), $v['id']);
         }
         unset($v);
-        $this->assign('scores',$scores);
+        $this->assign('scores', $scores);
 
 
-        $level=nl2br(modC('LEVEL','
+        $level = nl2br(modC('LEVEL', '
 0:Lv1 实习
 50:Lv2 试用
 100:Lv3 转正
@@ -105,41 +105,42 @@ class ConfigController extends BaseController
 400:Lv5 经理
 800:Lv6 董事
 1600:Lv7 董事长
-        ','UserConfig'));
-        $this->assign('level',$level);
+        ', 'UserConfig'));
+        $this->assign('level', $level);
 
-        $self=query_user(array('score','title'));
-        $this->assign('self',$self);
+        $self = query_user(array('score', 'title'));
+        $this->assign('self', $self);
 
-        $action=D('Admin/Action')->getAction(array('status'=>1));
-        $action_module=array();
-        foreach($action as &$v){
-            $v['rule_array']=unserialize($v['rule']);
-            foreach($v['rule_array'] as &$o){
-                if(is_numeric($o['rule'])){
-                    $o['rule']=$o['rule']>0?'+'.intval($o['rule']):$o['rule'];
+        $action = D('Admin/Action')->getAction(array('status' => 1));
+        $action_module = array();
+        foreach ($action as &$v) {
+            $v['rule_array'] = unserialize($v['rule']);
+            foreach ($v['rule_array'] as &$o) {
+                if (is_numeric($o['rule'])) {
+                    $o['rule'] = $o['rule'] > 0 ? '+' . intval($o['rule']) : $o['rule'];
                 }
-                $o['score']=D('Score')->getType(array('id'=>$o['field']));
+                $o['score'] = D('Score')->getType(array('id' => $o['field']));
             }
-            if($v['rule_array']!=false){
-                $action_module[$v['module']]['action'][]=$v;
+            if ($v['rule_array'] != false) {
+                $action_module[$v['module']]['action'][] = $v;
             }
 
         }
         unset($v);
 
-        foreach ($action_module as $key=>&$a) {
-            if(empty($a['action'])){
+        foreach ($action_module as $key => &$a) {
+            if (empty($a['action'])) {
                 unset($action_module[$key]);
             }
-            $a['module']=D('Common/Module')->getModule($key);
+            $a['module'] = D('Common/Module')->getModule($key);
         }
 
-        $this->assign('action_module',$action_module);
-
+        $this->assign('action_module', $action_module);
+        $this->_assignSelf();
         $this->_setTab('score');
         $this->display();
     }
+
     public function other()
     {
 
@@ -156,64 +157,64 @@ class ConfigController extends BaseController
 
     public function role()
     {
-        $userRoleModel=D('UserRole');
-        if(IS_POST){
-            $aShowRole=I('post.show_role',0,'intval');
-            $map['role_id']=$aShowRole;
-            $map['uid']=is_login();
-            $map['status']=array('egt',1);
-            if(!$userRoleModel->where($map)->count()){
+        $userRoleModel = D('UserRole');
+        if (IS_POST) {
+            $aShowRole = I('post.show_role', 0, 'intval');
+            $map['role_id'] = $aShowRole;
+            $map['uid'] = is_login();
+            $map['status'] = array('egt', 1);
+            if (!$userRoleModel->where($map)->count()) {
                 $this->error('参数错误！');
             }
-            $result=D('Member')->where(array('uid'=>is_login()))->setField('show_role',$aShowRole);
-            if($result){
-                clean_query_user_cache(is_login(),array('show_role'));
+            $result = D('Member')->where(array('uid' => is_login()))->setField('show_role', $aShowRole);
+            if ($result) {
+                clean_query_user_cache(is_login(), array('show_role'));
                 $this->success('设置成功！');
-            }else{
+            } else {
                 $this->error('设置失败！');
             }
-        }else{
-            $role_id=get_login_role();//当前登录角色
-            $roleModel=D('Role');
-            $userRoleModel=D('UserRole');
+        } else {
+            $role_id = get_login_role();//当前登录角色
+            $roleModel = D('Role');
+            $userRoleModel = D('UserRole');
 
-            $already_role_list=$userRoleModel->where(array('uid'=>is_login()))->field('role_id,status')->select();
-            $already_role_ids=array_column($already_role_list,'role_id');
-            $already_role_list=array_combine($already_role_ids,$already_role_list);
+            $already_role_list = $userRoleModel->where(array('uid' => is_login()))->field('role_id,status')->select();
+            $already_role_ids = array_column($already_role_list, 'role_id');
+            $already_role_list = array_combine($already_role_ids, $already_role_list);
 
-            $map_already_roles['id']=array('in',$already_role_ids);
-            $map_already_roles['status']=1;
-            $already_roles=$roleModel->where($map_already_roles)->order('sort asc')->select();
-            $already_group_ids=array_unique(array_column($already_roles,'group_id'));
+            $map_already_roles['id'] = array('in', $already_role_ids);
+            $map_already_roles['status'] = 1;
+            $already_roles = $roleModel->where($map_already_roles)->order('sort asc')->select();
+            $already_group_ids = array_unique(array_column($already_roles, 'group_id'));
 
-            foreach($already_roles as &$val){
-                $val['user_status']=$already_role_list[$val['id']]['status']!=2?($already_role_list[$val['id']]['status']==1)?'<span style="color: green;">已审核</span>':'<span style="color: #ff0000;">已禁用<span style="color: 333">(如有疑问，请联系管理员)</span></span>':'<span style="color: #0003FF;">正在审核</span>';;
-                $val['can_login']=$val['id']==$role_id?0:1;
-                $val['user_role_status']=$already_role_list[$val['id']]['status'];
+            foreach ($already_roles as &$val) {
+                $val['user_status'] = $already_role_list[$val['id']]['status'] != 2 ? ($already_role_list[$val['id']]['status'] == 1) ? '<span style="color: green;">已审核</span>' : '<span style="color: #ff0000;">已禁用<span style="color: 333">(如有疑问，请联系管理员)</span></span>' : '<span style="color: #0003FF;">正在审核</span>';;
+                $val['can_login'] = $val['id'] == $role_id ? 0 : 1;
+                $val['user_role_status'] = $already_role_list[$val['id']]['status'];
             }
             unset($val);
 
-            $already_group_ids=array_diff($already_group_ids,array(0));//去除无分组角色组
-            if(count($already_group_ids)){
-                $map_can_have_roles['group_id']=array('not in',$already_group_ids);//同组内的角色不显示
+            $already_group_ids = array_diff($already_group_ids, array(0));//去除无分组角色组
+            if (count($already_group_ids)) {
+                $map_can_have_roles['group_id'] = array('not in', $already_group_ids);//同组内的角色不显示
             }
-            $map_can_have_roles['id']=array('not in',$already_role_ids);//去除已有角色
-            $map_can_have_roles['invite']=0;//不需要邀请注册
-            $map_can_have_roles['status']=1;
-            $can_have_roles=$roleModel->where($map_can_have_roles)->order('sort asc')->select();//可持有角色
+            $map_can_have_roles['id'] = array('not in', $already_role_ids);//去除已有角色
+            $map_can_have_roles['invite'] = 0;//不需要邀请注册
+            $map_can_have_roles['status'] = 1;
+            $can_have_roles = $roleModel->where($map_can_have_roles)->order('sort asc')->select();//可持有角色
 
-            $register_type=modC('REGISTER_TYPE','normal','Invite');
-            $register_type=explode(',',$register_type);
-            if(in_array('invite',$register_type)){//开启邀请注册
-                $map_can_have_roles['invite']=1;
-                $can_up_roles=$roleModel->where($map_can_have_roles)->order('sort asc')->select();//可升级角色
-                $this->assign('can_up_roles',$can_up_roles);
+            $register_type = modC('REGISTER_TYPE', 'normal', 'Invite');
+            $register_type = explode(',', $register_type);
+            if (in_array('invite', $register_type)) {//开启邀请注册
+                $map_can_have_roles['invite'] = 1;
+                $can_up_roles = $roleModel->where($map_can_have_roles)->order('sort asc')->select();//可升级角色
+                $this->assign('can_up_roles', $can_up_roles);
             }
 
-            $show_role=query_user(array('show_role'));
-            $this->assign('show_role',$show_role['show_role']);
-            $this->assign('already_roles',$already_roles);
-            $this->assign('can_have_roles',$can_have_roles);
+            $show_role = query_user(array('show_role'));
+            $this->assign('show_role', $show_role['show_role']);
+            $this->assign('already_roles', $already_roles);
+            $this->assign('can_have_roles', $can_have_roles);
 
             $this->_setTab('role');
             $this->display();
@@ -223,31 +224,31 @@ class ConfigController extends BaseController
 
     public function tag()
     {
-        $userTagLinkModel=D('Ucenter/UserTagLink');
-        if(IS_POST){
-            $aTagIds=I('post.tag_ids','','op_t');
-            $result=$userTagLinkModel->editData($aTagIds);
-            if($result){
-                $res['status']=1;
-            }else{
-                $res['status']=0;
-                $res['info']="操作失败！";
+        $userTagLinkModel = D('Ucenter/UserTagLink');
+        if (IS_POST) {
+            $aTagIds = I('post.tag_ids', '', 'op_t');
+            $result = $userTagLinkModel->editData($aTagIds);
+            if ($result) {
+                $res['status'] = 1;
+            } else {
+                $res['status'] = 0;
+                $res['info'] = "操作失败！";
             }
             $this->ajaxReturn($res);
-        }else{
-            $userTagModel=D('Ucenter/UserTag');
-            $map=getRoleConfigMap('user_tag',get_login_role());
-            $ids=M('RoleConfig')->where($map)->getField('value');
-            if($ids){
-                $ids=explode(',',$ids);
-                $tag_list=$userTagModel->getTreeListByIds($ids);
-                $this->assign('tag_list',$tag_list);
+        } else {
+            $userTagModel = D('Ucenter/UserTag');
+            $map = getRoleConfigMap('user_tag', get_login_role());
+            $ids = M('RoleConfig')->where($map)->getField('value');
+            if ($ids) {
+                $ids = explode(',', $ids);
+                $tag_list = $userTagModel->getTreeListByIds($ids);
+                $this->assign('tag_list', $tag_list);
             }
-            $myTags=$userTagLinkModel->getUserTag(is_login());
-            $this->assign('my_tag',$myTags);
-            $my_tag_ids=array_column($myTags,'id');
-            $my_tag_ids=implode(',',$my_tag_ids);
-            $this->assign('my_tag_ids',$my_tag_ids);
+            $myTags = $userTagLinkModel->getUserTag(is_login());
+            $this->assign('my_tag', $myTags);
+            $my_tag_ids = array_column($myTags, 'id');
+            $my_tag_ids = implode(',', $my_tag_ids);
+            $this->assign('my_tag_ids', $my_tag_ids);
             $this->display();
         }
     }
@@ -367,7 +368,7 @@ class ConfigController extends BaseController
             //dump($info_list);exit;
         }
         foreach ($profile_group_list as &$v) {
-            $v['fields']=$this->_getExpandInfo($v['id']);
+            $v['fields'] = $this->_getExpandInfo($v['id']);
         }
 
         $this->assign('profile_group_list', $profile_group_list);
@@ -383,7 +384,7 @@ class ConfigController extends BaseController
     {
         $res = D('field_group')->where(array('id' => $profile_group_id, 'status' => '1'))->find();
         if (!$res) {
-           return array();
+            return array();
         }
         $info_list = $this->_info_list($profile_group_id);
 
@@ -399,14 +400,14 @@ class ConfigController extends BaseController
      */
     public function edit_expandinfo($profile_group_id)
     {
-        $field_list=$this->getRoleFieldIds();
-        if($field_list){
-            $map_field['id']=array('in',$field_list);
-        }else{
+        $field_list = $this->getRoleFieldIds();
+        if ($field_list) {
+            $map_field['id'] = array('in', $field_list);
+        } else {
             $this->error('没有要保存的信息！');
         }
-        $map_field['profile_group_id']=$profile_group_id;
-        $map_field['status']=1;
+        $map_field['profile_group_id'] = $profile_group_id;
+        $map_field['status'] = 1;
         $field_setting_list = D('field_setting')->where($map_field)->order('sort asc')->select();
 
         if (!$field_setting_list) {
@@ -473,10 +474,10 @@ class ConfigController extends BaseController
             }
         }
         $map['uid'] = is_login();
-        $map['role_id']=get_login_role();
+        $map['role_id'] = get_login_role();
         $is_success = false;
         foreach ($data as $dl) {
-            $dl['role_id']=$map['role_id'];
+            $dl['role_id'] = $map['role_id'];
 
             $map['field_id'] = $dl['field_id'];
             $res = D('field')->where($map)->find();
@@ -596,19 +597,19 @@ class ConfigController extends BaseController
     public function _info_list($id = null, $uid = null)
     {
 
-        $fields_list=$this->getRoleFieldIds($uid);
+        $fields_list = $this->getRoleFieldIds($uid);
         $info_list = null;
 
         if (isset($uid) && $uid != is_login()) {
             //查看别人的扩展信息
-            $field_setting_list = D('field_setting')->where(array('profile_group_id' => $id, 'status' => '1', 'visiable' => '1','id'=>array('in',$fields_list)))->order('sort asc')->select();
+            $field_setting_list = D('field_setting')->where(array('profile_group_id' => $id, 'status' => '1', 'visiable' => '1', 'id' => array('in', $fields_list)))->order('sort asc')->select();
 
             if (!$field_setting_list) {
                 return null;
             }
             $map['uid'] = $uid;
         } else if (is_login()) {
-            $field_setting_list = D('field_setting')->where(array('profile_group_id' => $id, 'status' => '1','id'=>array('in',$fields_list)))->order('sort asc')->select();
+            $field_setting_list = D('field_setting')->where(array('profile_group_id' => $id, 'status' => '1', 'id' => array('in', $fields_list)))->order('sort asc')->select();
 
             if (!$field_setting_list) {
                 return null;
@@ -629,15 +630,16 @@ class ConfigController extends BaseController
         return $info_list;
     }
 
-    private function getRoleFieldIds($uid=null){
-        $role_id=get_role_id($uid);
-        $fields_list=S('Role_Expend_Info_'.$role_id);
-        if(!$fields_list){
-            $map_role_config=getRoleConfigMap('expend_field',$role_id);
-            $fields_list=D('RoleConfig')->where($map_role_config)->getField('value');
-            if($fields_list){
-                $fields_list=explode(',',$fields_list);
-                S('Role_Expend_Info_'.$role_id,$fields_list,600);
+    private function getRoleFieldIds($uid = null)
+    {
+        $role_id = get_role_id($uid);
+        $fields_list = S('Role_Expend_Info_' . $role_id);
+        if (!$fields_list) {
+            $map_role_config = getRoleConfigMap('expend_field', $role_id);
+            $fields_list = D('RoleConfig')->where($map_role_config)->getField('value');
+            if ($fields_list) {
+                $fields_list = explode(',', $fields_list);
+                S('Role_Expend_Info_' . $role_id, $fields_list, 600);
             }
         }
         return $fields_list;
@@ -650,13 +652,13 @@ class ConfigController extends BaseController
      */
     public function _profile_group_list($uid = null)
     {
-        $profile_group_list=array();
-        $fields_list=$this->getRoleFieldIds($uid);
-        if($fields_list){
-            $fields_group_ids=D('FieldSetting')->where(array('id'=>array('in',$fields_list), 'status' => '1'))->field('profile_group_id')->select();
-            if($fields_group_ids){
-                $fields_group_ids=array_unique(array_column($fields_group_ids,'profile_group_id'));
-                $map['id']=array('in',$fields_group_ids);
+        $profile_group_list = array();
+        $fields_list = $this->getRoleFieldIds($uid);
+        if ($fields_list) {
+            $fields_group_ids = D('FieldSetting')->where(array('id' => array('in', $fields_list), 'status' => '1'))->field('profile_group_id')->select();
+            if ($fields_group_ids) {
+                $fields_group_ids = array_unique(array_column($fields_group_ids, 'profile_group_id'));
+                $map['id'] = array('in', $fields_group_ids);
 
                 if (isset($uid) && $uid != is_login()) {
                     $map['visiable'] = 1;
@@ -676,9 +678,6 @@ class ConfigController extends BaseController
     }
 
 
-
-
-
     private function iframeReturn($result)
     {
         $json = json_encode($result);
@@ -692,11 +691,11 @@ class ConfigController extends BaseController
     public function doChangePassword($old_password, $new_password)
     {
         //调用接口
-        $memberModel=UCenterMember();
-        $res=$memberModel->changePassword($old_password,$new_password);
-        if($res){
-            $this->success('修改密码成功。','refresh');
-        }else{
+        $memberModel = UCenterMember();
+        $res = $memberModel->changePassword($old_password, $new_password);
+        if ($res) {
+            $this->success('修改密码成功。', 'refresh');
+        } else {
             $this->error($memberModel->getErrorMessage());
         }
 
@@ -823,7 +822,7 @@ class ConfigController extends BaseController
                 $content = modC('SMS_CONTENT', '{$verify}', 'USERCONFIG');
                 $content = str_replace('{$verify}', $verify, $content);
                 $content = str_replace('{$account}', $account, $content);
-                $res = sendSMS($account,$content);
+                $res = sendSMS($account, $content);
                 return $res;
                 break;
             case 'email':
@@ -858,7 +857,7 @@ class ConfigController extends BaseController
         $aType = $aType == 'mobile' ? 'mobile' : 'email';
         $res = D('Verify')->checkVerify($aAccount, $aType, $aVerify, $aUid);
         if (!$res) {
-           $this->error('验证失败');
+            $this->error('验证失败');
         }
         UCenterMember()->where(array('id' => $aUid))->save(array($aType => $aAccount));
         $this->success('验证成功', U('ucenter/config/index'));
@@ -866,9 +865,10 @@ class ConfigController extends BaseController
     }
 
 
-    public function cleanRemember(){
+    public function cleanRemember()
+    {
         $uid = is_login();
-        if($uid){
+        if ($uid) {
             D('user_token')->where('uid=' . $uid)->delete();
             $this->success('清除成功！');
         }

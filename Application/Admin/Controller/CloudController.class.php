@@ -26,10 +26,11 @@ class CloudController extends AdminController
             $this->write('&nbsp;&nbsp;&nbsp;>服务器登陆验证失败。安装意外终止。', 'danger');
             return;
         }
-        $version = json_decode($data, true);
-        if (!$version) {
-            $this->write('解析服务器返回结果失败。安装意外终止。', 'danger');
+        $data = json_decode($data, true);
+        if (!$data['status']) {
+            $this->write('解析服务器返回结果失败。安装意外终止。' . $data['info'], 'danger');
         }
+        $version = $data['version'];
         switch ($version['goods']['entity']) {
             case 2:
                 $this->installModule($version, $aToken);
@@ -47,7 +48,7 @@ class CloudController extends AdminController
         $theme['name'] = $version['goods']['etitle'];
         $theme['alias'] = $version['goods']['title'];
         $this->write('&nbsp;&nbsp;&nbsp;>当前正在安装的是【主题】，主题名【' . $theme['alias'] . '】【' . $theme['name'] . '】');
-        if (file_exists(OS_THEME_PATH  . $version['goods']['etitle'])) {
+        if (file_exists(OS_THEME_PATH . $version['goods']['etitle'])) {
             //todo 进行版本检测
             $this->write('&nbsp;&nbsp;&nbsp;>本地已存在同名主题，安装被强制终止。请删除本地主题之后刷新本页面重试。', 'danger');
             return;
@@ -68,7 +69,7 @@ class CloudController extends AdminController
         $this->write('&nbsp;&nbsp;&nbsp;>安装主题成功。', 'success');
         $themeModel = D('Common/Theme');
         $res = $themeModel->setTheme($theme['name']);
-        if ($res===true) {
+        if ($res === true) {
             // $this->write($moduleModel->getError());
             $this->write('&nbsp;&nbsp;&nbsp;>主题使用成功。', 'success');
             $this->write('主题安装成功，即将跳转到本地主题页面。', 'success');
@@ -82,8 +83,6 @@ str
             $this->write('&nbsp;&nbsp;&nbsp;>主题使用失败，错误信息：' . $themeModel->getError(), 'danger');
             return;
         }
-
-
 
 
     }
