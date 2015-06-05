@@ -21,9 +21,9 @@
 				<p style="margin-top: 20px;">
 					<a href="{:U('atlas/index/detail',array('id'=>$atlas['id']))}" target="_blank"> <img
 						alt="{$atlas.content|parseWeiboContent}" id="pic-{$atlas.id}" class="img-responsive lazy" src="__PUBLIC__/js/ext/lazyload/load.gif"
-						 data-original="{$atlas.image_id|getAtlasThumbImageById=720}">
+						 data-original="{$atlas.image_id|getAtlasThumbImageById=###,720,0,1}">
 						 <noscript>
-						 	<img src="{$atlas.image_id|getAtlasThumbImageById=720}" class="img-responsive">
+						 	<img src="{$atlas.image_id|getAtlasThumbImageById=###,720,0,1}" class="img-responsive">
 						</noscript>
 					</a>
 				</p>
