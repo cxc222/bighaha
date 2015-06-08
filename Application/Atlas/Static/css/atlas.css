@@ -1,5 +1,5 @@
 @CHARSET "UTF-8";
-.web_left{width:100%;background:#FFF;height:auto;overflow:hidden;border:solid 1px #b1b1b1;box-shadow:0 0 0 1px #FFFFFF inset, 0 0 5px 1px #c6c6c6;margin-bottom:20px;}
+.web_left{width:100%;background:#FFF;height:auto;overflow:hidden;box-shadow:0 0 0 1px #FFFFFF inset, 0 0 5px 1px #c6c6c6;margin-bottom:20px;}
 .web_left .user_info{vertical-align:middle; padding-left:20px; padding-top:7px; padding-bottom:0px;color:#B6B6B6;height:44px;background-color:#F5F5F5;}
 .web_left .user_info li{float:left;}
 .web_left .user_info li.user_name p{color:#777777;height:18px;margin-top:6px;margin-left:12px;margin-right:5px;}
