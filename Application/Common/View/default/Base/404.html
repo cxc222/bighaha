@@ -3,10 +3,30 @@
 </block>
 
 <block name="body">
-<div class="col-xs-8">
-	<div class="web_content_left">
-		213123
+<div class="col-xs-12">
+	<div class="web_content_left" style="text-align: center; background: #fff;">
+		<img src="__ROOT__/Public/images/404.jpg" />
+	</div>
+	<div class="web_content_left" style="text-align: center; background: #fff;">
+		<p class="jump">
+	        页面自动 <a id="href" style="color: green" href="http://{$_SERVER['HTTP_HOST']}__ROOT__">跳转首页</a> 等待时间： <b id="wait">5</b>。
+	
+	        或手动 <a href="http://{$_SERVER['HTTP_HOST']}__ROOT__" style="color: green">返回首页</a>
+	    </p>
 	</div>
 </div>
 </block>
-<block name="script"></block>
+<block name="script">
+<script type="text/javascript">
+    (function(){
+        var wait = document.getElementById('wait'),href = document.getElementById('href').href;
+        var interval = setInterval(function(){
+            var time = --wait.innerHTML;
+            if(time <= 0) {
+                location.href = href;
+                clearInterval(interval);
+            };
+        }, 1000);
+    })();
+</script>
+</block>
