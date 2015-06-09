@@ -1,0 +1,5 @@
+# 将 RewriteEngine 模式打开
+RewriteEngine On
+
+# 404错误中转页面
+#ErrorDocument 404 /404.php
