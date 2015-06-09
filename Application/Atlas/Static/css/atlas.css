@@ -44,3 +44,13 @@
 	padding:20px;
 }
 .Atlas_hot_widget .card img{max-width: 150px; max-height: 150px;}
+
+/* 默认时的样式 */ 
+#sidebar{} 
+ 
+/* 加载 Portamento 成功后的样式 */ 
+#portamento_container{position:relative;z-index:99;} 
+#portamento_container #sidebar{} 
+ 
+/* 滑动时的样式 */ 
+#portamento_container #sidebar.fixed{position:fixed;} 

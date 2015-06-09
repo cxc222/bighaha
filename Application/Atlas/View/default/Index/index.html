@@ -30,16 +30,21 @@
 	<script>
 	$(function () {
 		CNZZ_SLOT_Async('383302','ad_index_2');
+		$('#sidebar').portamento({ 
+			  gap: 110,
+			  wrapper: $('#main-container')
+		});
 	});
 	</script>
 	<div id="ad_index_2"></div>
 	{:W('Hot/lists')}
-	
-	<!-- 广告位：最新图集页面右侧 -->
-	<script type="text/javascript">BAIDU_CLB_fillSlot("1096397");</script>
-
+	<div id="sidebar">
+		<!-- 广告位：最新图集页面右侧 -->
+		<script type="text/javascript">BAIDU_CLB_fillSlot("1096397");</script>
+	</div>
 </div>
 </block>
 <block name="script">
+<script src="__PUBLIC__/js/ext/portamento/portamento-min.js"></script>
 <script src="__JS__/atlas.js"></script>
 </block>
