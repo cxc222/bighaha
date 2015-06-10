@@ -1,5 +1,207 @@
-# 将 RewriteEngine 模式打开
-RewriteEngine On
+<IfModule mod_rewrite.c>
+  Options +FollowSymlinks
+  RewriteEngine On
 
-# 404错误中转页面
-#ErrorDocument 404 /404.php
+
+    #禁止访问 View
+    RewriteRule (.*)/?View/(.*)?.html$                     - [F]
+
+    #我的首页
+    RewriteRule ^/?shop_/(.*)?$                      index.php/shop/index/index/$1 [L]
+    RewriteRule ^/?shop$                              index.php/shop/index/index [L]
+    RewriteRule ^/?goods/([0-9]+)((/|.).*)?$         index.php/shop/index/goods/category_id/$1$2 [L]
+    RewriteRule ^/?goods_/(.*)?$                     index.php/shop/index/goods/$1 [L]
+    RewriteRule ^/?goods$                             index.php/shop/index/goods [L]
+    RewriteRule ^/?goods/detail_([0-9]+)((/|.).*)?$   index.php/shop/index/goodsdetail/id/$1$2 [L]
+    RewriteRule ^/?mygoods/([0-9]+)((/|.).*)?$       index.php/shop/index/mygoods/status/$1$2 [L]
+    RewriteRule ^/?mygoods_/(.*)?$                   index.php/shop/index/mygoods/$1 [L]
+    RewriteRule ^/?mygoods$                           index.php/shop/index/mygoods [L]
+
+    #活动
+    RewriteRule ^/?event/([0-9]+)/p_([0-9]+)((/|.).*)?$          index.php/event/index/index/type_id/$1/page/$2$3 [L]
+    RewriteRule ^/?event/([0-9]+)((/|.).*)?$                     index.php/event/index/index/type_id/$1$2 [L]
+    RewriteRule ^/?event/p_([0-9]+)((/|.).*)?$                   index.php/event/index/index/page/$1$2 [L]
+    RewriteRule ^/?event_/(.*)?$                                  index.php/event/index/index/$1 [L]
+    RewriteRule ^/?event$                                         index.php/event/index/index [L]
+    RewriteRule ^/?myevent/([0-9]+)((/|.).*)?$                   index.php/event/index/myevent/type_id/$1$2 [L]
+    RewriteRule ^/?myevent_/(.*)?$                               index.php/event/index/myevent/$1 [L]
+    RewriteRule ^/?myevent$                                       index.php/event/index/myevent [L]
+    RewriteRule ^/?event/detail_([0-9]+)((/|.).*)?$              index.php/event/index/detail/id/$1$2 [L]
+    RewriteRule ^/?event/member_([0-9]+)((/|.).*)?$              index.php/event/index/member/id/$1$2 [L]
+    RewriteRule ^/?event/edit_([0-9]+)((/|.).*)?$                index.php/event/index/edit/id/$1$2 [L]
+    RewriteRule ^/?event/add_/(.*)?$                             index.php/event/index/add/$1 [L]
+    RewriteRule ^/?event/add$                                     index.php/event/index/add [L]
+
+    #专辑
+    RewriteRule ^/?issue/([0-9]+)((/|.).*)?$                        index.php/issue/index/index/issue_id/$1$2 [L]
+    RewriteRule ^/?issue_/(.*)?$                                    index.php/issue/index/index/$1 [L]
+    RewriteRule ^/?issue$                                            index.php/issue/index/index [L]
+    RewriteRule ^/?issue/detail_([0-9]+)((/|.).*)?$                 index.php/issue/index/issuecontentdetail/id/$1$2 [L]
+    RewriteRule ^/?issue/edit_([0-9]+)((/|.).*)?$                   index.php/issue/index/edit/id/$1$2 [L]
+    RewriteRule ^/?issue/detail_/(.*)?$                             index.php/issue/index/issuecontentdetail/$1 [L]
+    RewriteRule ^/?issue/edit_/(.*)?$                               index.php/issue/index/edit/$1 [L]
+    RewriteRule ^/?issue/detail$                                     index.php/issue/index/issuecontentdetail [L]
+    RewriteRule ^/?issue/edit$                                       index.php/issue/index/edit [L]
+
+    #讨论区
+    RewriteRule ^/?forum/([0-9]+)/p_([0-9]+)((/|.).*)?$             index.php/forum/index/forum/id/$1/page/$2$3 [L]
+    RewriteRule ^/?forum/p_([0-9]+)((/|.).*)?$                      index.php/forum/index/forum/page/$1$2 [L]
+    RewriteRule ^/?forum/([0-9]+)((/|.).*)?$                        index.php/forum/index/forum/id/$1$2 [L]
+    RewriteRule ^/?forum_/(.*)?$                                     index.php/forum/index/forum/$1 [L]
+    RewriteRule ^/?forum$                                            index.php/forum/index/index [L]
+    RewriteRule ^/?forum/edit_([0-9]+)/p_([0-9]+)((/|.).*)?$         index.php/forum/index/edit/forum_id/$1/post_id/$2$3 [L]
+    RewriteRule ^/?forum/editp_([0-9]+)((/|.).*)?$                  index.php/forum/index/edit/post_id/$1$2 [L]
+    RewriteRule ^/?forum/edit_([0-9]+)((/|.).*)?$                    index.php/forum/index/edit/forum_id/$1$2 [L]
+    RewriteRule ^/?forum/edit_/(.*)?$                                 index.php/forum/index/edit/$1 [L]
+    RewriteRule ^/?forum/edit$                                        index.php/forum/index/edit [L]
+    RewriteRule ^/?forum/detail_([0-9]+)((/|.).*)?$                  index.php/forum/index/detail/id/$1$2 [L]
+    RewriteRule ^/?forum/detail_/(.*)?$                              index.php/forum/index/detail/$1 [L]
+    RewriteRule ^/?forum/detail$                                      index.php/forum/index/detail [L]
+    RewriteRule ^/?forum/search_/(.*)?$                              index.php/forum/index/search/$1 [L]
+    RewriteRule ^/?forum/search$                                     index.php/forum/index/search [L]
+
+    #资讯
+    RewriteRule ^/?blog_/(.*)?$                                     index.php/blog/index/index/$1 [L]
+    RewriteRule ^/?blog$                                             index.php/blog/index/index [L]
+    RewriteRule ^/?blog/list_([0-9]+)((/|.).*)?$                    index.php/blog/article/lists/category/$1$2 [L]
+    RewriteRule ^/?blog/list_/(.*)?$                                 index.php/blog/article/lists/$1 [L]
+    RewriteRule ^/?blog/list$                                        index.php/blog/article/lists [L]
+    RewriteRule ^/?blog/detail_([0-9]+)((/|.).*)?$                  index.php/blog/article/detail/id/$1$2 [L]
+    RewriteRule ^/?blog/detail_/(.*)?$                              index.php/blog/article/detail/$1 [L]
+    RewriteRule ^/?blog/detail$                                      index.php/blog/article/detail [L]
+
+    #微博
+    RewriteRule ^/?weibo/p_([0-9]+)((/|.).*)?$                    index.php/weibo/index/index/page/$1$2 [L]
+    RewriteRule ^/?weibo_/(.*)?$                                  index.php/weibo/index/index/$1 [L]
+    RewriteRule ^/?weibo$                                          index.php/weibo/index/index [L]
+    RewriteRule ^/?weibo/detail_([0-9]+)((/|.).*)?$               index.php/weibo/index/weibodetail/id/$1$2 [L]
+    RewriteRule ^/?weibo/detail_/(.*)?$                           index.php/weibo/index/weibodetail/$1 [L]
+    RewriteRule ^/?weibo/detail$                                   index.php/weibo/index/weibodetail [L]
+    RewriteRule ^/?weibo/concerned_/(.*)?$                        index.php/weibo/index/myconcerned/$1 [L]
+    RewriteRule ^/?weibo/concerned$                                index.php/weibo/index/myconcerned [L]
+    RewriteRule ^/?weibo/search_/(.*)?$                           index.php/weibo/index/search/$1 [L]
+    RewriteRule ^/?weibo/search$                                 index.php/weibo/index/search [L]
+
+    #用户中心
+    RewriteRule ^/?ucenter/([0-9]+)((/|.).*)?$                               index.php/ucenter/index/index/uid/$1$2 [L]
+    RewriteRule ^/?ucenter_/(.*)?$                                           index.php/ucenter/index/index/$1 [L]
+    RewriteRule ^/?ucenter$                                                   index.php/ucenter/index/index [L]
+    RewriteRule ^/?ucenter/following_([0-9]+)((/|.).*)?$                      index.php/ucenter/index/following/uid/$1$2 [L]
+    RewriteRule ^/?ucenter/following_/(.*)?$                                   index.php/ucenter/index/following/$1 [L]
+    RewriteRule ^/?ucenter/following$                                          index.php/ucenter/index/following [L]
+    RewriteRule ^/?ucenter/applist_([A-Za-z]+)/([0-9]+)((/|.).*)?$            index.php/ucenter/index/applist/type/$1/uid/$2$3 [L]
+    RewriteRule ^/?ucenter/applist_([A-Za-z]+)((/|.).*)?$                     index.php/ucenter/index/applist/type/$1$2 [L]
+    RewriteRule ^/?ucenter/applist_([0-9]+)((/|.).*)?$                        index.php/ucenter/index/applist/uid/$1$2 [L]
+    RewriteRule ^/?ucenter/applist_/(.*)?$                                    index.php/ucenter/index/applist/$1 [L]
+    RewriteRule ^/?ucenter/applist$                                            index.php/ucenter/index/applist [L]
+    RewriteRule ^/?ucenter/information_([0-9]+)((/|.).*)?$                      index.php/ucenter/index/information/uid/$1$2 [L]
+    RewriteRule ^/?ucenter/information_/(.*)?$                                  index.php/ucenter/index/information/$1 [L]
+    RewriteRule ^/?ucenter/information$                                          index.php/ucenter/index/information [L]
+    RewriteRule ^/?ucenter/fans_([0-9]+)((/|.).*)?$                           index.php/ucenter/index/fans/uid/$1$2 [L]
+    RewriteRule ^/?ucenter/fans_/(.*)?$                                       index.php/ucenter/index/fans/$1 [L]
+    RewriteRule ^/?ucenter/fans$                                               index.php/ucenter/index/fans [L]
+    RewriteRule ^/?ucenter/rank_([0-9]+)((/|.).*)?$                           index.php/ucenter/index/rank/uid/$1$2 [L]
+    RewriteRule ^/?ucenter/rank_/(.*)?$                                       index.php/ucenter/index/rank/$1 [L]
+    RewriteRule ^/?ucenter/rank$                                               index.php/ucenter/index/rank [L]
+    RewriteRule ^/?ucenter/rankwait_([0_9]+)((/|.).*)?$                       index.php/ucenter/index/rankverifywait/uid/$1$2 [L]
+    RewriteRule ^/?ucenter/rankwait_/(.*)?$                                    index.php/ucenter/index/rankverifywait/$1 [L]
+    RewriteRule ^/?ucenter/rankwait$                                           index.php/ucenter/index/rankverifywait [L]
+    RewriteRule ^/?ucenter/rankfailure_([0-9]+)((/|.).*)?$                    index.php/ucenter/index/rankverifyfailure/uid/$1$2 [L]
+    RewriteRule ^/?ucenter/rankfailure_/(.*)?$                                 index.php/ucenter/index/rankverifyfailure/$1 [L]
+    RewriteRule ^/?ucenter/rankfailure$                                        index.php/ucenter/index/rankverifyfailure [L]
+    RewriteRule ^/?ucenter/rankverify_([0-9]+)((/|.).*)?$                     index.php/ucenter/index/rankverify/uid/$1$2 [L]
+    RewriteRule ^/?ucenter/rankverify_/(.*)?$                                 index.php/ucenter/index/rankverify/$1 [L]
+    RewriteRule ^/?ucenter/rankverify$                                         index.php/ucenter/index/rankverify [L]
+    RewriteRule ^/?ucenter/conf_/(.*)?$                                       index.php/ucenter/config/index/$1 [L]
+    RewriteRule ^/?ucenter/conf$                                               index.php/ucenter/config/index [L]
+    RewriteRule ^/?ucenter/session_/(.*)?$                                    index.php/ucenter/message/session/$1 [L]
+    RewriteRule ^/?ucenter/session$                                            index.php/ucenter/message/session [L]
+    RewriteRule ^/?ucenter/msg_/(.*)?$                                        index.php/ucenter/message/message/$1 [L]
+    RewriteRule ^/?ucenter/msg$                                                index.php/ucenter/message/message [L]
+    RewriteRule ^/?ucenter/collection_/(.*)?$                                 index.php/ucenter/message/collection/$1 [L]
+    RewriteRule ^/?ucenter/collection$                                         index.php/ucenter/message/collection [L]
+
+    #会员
+    RewriteRule ^/?people/find_/(.*)?$                                       index.php/people/index/find/$1 [L]
+    RewriteRule ^/?people/find$                                               index.php/people/index/find [L]
+    RewriteRule ^/?people_/(.*)?$                                           index.php/people/index/index/$1 [L]
+    RewriteRule ^/?people$                                                   index.php/people/index/index [L]
+
+    #注册登录
+    RewriteRule ^/?register_/(.*)?$                                          index.php/home/user/register/$1 [L]
+    RewriteRule ^/?register$                                                  index.php/home/user/register [L]
+    RewriteRule ^/?register/step2_/(.*)?$                                     index.php/home/user/step2/$1 [L]
+    RewriteRule ^/?register/step2$                                            index.php/home/user/step2 [L]
+    RewriteRule ^/?register/step3_/(.*)?$                                     index.php/home/user/step3/$1 [L]
+    RewriteRule ^/?register/step3$                                            index.php/home/user/step3 [L]
+    RewriteRule ^/?login_/(.*)?$                                             index.php/home/user/login/$1 [L]
+    RewriteRule ^/?login$                                                     index.php/home/user/login [L]
+
+    #默认情况
+    RewriteCond %{REQUEST_FiLENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^/?(.*)$ index.php/$1 [QSA,PT,L]
+
+</IfModule>
+
+
+
+## EXPIRES CACHING ##
+<IfModule mod_expires.c>
+ExpiresActive On
+ExpiresByType text/css A31536000
+ExpiresByType application/x-javascript A31536000
+ExpiresByType text/x-component A31536000
+ExpiresByType text/html A3600
+ExpiresByType text/richtext A3600
+ExpiresByType image/svg+xml A3600
+ExpiresByType text/plain A3600
+ExpiresByType text/xsd A3600
+ExpiresByType text/xsl A3600
+ExpiresByType text/xml A3600
+ExpiresByType video/asf A31536000
+ExpiresByType video/avi A31536000
+ExpiresByType image/bmp A31536000
+ExpiresByType application/java A31536000
+ExpiresByType video/divx A31536000
+ExpiresByType application/msword A31536000
+ExpiresByType application/vnd.ms-fontobject A31536000
+ExpiresByType application/x-msdownload A31536000
+ExpiresByType image/gif A31536000
+ExpiresByType application/x-gzip A31536000
+ExpiresByType image/x-icon A31536000
+ExpiresByType image/jpeg A31536000
+ExpiresByType application/vnd.ms-access A31536000
+ExpiresByType audio/midi A31536000
+ExpiresByType video/quicktime A31536000
+ExpiresByType audio/mpeg A31536000
+ExpiresByType video/mp4 A31536000
+ExpiresByType video/mpeg A31536000
+ExpiresByType application/vnd.ms-project A31536000
+ExpiresByType application/x-font-otf A31536000
+ExpiresByType application/vnd.oasis.opendocument.database A31536000
+ExpiresByType application/vnd.oasis.opendocument.chart A31536000
+ExpiresByType application/vnd.oasis.opendocument.formula A31536000
+ExpiresByType application/vnd.oasis.opendocument.graphics A31536000
+ExpiresByType application/vnd.oasis.opendocument.presentation A31536000
+ExpiresByType application/vnd.oasis.opendocument.spreadsheet A31536000
+ExpiresByType application/vnd.oasis.opendocument.text A31536000
+ExpiresByType audio/ogg A31536000
+ExpiresByType application/pdf A31536000
+ExpiresByType image/png A31536000
+ExpiresByType application/vnd.ms-powerpoint A31536000
+ExpiresByType audio/x-realaudio A31536000
+ExpiresByType image/svg+xml A31536000
+ExpiresByType application/x-shockwave-flash A31536000
+ExpiresByType application/x-tar A31536000
+ExpiresByType image/tiff A31536000
+ExpiresByType application/x-font-ttf A31536000
+ExpiresByType audio/wav A31536000
+ExpiresByType audio/wma A31536000
+ExpiresByType application/vnd.ms-write A31536000
+ExpiresByType application/vnd.ms-excel A31536000
+ExpiresByType application/zip A31536000
+</IfModule>
+## EXPIRES CACHING ##
+
+ErrorDocument 404 /index.php?s=/atlas/Empty/index.html
