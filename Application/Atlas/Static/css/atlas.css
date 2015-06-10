@@ -53,4 +53,9 @@
 #portamento_container #sidebar{} 
  
 /* 滑动时的样式 */ 
-#portamento_container #sidebar.fixed{position:fixed;} 
+#portamento_container #sidebar.fixed{position:fixed;}
+
+.shareBox{
+	margin-right: 20px;
+    margin-top: 15px;
+}
