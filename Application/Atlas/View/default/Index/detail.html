@@ -2,15 +2,11 @@
 <block name="style">
 <link type="text/css" rel="stylesheet" href="__CSS__/atlas.css" />
 </block>
-<block name="header">
-    <include file="Public/nav"/>
-</block>
+<block name="header"> <include file="Public/nav" /> </block>
 
 <block name="body">
-<div class="span9">
-
+<div class="col-xs-8">
 	<div class="web_content_left">
-
 		<div class="web_left ">
 			<div class="user_info">
 				<ul class="list-unstyled">
@@ -30,17 +26,20 @@
 					<p id="title-{$detail.id}" class="web_size">{$detail.content|parseWeiboContent}</p>
 					<p>
 						<img id="pic-{$detail.id}"
-							data-original="{$detail.image_id|getAtlasThumbImageById=###,720,0,2}" src="__PUBLIC__/js/ext/lazyload/load.gif" class="img-responsive lazy">
-							<noscript>
-								<img src="{$detail.image_id|getAtlasThumbImageById=###,720,0,2}" class="img-responsive">
-							</noscript>
+							data-original="{$detail.image_id|getAtlasThumbImageById=###,720,0,2}"
+							src="__PUBLIC__/js/ext/lazyload/load.gif"
+							class="img-responsive lazy">
+					<noscript>
+						<img src="{$detail.image_id|getAtlasThumbImageById=###,720,0,2}"
+							class="img-responsive">
+					</noscript>
 					</p>
 				</div>
 
 				<div class="budejie_mutual clear">
 					<ul class="pull-left list-unstyled">
-						<li><a class="case dolove love" data-postid="{$detail.id}"> <span
-								id="loveNum-{$detail.id}" class="num">{$detail.like_count}</span>
+						<li><a class="case dolove love" data-postid="{$detail.id}">
+								<span id="loveNum-{$detail.id}" class="num">{$detail.like_count}</span>
 						</a></li>
 						<li><a class="case notlove no_cai" data-postid="{$detail.id}">
 								<span id="noloveNum-{$detail.id}" class="num">{$detail.unlike_count}</span>
@@ -56,27 +55,27 @@
 						<div class="bdsharebuttonbox">
 							<a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
 							<a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
-							<a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博"></a>
-							<a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网"></a>
+							<a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博"></a> <a
+								href="#" class="bds_renren" data-cmd="renren" title="分享到人人网"></a>
 							<a href="#" class="bds_copy" data-cmd="copy" title="分享到复制网址"></a>
 							<a href="#" class="bds_more" data-cmd="more"></a>
 						</div>
 						<script>
-							window._bd_share_config={
-								"common":{
+							window._bd_share_config = {
+								"common" : {
 									//"bdSnsKey":{},
-									"bdText":"{$detail.content|parseWeiboContent}",
-									"bdUrl":"{:U('atlas/index/detail',array('id'=>$detail['id']),'',true)}",
-									"bdMini":"2",
-									"bdMiniList":false,
-									"bdPic":"{$detail.image_id|getAtlasThumbImageById=###,720,0,2}",
-									"bdStyle":"1",
-									"bdSize":"32",
-									"onAfterClick":function(cmd){
-										
+									"bdText" : "{$detail.content|parseWeiboContent}",
+									"bdUrl" : "{:U('atlas/index/detail',array('id'=>$detail['id']),'',true)}",
+									"bdMini" : "2",
+									"bdMiniList" : false,
+									"bdPic" : "{$detail.image_id|getAtlasThumbImageById=###,720,0,2}",
+									"bdStyle" : "1",
+									"bdSize" : "32",
+									"onAfterClick" : function(cmd) {
+
 									}
 								},
-								"share":{}
+								"share" : {}
 							};
 						</script>
 					</div>
@@ -85,15 +84,27 @@
 
 
 			<!-- 评论开始 -->
-				<div class="comment-frame">
-					 {:hook('localComment', array('path'=>"Atlas/index/$detail[id]", 'uid'=>$detail['uid']))}
-				</div>
-				
+			<div class="comment-frame">{:hook('localComment',
+				array('path'=>"Atlas/index/$detail[id]", 'uid'=>$detail['uid']))}</div>
+
 			<!-- 评论结束 -->
 		</div>
 	</div>
 </div>
+<div class="col-xs-4">
+	<div class="ad_side">
+		<script type="text/javascript">
+		        document.write('<a style="display:none!important" id="tanx-a-mm_18018789_9934757_33104434"></a>');
+		        tanx_s = document.createElement("script");
+		        tanx_s.type = "text/javascript";
+		        tanx_s.charset = "gbk";
+		        tanx_s.id = "tanx-s-mm_18018789_9934757_33104434";
+		        tanx_s.async = true;
+		        tanx_s.src = "http://p.tanx.com/ex?i=mm_18018789_9934757_33104434";
+		        tanx_h = document.getElementsByTagName("head")[0];
+		        if(tanx_h)tanx_h.insertBefore(tanx_s,tanx_h.firstChild);
+		</script>
+	</div>
+</div>
 </block>
-<block name="script">
-<script src="__JS__/atlas.js"></script>
-</block>
+<block name="script"> <script src="__JS__/atlas.js"></script> </block>
