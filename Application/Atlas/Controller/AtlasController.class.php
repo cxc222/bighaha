@@ -13,7 +13,7 @@ use Admin\Builder\AdminListBuilder;
 use Admin\Builder\AdminTreeListBuilder;
 use Atlas\Lib;
 use Atlas\Lib\Picture;
-
+use Atlas\Rule;
 
 class AtlasController extends AdminController
 {
@@ -198,7 +198,7 @@ class AtlasController extends AdminController
 		if (!file_exists($diskPath)){	//判断目录不存在, 自动创建
 			mkdir($diskPath, 0777,true);
 		}
-		 
+		
 		Vendor('Curl.Curl');
 		require_once('ThinkPHP/Library/Vendor/Snoopy/Snoopy.class.php');
 		require_once('ThinkPHP/Library/Vendor/simplehtmldom/simple_html_dom.php');
@@ -225,7 +225,6 @@ class AtlasController extends AdminController
 					$alt = $img->alt;
 					$id = str_replace('pic-',' ',$img->id);
 					
-
 					//判断是否结束
 					if($id == $atlasCollection['start_id']){
 					    $this->success('采集成功, 成功数: '.$zindex,U('admin/atlas/index'));
@@ -346,6 +345,14 @@ class AtlasController extends AdminController
 		$CollectionModel->delete(); */
 		//模块/控制器/操作
 		$this->success('采集成功, 成功数: '.$zindex,U('admin/atlas/index'));
+	}
+	
+	//测试用
+	function test(){
+		$rule = new \Atlas\Rule\CollectRule();
+		$rule->execute($aId);
+		print_r($rule);
+		die();
 	}
 	
 	/**
