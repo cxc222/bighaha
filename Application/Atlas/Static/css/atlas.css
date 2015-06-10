@@ -16,12 +16,12 @@
 .web_left .budejie_share a.qzone{background: url('http://img.spriteapp.com/ws/www/img/share_qzone.png') center left no-repeat;}
 
 .web_left .budejie_mutual{text-align:center;height:80px;line-height:80px}
-.web_left .budejie_mutual a{cursor:pointer;color:#6A6A6A;font-family:"微软雅黑";border:solid 1px #B7B7B7;padding:7px 10px 7px 8px;box-shadow:0 1px 2px #EEEEEE, 0 0 0 1px #FFFFFF inset;border-radius:5px 5px 5px 5px;*padding-right:7px!important;padding-right:7px\9;}
-.web_left .budejie_mutual a:hover{background:#e6e6e6;}
+.web_left .budejie_mutual a.case{cursor:pointer;color:#6A6A6A;font-family:"微软雅黑";border:solid 1px #B7B7B7;padding:7px 10px 7px 8px;box-shadow:0 1px 2px #EEEEEE, 0 0 0 1px #FFFFFF inset;border-radius:5px 5px 5px 5px;*padding-right:7px!important;padding-right:7px\9;}
+.web_left .budejie_mutual a.case:hover{background:#e6e6e6;}
 .web_left .budejie_mutual li{float:left;margin-right:16px;}
 .web_left .budejie_mutual_no{text-align:center;height:80px;line-height:80px}
-.web_left .budejie_mutual_no a{color:#6A6A6A;font-family:"微软雅黑";border:solid 1px #B7B7B7;padding:7px 10px 7px 8px;box-shadow:0 1px 2px #EEEEEE, 0 0 0 1px #FFFFFF inset;border-radius:5px 5px 5px 5px;}
-.web_left .budejie_mutual_no a:hover{}
+.web_left .budejie_mutual_no a.case{color:#6A6A6A;font-family:"微软雅黑";border:solid 1px #B7B7B7;padding:7px 10px 7px 8px;box-shadow:0 1px 2px #EEEEEE, 0 0 0 1px #FFFFFF inset;border-radius:5px 5px 5px 5px;}
+.web_left .budejie_mutual_no a.case:hover{}
 .web_left .budejie_mutual_no li{float:left;margin-right:20px;}
 .love span{background: url('http://img.spriteapp.com/ws/www/img/icon/ding.png') no-repeat;background-position:0px 1px;padding:5px 0px 5px 30px;color:#FFA303;}
 .no_love span{background: url('http://img.spriteapp.com/ws/www/img/icon/no_ding.png') no-repeat;background-position:0px 1px;padding:5px 0px 10px 30px;}

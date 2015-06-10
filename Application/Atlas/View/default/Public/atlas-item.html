@@ -31,9 +31,9 @@
 			
 			<div class="budejie_mutual clearfix">
 				<ul class="pull-left interactive list-unstyled">
-					<li><a class="dolove no_love" data-postid="{$atlas.id}" data-login="quick_login"> <span id="loveNum-{$atlas.id}" class="num">{$atlas.like_count}</span>
+					<li><a class="case dolove no_love" data-postid="{$atlas.id}" data-login="quick_login"> <span id="loveNum-{$atlas.id}" class="num">{$atlas.like_count}</span>
 					</a></li>
-					<li><a class="notlove no_cai" data-postid="{$atlas.id}" data-login="quick_login"> <span id="noloveNum-{$atlas.id}" class="num">{$atlas.unlike_count}</span>
+					<li><a class="case notlove no_cai" data-postid="{$atlas.id}" data-login="quick_login"> <span id="noloveNum-{$atlas.id}" class="num">{$atlas.unlike_count}</span>
 					</a></li>
 					<!-- <li style="height: 50px;"><a style="display: none;"
 						class="bookmark" onclick="do_cancelBookmark('', '14006007')">
@@ -45,10 +45,14 @@
 				<ul class="pull-right list-unstyled">
 					<!-- <li><a class="share-content"> <span id="repost-14006007">3</span>
 					</a></li> -->
-					<li style="margin-right: 0px;"><a class="comment_button"
+					<li style="margin-right: 0px;"><a class="case comment_button"
 						href="{:U('atlas/index/detail',array('id'=>$atlas['id']))}" target="_blank" > <span>{$atlas.comment_count}</span>
 					</a></li>
 				</ul>
+				<div class="shareBox pull-right">
+					<div class="bdsharebuttonbox"><a href="#" class="bds_more" data-cmd="more"></a><a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a><a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a><a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博"></a><a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网"></a><a href="#" class="bds_copy" data-cmd="copy" title="分享到复制网址"></a></div>
+					<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"32"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+				</div>
 			</div>
 		</div>
 	</div>
