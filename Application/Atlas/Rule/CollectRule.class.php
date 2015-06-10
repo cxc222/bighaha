@@ -9,8 +9,11 @@ use Atlas\Model;
 class CollectRule {
 	public $curl;
 	public $snoopy;
+	public $atlasModel;
 	public $atlasCollectionModel;
 	public $RuleClass;
+	public $PictureClass;
+	public $diskPath = 'Uploads/atlas/';
 	
 	function __construct() {
 		Vendor ( 'Curl.Curl' );
@@ -19,7 +22,13 @@ class CollectRule {
 		
 		$this->curl = new \Curl\Curl ();
 		$this->snoopy = new \Snoopy ();
+		$this->atlasModel = D('Atlas/Atlas');
 		$this->atlasCollectionModel = D('Atlas/Atlas_collection');
+		$this->PictureClass = new \Atlas\Lib\Picture();
+		
+		if (!file_exists($this->diskPath)){	//判断目录不存在, 自动创建
+		    mkdir($this->diskPath, 0777,true);
+		}
 	}
 	
 	/**
@@ -47,4 +56,68 @@ class CollectRule {
 		die();
 	}
 	
+	/**
+	 * 开启下载图片
+	 * @param unknown $imgUrl
+	 */
+	function download($imgUrl){
+	    $file = $this->diskPath . basename($imgUrl);
+	    $pathName = basename($imgUrl);
+	    
+	    $curl_down = $this->curl->download($img->src, $this->diskPath.$pathName);
+	    //下载结束
+	    if($curl_down){
+	        $filePath = ROOT_PATH.'/'.$file;
+	        //模拟一组 $_FILES 格式
+	        $fileGBK = iconv('UTF-8','GB2312',$filePath);
+	        $fileInfo['size'] = filesize($fileGBK);
+	        $fileInfo['name'] = $pathName;
+	        $fileInfo['error'] = 0;
+	        $fileInfo['type'] = mime_content_type($fileGBK);
+	        $fileInfo['tmp_name'] = $fileGBK;
+	        
+	        //执行文件移动
+	        $info = $this->PictureClass->moveUpload(
+	            $fileInfo,
+	            C('PICTURE_UPLOAD'),
+	            //C('PICTURE_UPLOAD_DRIVER'),
+	            'qiniu',
+	            C("UPLOAD_QINIU_CONFIG")
+	        ); //TODO:上传到远程服务器
+	        
+	        if(!$info){
+	            //$this->error[] = '';
+	            return false;
+	        }else{
+	            //暂停60秒
+	            //sleep(60);
+	            /* $_data['uid'] = 1;
+	            $_data['content'] = $alt;
+	            $_data['image_id'] = $info['id'];
+	            $_data['addtime'] = time();
+	            $_data['status'] = 1;
+	            if($this->atlasModel->create($_data) && ( $this->atlasModel->add())){
+	                $this->zindex++;
+	            } */
+	            return $info;
+	        }
+	        
+	    }
+	    //下载end
+	}
+	
+	/**
+	 * 保存到数据库
+	 * 
+	 */
+	function save($content,$image_id,$uid=1){
+	    $_data['uid'] = $uid;
+	    $_data['content'] = $content;
+	    $_data['image_id'] = $image_id;
+	    $_data['addtime'] = time();
+	    $_data['status'] = 1;
+	    if($this->atlasModel->create($_data) && ( $this->atlasModel->add())){
+	        $this->zindex++;
+	    }
+	}
 }

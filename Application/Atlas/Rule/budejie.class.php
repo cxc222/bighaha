@@ -37,15 +37,19 @@ class budejie extends \Atlas\Rule\CollectRule{
 					$id = str_replace('pic-',' ',$img->id);
 					
 					//判断是否结束
-					if($id == $this->start_id){
-						$this->success('采集成功, 成功数: '.$zindex,U('admin/atlas/index'));
-					}
+					$this->finish($id);
 					
-					$this->Fast($index,$id);	//首次采集, 记录ID号
+					$this->Fast($this->zindex,$id);	//首次采集, 记录ID号
 					
 					//开始下载
+					$info = $this->download($src);
+					if($info){
+					    //保存数据库
+					    $this->save($alt, $info['id']);
+					}
+					
 					//$file = 'Uploads/atlas/' . basename($instance->url);
-					$file = $diskPath . basename($src);
+					/* $file = $diskPath . basename($src);
 					$pathName = basename($src);
 		
 					$curl_down = $curl->download($img->src, $diskPath.$pathName);
@@ -80,10 +84,11 @@ class budejie extends \Atlas\Rule\CollectRule{
 							$_data['addtime'] = time();
 							$_data['status'] = 1;
 							if($this->atlasModel->create($_data) && ( $this->atlasModel->add())){
-								$zindex++;
+								$this->zindex++;
 							}
 						}
-					}
+						
+					} */
 				}
 			}
 		}
@@ -102,5 +107,17 @@ class budejie extends \Atlas\Rule\CollectRule{
 			//首次采集, 记录ID号
 			$this->atlasCollectionModel->where(array('id'=>$this->id))->setField('start_id',$id);
 		}
+	}
+	
+	
+	function finish($id){
+	    if($id == $this->start_id){
+	        //$this->success('采集成功, 成功数: '.$this->zindex,U('admin/atlas/index'));
+	        return true;
+	    }
+	}
+	
+	function Success(){
+	    
 	}
 }
