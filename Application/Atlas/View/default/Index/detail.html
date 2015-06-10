@@ -52,6 +52,34 @@
 							href="#main_conter"> <span>54</span>
 						</a></li>
 					</ul> -->
+					<div class="shareBox pull-right">
+						<div class="bdsharebuttonbox">
+							<a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+							<a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+							<a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博"></a>
+							<a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网"></a>
+							<a href="#" class="bds_copy" data-cmd="copy" title="分享到复制网址"></a>
+							<a href="#" class="bds_more" data-cmd="more"></a>
+						</div>
+						<script>
+							window._bd_share_config={
+								"common":{
+									//"bdSnsKey":{},
+									"bdText":"{$detail.content|parseWeiboContent}",
+									"bdUrl":"{:U('atlas/index/detail',array('id'=>$detail['id']),'',true)}",
+									"bdMini":"2",
+									"bdMiniList":false,
+									"bdPic":"{$detail.image_id|getAtlasThumbImageById=###,720,0,2}",
+									"bdStyle":"1",
+									"bdSize":"32",
+									"onAfterClick":function(cmd){
+										
+									}
+								},
+								"share":{}
+							};
+						</script>
+					</div>
 				</div>
 			</div>
 
