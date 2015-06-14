@@ -2012,7 +2012,7 @@ class Model
      * @param mixed $pageopt 分页参数
      * @return mixed
      */
-    public function findPage($pageopt, $count = false, $options = array())
+    public function findPage($pageopt, $count = false, $options = array(),$rollPage=0)
     {
         // 分析表达式
         $options = $this->_parseOptions($options);
@@ -2044,6 +2044,9 @@ class Model
             }
 
             $p = new \Think\Page($count, $pageopt); // 实例化分页类 传入总记录数和每页显示的记录数
+            if($rollPage){//zzl添加 2015-6-11 10:44
+                $p->setRollPage($rollPage);
+            }
             // 查询数据
             $options['limit'] = $p->firstRow . ',' . $p->listRows;
 

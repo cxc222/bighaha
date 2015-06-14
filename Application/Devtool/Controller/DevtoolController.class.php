@@ -33,8 +33,8 @@ class DevtoolController extends AdminController
     public function module()
     {
         $modules = D('Common/Module')->getAll();
-        foreach($modules as $key=>$v){
-            if($v['is_setup']){
+        foreach ($modules as $key => $v) {
+            if ($v['is_setup']) {
                 continue;
             }
             unset($modules[$key]);
@@ -147,7 +147,7 @@ class DevtoolController extends AdminController
                 $this->backup_table($v['name'], 1);
 
                 $sql_table .= $this->sql;
-                $sql_drop_table.= $this->backup_drop_table($v['name']);
+                $sql_drop_table .= $this->backup_drop_table($v['name']);
                 if ($v['rows'] > 0) {
                     $this->sql = '';
                     $this->backup_table($v['name'], 2);
@@ -158,7 +158,7 @@ class DevtoolController extends AdminController
         }
         $this->assign('tables', $list);
         $this->assign('sql_tables', $sql_table);
-        $this->assign('sql_drop_tables',$sql_drop_table);
+        $this->assign('sql_drop_tables', $sql_drop_table);
         $this->assign('sql_rows', $sql_rows);
 
 
@@ -169,7 +169,7 @@ class DevtoolController extends AdminController
     public function module5()
     {
         $sql_table = I('post.sql_tables', '');
-        $sql_drop_table=I('post.sql_drop_table','');
+        $sql_drop_table = I('post.sql_drop_table', '');
 
         $sql_rows = I('post.sql_rows', '');
 
@@ -187,7 +187,7 @@ class DevtoolController extends AdminController
 
         $install = $this->getInstallContent();
         $this->assign('install', $install);
-        $this->assign('cleanData',$sql_drop_table);
+        $this->assign('cleanData', $sql_drop_table);
 
 
         $this->display(T('Devtool@Admin/module5'));
@@ -212,7 +212,7 @@ class DevtoolController extends AdminController
             if (!file_put_contents($dir . '/install.sql', $this->getInstallContent())) {
                 $info .= '替换install.sql失败。';
             };
-            if (!file_put_contents($dir . '/cleanData.sql',$_SESSION['guide_sql_drop_table'])) {
+            if (!file_put_contents($dir . '/cleanData.sql', $_SESSION['guide_sql_drop_table'])) {
                 $info .= '替换cleanData.sql失败。';
             };
 
@@ -233,7 +233,7 @@ class DevtoolController extends AdminController
         $archive = new \PclZip($zip);
         file_put_contents('Runtime/Temp/guide.json', json_encode($this->getGuideContent()));
         file_put_contents('Runtime/Temp/install.sql', $this->getInstallContent());
-        file_put_contents('Runtime/Temp/cleanData.sql',$_SESSION['guide_sql_drop_table']);
+        file_put_contents('Runtime/Temp/cleanData.sql', $_SESSION['guide_sql_drop_table']);
 
 
         $v_list = $archive->create('Runtime/Temp/guide.json,Runtime/Temp/install.sql,Runtime/Temp/cleanData.sql',
@@ -268,9 +268,11 @@ class DevtoolController extends AdminController
         $this->sql .= $sql;
     }
 
-    private function backup_drop_table($name){
+    private function backup_drop_table($name)
+    {
         return "DROP TABLE IF EXISTS `{$name}`;\n";
     }
+
     /**
      * @param int $type 备份类型，1:table,2:row,3:all
      */
@@ -286,7 +288,7 @@ class DevtoolController extends AdminController
                     $sql .= "-- 表结构 `{$table}`\n";
                     $sql .= "-- -----------------------------\n";
                     //$sql .= "DROP TABLE IF EXISTS `{$table}`;\n";
-                    $sql .= str_replace('CREATE TABLE','CREATE TABLE IF NOT EXISTS',trim($result[0]['Create Table']) . ";\n\n");
+                    $sql .= str_replace('CREATE TABLE', 'CREATE TABLE IF NOT EXISTS', trim($result[0]['Create Table']) . ";\n\n");
                     if (false === $this->write($sql)) {
                         return false;
                     }
@@ -415,5 +417,6 @@ class DevtoolController extends AdminController
         $install = $_SESSION['guide_sql_tables'] . $_SESSION['guide_sql_rows'];
         return $install;
     }
+
 
 }

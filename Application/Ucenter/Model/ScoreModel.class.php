@@ -1,5 +1,6 @@
 <?php
 namespace Ucenter\Model;
+
 use Think\Model;
 
 /**
@@ -10,11 +11,12 @@ use Think\Model;
 class ScoreModel extends Model
 {
 
-    private $typeModel =null;
+    private $typeModel = null;
+
     protected function _initialize()
     {
         parent::_initialize();
-        $this->typeModel =  M('ucenter_score_type');
+        $this->typeModel = M('ucenter_score_type');
     }
 
     /**
@@ -23,11 +25,12 @@ class ScoreModel extends Model
      * @return mixed
      * @author:xjw129xjt(肖骏涛) xjt@ourstu.com
      */
-    public function getTypeList($map=''){
-       $list = $this->typeModel->where($map)->order('id asc')->select();
+    public function getTypeList($map = '')
+    {
+        $list = $this->typeModel->where($map)->order('id asc')->select();
 
-       return $list;
-   }
+        return $list;
+    }
 
     /**
      * getType  获取单个类型
@@ -35,7 +38,8 @@ class ScoreModel extends Model
      * @return mixed
      * @author:xjw129xjt(肖骏涛) xjt@ourstu.com
      */
-    public function getType($map=''){
+    public function getType($map = '')
+    {
         $type = $this->typeModel->where($map)->find();
         return $type;
     }
@@ -46,12 +50,13 @@ class ScoreModel extends Model
      * @return mixed
      * @author:xjw129xjt(肖骏涛) xjt@ourstu.com
      */
-    public function addType($data){
+    public function addType($data)
+    {
         $db_prefix = C('DB_PREFIX');
-       $res = $this->typeModel->add($data);
-       $query = "ALTER TABLE  `{$db_prefix}member` ADD  `score".$res."` FLOAT NOT NULL COMMENT  '".$data['title']."'";
-       D()->execute($query);
-       return $res;
+        $res = $this->typeModel->add($data);
+        $query = "ALTER TABLE  `{$db_prefix}member` ADD  `score" . $res . "` FLOAT NOT NULL COMMENT  '" . $data['title'] . "'";
+        D()->execute($query);
+        return $res;
     }
 
     /**
@@ -60,15 +65,16 @@ class ScoreModel extends Model
      * @return mixed
      * @author:xjw129xjt(肖骏涛) xjt@ourstu.com
      */
-    public function delType($ids){
+    public function delType($ids)
+    {
         $db_prefix = C('DB_PREFIX');
-        $res = $this->typeModel->where(array('id'=>array(array('in',$ids),array('gt',4),'and')))->delete();
-        foreach($ids as $v){
-            if($v>4){
-                $query = "alter table `{$db_prefix}member` drop column score".$v;
+        $res = $this->typeModel->where(array('id' => array(array('in', $ids), array('gt', 4), 'and')))->delete();
+        foreach ($ids as $v) {
+            if ($v > 4) {
+                $query = "alter table `{$db_prefix}member` drop column score" . $v;
                 D()->execute($query);
             }
-      }
+        }
         return $res;
     }
 
@@ -78,10 +84,11 @@ class ScoreModel extends Model
      * @return mixed
      * @author:xjw129xjt(肖骏涛) xjt@ourstu.com
      */
-    public function editType($data){
+    public function editType($data)
+    {
         $db_prefix = C('DB_PREFIX');
         $res = $this->typeModel->save($data);
-        $query = "alter table `{$db_prefix}member` modify column `score".$data['id']."` FLOAT comment '".$data['title']."';";
+        $query = "alter table `{$db_prefix}member` modify column `score" . $data['id'] . "` FLOAT comment '" . $data['title'] . "';";
         D()->execute($query);
         return $res;
     }
@@ -94,9 +101,10 @@ class ScoreModel extends Model
      * @return mixed
      * @author:xjw129xjt(肖骏涛) xjt@ourstu.com
      */
-    public function getUserScore($uid,$type){
+    public function getUserScore($uid, $type)
+    {
         $model = D('Member');
-        $score = $model->where(array('uid'=>$uid))->getField('score'.$type);
+        $score = $model->where(array('uid' => $uid))->getField('score' . $type);
         return $score;
     }
 
@@ -108,31 +116,82 @@ class ScoreModel extends Model
      * @param string $action
      * @author:xjw129xjt(肖骏涛) xjt@ourstu.com
      */
-    public function setUserScore($uids,$score,$type,$action='inc'){
+    public function setUserScore($uids, $score, $type, $action = 'inc',$action_model ='',$record_id=0,$remark='')
+    {
 
         $model = D('Member');
-        switch($action){
+        switch ($action) {
             case 'inc':
                 $score = abs($score);
-                $res = $model->where(array('uid'=>array('in',$uids)))->setInc('score'.$type,$score);
+                $res = $model->where(array('uid' => array('in', $uids)))->setInc('score' . $type, $score);
                 break;
             case 'dec':
                 $score = abs($score);
-                $res = $model->where(array('uid'=>array('in',$uids)))->setDec('score'.$type,$score);
+                $res = $model->where(array('uid' => array('in', $uids)))->setDec('score' . $type, $score);
                 break;
             case 'to':
-                $res = $model->where(array('uid'=>array('in',$uids)))->setField('score'.$type,$score);
+                $res = $model->where(array('uid' => array('in', $uids)))->setField('score' . $type, $score);
                 break;
             default:
                 $res = false;
                 break;
         }
-        foreach($uids as $val){
-            clean_query_user_cache($val,'score'.$type);
+
+        if(!($action != 'to' && $score == 0)){
+            $this->addScoreLog($uids,$type,$action,$score,$action_model,$record_id,$remark);
+        }
+
+        foreach ($uids as $val) {
+           $this->cleanUserCache($val,$type);
         }
         unset($val);
         return $res;
     }
 
+
+    public function addScoreLog($uid, $type, $action='inc',$value=0, $model='',$record_id=0,$remark='')
+    {
+        $uid = is_array($uid) ? $uid : explode(',',$uid);
+        foreach($uid as $v){
+            $score =  D('Member')->where(array('uid'=>$v))->getField('score'.$type);
+            $data['uid'] = $v;
+            $data['ip'] = ip2long(get_client_ip());
+            $data['type'] = $type;
+            $data['action'] = $action;
+            $data['value'] = $value;
+            $data['model'] = $model;
+            $data['record_id'] = $record_id;
+            $data['finally_value'] = $score;
+            $data['remark'] = $remark;
+            $data['create_time'] = time();
+            D('score_log')->add($data);
+        }
+        return true;
+    }
+
+    public function cleanUserCache($uid,$type){
+        $uid = is_array($uid) ? $uid : explode(',',$uid);
+        $type = is_array($type)?$type:explode(',',$type);
+        foreach($uid as $val){
+            foreach($type as $v){
+                clean_query_user_cache($val, 'score' . $v);
+
+            }
+            clean_query_user_cache($uid, 'title');
+        }  
+    }
+
+    public function getAllScore($uid)
+    {
+        $typeList = $this->getTypeList(array('status'=>1));
+        $return = array();
+        foreach($typeList as $key => &$v){
+            $v['value'] = $this->getUserScore($uid,$v['id']);
+            $return[$v['id']] = $v;
+
+        }
+        unset($v);
+        return $return;
+    }
 
 }

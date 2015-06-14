@@ -106,7 +106,12 @@ class MessageModel extends Model
             if($content){
                 $content['args'] = json_decode($content['args'],true);
                 $content['args_json'] = json_encode($content['args']) ;
-                $content['web_url'] = is_bool(strpos($content['url'],'http://')) ? U($content['url'],$content['args']):$content['url'];
+                if($content['url']){
+                    $content['web_url'] = is_bool(strpos($content['url'],'http://')) ? U($content['url'],$content['args']):$content['url'];
+                }else{
+                    $content['web_url'] = U('ucenter/message/message');
+                }
+
             }
             S('message_content_' . $id, $content, 60 * 60);
         }

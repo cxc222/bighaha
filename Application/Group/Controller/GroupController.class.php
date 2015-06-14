@@ -301,16 +301,17 @@ class GroupController extends AdminController
             $aId = I('post.id', 0, 'intval');
             $aTitle = I('post.title', '', 'text');
             $aCreateTime = I('post.create_time', 0, 'intval');
-            $aStatus = I('post.create_time', 0, 'intval');
+            $aStatus = I('post.status', 0, 'intval');
             $aAllowUserGroup = I('post.allow_user_group', 0, 'intval');
             $aLogo = I('post.logo', 0, 'intval');
             $aTypeId = I('post.type_id', 0, 'intval');
             $aDetail = I('post.detail', '', 'text');
             $aType = I('post.type', 0, 'intval');
+            $aMemberAlias=I('post.member_alias','','text');
 
             $isEdit = $aId ? true : false;
             //生成数据
-            $data = array('title' => $aTitle, 'create_time' => $aCreateTime, 'status' => $aStatus, 'allow_user_group' => $aAllowUserGroup, 'logo' => $aLogo, 'type_id' => $aTypeId, 'detail' => $aDetail, 'type' => $aType);
+            $data = array('title' => $aTitle, 'create_time' => $aCreateTime, 'status' => $aStatus, 'allow_user_group' => $aAllowUserGroup, 'logo' => $aLogo, 'type_id' => $aTypeId, 'detail' => $aDetail, 'type' => $aType,'member_alias'=>$aMemberAlias);
             //写入数据库
             $model = M('Group');
             if ($isEdit) {
@@ -362,8 +363,7 @@ class GroupController extends AdminController
                 ->keySelect('type_id', '分类', '选择分类', $opt)
                 /* ->keyMultiUserGroup('allow_user_group', '允许发帖的用户组')*/
                 ->keyStatus()
-                ->keySingleImage('logo', '群组logo', '群组logo，300px*300px')
-                ->keySingleImage('background', '群组背景', '用于显示的背景，1050px*200px')->keyCreateTime()
+                ->keySingleImage('logo', '群组logo', '群组logo，300px*300px')->keyText('member_alias','群成员昵称')->keyCreateTime()
                 ->data($group)
                 ->buttonSubmit(U('editGroup'))->buttonBack()
                 ->display();

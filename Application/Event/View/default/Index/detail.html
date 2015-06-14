@@ -152,7 +152,7 @@
 
             <div class="clearfix"></div>
             <div style="padding: 5px 20px 50px 20px;">
-                {:hook('localComment', array('path'=>"Event/event/$content[id]", 'uid'=>$content['uid'],'count_model'=>'event','count_field'=>'reply_count'))}
+                {:hook('localComment', array('path'=>"Event/event/$content[id]", 'uid'=>$content['uid'],'count_model'=>'event','count_field'=>'reply_count','this_url'=>'event/index/detail'))}
             </div>
 
         </div>

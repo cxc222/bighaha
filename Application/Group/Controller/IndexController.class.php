@@ -10,7 +10,7 @@ class IndexController extends BaseController
     public function _initialize()
     {
         parent::_initialize();
-        $myInfo = query_user(array('avatar128', 'avatar64', 'nickname', 'uid', 'space_url', 'icons_html'), is_login());
+        $myInfo = query_user(array('avatar128', 'avatar64', 'nickname', 'uid', 'space_url'), is_login());
         $this->assign('myInfo', $myInfo);
     }
 
@@ -933,7 +933,7 @@ class IndexController extends BaseController
             $friendIds = getSubByKey($friendList, 'follow_who');
             $friends = array();
             foreach ($friendIds as $v) {
-                $friends[$v] = query_user(array('avatar128', 'avatar64', 'nickname', 'uid', 'space_url', 'icons_html'), $v);
+                $friends[$v] = query_user(array('avatar128', 'avatar64', 'nickname', 'uid', 'space_url'), $v);
             }
             $this->assign('friends', $friends);
             $this->assign('group_id', $aGroupId);

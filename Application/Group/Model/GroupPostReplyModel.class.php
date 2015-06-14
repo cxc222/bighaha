@@ -32,7 +32,7 @@ class GroupPostReplyModel extends Model
         if (is_bool($reply)) {
             $reply = $this->where(array('id' => $id, 'status' => 1))->find();
             if ($reply) {
-                $reply['user'] = query_user(array('avatar128', 'avatar64', 'nickname', 'uid', 'space_url', 'icons_html'), $reply['uid']);
+                $reply['user'] = query_user(array('avatar128', 'avatar64', 'nickname', 'uid', 'space_url'), $reply['uid']);
                 S('group_post_reply_' . $id, $reply, 60 * 60);
             }
         }

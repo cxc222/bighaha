@@ -112,9 +112,22 @@ function parse_popup($content)
 
 function replace_attr($content)
 {
+    // 阻止代码部分被过滤 过滤前
+    preg_match_all('/\<pre .*?\<\/pre\>/si',$content,$matches);
+    $pattens=array();
+    foreach($matches[0] as $key=>$val){
+        $pattens[$key]='{$pre}_'.$key;
+        $content=str_replace($val,$pattens[$key],$content);
+    }
+    //阻止代码部分被过滤 过滤前end
+
     $content = preg_replace("/class=\".*?\"/si", "", $content);
     $content = preg_replace("/id=\".*?\"/si", "", $content);
     $content = closetags($content);
+
+    //阻止代码部分被过滤 过滤后
+    $content=str_replace($pattens,$matches[0],$content);
+    //阻止代码部分被过滤 过滤后end
     return $content;
 
 }

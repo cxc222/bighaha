@@ -141,4 +141,10 @@ class Page{
             $this->config['theme']);
         return "<div class='pager'>{$page_str}</div>";
     }
+
+    // 设置分页栏每页显示的页数 //zzl添加 2015-6-11 10:44
+    public function setRollPage($num)
+    {
+        $this->rollPage=$num;
+    }
 }

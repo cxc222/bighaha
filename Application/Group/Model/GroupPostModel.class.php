@@ -24,7 +24,7 @@ class GroupPostModel extends Model {
         if(is_bool($post)){
             $post = $this->where(array('id'=>$id,'status'=>1))->find();
             if($post){
-                $post['user'] = query_user(array('avatar128', 'avatar64', 'nickname', 'uid', 'space_url', 'icons_html'), $post['uid']);
+                $post['user'] = query_user(array('avatar128', 'avatar64', 'nickname', 'uid', 'space_url'), $post['uid']);
                 S('group_post_'.$id,$post,60*60);
             }
         }

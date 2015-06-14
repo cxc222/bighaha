@@ -28,7 +28,7 @@ class IndexController extends Controller
             $userConfigModel = D('Ucenter/UserConfig');
             $titleModel = D('Ucenter/Title');
             foreach ($peoples['data'] as &$v) {
-                $v = query_user(array('title', 'avatar128', 'nickname', 'uid', 'space_url', 'icons_html', 'score', 'title', 'fans', 'following', 'rank_link'), $v['uid']);
+                $v = query_user(array('title', 'avatar128', 'nickname', 'uid', 'space_url', 'score', 'title', 'fans', 'following', 'rank_link'), $v['uid']);
                 $v['level'] = $titleModel->getCurrentTitleInfo($v['uid']);
                 //获取用户封面id
                 $where = getUserConfigMap('user_cover', '', $v['uid']);

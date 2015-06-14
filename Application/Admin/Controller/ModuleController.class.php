@@ -205,8 +205,11 @@ class ModuleController extends AdminController
                 ->keyText('admin_entry', '后台入口');
 
 //, 'repair' => '修复模式'修复模式不会导入模块专用数据表，只导入菜单、权限、行为、行为限制
-            $builder->keyRadio('mode', '安装模式', '', array('install' => '覆盖安装模式'))
-                    ->keyBool('add_nav','添加导航','安装后自动在导航栏中加入菜单，或者<a target="_blank" href="'.U('channel/index').'">手动设置</a>');
+            $builder->keyRadio('mode', '安装模式', '', array('install' => '覆盖安装模式'));
+            if($module['entry']){
+                $builder->keyBool('add_nav','添加导航','安装后自动在导航栏中加入菜单，或者<a target="_blank" href="'.U('channel/index').'">手动设置</a>');
+            }
+
          /*   $builder->keyRadio('add_nav','添加导航菜单','默认不会添加导航',array(1=>'不添加',2=>'添加'));*/
             $builder->group('安装选项', 'mode,add_nav');
            /* $builder->group('模块信息', 'id,name,alias,version,icon,summary,developer,entry,admin_entry');*/

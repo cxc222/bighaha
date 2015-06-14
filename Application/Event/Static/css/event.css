@@ -91,9 +91,9 @@
   top: 0;
 }
 .upload-pre-item img {
-  min-width: 350px;
+  min-width: 250px;
   max-width: 250px;
-  max-height: 300px;
+  max-height: 200px;
   border: 1px solid #ccc;
   padding: 2px;
 }
@@ -454,4 +454,8 @@ hr {
   color: #fff;
   background-color: #008CC9;
   border-color: #008CC9;
+}
+.form-horizontal .control-label {
+  width: 50px;
+  float: left;
 }

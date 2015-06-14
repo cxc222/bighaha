@@ -37,7 +37,6 @@
                                 <a ucard="{$weibo.user.uid}"
                                    href="{$weibo.user.space_url}" class="user_name">{$weibo.user.nickname|htmlspecialchars}
                                 </a>
-                                {$weibo.user.icons_html}
                                 <volist name="weibo['user']['rank_link']" id="vl">
                                     <if condition="$vl['is_show']">
                                         <img src="{$vl.logo_url}" title="{$vl.title}" alt="{$vl.title}"

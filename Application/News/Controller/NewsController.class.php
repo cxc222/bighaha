@@ -355,7 +355,7 @@ str;
                 ->keyId()
                 ->keyReadOnly('uid','发布者')->keyDefault('uid',get_uid())
                 ->keyText('title','标题')
-                ->keyEditor('content','内容','','all')
+                ->keyEditor('content','内容','','all',array('width' => '700px', 'height' => '400px'))
                 ->keySelect('category','分类','',$options)
 
                 ->keyTextArea('description','摘要')

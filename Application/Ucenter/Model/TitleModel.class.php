@@ -45,11 +45,15 @@ class TitleModel
         //根据积分查询对应等级
         $config = $this->getTitleConfig();
         foreach ($config as $max => $title) {
+            if($score>$max){
+                $data['before_level_need']=$max;
+            }
             if ($score <= $max) {
                 $data['next'] = $title;
                 $data['upgrade_require'] = $max;
                 break;
             }
+
         }
         if (empty($data['next'])) {
             //查询无结果，返回最高等级
@@ -59,7 +63,7 @@ class TitleModel
         }
 
         $data['left'] =$data['upgrade_require']-$score;
-        $data['percent']=number_format($score/$data['upgrade_require']*100,1);
+        $data['percent']=number_format((1-$data['left']/($data['upgrade_require']-$data['before_level_need']))*100,1);
 
 
         return $data;
@@ -94,6 +98,10 @@ class TitleModel
         }
     }
 
+    /**找到当前等级需要的积分
+     * @param $userScore
+     * @return int|string
+     */
     public function getScoreTotal($userScore)
     {
         $titles = $this->getTitleConfig();

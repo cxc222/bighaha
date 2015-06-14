@@ -953,7 +953,7 @@ class MemberController extends Controller
                     $followModel->addFollow(abs($invite['uid']), $uid);
                 }
                 if($invite['uid']>0){
-                    D('Ucenter/Score')->setUserScore(array($invite['uid']),$invite_type['income_score'],$invite_type['income_score_type'],'inc');//扣积分
+                    D('Ucenter/Score')->setUserScore(array($invite['uid']),$invite_type['income_score'],$invite_type['income_score_type'],'inc','',0,'邀请奖励');
                 }
             }
         }

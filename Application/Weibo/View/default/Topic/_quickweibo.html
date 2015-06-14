@@ -16,7 +16,6 @@
                         <a ucard="{$self.uid}"
                            href="{$self.space_url}" class="user_name"> {$self.nickname|htmlspecialchars}
                         </a>
-                        {$weibo.user.icons_html}
                         <volist name="self['rank_link']" id="vl">
                             <if condition="$vl['is_show']">
                                 <img src="{$vl.logo_url}" title="{$vl.title}" alt="{$vl.title}"

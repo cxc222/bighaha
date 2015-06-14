@@ -94,7 +94,7 @@ class ForumLzlReplyModel extends Model
         if ($list == null) {
             $list = D('forum_lzl_reply')->where('is_del=0 and to_f_reply_id=' . $to_f_reply_id)->order($order)->select();
             foreach ($list as $k => &$v) {
-                $v['userInfo'] = query_user(array('avatar128', 'nickname', 'uid', 'space_url', 'icons_html'), $v['uid']);
+                $v['userInfo'] = query_user(array('avatar128', 'nickname', 'uid', 'space_url'), $v['uid']);
                 $v['content'] = op_t($v['content']);
             }
             unset($v);

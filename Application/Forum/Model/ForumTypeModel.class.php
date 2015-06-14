@@ -31,7 +31,7 @@ class ForumTypeModel extends Model
 
         /* 获取所有分类 */
         $map = array('status' => array('gt', -1));
-        $list = $this->field($field)->where($map)->order('sort desc')->select();
+        $list = $this->field($field)->where($map)->order('sort asc')->select();
         $list = list_to_tree($list, $pk = 'id', $pid = 'pid', $child = '_', $root = $id);
 
 

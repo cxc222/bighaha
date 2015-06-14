@@ -33,7 +33,7 @@ class Api
     protected function getUserStructure($uid)
     {
         //请不要在这里增加用户敏感信息，可能会暴露用户隐私
-        $fields = array('uid', 'nickname', 'avatar32', 'avatar64', 'avatar128', 'avatar256', 'avatar512', 'space_url', 'icons_html', 'rank_link', 'score', 'title', 'weibocount', 'fans', 'following');
+        $fields = array('uid', 'nickname', 'avatar32', 'avatar64', 'avatar128', 'avatar256', 'avatar512', 'space_url', 'rank_link', 'score', 'title', 'weibocount', 'fans', 'following');
         return query_user($fields, $uid);
     }
 

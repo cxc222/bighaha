@@ -21,7 +21,7 @@ class ManageController extends BaseController
         $this->assignNotice($this->groupId);
         $this->assign('group_id', $this->groupId);
         unset($e);
-        $myInfo = query_user(array('avatar128', 'avatar64', 'nickname', 'uid', 'space_url', 'icons_html'), is_login());
+        $myInfo = query_user(array('avatar128', 'avatar64', 'nickname', 'uid', 'space_url'), is_login());
         $this->assign('myInfo', $myInfo);
         //赋予贴吧列表
 
@@ -46,7 +46,7 @@ class ManageController extends BaseController
         $member = D('GroupMember')->where(array('group_id' => $this->groupId, 'status' => $aStatus))->page($aPage, 10)->select();
         $totalCount = D('GroupMember')->where(array('group_id' => $this->groupId, 'status' => $aStatus))->count();
         foreach ($member as &$v) {
-            $v['user'] = query_user(array('avatar128', 'avatar64', 'nickname', 'uid', 'space_url', 'icons_html'), $v['uid']);
+            $v['user'] = query_user(array('avatar128', 'avatar64', 'nickname', 'uid', 'space_url'), $v['uid']);
         }
         $this->assign('member', $member);
         $this->assign('status', $aStatus);

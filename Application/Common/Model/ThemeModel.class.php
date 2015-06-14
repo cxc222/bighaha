@@ -26,7 +26,7 @@ class ThemeModel extends Model
 
         if ($res) {
             S('conf_THEME_NOW_THEME', $name);
-            cookie('TO_LOOK_THEME', $name, array('prefix' => 'OSV2', 'expire' => 60));
+            cookie('TO_LOOK_THEME', $name, array('prefix' => 'OSV2'));
             clean_cache(RUNTIME_PATH.'Cache/');//清除模板缓存
             return true;
 

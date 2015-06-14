@@ -26,12 +26,6 @@ class HomeController extends AdminController
 
         $builder->title('首页设置');
 
-        $builder->keySingleImage('LOGO', 'Logo图标', '此处不同于网站信息内的LOGO，只在首页显示');
-        $builder->keyText('ENTER_URL', '进入网站Url','不填则隐藏此按钮，不留入口，支持形如weibo/index/index之类的tp写法和http://等常规写法');
-        $builder->keyEditor('SUMMARY', '导语', '顶部导语，用一句话来介绍你的网站');
-
-        $builder->group('内容设置', 'LOGO,SUMMARY,OPEN_LOGIN_PANEL,ENTER_URL');
-
         $modules = D('Common/Module')->getAll();
         foreach ($modules as $m) {
             if ($m['is_setup'] == 1 && $m['entry'] != '') {
@@ -43,7 +37,7 @@ class HomeController extends AdminController
         $module[] = array('data-id' => 'slider', 'title' => '轮播');
 
         $default = array(array('data-id' => 'disable', 'title' => '禁用', 'items' => $module), array('data-id' => 'enable', 'title' => '启用', 'items' => array()));
-        $builder->keyKanban('BLOCK', '展示模块');
+        $builder->keyKanban('BLOCK', '展示模块','拖拽到右侧以展示这些模块，新的模块安装后会多出一些可操作的项目');
         $data['BLOCK'] = $builder->parseKanbanArray($data['BLOCK'], $module, $default);
         $builder->group('展示模块', 'BLOCK');
 

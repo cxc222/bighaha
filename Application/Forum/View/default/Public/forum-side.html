@@ -1,6 +1,6 @@
 <div class="margin-bottom-15"></div>
 <nav class="menu" data-toggle="menu">
-    <if condition="$allow_publish">
+    <if condition="check_auth('Forum/Index/addPost',get_expect_ids(0,0,0,forum_id,0))&&forumAllowCurrentUserGroup($forum_id)">
         <a class="btn btn-primary btn-md" href="{:U('Index/edit',array('forum_id'=>$forum_id))}"><i
                 class="icon-edit"></i> 发表新帖</a>
     </if>

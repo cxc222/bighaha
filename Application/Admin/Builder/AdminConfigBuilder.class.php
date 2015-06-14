@@ -214,6 +214,26 @@ class AdminConfigBuilder extends AdminBuilder
         return $this->keyCheckBox($name, $title, $subtitle, $options);
     }
 
+    /**单文件上传
+     * @param $name
+     * @param $title
+     * @param null $subtitle
+     */
+    public function keySingleFile($name, $title, $subtitle = null){
+        return  $this->key($name,$title,$subtitle,'singleFile');
+    }
+
+    /**多文件上传
+     * @param $name
+     * @param $title
+     * @param null $subtitle
+     */
+    public function keyMultiFile($name, $title, $subtitle = null){
+        return   $this->key($name,$title,$subtitle,'multiFile');
+    }
+
+
+
     public function keySingleImage($name, $title, $subtitle = null)
     {
         return $this->key($name, $title, $subtitle, 'singleImage');
@@ -581,6 +601,24 @@ class AdminConfigBuilder extends AdminBuilder
         $this->group($group_name, $mod.'_LOCAL_COMMENT_CAN_GUEST,'.$mod.'_LOCAL_COMMENT_ORDER,'.$mod.'_LOCAL_COMMENT_COUNT');
         return $this;
     }
+
+
+
+    public function keyUserDefined($name,$title,$subtitle,$display='',$param=''){
+        $this->assign('param',$param);
+        $this->assign('name',$name);
+        $html = $this->fetch($display);
+
+        $key = array('name'=>$name, 'title' => $title, 'subtitle' => $subtitle, 'type' => 'userDefined', 'definedHtml' => $html);
+        $this->_keyList[] = $key;
+        return $this;
+    }
+
+
+
+
+
+
 
 
 }

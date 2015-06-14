@@ -11,7 +11,7 @@
 
 
 /**
- * 获取当前用户登录的角色的标识(角色功能完成后修改)
+ * 获取当前用户登录的角色的标识
  * @return int 角色id
  * @author 郑钟良<zzl@ourstu.com>
  */
@@ -26,8 +26,8 @@ function get_login_role()
 }
 
 /**
- * 获取当前用户登录的角色的标识(角色功能完成后修改)
- * @return int 角色id
+ * 获取当前用户登录的角色是否审核通过
+ * @return status 用户角色审核状态  1：通过，2：待审核，0：审核失败
  * @author 郑钟良<zzl@ourstu.com>
  */
 function get_login_role_audit()

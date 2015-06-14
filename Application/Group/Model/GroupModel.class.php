@@ -59,7 +59,7 @@ class GroupModel extends Model
         if (is_bool($group)) {
             $group = $this->where(array('id' => $id, 'status' => 1))->find();
             if ($group) {
-                $group['user'] = query_user(array('avatar128', 'avatar64', 'nickname', 'uid', 'space_url', 'icons_html'), $group['uid']);
+                $group['user'] = query_user(array('avatar128', 'avatar64', 'nickname', 'uid', 'space_url'), $group['uid']);
                 $group['user']['group_count'] = $this->getUserGroupCount($group['uid']);
                 S('group_' . $id, $group, 60 * 60);
             }

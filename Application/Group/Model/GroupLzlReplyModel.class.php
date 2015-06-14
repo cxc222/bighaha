@@ -25,7 +25,7 @@ class GroupLzlReplyModel extends Model
         if (is_bool($lzl)) {
             $lzl = $this->where(array('id' => $id, 'status' => 1))->find();
             if ($lzl) {
-                $lzl['user'] = query_user(array('avatar128', 'avatar64', 'nickname', 'uid', 'space_url', 'icons_html'), $lzl['uid']);
+                $lzl['user'] = query_user(array('avatar128', 'avatar64', 'nickname', 'uid', 'space_url'), $lzl['uid']);
                 S('group_lzl_reply_' . $id, $lzl, 60 * 60);
             }
         }

@@ -2,7 +2,7 @@
     <div class="col-xs-12">
         <div class="col-xs-12 weibo_content" style="padding: 0;position:relative;">
             <div class="weibo_icon">
-                <if condition="is_administrator() OR check_auth('Weibo/Index/setTop')">
+                <if condition="check_auth('Weibo/Index/setTop')">
                     <eq name="weibo.is_top" value="0">
                         <li data-weibo-id="{$weibo.id}" title="置顶{$MODULE_ALIAS}" data-role="weibo_set_top">
                             <i class="icon icon-arrow-up"></i>
@@ -41,7 +41,6 @@
                         <a ucard="{$weibo.user.uid}" href="{$weibo.user.space_url}" class="user_name">
                             {$weibo.user.nickname|htmlspecialchars}
                         </a>
-                        {$weibo.user.icons_html}
                         <volist name="weibo['user']['rank_link']" id="vl">
                             <if condition="$vl['is_show']">
                                 <img src="{$vl.logo_url}" title="{$vl.title}" alt="{$vl.title}" class="rank_html"/>

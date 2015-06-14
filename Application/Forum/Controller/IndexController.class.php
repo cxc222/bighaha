@@ -31,7 +31,7 @@ class IndexController extends Controller
             $e['allow_publish'] = $this->isForumAllowPublish($e['id']);
         }
         unset($e);
-        $myInfo = query_user(array('avatar128', 'avatar64', 'nickname', 'uid', 'space_url', 'icons_html'), is_login());
+        $myInfo = query_user(array('avatar128', 'avatar64', 'nickname', 'uid', 'space_url'), is_login());
         $this->assign('myInfo', $myInfo);
         //赋予论坛列表
         $this->assign('forum_list', $forum_list);
@@ -376,12 +376,34 @@ class IndexController extends Controller
         $this->display();
     }
 
+    /**
+     * 删除贴子
+     * @param $id
+     * @author 郑钟良<zzl@ourstu.com>
+     */
+    public function delPost($id)
+    {
+        $id = intval($id);
+        $post=D('ForumPost')->where(array('id' => $id, 'status' => 1))->find();
+        $forum_id=$post['forum_id'];
+
+        $this->checkAuth('Forum/Index/delPost',get_expect_ids(0,0,0,$forum_id,0),'你没有删除评论权限！');
+        $this->checkActionLimit('forum_del_post','Forum',null,get_uid());
+        $res = M('ForumPost')->where(array('id'=>$id))->setField('status',-1);
+        if($res){
+            action_log('forum_del_post','Forum',$id,get_uid());
+            $this->success('操作成功！',U('Forum/Index/forum',array('id'=>$forum_id)));
+        }else{
+            $this->error('操作失败！');
+        }
+    }
+
     public function delPostReply($id)
     {
         $id = intval($id);
 
         $this->requireLogin();
-        $this->requireCanDeletePostReply($id);
+        $this->checkAuth('Forum/Index/delPostReply',get_expect_ids(0,$id,0,0,1),'你没有删除评论权限！');
         $res = D('ForumPostReply')->delPostReply($id);
         $res && $this->success($res);
         !$res && $this->error('');
@@ -392,17 +414,15 @@ class IndexController extends Controller
     {
         $reply_id = intval($reply_id);
 
-        $has_permission = $this->checkRelyPermission($reply_id);
-        if (!$has_permission) {
-            $this->error('您不具备编辑该回复的权限。');
-        }
+        $this->checkAuth('Forum/Index/doReplyEdit',get_expect_ids(0,$reply_id,0,0,1),'你没有编辑该评论权限！');
+
         if ($reply_id) {
             $reply = D('forum_post_reply')->where(array('id' => $reply_id, 'status' => 1))->find();
         } else {
             $this->error('参数出错！');
         }
 
-        $this->setTitle('编辑回复 —— 论坛');
+        $this->setTitle('编辑评论 —— 论坛');
         //显示页面
         $this->assign('reply', $reply);
         $this->display();
@@ -414,15 +434,10 @@ class IndexController extends Controller
         //对帖子内容进行安全过滤
         $content = $this->filterPostContent($content);
 
-
-        $has_permission = $this->checkRelyPermission($reply_id);
-        if (!$has_permission) {
-            $this->error('您不具备编辑该回复的权限。');
-        }
-
+        $this->checkAuth('Forum/Index/doReplyEdit',get_expect_ids(0,$reply_id,0,0,1),'你没有编辑该评论权限！');
 
         if (!$content) {
-            $this->error("回复内容不能为空！");
+            $this->error("评论内容不能为空！");
         }
         $data['content'] = $content;
         $data['update_time'] = time();
@@ -430,9 +445,9 @@ class IndexController extends Controller
         $reply = D('forum_post_reply')->where(array('id' => intval($reply_id)))->save($data);
         if ($reply) {
             S('post_replylist_' . $post_id, null);
-            $this->success('编辑回复成功', U('Forum/Index/detail', array('id' => $post_id)));
+            $this->success('编辑评论成功', U('Forum/Index/detail', array('id' => $post_id)));
         } else {
-            $this->error("编辑回复失败");
+            $this->error("编辑评论失败");
         }
     }
 
@@ -447,10 +462,9 @@ class IndexController extends Controller
         if ($isEdit) {
             $post = D('ForumPost')->where(array('id' => intval($post_id), 'status' => 1))->find();
             $this->requireAllowEditPost($post_id);
-            $this->checkActionLimit('forum_edit_post','Forum',$post_id,get_uid());
         } else {
             $post = array('forum_id' => $forum_id);
-            $this->checkAuth('Forum/Index/addPost',-1,'没有权限发表帖子！');
+            $this->checkAuth('Forum/Index/addPost',get_expect_ids(0,0,0,$forum_id,0),'没有权限发表帖子！');
             $this->checkActionLimit('forum_add_post','Forum',null,get_uid());
         }
         //获取论坛编号
@@ -458,11 +472,6 @@ class IndexController extends Controller
 
         //确认当前论坛能发帖
         $this->requireForumAllowPublish($forum_id);
-
-        //确认论坛能发帖
-        if ($forum_id) {
-            $this->requireForumAllowPublish($forum_id);
-        }
 
         //显示页面
         $this->assign('forum_id', $forum_id);
@@ -490,7 +499,6 @@ class IndexController extends Controller
         //如果是编辑模式，确认当前用户能编辑帖子
         if ($isEdit) {
             $this->requireAllowEditPost($post_id);
-            $this->checkActionLimit('forum_edit_post','Forum',$post_id,get_uid());
         }else{
             $this->checkAuth('Forum/Index/addPost',-1,'没有权限发表帖子！');
             $this->checkActionLimit('forum_add_post','Forum',null,get_uid());
@@ -595,8 +603,15 @@ class IndexController extends Controller
         $post_id = intval($post_id);
         $content = $this->filterPostContent($content);
 
-        //确认有权限回复
-        $this->requireAllowReply($post_id);
+        //确认有权限评论
+        $post_id = intval($post_id);
+        $post = D('ForumPost')->where(array('id' => $post_id))->find();
+        if (!$post) {
+            $this->error('帖子不存在');
+        }
+        $this->requireLogin();
+        $this->checkAuth('Forum/Index/doReply',$post['uid'],'你没有评论贴子权限！');
+        //确认有权限评论 end
 
         $this->checkActionLimit('forum_post_reply','Forum',null,get_uid());
 
@@ -606,7 +621,7 @@ class IndexController extends Controller
         $result = $model->addReply($post_id, $content);
         $after = getMyScore();
         if (!$result) {
-            $this->error('回复失败：' . $model->getError());
+            $this->error('评论失败：' . $model->getError());
         }
         //显示成功消息
         action_log('forum_post_reply','Forum',$result,get_uid());
@@ -706,9 +721,8 @@ class IndexController extends Controller
     {
         $this->requirePostExists($post_id);
         $this->requireLogin();
-        //确认帖子时自己的
-        $post = D('ForumPost')->where(array('id' => $post_id, 'status' => 1))->find();
-        $this->checkAuth('Forum/Index/editPost',$post['uid'],'没有权限编辑该帖子！');
+        $this->checkAuth('Forum/Index/editPost',get_expect_ids(0,0,$post_id,0,1),'没有权限编辑该帖子！');
+        $this->checkActionLimit('forum_edit_post','Forum',$post_id,get_uid());
     }
 
     private function requireForumAllowView($forum_id)
@@ -728,13 +742,6 @@ class IndexController extends Controller
         $forum_id = intval($forum_id);
         $forum = D('Forum')->where(array('id' => $forum_id, 'status' => 1));
         return $forum ? true : false;
-    }
-
-    private function requireAllowReply($post_id)
-    {
-        $post_id = intval($post_id);
-        $this->requirePostExists($post_id);
-        $this->requireLogin();
     }
 
     private function requirePostExists($post_id)
@@ -851,31 +858,6 @@ class IndexController extends Controller
         return $content;
     }
 
-    private function requireCanDeletePostReply($post_id)
-    {
-        if (!$this->canDeletePostReply($post_id)) {
-            $this->error('您没有删贴权限');
-        }
-    }
-
-    private function canDeletePostReply($post_id)
-    {
-        //如果是管理员，则可以删除
-        if (is_administrator()) {
-            return true;
-        }
-
-        //如果是自己的回帖，则可以删除
-        $reply = D('ForumPostReply')->find($post_id);
-        if ($reply['uid'] == get_uid()) {
-            return true;
-        }
-
-        //其他情况不能删除
-        return false;
-    }
-
-
     /**过滤输出，临时解决方案
      * @param $content
      * @return mixed|string
@@ -887,18 +869,6 @@ class IndexController extends Controller
         $content = $this->limitPictureCount($content);
         $content = op_h($content);
         return $content;
-    }
-
-    /**
-     * @param $reply_id
-     * @return mixed
-     * @auth 陈一枭
-     */
-    private function checkRelyPermission($reply_id)
-    {
-        $reply = D('ForumPostReply')->find(intval($reply_id));
-        $has_permission = $reply['uid'] == is_login() || is_administrator();
-        return $has_permission;
     }
 
     /**

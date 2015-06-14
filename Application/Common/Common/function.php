@@ -832,6 +832,8 @@ function execute_action($rules = false, $action_id = null, $user_id = null, $log
         return false;
     }
     $return = true;
+
+    $action_log = M('ActionLog')->where(array('id' => $log_id))->find();
     foreach ($rules as $rule) {
         //检查执行周期
         $map = array('action_id' => $action_id, 'user_id' => $user_id);
@@ -843,11 +845,21 @@ function execute_action($rules = false, $action_id = null, $user_id = null, $log
         //执行数据库操作
         $Model = M(ucfirst($rule['table']));
         $field = 'score' . $rule['field'];
-        $res = $Model->where(array('uid' => is_login(), 'status' => 1))->setField($field, array('exp', $field . (is_bool(strpos($rule['rule'], '+')) ? '+' : '') . $rule['rule']));
+
+
+        $rule['rule'] = (is_bool(strpos($rule['rule'], '+')) ? '+' : '') . $rule['rule'];
+        $res = $Model->where(array('uid' => is_login(), 'status' => 1))->setField($field, array('exp', $field  . $rule['rule']));
+
+        $scoreModel= D('Ucenter/Score') ;
+
+        $scoreModel->cleanUserCache(is_login(),$rule['field']);
 
 
         $sType = D('ucenter_score_type')->where(array('id' => $rule['field']))->find();
         $log_score .= '【' . $sType['title'] . '：' . $rule['rule'] . $sType['unit'] . '】';
+
+        $action = strpos($rule['rule'], '-')?'dec':'inc';
+        $scoreModel->addScoreLog(is_login(),$rule['field'],$action , substr($rule['rule'],1,strlen($rule['rule'])-1),$action_log['model'],$action_log['record_id'],$action_log['remark'].'【' . $sType['title'] . '：' . $rule['rule'] . $sType['unit'] . '】');
 
         if (!$res) {
             $return = false;

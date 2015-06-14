@@ -171,6 +171,23 @@ function bindLzlEvent() {
         return false;
 
     });
+    $('.del_post_btn').unbind('click');
+    $('.del_post_btn').click(function () {
+        if (confirm('确定要删除该贴子么？')) {
+            var args = getArgs($(this).attr('args'));
+            var url = U('Forum/Index/delPost');
+            $.post(url, {id: args['post_id']}, function (msg) {
+                if (msg.status) {
+                    toast.success('删除成功', '温馨提示');
+                    location.href=msg.url;
+                } else {
+                    toast.error('删除失败', '温馨提示');
+                }
+            });
+
+        }
+        this.preventDefault();
+    });
     $('.del_reply_btn').unbind('click');
     $('.del_reply_btn').click(function () {
         if (confirm('确定要删除该回复么？')) {

@@ -17,6 +17,10 @@ class ThemeController extends AdminController{
      */
     public function tpls()
     {
+        $aCleanCookie=I('get.cleanCookie',0,'intval');
+        if($aCleanCookie){
+            cookie('TO_LOOK_THEME', null, array('prefix' => 'OSV2'));
+        }
         // 根据应用目录取全部APP信息
         $dir = OS_THEME_PATH;
         $tplList = null;

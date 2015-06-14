@@ -78,6 +78,12 @@
         </script>
     </case>
 
+    <case value="singleFile">
+        {:W('Common/UploadFile/render',array(array('name'=>$field['name'],'value'=>$field['value'])))}
+    </case>
+    <case value="multiFile">
+        {:W('Common/UploadMultiFile/render',array(array('name'=>$field['name'],'limit'=>9,'value'=>$field['value'])))}
+    </case>
     <case value="singleImage">
         <div class="controls">
             <div id="upload_single_image_{$field.name}" style="padding-bottom: 5px;">选择图片</div>
@@ -434,7 +440,9 @@
         </php>
         </div>
     </case>
-
+    <case value="userDefined">
+        {$field.definedHtml}
+    </case>
 
     <default/>
     <span style="color: #f00;">错误：未知字段类型 {$field.type}</span>

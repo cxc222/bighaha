@@ -25,7 +25,7 @@ class ForumModel extends Model
 
     public function getAllForumsSortByTypes()
     {
-        $forum_type = D("ForumType")->where(array('status' => 1))->order('sort desc')->select();
+        $forum_type = D("ForumType")->where(array('status' => 1))->order('sort asc')->select();
         foreach ($forum_type as &$t) {
             $t['forums'] = $this->getForumList(array('status' => 1, 'type_id' => $t['id']));
         }

@@ -68,7 +68,7 @@
                     {$content.goods_detail}
                 </div>
                 <div style="padding: 5px 20px 50px 20px;">
-                    {:hook('localComment', array('path'=>"Shop/goodsDetail/$content[id]", 'uid'=>$content['uid']))}
+                    {:hook('localComment', array('path'=>"Shop/goodsDetail/$content[id]", 'uid'=>$content['uid'],'this_url'=>'shop/index/goodsdetail'))}
                 </div>
             </div>
             <div class="col-xs-3 fl_left">

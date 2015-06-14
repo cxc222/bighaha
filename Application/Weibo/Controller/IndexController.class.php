@@ -148,9 +148,9 @@ class IndexController extends BaseController
             }else{
                 $class = new $class_str();
                 if(method_exists($class,'parseExtra')){
-                    $aExtra = Hook::exec('Addons\\Insert' . ucfirst($aType) . '\\Insert' . ucfirst($aType) . 'Addon', 'parseExtra', $aExtra);
-                    if(!$aExtra){
-                        $this->error('仅支持优酷、酷6、新浪、土豆网、搜狐、音悦台、腾讯、爱奇艺等视频网址发布');
+                    $res = $class->parseExtra($aExtra);
+                    if(!$res){
+                        $this->error($class->error);
                     }
                 }
 
@@ -191,22 +191,22 @@ class IndexController extends BaseController
      */
     public function sendrepost()
     {
-        $aSourseId = I('get.sourseId', 0, 'intval');
+        $aSourceId = I('get.sourceId', 0, 'intval');
         $aWeiboId = I('get.weiboId', 0, 'intval');
 
         $weiboModel = D('Weibo');
-        $result = $weiboModel->getWeiboDetail($aSourseId);
+        $result = $weiboModel->getWeiboDetail($aSourceId);
 
-        $this->assign('soueseWeibo', $result);
+        $this->assign('sourceWeibo', $result);
         $weiboContent = '';
-        if ($aSourseId != $aWeiboId) {
+        if ($aSourceId != $aWeiboId) {
             $weibo1 = $weiboModel->getWeiboDetail($aWeiboId);
             $weiboContent = '//@' . $weibo1['user']['nickname'] . ' ：' . $weibo1['content'];
 
         }
         $this->assign('weiboId', $aWeiboId);
         $this->assign('weiboContent', $weiboContent);
-        $this->assign('sourseId', $aSourseId);
+        $this->assign('sourceId', $aSourceId);
 
         $this->display();
     }
@@ -222,7 +222,7 @@ class IndexController extends BaseController
 
         $aType = I('post.type', '', 'op_t');
 
-        $aSoueseId = I('post.sourseId', 0, 'intval');
+        $aSoueseId = I('post.sourceId', 0, 'intval');
 
         $aWeiboId = I('post.weiboId', 0, 'intval');
 
@@ -243,10 +243,10 @@ class IndexController extends BaseController
 
         $weiboModel = D('Weibo');
         $feed_data = '';
-        $sourse = $weiboModel->getWeiboDetail($aSoueseId);
-        $sourseweibo = $sourse['weibo'];
-        $feed_data['sourse'] = $sourseweibo;
-        $feed_data['sourseId'] = $aSoueseId;
+        $source = $weiboModel->getWeiboDetail($aSoueseId);
+        $sourceweibo = $source['weibo'];
+        $feed_data['source'] = $sourceweibo;
+        $feed_data['sourceId'] = $aSoueseId;
         //发布微博
         $new_id = send_weibo($aContent, $aType, $feed_data);
 
@@ -435,7 +435,7 @@ class IndexController extends BaseController
      */
     private function assignSelf()
     {
-        $self = query_user(array('title', 'avatar128', 'nickname', 'uid', 'space_url', 'icons_html', 'score', 'title', 'fans', 'following', 'weibocount', 'rank_link'));
+        $self = query_user(array('title', 'avatar128', 'nickname', 'uid', 'space_url', 'score', 'title', 'fans', 'following', 'weibocount', 'rank_link'));
         //获取用户封面id
         $map = getUserConfigMap('user_cover');
         $map['role_id'] = 0;
@@ -479,7 +479,7 @@ class IndexController extends BaseController
 
     private function userInfo($uid = null)
     {
-        $user_info = query_user(array('avatar128', 'nickname', 'uid', 'space_url', 'icons_html', 'score', 'title', 'fans', 'following', 'weibocount', 'rank_link', 'signature'), $uid);
+        $user_info = query_user(array('avatar128', 'nickname', 'uid', 'space_url', 'score', 'title', 'fans', 'following', 'weibocount', 'rank_link', 'signature'), $uid);
         //获取用户封面id
         $map = getUserConfigMap('user_cover', '', $uid);
         $map['role_id'] = 0;

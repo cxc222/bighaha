@@ -288,7 +288,7 @@ class IndexController extends Controller
             $data['uid'] = is_login();
             $data['createtime'] = time();
 
-            $ScoreModel->setUserScore(array(is_login()),$money_need,$score_type,'dec');
+            $ScoreModel->setUserScore(array(is_login()),$money_need,$score_type,'dec','shop',$id ,get_nickname(is_login()).'购买了商品');
             $res = D('shop_buy')->add($data);
             if ($res) {
                 //商品数量减少,已售量增加

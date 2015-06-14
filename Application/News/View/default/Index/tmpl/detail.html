@@ -64,10 +64,10 @@
                     <hr/>
                     <section id="contents">
                         <if condition="$info['source'] neq ''"><div style="margin-bottom: 20px;color: #C0C0C0;"><i class="icon-chrome"></i> 来源：{$info.source}</div></if>
-                        <div>{$info.detail.content}</div>
+                        <div class="news-content">{$info.detail.content}</div>
                     </section>
                     <div style="padding: 20px">
-                        {:hook('localComment', array('path'=>"News/index/$info[id]", 'uid'=>$info['uid'],'count_model'=>'news','count_field'=>'comment'))}
+                        {:hook('localComment', array('path'=>"News/index/$info[id]", 'uid'=>$info['uid'],'count_model'=>'news','count_field'=>'comment','this_url'=>'news/index/detail'))}
                     </div>
                 </div>
             </div>
@@ -94,6 +94,11 @@
 
 
     </div>
+    <script type="text/javascript" charset="utf-8" src="__STATIC__/ueditor/third-party/SyntaxHighlighter/shCore.js"></script>
+    <link rel="stylesheet" type="text/css" href="__STATIC__/ueditor/third-party/SyntaxHighlighter/shCoreDefault.css"/>
+    <script type="text/javascript">
+        SyntaxHighlighter.all();
+    </script>
     <script>
         $(document).ready(function () {
             $('.popup-gallery').each(function () { // the containers for all your galleries

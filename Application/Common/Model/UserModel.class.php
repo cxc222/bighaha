@@ -133,9 +133,6 @@ class UserModel
         $cachedFields = array();
         $cacheResult = array();
         foreach ($fields as $field) {
-            if (in_array($field, array('icons_html', 'title', 'score'))) {
-                continue;
-            }
             $cache = read_query_user_cache($uid, $field);
             if ($cache !== false) {
                 $cacheResult[$field] = $cache;
@@ -363,11 +360,8 @@ class UserModel
     {
 //写入缓存
         foreach ($result as $field => $value) {
-            if (in_array($field, array('icons_html', 'title', 'score'))) {
-                continue;
-            }
-            if (!in_array($field, array('rank_link', 'icons_html', 'space_link', 'expand_info'))) {
-                $value = str_replace('"', '', op_t($value));
+            if (!in_array($field, array('rank_link', 'space_link', 'expand_info'))) {
+                $value = str_replace('"', '', text($value));
             }
 
             $result[$field] = $value;

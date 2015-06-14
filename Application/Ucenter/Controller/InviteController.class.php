@@ -73,7 +73,8 @@ class InviteController extends BaseController
             $aNum=I('post.exchange_num',0,'intval');
             $this->_checkCanBuy($aTypeId,$aNum);
             $inviteType=$this->mInviteTypeModel->where(array('id'=>$aTypeId))->find();
-            D('Ucenter/Score')->setUserScore(array(is_login()),$aNum*$inviteType['pay_score'],$inviteType['pay_score_type'],'dec');//扣积分
+            D('Ucenter/Score')->setUserScore(array(is_login()),$aNum*$inviteType['pay_score'],$inviteType['pay_score_type'],'dec','',0,'兑换邀请名额');//扣积分
+
             $result=$this->mInviteBuyLogModel->buy($aTypeId,$aNum);
             if($result){
                 $this->mInviteUserInfoModel->addNum($aTypeId,$aNum);

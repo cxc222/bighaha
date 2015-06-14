@@ -69,7 +69,7 @@ class TopicController extends BaseController
 
     private function assignSelf()
     {
-        $self = query_user(array('title', 'avatar128', 'nickname', 'uid', 'space_url', 'icons_html', 'score', 'title', 'fans', 'following', 'weibocount', 'rank_link'));
+        $self = query_user(array('title', 'avatar128', 'nickname', 'uid', 'space_url', 'score', 'title', 'fans', 'following', 'weibocount', 'rank_link'));
         $this->assign('self', $self);
     }
 
@@ -77,7 +77,7 @@ class TopicController extends BaseController
     protected function getUserStructure($uid)
     {
         //请不要在这里增加用户敏感信息，可能会暴露用户隐私
-        $fields = array('uid', 'nickname', 'avatar32', 'avatar64', 'avatar128', 'avatar256', 'avatar512', 'space_url', 'icons_html', 'rank_link', 'signature', 'score', 'tox_money', 'title', 'weibocount', 'fans', 'following');
+        $fields = array('uid', 'nickname', 'avatar32', 'avatar64', 'avatar128', 'avatar256', 'avatar512', 'space_url', 'rank_link', 'signature', 'score', 'tox_money', 'title', 'weibocount', 'fans', 'following');
         return query_user($fields, $uid);
     }
 

@@ -37,7 +37,7 @@ class ForumController extends AdminController
             $data['CACHE_TIME'] = 300;
         }
 
-        $admin_config->title('论坛基本设置')
+        $admin_config->title('论坛设置')
             ->data($data)
             ->keyInteger('LIMIT_IMAGE', '帖子图片解析数量限制', '超过数量限制就不会被解析出来，不填则默认为10张')
             ->keyInteger('FORUM_BLOCK_SIZE', '论坛板块列表板块所占尺寸', '默认为4,，值可填1到12,共12块，数值代表每个板块所占块数，一行放3个板块则为4，一行放4个板块则为3')
@@ -45,8 +45,22 @@ class ForumController extends AdminController
             ->keyText('SUGGESTION_POSTS', '首页推荐帖子，竖线|分割，填帖子ID，最多填5个，如1|2|3|4|5，第一个为大图')
             ->keyText('HOT_FORUM', '热门版块', '逗号,分隔')->keyDefault('HOT_FORUM', '1,2,3')
             ->keyText('RECOMMAND_FORUM', '推荐版块', '逗号,分隔')->keyDefault('RECOMMAND_FORUM', '1,2,3')
-            ->buttonSubmit('', '保存');
-        $admin_config->display();
+
+            ->keyText('FORUM_SHOW_TITLE', '标题名称', '在首页展示块的标题')->keyDefault('FORUM_SHOW_TITLE','论坛板块')
+            ->keyText('FORUM_SHOW','显示板块','竖线|分割，填板块ID，如1|2|3|4|5')
+            ->keyText('FORUM_SHOW_CACHE_TIME', '缓存时间', '默认600秒，以秒为单位')->keyDefault('FORUM_SHOW_CACHE_TIME','600')
+
+            ->keyText('FORUM_POST_SHOW_TITLE', '标题名称', '在首页展示块的标题')->keyDefault('FORUM_POST_SHOW_TITLE','热门贴子')
+            ->keyText('FORUM_POST_SHOW_NUM','贴子显示数量')->keyDefault('FORUM_POST_SHOW_NUM',5)
+            ->keyRadio('FORUM_POST_ORDER','贴子排序字段','',array('update_time'=>'更新时间','last_reply_time'=>'最后回复时间','view_count'=>'阅读量','reply_count'=>'回复数'))->keyDefault('FORUM_POST_ORDER','last_reply_time')
+            ->keyRadio('FORUM_POST_TYPE','贴子排序方式','',array('asc'=>'升序','desc'=>'降序'))->keyDefault('FORUM_POST_TYPE','desc')
+            ->keyText('FORUM_POST_CACHE_TIME', '缓存时间', '默认600秒，以秒为单位')->keyDefault('FORUM_POST_CACHE_TIME','600')
+
+            ->group('基础设置', 'LIMIT_IMAGE,FORUM_BLOCK_SIZE,CACHE_TIME,SUGGESTION_POSTS,HOT_FORUM,RECOMMAND_FORUM')
+            ->group('首页展示板块设置', 'FORUM_SHOW_TITLE,FORUM_SHOW,FORUM_SHOW_CACHE_TIME')
+            ->group('首页展示贴子设置', 'FORUM_POST_SHOW_TITLE,FORUM_POST_SHOW_NUM,FORUM_POST_ORDER,FORUM_POST_TYPE,NEWS_SHOW_CACHE_TIME');
+
+        $admin_config->buttonSubmit('', '保存')->display();
     }
 
     public function forum($page = 1, $r = 20)
@@ -78,13 +92,12 @@ class ForumController extends AdminController
     public function type()
     {
         $list = D('Forum/ForumType')->getTree();
-        $treeBuilder = new AdminTreeListBuilder();
-
-        $treeBuilder->buttonNew(U('addtype'));
-        $treeBuilder->title('论坛分类管理')->setLevel(1)
-            ->setModel('type')
-            ->data($list);
-        $treeBuilder->display();
+        $map = array('status' => array('GT', -1),'type_id'=>array('gt',0));
+        $forums = M('Forum')->where($map)->order('sort asc')->field('id as forum_id,title,sort,type_id as pid,status')->select();
+        $list=array_merge($list,$forums);
+        $list=list_to_tree($list,'id','pid','child',0);
+        $this->assign('list',$list);
+        $this->display(T('Application://Forum@Forum/type'));
     }
 
     public function setTypeStatus($ids = array(), $status = 1)
@@ -121,9 +134,9 @@ class ForumController extends AdminController
                 $result = M('ForumType')->add($type);
             }
             if ($result) {
-                $this->success('成功。');
+                $this->success('操作成功！');
             } else {
-                $this->error('出错。');
+                $this->error('操作失败！');
             }
 
 
@@ -197,37 +210,44 @@ class ForumController extends AdminController
         $builder->doSort('Forum', $ids);
     }
 
-    public function editForum($id = null, $title = '', $create_time = 0, $status = 1, $allow_user_group = 0, $logo = 0)
+    public function editForum($id = null, $title = '', $create_time = 0, $status = 1, $allow_user_group = 0, $logo = 0,$type_id=0)
     {
         if (IS_POST) {
             //判断是否为编辑模式
             $isEdit = $id ? true : false;
-
-            //生成数据
-            $data = array('title' => $title, 'create_time' => $create_time, 'status' => $status, 'allow_user_group' => $allow_user_group, 'logo' => $logo, 'admin' => I('admin', 1, 'text')
-            , 'type_id' => I('type_id', 1, 'intval'), 'background' => I('background', 0, 'intval'), 'description' => I('description', '', 'op_t'));
-
-            //写入数据库
             $model = M('Forum');
-            if ($isEdit) {
-                $data['id'] = $id;
-                $data = $model->create($data);
+            if(I('quick_edit',0,'intval')){
+                //生成数据
+                $data = array('title' => $title,  'sort' => I('sort',0, 'intval'));
+                //写入数据库
                 $result = $model->where(array('id' => $id))->save($data);
                 if (!$result) {
                     $this->error('编辑失败');
                 }
-            } else {
-                $data = $model->create($data);
-                $result = $model->add($data);
-                if (!$result) {
-                    $this->error('创建失败');
+            }else{
+                //生成数据
+                $data = array('title' => $title, 'create_time' => $create_time, 'status' => $status, 'allow_user_group' => $allow_user_group, 'logo' => $logo, 'admin' => I('admin', 1, 'text')
+                , 'type_id' => I('type_id', 1, 'intval'), 'background' => I('background', 0, 'intval'), 'description' => I('description', '', 'op_t'));
+
+                //写入数据库
+                if ($isEdit) {
+                    $data['id'] = $id;
+                    $data = $model->create($data);
+                    $result = $model->where(array('id' => $id))->save($data);
+                    if (!$result) {
+                        $this->error('编辑失败');
+                    }
+                } else {
+                    $data = $model->create($data);
+                    $result = $model->add($data);
+                    if (!$result) {
+                        $this->error('创建失败');
+                    }
                 }
             }
-
             S('forum_list', null);
             //返回成功信息
             $this->success($isEdit ? '编辑成功' : '保存成功');
-
         } else {
             //判断是否为编辑模式
             $isEdit = $id ? true : false;
@@ -236,7 +256,7 @@ class ForumController extends AdminController
             if ($isEdit) {
                 $forum = M('Forum')->where(array('id' => $id))->find();
             } else {
-                $forum = array('create_time' => time(), 'post_count' => 0, 'status' => 1);
+                $forum = array('create_time' => time(), 'post_count' => 0, 'status' => 1,'type_id'=>$type_id);
             }
             $types = M('ForumType')->where(array('status' => 1))->select();
             foreach ($types as $t) {

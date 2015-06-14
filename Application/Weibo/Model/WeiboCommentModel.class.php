@@ -65,7 +65,7 @@ class WeiboCommentModel extends Model
         if (!$comment) {
             $comment = $this->find($id);
             $comment['content'] = $this->parseComment($comment['content']);
-            $comment['user'] = query_user(array('uid', 'nickname', 'avatar32', 'avatar64', 'avatar128', 'avatar256', 'avatar512', 'space_url', 'icons_html', 'rank_link', 'score', 'title', 'weibocount', 'fans', 'following'), $comment['uid']);
+            $comment['user'] = query_user(array('uid', 'nickname', 'avatar32', 'avatar64', 'avatar128', 'avatar256', 'avatar512', 'space_url', 'rank_link', 'score', 'title', 'weibocount', 'fans', 'following'), $comment['uid']);
             S('weibo_comment_' . $id, $comment);
         }
         $comment['can_delete'] = check_auth('Weibo/Index/doDelComment', $comment['uid']);

@@ -7,7 +7,6 @@
  * 等级：title
  * 头像：avatar32 avatar64 avatar128 avatar256 avatar512
  * 个人中心地址：space_url
- * 认证图标：icons_html
  *
  * @param      $fields array|string 如果是数组，则返回数组。如果不是数组，则返回对应的值
  * @param null $uid

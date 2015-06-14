@@ -183,8 +183,6 @@ class FollowModel extends Model
          */
         $user = query_user(array('id', 'username', 'space_url'), $who_follow);
 
-        D('Message')->sendMessage($follow_who, $user['username'] . ' 关注了你。', '粉丝数增加', $user['space_url'], $who_follow, 0);
-
         D('Message')->sendMessage($follow_who, '粉丝数增加' ,  $user['nickname'] . ' 关注了你。', 'Ucenter/Index/index',array('uid'=>$who_follow),$who_follow);
 
         return $this->add($follow);

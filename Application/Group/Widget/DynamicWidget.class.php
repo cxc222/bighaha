@@ -23,7 +23,7 @@ class DynamicWidget extends Controller
     public function lists($dynamic_id='')
     {
         $dynamic = D('GroupDynamic')->getDynamic($dynamic_id);
-        $user= query_user(array('avatar128','avatar64','nickname','uid','space_url','icons_html'),$dynamic['uid']);
+        $user= query_user(array('avatar128','avatar64','nickname','uid','space_url'),$dynamic['uid']);
         $this->assign('dynamic', $dynamic);
         $this->assign('user', $user);
         $this->display('Widget/dynamic');

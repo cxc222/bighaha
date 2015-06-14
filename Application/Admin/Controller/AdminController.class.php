@@ -65,6 +65,8 @@ class AdminController extends Controller
 
         $this->assign('__MENU__', $this->getMenus());
         $this->assign('__MODULE_MENU__', $this->getModules());
+
+        $this->checkUpdate();
         $this->getReport();
     }
 
@@ -548,5 +550,15 @@ class AdminController extends Controller
         $requester->method = "post";
         $arr = $requester->request();
         return $arr;
+    }
+
+    protected function checkUpdate()
+    {
+        if (C('AUTO_UPDATE')) {
+            $can_update = D('Version')->checkUpdate();
+        } else {
+            $can_update = 0;
+        }
+        $this->assign('update', $can_update);
     }
 }

@@ -39,9 +39,10 @@ class LzlController extends Controller
 
     public function doSendLZLReply($post_id, $to_f_reply_id, $to_reply_id, $to_uid, $content,$p=1)
     {
-
         //确认用户已经登录
         $this->requireLogin();
+        $this->checkAuth('Forum/Lzl/doSendLZLReply',get_expect_ids(0,0,$post_id,0),'你没有回复评论的权限！');
+        $this->checkActionLimit('forum_lzl_reply','Forum',null,get_uid());
         //写入数据库
         $model = D('ForumLzlReply');
         $before=getMyScore();
@@ -50,6 +51,7 @@ class LzlController extends Controller
         if (!$result) {
             $this->error('发布失败：' . $model->getError());
         }
+        action_log('forum_lzl_reply','Forum',$result,get_uid());
         //显示成功页面
         $totalCount = D('forum_lzl_reply')->where('is_del=0 and to_f_reply_id=' . $to_f_reply_id)->count();
         $limit = 5;
@@ -64,13 +66,16 @@ class LzlController extends Controller
         }
     }
 
-public function delLZLReply($id){
-    $this->requireLogin();
-    $data['post_reply_id']=D('ForumLzlReply')->where('id='.$id)->getfield('to_f_reply_id');
-    $res= D('ForumLzlReply')->delLZLReply($id);
-    $data['lzl_reply_count']=D('ForumLzlReply')->where('is_del=0 and to_f_reply_id='.$data['post_reply_id'])->count();
-    $res &&   $this->success($res,'',$data);
-    !$res &&   $this->error('');
-}
-
+    public function delLZLReply($id){
+        $this->requireLogin();
+        $this->checkAuth('Forum/Lzl/delLZLReply',get_expect_ids($id),'你没有删除回复的权限！');
+        $this->checkActionLimit('forum_lzl_del_reply','Forum',null,get_uid());
+        $Lzlreply=D('ForumLzlReply')->where('id='.$id)->find();
+        $data['post_reply_id']=$Lzlreply['to_f_reply_id'];
+        $res= D('ForumLzlReply')->delLZLReply($id);
+        $data['lzl_reply_count']=D('ForumLzlReply')->where('is_del=0 and to_f_reply_id='.$data['post_reply_id'])->count();
+        action_log('forum_lzl_del_reply','Forum',$id,get_uid());
+        $res &&   $this->success($res,'',$data);
+        !$res &&   $this->error('');
+    }
 }

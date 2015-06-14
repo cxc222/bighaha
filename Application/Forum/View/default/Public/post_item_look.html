@@ -1,5 +1,5 @@
 <php>
-    $user = query_user(array('avatar128','avatar64','nickname','uid','space_url','icons_html'),
+    $user = query_user(array('avatar128','avatar64','nickname','uid','space_url'),
     $vo['uid']);
 </php>
 <div class="clearfix">
@@ -29,7 +29,7 @@
         </p>
 
         <p class="text-muted author">
-            <a href="{$user.space_url}" ucard="{$user.uid}">{$user.nickname|op_t}</a>{$user.icons_html}
+            <a href="{$user.space_url}" ucard="{$user.uid}">{$user.nickname|op_t}</a>
             发布：{$vo.create_time|friendlyDate} |
             回复：{$vo.last_reply_time|friendlyDate}
         </p>

@@ -39,15 +39,15 @@
             <div class="col-xs-2">
                 <div class="message_icon">
                     <img style="width: 55%;" class="avatar-img" ucard="{$message.from_uid}"
-                         src="{$message.from_user.avatar64}"><br/>
-                    {$message.from_user.space_link}
+                         src="{$message.from_user.avatar64|default='./Public/images/default_avatar_64_64.jpg'}"><br/>
+                    {$message.from_user.space_link|default='游客'}
                 </div>
             </div>
             <div class="col-xs-10">
                 <dl>
                     <dt>
                     <div class="row">
-                        <div class="col-xs-9"><a href="{$message.content.web_url}" onclick="Notify.readMessage(this,{$message.id})">{$message.content.title}</a>
+                        <div class="col-xs-9"><a href="{$message.content.web_url}" data-url="{$message.content.web_url}" onclick="Notify.readMessage(this,{$message.id})">{$message.content.title}</a>
                             <eq name="message.is_read" value="0">
                                 <span class="label label-badge label-info">未读</span>
                             </eq>

@@ -55,7 +55,7 @@ class IndexController extends BaseController
 
     private function userInfo($uid = null)
     {
-        $user_info = query_user(array('avatar128', 'nickname', 'uid', 'space_url', 'icons_html', 'score', 'title', 'fans', 'following', 'weibocount', 'rank_link', 'signature'), $uid);
+        $user_info = query_user(array('avatar128', 'nickname', 'uid', 'space_url', 'score', 'title', 'fans', 'following', 'weibocount', 'rank_link', 'signature'), $uid);
         //获取用户封面id
         $map=getUserConfigMap('user_cover','',$uid);
         $map['role_id']=0;

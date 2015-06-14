@@ -176,7 +176,17 @@ class UserController extends AdminController
                     $data_score[$key] = $val;
                 }
             }
+            unset($key,$val);
             $res = D('Member')->where(array('uid' => $data['id']))->save($data_score);
+            foreach ($data_score as $key => $val) {
+                $value = query_user(array($key),$data['id']);
+                if($val == $value[$key]){
+                    continue;
+                }
+                D('Ucenter/Score')->addScoreLog($data['id'],cut_str('score',$key,'l'),'to' , $val ,'',0,get_nickname(is_login()).'后台调整');
+                D('Ucenter/Score')->cleanUserCache($data['id'],cut_str('score',$key,'l'));
+            }
+            unset($key,$val);
             if ($res) {
                 $this->success('设置成功');
             } else {
@@ -622,8 +632,10 @@ class UserController extends AdminController
      */
     public function action()
     {
-        $aModule = I('post.module', '', 'text');
-        $map['module'] = $aModule;
+        $aModule = I('post.module', '-1', 'text');
+        if($aModule!=-1){
+            $map['module'] = $aModule;
+        }
         $this->assign('current_module', $aModule);
         $map['status'] = array('gt', -1);
         //获取列表数据
@@ -801,11 +813,13 @@ class UserController extends AdminController
     {
         $scoreTypes = D('Ucenter/Score')->getTypeList(array('status' => 1));
         if (IS_POST) {
-            $aUids = I('post.uid', '', 'op_t');
+            $aUids = I('post.uid');
             foreach ($scoreTypes as $v) {
                 $aAction = I('post.action_score' . $v['id'], '', 'op_t');
                 $aValue = I('post.value_score' . $v['id'], 0, 'intval');
-                D('Ucenter/Score')->setUserScore($aUids, $aValue, $v['id'], $aAction);
+                D('Ucenter/Score')->setUserScore($aUids, $aValue, $v['id'], $aAction,'',0,'后台管理员充值页面充值');
+                D('Ucenter/Score')->cleanUserCache($aUids,$aValue);
+
             }
             $this->success('设置成功', 'refresh');
         } else {

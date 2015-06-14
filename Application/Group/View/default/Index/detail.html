@@ -6,7 +6,7 @@
 <div class=" clearfix col-xs-12 group_block_border " style="background: white">
 <div style="margin-top: 15px"></div>
 <php>
-    $user = query_user(array('avatar128','uid','nickname','space_url','icons_html','rank_link','space_link'),
+    $user = query_user(array('avatar128','uid','nickname','space_url','rank_link','space_link'),
     $post['uid']);
 </php>
 
@@ -83,14 +83,13 @@
                                                                  class="avatar-img"/></a>
                 <span class="hidden-lg hidden-md">
                 <a href="{$user.space_url}" ucard="{$user.uid}" style="margin-left: 10px;">{$user.nickname|htmlspecialchars}</a>
-                {$user.icons_html}
                 </span>
 
         </p>
 
         <p class="hidden-xs">
             <a href="{$user.space_url}" ucard="{$user.uid}">{$user.nickname|htmlspecialchars}</a>
-            {$user.icons_html}
+
         </p>
 
         <p class="text-center">
@@ -317,4 +316,9 @@
         margin-top: 15px;
     }
 </style>
+<script type="text/javascript" charset="utf-8" src="__STATIC__/ueditor/third-party/SyntaxHighlighter/shCore.js"></script>
+<link rel="stylesheet" type="text/css" href="__STATIC__/ueditor/third-party/SyntaxHighlighter/shCoreDefault.css"/>
+<script type="text/javascript">
+    SyntaxHighlighter.all();
+</script>
 </block>

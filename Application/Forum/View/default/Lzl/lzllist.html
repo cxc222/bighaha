@@ -13,14 +13,15 @@
             <p><a href="{$vo.userInfo.space_url}" ucard="{$vo.userInfo.uid}"> {$vo.userInfo.nickname}</a></p>
 
             <p>{$vo.content|parse_at_users}</p>
-
             <p style="color:  #ccc;">{$vo.ctime|time_format}
-
-                <a class="pull-right reply_lzl_btn"
-                   args="to_f_reply_id={$to_f_reply_id}&uid={:is_login()}&to_uid={$vo.userInfo.uid}&to_reply_id={$vo.id}&to_nickname={$vo.userInfo.nickname}&p={$p}"
-                   href="javascript:">回复</a>
-
-                <if condition="CheckPermission(array($vo['uid']))">
+                <if condition="check_auth('Forum/Lzl/doSendLZLReply',get_expect_ids($vo['id'],0,0,0,0))">
+                    <a class="pull-right reply_lzl_btn"
+                       args="to_f_reply_id={$to_f_reply_id}&uid={:is_login()}&to_uid={$vo.userInfo.uid}&to_reply_id={$vo.id}&to_nickname={$vo.userInfo.nickname}&p={$p}"
+                       href="javascript:">回复</a>
+                    <else/>
+                    <a class="pull-right" href="javascript:" onclick=" if(is_login()){toast.error('你无回复权限！！');}else{toast.error('请先登录！');}">回复</a>
+                </if>
+                <if condition="check_auth('Forum/Lzl/delLZLReply',get_expect_ids($vo['id']))">
                     <b class="pull-right">&nbsp;|&nbsp;</b>
                     <a class="pull-right del_lzl_reply" args="lzl_reply_id={$vo.id}&to_f_reply_id={$to_f_reply_id}"
                        href="javascript:">删除</a>

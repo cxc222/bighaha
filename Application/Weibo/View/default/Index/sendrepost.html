@@ -9,16 +9,16 @@
 
         <div class="col-xs-12">
 
-            <div>  <a ucard="{$soueseWeibo.user.uid}" href="{$soueseWeibo.user.space_url}">{$soueseWeibo.user.nickname}</a></div>
+            <div>  <a ucard="{$sourceWeibo.user.uid}" href="{$sourceWeibo.user.space_url}">{$sourceWeibo.user.nickname}</a></div>
 
-            <div>{$soueseWeibo.content|parse_weibo_content}</div>
+            <div>{$sourceWeibo.content|parse_weibo_content}</div>
 
 
             <br/>
             <p><textarea class="form-control" id="repost_content" style="height: 6em;"
                          placeholder="写点什么吧～～">{$weiboContent}</textarea></p>
             <a href="javascript:" onclick="insertFace($(this))"><img src="__CORE_IMAGE__/bq.png"/></a>
-            <p class="pull-right"><input type="submit" value="发表 Ctrl+Enter" data-role="do_send_repost"  data-weibo-id="{$weiboId}"  data-sourse-id = "{$sourseId}"
+            <p class="pull-right"><input type="submit" value="发表 Ctrl+Enter" data-role="do_send_repost"  data-weibo-id="{$weiboId}"  data-source-id = "{$sourceId}"
                                          class="btn btn-primary" data-url="{:U('weibo/Index/doSendRepost')}"/></p>
           <p><input id="becomment" checked type="checkbox" value="1" name="becomment" >同时作为评论发布</p>
         </div>

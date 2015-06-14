@@ -183,7 +183,7 @@ class EventController extends AdminController
 
         } else {
             $builder = new AdminConfigBuilder();
-            $eventtypes =$this->eventTypeModel->select();
+            $eventtypes =$this->eventTypeModel->where(array('pid'=>0))->select();
             $opt = array();
             foreach ($eventtypes as $eventtype) {
                 $opt[$eventtype['id']] = $eventtype['title'];

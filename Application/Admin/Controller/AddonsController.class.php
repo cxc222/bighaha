@@ -395,42 +395,12 @@ str;
     public function install()
     {
         $addon_name = trim(I('addon_name'));
-        $class = get_addon_class($addon_name);
-        if (!class_exists($class))
-            $this->error('插件不存在');
-        $addons = new $class;
-        $info = $addons->info;
-        if (!$info || !$addons->checkInfo())//检测信息的正确性
-            $this->error('插件信息缺失');
-        session('addons_install_error', null);
-        $install_flag = $addons->install();
-        if (!$install_flag) {
-            $this->error('执行插件预安装操作失败' . session('addons_install_error'));
-        }
         $addonsModel = D('Addons');
-        $data = $addonsModel->create($info);
-
-        if ((is_array($addons->admin_list) && $addons->admin_list !== array()) || method_exists(A('Addons://Mail/Admin'), 'buildList')) {
-            $data['has_adminlist'] = 1;
+        $rs = $addonsModel->install($addon_name);
+        if ($rs === true) {
+            $this->success('安装插件成功。');
         } else {
-            $data['has_adminlist'] = 0;
-        }
-        if (!$data)
             $this->error($addonsModel->getError());
-        if ($addonsModel->add($data)) {
-            $config = array('config' => json_encode($addons->getConfig()));
-            $addonsModel->where("name='{$addon_name}'")->save($config);
-            $hooks_update = D('Hooks')->updateHooks($addon_name);
-            if ($hooks_update) {
-                S('hooks', null);
-                $this->success('安装成功');
-            } else {
-                $addonsModel->where("name='{$addon_name}'")->delete();
-                $this->error('更新钩子处插件失败,请卸载后尝试重新安装');
-            }
-
-        } else {
-            $this->error('写入插件数据失败');
         }
     }
 

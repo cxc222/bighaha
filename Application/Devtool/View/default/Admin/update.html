@@ -1,0 +1,40 @@
+<extend name="Public/base"/>
+<block name="body">
+    <div class="main-title">
+        <h2>版本打包向导
+            <small>（适用于v2.1.0以上版本OS）</small>
+        </h2>
+    </div>
+
+    <div class="with-padding">
+        <p class="lead">欢迎使用本工具。本工具将会生成一个可以导入到云市场的系统版本。</p>
+
+        <p>使用本工具打包的程序必须是在OpenSNS 2.1.0版本或OpenCenter 1.5.0 以上方可安装。更低版本的OpenSNS及1.0.0版的OpenCenter均无法兼容。</p>
+
+        <form action="{:U('module1')}" method="post">
+            <div class="clearfix">
+                <div class="col-xs-8">
+                    <h4>当前系统的文件MD5序列</h4>
+
+                    <div>
+                    <php>
+                        dump($md5)
+                    </php>
+
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="clearfix">
+                <div class="col-xs-6 with-padding ">
+                    <input class="btn btn-default btn-success btn-block" type="submit" value="我同意，开始打包向导">
+
+                    </input>
+                </div>
+            </div>
+        </form>
+
+
+    </div>
+</block>

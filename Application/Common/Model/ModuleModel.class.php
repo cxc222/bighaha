@@ -220,9 +220,6 @@ class ModuleModel extends Model
             foreach ($groups as $g) {
                 $old = explode(',', $g['rules']);
                 $new = array_merge($old, $auth_id);
-                dump($old);
-                dump($auth_id);
-                dump($new);exit;
                 $g['rules'] = implode(',', $new);
                 M('AuthGroup')->save($g);
             }

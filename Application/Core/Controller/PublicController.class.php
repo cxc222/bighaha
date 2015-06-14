@@ -23,13 +23,14 @@ class PublicController extends Controller
      * @param int $uid
      * @auth 陈一枭
      */
-    public function follow($uid = 0)
+    public function follow()
     {
+        $aUid=I('post.uid',0,'intval');
         if (!is_login()) {
             $this->ajaxReturn(array('status' => 0, 'info' => '请登陆'));
         }
 
-        if (D('Follow')->follow($uid)) {
+        if (D('Follow')->follow($aUid)) {
             $this->ajaxReturn(array('status' => 1, 'info' => '关注成功'));
         } else {
             $this->ajaxReturn(array('status' => 0, 'info' => '关注失败'));
@@ -40,13 +41,14 @@ class PublicController extends Controller
      * @param int $uid
      * @auth 陈一枭
      */
-    public function unfollow($uid = 0)
+    public function unfollow()
     {
+        $aUid=I('post.uid',0,'intval');
         if (!is_login()) {
             $this->ajaxReturn(array('status' => 0, 'info' => '请登陆'));
         }
 
-        if (D('Follow')->unfollow($uid)) {
+        if (D('Follow')->unfollow($aUid)) {
             $this->ajaxReturn(array('status' => 1, 'info' => '取消关注成功'));
         } else {
             $this->ajaxReturn(array('status' => 0, 'info' => '取消关注失败'));

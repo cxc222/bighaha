@@ -537,11 +537,11 @@ var do_send_repost = function(){
         var button = $(this);
         var originalButtonText = button.val();
         var feedType = 'repost';
-        var sourseId = button.attr('data-sourse-id');
+        var sourceId = button.attr('data-source-id');
         var weiboId = button.attr('data-weibo-id');
         var becomment=   document.getElementsByName("becomment")
         //发送到服务器
-        $.post(url, {content: content,type:feedType,sourseId:sourseId,weiboId:weiboId,becomment:becomment[0].checked}, function (a) {
+        $.post(url, {content: content,type:feedType,sourceId:sourceId,weiboId:weiboId,becomment:becomment[0].checked}, function (a) {
             handleAjax(a);
             if (a.status) {
                 $('.mfp-close').click();

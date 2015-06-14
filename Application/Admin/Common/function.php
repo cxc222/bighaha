@@ -422,7 +422,7 @@ function get_action_type($type, $all = false)
 }
 
 
-function cloudU($url, $p)
+function cloudU($url, $p=array())
 {
     $url = U($url, $p);
     return str_replace(__ROOT__, '', $url);

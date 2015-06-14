@@ -27,7 +27,7 @@ class HotPeopleWidget extends Controller
         if (empty($hot_people)) {
             $hot_people = D('GroupMember')->where(array( 'status' => 1,'group_id'=>$group_id))->limit(8)->order('activity desc')->select();
             foreach ($hot_people as &$val) {
-                $val['user'] =  query_user(array('avatar128', 'avatar64', 'nickname', 'uid', 'space_url', 'icons_html'), $val['uid']);
+                $val['user'] =  query_user(array('avatar128', 'avatar64', 'nickname', 'uid', 'space_url'), $val['uid']);
 
             }
             unset($val);
@@ -37,7 +37,7 @@ class HotPeopleWidget extends Controller
 
         $all = D('GroupMember')->where(array( 'status' => 1,'group_id'=>$group_id))->limit(32)->order('create_time desc')->select();
         foreach ($all as &$val) {
-            $val['user'] =  query_user(array('avatar128', 'avatar64', 'nickname', 'uid', 'space_url', 'icons_html'), $val['uid']);
+            $val['user'] =  query_user(array('avatar128', 'avatar64', 'nickname', 'uid', 'space_url'), $val['uid']);
         }
         unset($val);
         $this->assign('all', $all);

@@ -70,7 +70,7 @@ str;
             ->keyEditor('REG_EMAIL_VERIFY', '邮箱验证模版', '用于进行邮箱的验证','all')
             ->keyEditor('REG_EMAIL_ACTIVATE', '邮箱激活模版', '用于进行用户的激活')
 
-            ->keyText('SMS_HTTP', '短信平台HTTP', '短信平台HTTP')
+            ->keyText('SMS_HTTP', '短信平台HTTP', '短信平台HTTP，可用服务商：<a href="http://www.yunsms.cn/" target="_blank">云短信</a>')
             ->keyText('SMS_UID', '短信平台帐号', '短信平台帐号')
             ->keyText('SMS_PWD', '短信平台密码', '短信平台密码')
             ->keyTextArea('SMS_CONTENT', '短信内容', '短信内容')

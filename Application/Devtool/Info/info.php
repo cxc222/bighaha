@@ -18,7 +18,7 @@ return array(
     //开发者网站
     'website' => 'http://www.ourstu.com',
     //前台入口，可用U函数
-    'entry' => 'Home/index/index',
+    'entry' => '',
 
     'admin_entry' => 'Admin/Devtool/module',
 

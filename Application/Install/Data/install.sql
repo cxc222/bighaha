@@ -646,7 +646,7 @@ INSERT INTO `ocenter_config` (`id`, `name`, `type`, `title`, `group`, `extra`, `
 (105, 'LIST_ROWS', 0, '后台每页记录数', 2, '', '后台数据每页显示记录数', 1379503896, 1380427745, 1, '10', 24),
 (106, 'USER_ALLOW_REGISTER', 4, '是否允许用户注册', 3, '0:关闭注册\r\n1:允许注册', '是否开放用户注册', 1379504487, 1379504580, 1, '1', 12),
 (107, 'CODEMIRROR_THEME', 4, '预览插件的CodeMirror主题', 4, '3024-day:3024 day\r\n3024-night:3024 night\r\nambiance:ambiance\r\nbase16-dark:base16 dark\r\nbase16-light:base16 light\r\nblackboard:blackboard\r\ncobalt:cobalt\r\neclipse:eclipse\r\nelegant:elegant\r\nerlang-dark:erlang-dark\r\nlesser-dark:lesser-dark\r\nmidnight:midnight', '详情见CodeMirror官网', 1379814385, 1384740813, 1, 'ambiance', 13),
-(108, 'DATA_BACKUP_PATH', 1, '数据库备份根路径', 4, '', '路径必须以 / 结尾', 1381482411, 1381482411, 1, './Data/', 16),
+(108, 'DATA_BACKUP_PATH', 1, '数据库备份根路径', 4, '', '路径必须以 / 结尾', 1381482411, 1381482411, 1, './Data/Backup', 16),
 (109, 'DATA_BACKUP_PART_SIZE', 0, '数据库备份卷大小', 4, '', '该值用于限制压缩后的分卷最大长度。单位：B；建议设置20M', 1381482488, 1381729564, 1, '20971520', 18),
 (110, 'DATA_BACKUP_COMPRESS', 4, '数据库备份文件是否启用压缩', 4, '0:不压缩\r\n1:启用压缩', '压缩备份文件需要PHP环境支持gzopen,gzwrite函数', 1381713345, 1381729544, 1, '1', 22),
 (111, 'DATA_BACKUP_COMPRESS_LEVEL', 4, '数据库备份文件压缩级别', 4, '1:普通\r\n4:一般\r\n9:最高', '数据库备份文件的压缩级别，该配置在开启压缩时生效', 1381713408, 1381713408, 1, '9', 25),
@@ -693,7 +693,9 @@ INSERT INTO `ocenter_config` (`id`, `name`, `type`, `title`, `group`, `extra`, `
 (176, '_HOME_TITLE2', 0, '', 0, '', '', 1432791820, 1432791820, 1, '', 0),
 (177, '_HOME_PIC3', 0, '', 0, '', '', 1432791820, 1432791820, 1, '', 0),
 (178, '_HOME_URL3', 0, '', 0, '', '', 1432791820, 1432791820, 1, '', 0),
-(179, '_HOME_TITLE3', 0, '', 0, '', '', 1432791820, 1432791820, 1, '', 0);
+(179, '_HOME_TITLE3', 0, '', 0, '', '', 1432791820, 1432791820, 1, '', 0),
+(180, 'AUTO_UPDATE', 4, '自动更新提示', 1, '0:关闭,1:开启', '关闭后，后台将不显示更新提示', 1433731153, 1433731348, 1, '1', 2),
+(181, 'WEB_SITE_CLOSE_HINT', 2, '关站提示文字', 1, '', '站点关闭后的提示文字。', 1433731248, 1433731287, 1, '网站正在更新维护，请稍候再试。', 4);
 
 DROP TABLE IF EXISTS `ocenter_district`;
 CREATE TABLE IF NOT EXISTS `ocenter_district` (
@@ -4713,7 +4715,15 @@ INSERT INTO `ocenter_menu` (`id`, `title`, `pid`, `sort`, `url`, `hide`, `tip`, 
 (197, '运营', 0, 25, 'Operation/index', 0, '', '', 0, 'laptop', ''),
 (198, '群发消息用户列表', 197, 0, 'message/userList', 0, '', '群发消息', 0, '', ''),
 (199, '群发消息', 197, 0, 'message/sendMessage', 1, '', '群发消息', 0, '', ''),
-(200, '在线安装', 178, 0, 'Cloud/install', 1, '', '', 0, '', '');
+(200, '在线安装', 178, 0, 'Cloud/install', 1, '', '', 0, '', ''),
+(201, '重置用户密码', 3, 0, 'User/initpass', 1, '', '', 0, '', ''),
+(202, '自动升级', 105, 0, 'Cloud/update', 0, '', '云市场', 0, '', ''),
+(203, '获取版本信息', 202, 0, 'Cloud/version', 1, '', '', 0, '', ''),
+(204, '获取文件列表', 202, 0, 'Cloud/getFileList', 1, '', '', 0, '', ''),
+(205, '比较本地文件', 202, 0, 'Cloud/compare', 1, '', '', 0, '', ''),
+(206, '覆盖文件', 202, 0, 'Cloud/cover', 1, '', '', 0, '', ''),
+(207, '更新数据库', 202, 0, 'Cloud/updb', 1, '', '', 0, '', ''),
+(208, '更新完成', 202, 0, 'Cloud/finish', 1, '', '', 0, '', '');
 
 
 DROP TABLE IF EXISTS `ocenter_message`;
@@ -5104,6 +5114,19 @@ CREATE TABLE IF NOT EXISTS `ocenter_verify` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
+CREATE TABLE IF NOT EXISTS `ocenter_version` (
+  `title` varchar(50) NOT NULL COMMENT '版本名',
+  `create_time` int(11) NOT NULL COMMENT '发布时间',
+  `update_time` int(11) NOT NULL COMMENT '更新的时间',
+  `log` text NOT NULL COMMENT '更新日志',
+  `url` varchar(150) NOT NULL COMMENT '链接到的远程文章',
+  `number` int(11) NOT NULL COMMENT '序列号，一般用日期数字标示',
+  `name` varchar(50) NOT NULL COMMENT '版本号',
+  `is_current` tinyint(4) NOT NULL,
+  PRIMARY KEY (`name`),
+  KEY `id` (`number`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='自动更新表';
+
 DROP TABLE IF EXISTS `ocenter_weibo`;
 CREATE TABLE IF NOT EXISTS `ocenter_weibo` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -5151,3 +5174,23 @@ CREATE TABLE IF NOT EXISTS `ocenter_weibo_topic` (
   `is_top` tinyint(4) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+
+
+
+
+DROP TABLE IF EXISTS `ocenter_score_log`;
+CREATE TABLE IF NOT EXISTS `ocenter_score_log` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `uid` int(11) NOT NULL,
+  `ip` bigint(20) NOT NULL,
+  `type` int(11) NOT NULL,
+  `action` varchar(20) NOT NULL,
+  `value` float NOT NULL,
+  `finally_value` float NOT NULL,
+  `create_time` int(11) NOT NULL,
+  `remark` varchar(255) NOT NULL,
+  `model` varchar(20) NOT NULL,
+  `record_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;

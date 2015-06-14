@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: caipeichao
- * Date: 14-3-11
- * Time: PM1:13
- */
 
 namespace Ucenter\Controller;
 
@@ -28,7 +22,7 @@ class ConfigController extends BaseController
      */
     private function _assignSelf()
     {
-        $self = query_user(array('avatar128', 'nickname', 'space_url', 'space_link'));
+        $self = query_user(array('avatar128', 'nickname', 'space_url', 'space_link','score','title'));
         $this->assign('self', $self);
     }
 
@@ -109,6 +103,7 @@ class ConfigController extends BaseController
         $this->assign('level', $level);
 
         $self = query_user(array('score', 'title'));
+
         $this->assign('self', $self);
 
         $action = D('Admin/Action')->getAction(array('status' => 1));

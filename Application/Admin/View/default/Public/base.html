@@ -59,6 +59,7 @@
                 </volist>
             </ul>
             <ul class="nav navbar-nav navbar-right">
+
                 <li><a href="javascript:;"  onclick="clear_cache()"><i class="icon-trash"></i> 清空缓存</a></li>
                 <li><a target="_blank" href="{:U('Home/Index/index')}"><i class="icon-copy"></i> 打开前台</a></li>
                 <li class="dropdown">
@@ -157,10 +158,13 @@
             <php>$col=12;</php>
         </notempty>
         <div id="main-content" class="" style="padding:10px;padding-left:0;padding-bottom:10px;left: 180px;position:absolute;right: 0;bottom: 0;top: 0;overflow: auto">
-            <div id="top-alert" class="fixed alert alert-error" style="display: none;">
-                <button class="close fixed" style="margin-top: 4px;">&times;</button>
-                <div class="alert-content">这是内容</div>
-            </div>
+           <eq name="update" value="1">
+               <div id="top-alert" class="alert alert-success alert-dismissable" style="position: absolute;left: 50%;margin-left: -150px;width: 300px;box-shadow: rgba(95, 95, 95, 0.4) 3px 3px 3px;z-index:999">
+                   <i class="icon-ok-sign" style="font-size: 28px"></i>  &nbsp;&nbsp; 有新版本可更新！<a class="alert-link" href="{:U('Cloud/update')}">去更新！</a>
+                   <button class="close fixed" style="margin-top: 4px;">&times;</button>
+               </div>
+           </eq>
+
             <div id="main" style="overflow-y:auto;overflow-x:hidden;">
                 <block name="nav">
                     <!-- nav -->
@@ -361,17 +365,6 @@
         }
     }();
     highlight_subnav("{:U('Admin'.'/'.CONTROLLER_NAME.'/'.ACTION_NAME,$_GET)}")
-</script>
-<!--优化系统DUMP显示方式@mingyangliu-->
-<script type="text/javascript">
-if ( $("pre").length > 0 ) { 
-document.writeln("<div id=\"mydump\"  style=\"position: fixed;z-index: 999;top:0;height:400px;width: 500px;OVERFLOW:auto;\" ></div>");
-$("pre").appendTo('#mydump'); 
-document.writeln("<div style=\"z-index:9999;height:30px;float:right;text-align: right;overflow:hidden;position:fixed;bottom:0;right:150px;color:#000;line-height:30px;cursor:pointer;\">");
-document.writeln("<a style=\"background-color: rgb(255, 255, 255);float: right;\"href=JavaScript:; class=\"STYLE1\" onclick=\"document.all.mydump.style.display=`none`;\">[隐藏DUMP数据]</a>");
-document.writeln("<a style=\"background-color: rgb(255, 255, 255);float: right;\"href=JavaScript:; class=\"STYLE1\" onclick=\"document.all.mydump.style.display=`block`;\">[显示DUMP数据]</a>");
-document.writeln("</div>");
-}
 </script>
 <block name="script"></block>
 <block name="modal">

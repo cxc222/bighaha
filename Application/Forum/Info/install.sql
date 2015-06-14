@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS `ocenter_forum_bookmark` (
   `post_id` int(11) NOT NULL,
   `create_time` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 
 -- -----------------------------
@@ -56,7 +56,7 @@ CREATE TABLE IF NOT EXISTS `ocenter_forum_lzl_reply` (
   `ctime` int(11) NOT NULL,
   `is_del` tinyint(4) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=84 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=85 DEFAULT CHARSET=utf8;
 
 
 -- -----------------------------
@@ -112,8 +112,8 @@ CREATE TABLE IF NOT EXISTS `ocenter_forum_type` (
 -- -----------------------------
 -- 表内记录 `ocenter_forum`
 -- -----------------------------
-INSERT INTO `ocenter_forum` VALUES ('1', '默认版块', '1407114174', '0', '1', '1', '0', '133', '123', '1231', '', '1', '0');
-INSERT INTO `ocenter_forum` VALUES ('2', '官方公告', '1417424922', '2', '1', '1', '0', '134', '117', '官方公告发布区', '', '2', '1433388564');
+INSERT INTO `ocenter_forum` VALUES ('1', '默认版块', '1407114174', '0', '1', '1', '0', '133', '123', '浑身发抖活动方式  发的撒健康福简单覆盖给艰苦奋斗是就是的撒伐', '[1],[2]', '1', '0');
+INSERT INTO `ocenter_forum` VALUES ('2', '官方公告', '1417424922', '2', '1', '1', '0', '134', '117', '官方公告发布区', '', '2', '1433468728');
 -- -----------------------------
 -- 表内记录 `ocenter_forum_type`
 -- -----------------------------

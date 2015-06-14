@@ -6,6 +6,7 @@
     </div>
 
 <div class="clearfix"></div>
+    <if condition="check_auth('Forum/Lzl/doSendLZLReply',get_expect_ids(0,$reply['id'],0,1))">
     <div>
     <a href="javascript:" class="pull-right show_textarea" args="{$to_f_reply_id}" >我也说几句</a>
     </div>
@@ -18,6 +19,9 @@
     </div>
     <div class="XT_submit"><a id="submit_{$to_f_reply_id}" href="javascript:" post_id="{$post_id}" args="to_f_reply_id={$to_f_reply_id}&to_reply_id=0&to_uid={$reply_uid}&p={$p}" class="submitReply pull-right btn btn-primary">提交 Ctrl+Enter</a></div>
 </div>
+<else/>
+<a class="pull-right show_textarea" href="javascript:" onclick=" if(is_login()){toast.error('你无回复权限！！');}else{toast.error('请先登录！');}">我也说几句</a>
+        </if>
 </div>
 
 <script>
