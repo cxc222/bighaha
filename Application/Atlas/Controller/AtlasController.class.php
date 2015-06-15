@@ -176,8 +176,12 @@ class AtlasController extends AdminController
 	 *
 	 */
 	function collection(){
-	    $aId=I('id',0,'intval');
-	    
+	    $aId = I('id',0,'intval');
+        $rule = new \Atlas\Rule\CollectRule();
+        $rule->execute($aId);
+        $this->success('采集成功, 成功数: '.$rule->zindex,U('admin/atlas/index'));
+
+        die();
 	    $atlasCollection = $this->atlasCollectionModel->find($aId);
 		set_time_limit(0);
 		
