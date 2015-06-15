@@ -39,7 +39,10 @@ class budejie extends \Atlas\Rule\CollectRule{
 					$id = str_replace('pic-',' ',$img->id);
 					
 					//判断是否结束
-					$this->finish($id);
+					if($this->finish($id)){
+                        //跳出循环
+                        break 3;
+                    }
 
                     /** @noinspection PhpParamsInspection */
                     $this->Fast($this->zindex,$id);	//首次采集, 记录ID号
