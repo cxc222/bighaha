@@ -40,6 +40,7 @@ class CollectRule {
 	 * 
 	 */
 	function execute($aId){
+        set_time_limit(0);
 		$atlasCollection = $this->atlasCollectionModel->find($aId);
 		
 		/* $url = $atlasCollection['url'];
@@ -52,7 +53,7 @@ class CollectRule {
 		$atlasCollectionData['page_suffix'] = '{page}';
 		$atlasCollectionData['start_id'] = $atlasCollection['start_id'];
 		
-		$class = '\Atlas\Rule\\'.$atlasCollection['className'];
+		$class = 'Atlas\Rule\\'.$atlasCollection['className'];
 		$this->RuleClass = new $class();
 		return $this->RuleClass->executeRule($atlasCollectionData);
 	}

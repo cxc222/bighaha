@@ -16,7 +16,7 @@ class budejie extends \Atlas\Rule\CollectRule{
      * @return int
      */
 	function executeRule($atlasCollectionData){
-        set_time_limit(0);
+
 		//$this->atlasCollection = $this->atlasCollectionModel->find($atlasCollectionData['id']);
 		$this->id = $atlasCollectionData['id'];
 		$this->url = $atlasCollectionData['url'];

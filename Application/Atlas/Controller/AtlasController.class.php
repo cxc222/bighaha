@@ -120,6 +120,7 @@ class AtlasController extends AdminController
 	    if(IS_POST){
 	        $aId&&$data['id']=$aId;
             $data['name']=I('post.name','','op_t');
+            $data['className']=I('post.className','','op_t');
             $data['url']=I('post.url','','op_t');
             $data['page']=I('post.page',1,'intval');
             
@@ -151,7 +152,7 @@ class AtlasController extends AdminController
 	        $builder->title($title.'采集项目')
 	        ->data($data)
 	        ->keyId()
-	        ->keyText('name','名称')
+	        ->keyText('name','名称')->keyText('className','对应类名称')
 	        ->keyText('url','采集URL')
 	        ->keyText('page','采集页数')
 	        ->keyText('start_id','上次采集开始id')
@@ -181,7 +182,7 @@ class AtlasController extends AdminController
         $rule->execute($aId);
         $this->success('采集成功, 成功数: '.$rule->zindex,U('admin/atlas/index'));
 
-        die();
+        /*die();
 	    $atlasCollection = $this->atlasCollectionModel->find($aId);
 		set_time_limit(0);
 		
@@ -193,7 +194,7 @@ class AtlasController extends AdminController
 		//保存Model
 		$atlas_configModel = D('atlas_config');
 		$Picture = D('Picture');
-		/* 调用文件上传组件上传文件 */
+		//调用文件上传组件上传文件
 		$pic_driver = C('PICTURE_UPLOAD_DRIVER');
 		 
 		//保存路径	Uploads/atlas/005OPWbujw1ergwtgwamig306403dhdt.gif
@@ -245,17 +246,6 @@ class AtlasController extends AdminController
 					$pathName = basename($src);
 	
 					$curl_down = $curl->download($img->src, $diskPath.$pathName);
-					/* $curl_down = $curl->download($img->src,  function($instance, $tmpfile) {
-					 //本地保存成功
-							$file = 'Uploads/atlas/' . basename($instance->url);
-							$pathName = basename($instance->url);
-								
-							//执行保存文件
-							$fh = fopen($file, 'wb');
-							stream_copy_to_stream($tmpfile, $fh);
-							fclose($fh);
-							//return array('file'=>$file,'name'=>$pathName);
-							}); */
 					//下载结束
 					if($curl_down){
 						$filePath = ROOT_PATH.'/'.$file;
@@ -295,7 +285,7 @@ class AtlasController extends AdminController
 			}
 		}
 		$html->clear();	//清理
-		$this->atlasCollectionModel->where(array('id'=>$aId))->setField('end_id',$id);
+		$this->atlasCollectionModel->where(array('id'=>$aId))->setField('end_id',$id);*/
 		/* ------------------------------------------------------------------------------------------------------------- */
 		/* $CollectionModel = D('Collection');
 		 $CollectionConfigModel = D('CollectionConfig');
