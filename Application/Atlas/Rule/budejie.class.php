@@ -1,20 +1,22 @@
 <?php
 namespace Atlas\Rule;
 
+/** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
 class budejie extends \Atlas\Rule\CollectRule{
-	private $zindex = 1;
 	private $start_id;
 	private $url;
 	private $page_Count;
 	private $page_suffix;
 	private $id;
 	//private $atlasCollection;
-	
-	/**
-	 * 
-	 * 
-	 */
+
+    /**
+     *
+     * @param $atlasCollectionData
+     * @return int
+     */
 	function executeRule($atlasCollectionData){
+        set_time_limit(0);
 		//$this->atlasCollection = $this->atlasCollectionModel->find($atlasCollectionData['id']);
 		$this->id = $atlasCollectionData['id'];
 		$this->url = $atlasCollectionData['url'];
@@ -38,62 +40,22 @@ class budejie extends \Atlas\Rule\CollectRule{
 					
 					//判断是否结束
 					$this->finish($id);
-					
-					$this->Fast($this->zindex,$id);	//首次采集, 记录ID号
-					
+
+                    /** @noinspection PhpParamsInspection */
+                    $this->Fast($this->zindex,$id);	//首次采集, 记录ID号
 					//开始下载
 					$info = $this->download($src);
 					if($info){
 					    //保存数据库
 					    $this->save($alt, $info['id']);
 					}
-					
-					//$file = 'Uploads/atlas/' . basename($instance->url);
-					/* $file = $diskPath . basename($src);
-					$pathName = basename($src);
-		
-					$curl_down = $curl->download($img->src, $diskPath.$pathName);
-					//下载结束
-					if($curl_down){
-						$filePath = ROOT_PATH.'/'.$file;
-						//模拟一组 $_FILES 格式
-						$fileGBK = iconv('UTF-8','GB2312',$filePath);
-						$fileInfo['size'] = filesize($fileGBK);
-						$fileInfo['name'] = $pathName;
-						$fileInfo['error'] = 0;
-						$fileInfo['type'] = mime_content_type($fileGBK);
-						$fileInfo['tmp_name'] = $fileGBK;
-		
-						//执行文件移动
-						$info = $PictureClass->moveUpload(
-								$fileInfo,
-								C('PICTURE_UPLOAD'),
-								//C('PICTURE_UPLOAD_DRIVER'),
-								'qiniu',
-								C("UPLOAD_QINIU_CONFIG")
-						); //TODO:上传到远程服务器
-		
-						if(!$info){
-							//$this->error[] = '';
-						}else{
-							//暂停60秒
-							//sleep(60);
-							$_data['uid'] = 1;
-							$_data['content'] = $alt;
-							$_data['image_id'] = $info['id'];
-							$_data['addtime'] = time();
-							$_data['status'] = 1;
-							if($this->atlasModel->create($_data) && ( $this->atlasModel->add())){
-								$this->zindex++;
-							}
-						}
-						
-					} */
+
 				}
 			}
 		}
-		
-		
+        $html->clear();	//清理
+        $this->Success($this->id,$id);  //最后一个的时候记录
+		return $this->zindex;
 	}
 	
 	/**
@@ -117,7 +79,5 @@ class budejie extends \Atlas\Rule\CollectRule{
 	    }
 	}
 	
-	function Success(){
-	    
-	}
+
 }

@@ -14,17 +14,21 @@ class CollectRule {
 	public $RuleClass;
 	public $PictureClass;
 	public $diskPath = 'Uploads/atlas/';
+    public $zindex = 1;
 	
 	function __construct() {
 		Vendor ( 'Curl.Curl' );
 		require_once ('ThinkPHP/Library/Vendor/Snoopy/Snoopy.class.php');
-		require_once ('ThinkPHP/Library/Vendor/simplehtmldom/simple_html_dom.php');
-		
-		$this->curl = new \Curl\Curl ();
+        /** @noinspection SpellCheckingInspection */
+        require_once ('ThinkPHP/Library/Vendor/simplehtmldom/simple_html_dom.php');
+
+        /** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
+        $this->curl = new \Curl\Curl ();
 		$this->snoopy = new \Snoopy ();
 		$this->atlasModel = D('Atlas/Atlas');
 		$this->atlasCollectionModel = D('Atlas/Atlas_collection');
-		$this->PictureClass = new \Atlas\Lib\Picture();
+        /** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
+        $this->PictureClass = new \Atlas\Lib\Picture();
 		
 		if (!file_exists($this->diskPath)){	//判断目录不存在, 自动创建
 		    mkdir($this->diskPath, 0777,true);
@@ -50,21 +54,19 @@ class CollectRule {
 		
 		$class = '\Atlas\Rule\\'.$atlasCollection['className'];
 		$this->RuleClass = new $class();
-		$this->RuleClass->executeRule($atlasCollectionData);
-		
-		print_r($this->RuleClass);
-		die();
+		return $this->RuleClass->executeRule($atlasCollectionData);
 	}
-	
-	/**
-	 * 开启下载图片
-	 * @param unknown $imgUrl
-	 */
+
+    /**
+     * 开启下载图片
+     * @param unknown $imgUrl
+     * @return bool
+     */
 	function download($imgUrl){
 	    $file = $this->diskPath . basename($imgUrl);
 	    $pathName = basename($imgUrl);
 	    
-	    $curl_down = $this->curl->download($img->src, $this->diskPath.$pathName);
+	    $curl_down = $this->curl->download($imgUrl, $this->diskPath.$pathName);
 	    //下载结束
 	    if($curl_down){
 	        $filePath = ROOT_PATH.'/'.$file;
@@ -84,7 +86,7 @@ class CollectRule {
 	            'qiniu',
 	            C("UPLOAD_QINIU_CONFIG")
 	        ); //TODO:上传到远程服务器
-	        
+
 	        if(!$info){
 	            //$this->error[] = '';
 	            return false;
@@ -105,11 +107,13 @@ class CollectRule {
 	    }
 	    //下载end
 	}
-	
-	/**
-	 * 保存到数据库
-	 * 
-	 */
+
+    /**
+     * 保存到数据库
+     * @param $content
+     * @param $image_id
+     * @param int $uid
+     */
 	function save($content,$image_id,$uid=1){
 	    $_data['uid'] = $uid;
 	    $_data['content'] = $content;
@@ -120,4 +124,14 @@ class CollectRule {
 	        $this->zindex++;
 	    }
 	}
+
+    /**
+     * 成功后的操作
+     *
+     * @param $aId  采集id
+     * @param $id   需要更新上去的id
+     */
+    function Success($aId,$id){
+        $this->atlasCollectionModel->where(array('id'=>$aId))->setField('end_id',$id);
+    }
 }

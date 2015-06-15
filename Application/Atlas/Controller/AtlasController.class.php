@@ -17,11 +17,11 @@ use Atlas\Rule;
 
 class AtlasController extends AdminController
 {
+	public $error;
 	protected $atlasModel;
 	protected $atlasCollectionModel;
 	protected $atlasPictureModel;
 	protected $qiniu;
-	public $error;
 	
 	function _initialize()
 	{
@@ -62,7 +62,7 @@ class AtlasController extends AdminController
 		->button('设为推荐', array_merge($attr, array('url' => U('doRecommend', array('tip' => 1)))))
 		->button('取消推荐', array_merge($attr, array('url' => U('doRecommend', array('tip' => 0)))))
 		
-		->keyId()->keyLink('content', '内容', 'Atlas/Index/detail?id=###')
+            ->keyId()->keyLink('content', '内容', 'Atlas/Index/detail?id=###')
 		->keyUid()->keyCreateTime('addtime')->keyStatus()
 		->keyMap('is_recommend', '是否推荐', array(0 => '否', 1 => '是'))
 		->data($list)
@@ -349,10 +349,10 @@ class AtlasController extends AdminController
 	
 	//测试用
 	function test(){
-		$rule = new \Atlas\Rule\CollectRule();
-		$rule->execute($aId);
-		print_r($rule);
-		die();
+        /** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
+        $rule = new \Atlas\Rule\CollectRule();
+		$rule->execute(1);
+        $this->success('采集成功, 成功数: '.$rule->zindex,U('admin/atlas/index'));
 	}
 	
 	/**
