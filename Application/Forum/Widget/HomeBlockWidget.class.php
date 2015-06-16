@@ -33,15 +33,22 @@ class HomeBlockWidget extends Controller{
             $forum=array_combine(array_column($forum,'id'),$forum);
             $data=array();
             foreach($forum_ids as $val){
-                $data[]=$forum[$val];
+                if($val!=''){
+                    $data[]=$forum[$val];
+                }
             }
-
+            if(!count($data)){
+                $data=1;
+            }
             S('FORUM_SHOW_DATA', $data,$cache_time);
         }
-        unset($v);
+        if($data==1){
+            $data=null;
+        }
         foreach ($data as &$v) {
             $v['hasFollowed'] = $forumModel->checkFollowed($v['id'], is_login());
         }
+        unset($v);
         $this->assign('forum_show', $data);
     }
 

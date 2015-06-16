@@ -143,13 +143,13 @@ class IndexController extends BaseController
         if (!in_array($aType, $types)) {
             $class_str = 'Addons\\Insert' . ucfirst($aType) . '\\Insert' . ucfirst($aType) . 'Addon';
             $class_exists = class_exists($class_str);
-            if(!$class_exists){
+            if (!$class_exists) {
                 $this->error('无法发表该类型的微博');
-            }else{
+            } else {
                 $class = new $class_str();
-                if(method_exists($class,'parseExtra')){
+                if (method_exists($class, 'parseExtra')) {
                     $res = $class->parseExtra($aExtra);
-                    if(!$res){
+                    if (!$res) {
                         $this->error($class->error);
                     }
                 }
@@ -168,6 +168,10 @@ class IndexController extends BaseController
         $feed_data = array();
         if (!empty($aAttachIds)) {
             $feed_data['attach_ids'] = $aAttachIds;
+        }else{
+            if($aType == 'image'){
+                $this->error('请至少选择一张图片');
+            }
         }
 
         if (!empty($aExtra)) $feed_data = array_merge($feed_data, $aExtra);
@@ -222,7 +226,7 @@ class IndexController extends BaseController
 
         $aType = I('post.type', '', 'op_t');
 
-        $aSoueseId = I('post.sourceId', 0, 'intval');
+        $aSourceId = I('post.sourceId', 0, 'intval');
 
         $aWeiboId = I('post.weiboId', 0, 'intval');
 
@@ -243,23 +247,23 @@ class IndexController extends BaseController
 
         $weiboModel = D('Weibo');
         $feed_data = '';
-        $source = $weiboModel->getWeiboDetail($aSoueseId);
+        $source = $weiboModel->getWeiboDetail($aSourceId);
         $sourceweibo = $source['weibo'];
         $feed_data['source'] = $sourceweibo;
-        $feed_data['sourceId'] = $aSoueseId;
+        $feed_data['sourceId'] = $aSourceId;
         //发布微博
         $new_id = send_weibo($aContent, $aType, $feed_data);
 
         if ($new_id) {
-            D('weibo')->where('id=' . $aSoueseId)->setInc('repost_count');
-            $aWeiboId != $aSoueseId && D('weibo')->where('id=' . $aWeiboId)->setInc('repost_count');
+            D('weibo')->where('id=' . $aSourceId)->setInc('repost_count');
+            $aWeiboId != $aSourceId && D('weibo')->where('id=' . $aWeiboId)->setInc('repost_count');
             S('weibo_' . $aWeiboId, null);
-            S('weibo_' . $aSoueseId, null);
+            S('weibo_' . $aSourceId, null);
         }
 // 发送消息
         $user = query_user(array('nickname'), is_login());
         $toUid = D('weibo')->where(array('id' => $aWeiboId))->getField('uid');
-        D('Common/Message')->sendMessage($toUid,'转发提醒', $user['nickname'] . '转发了您的微博！',  'Weibo/Index/weiboDetail', array('id' => $new_id), is_login(), 1);
+        D('Common/Message')->sendMessage($toUid, '转发提醒', $user['nickname'] . '转发了您的微博！', 'Weibo/Index/weiboDetail', array('id' => $new_id), is_login(), 1);
 
         // 发布评论
         //  dump($aBeComment);exit;
@@ -500,6 +504,50 @@ class IndexController extends BaseController
         $return['status'] = 1;
         //返回成功信息
         $this->ajaxReturn($return);
+    }
+
+
+    public function search()
+    {
+
+        $aKeywords = $this->parseSearchKey('keywords');
+        $aKeywords = text($aKeywords);
+        $aPage = I('get.page', 1, 'intval');
+        $r = 30;
+        $param['where']['content'] = array('like', "%{$aKeywords}%");
+        $param['where']['status'] = 1;
+        $param['order'] = 'create_time desc';
+        $param['page'] = $aPage;
+        $param['count'] = $r;
+        //查询
+        $list = D('Weibo')->getWeiboList($param);
+        $totalCount = D('Weibo')->where($param['where'])->count();
+        $this->assign('totalCount', $totalCount);
+        $this->assign('r', $r);
+        $this->assign('list', $list);
+        $this->assign('search_keywords', $aKeywords);
+        $this->assignSelf();
+        $this->display();
+    }
+
+
+    protected function parseSearchKey($key = null)
+    {
+        $action = MODULE_NAME . '_' . CONTROLLER_NAME . '_' . ACTION_NAME;
+        $post = I('post.');
+        if (empty($post)) {
+            $keywords = cookie($action);
+        } else {
+            $keywords = $post;
+            cookie($action, $post);
+            $_GET['page'] = 1;
+        }
+
+        if (!$_GET['page']) {
+            cookie($action, null);
+            $keywords = null;
+        }
+        return $key ? $keywords[$key] : $keywords;
     }
 
 

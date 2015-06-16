@@ -54,7 +54,9 @@ class WeiboModel extends Model
     {
 
         $weibo = S('weibo_' . $id);
-        if (empty($weibo)) {
+
+        $check_empty = empty($weibo);
+        if ($check_empty) {
             $weibo = $this->where(array('status' => 1, 'id' => $id))->find();
             if (!$weibo) {
                 return null;
@@ -101,6 +103,18 @@ class WeiboModel extends Model
         $weibo['user'] = query_user(array('uid', 'nickname', 'avatar64', 'space_url', 'rank_link', 'title'), $weibo['uid']);
         $weibo['can_delete'] = $this->canDeleteWeibo($weibo);
 
+
+        // 判断转发的原微博是否已经删除
+        if($weibo['type'] == 'repost'){
+            $source_weibo = $this->getWeiboDetail( $weibo['weibo_data']['sourceId']);
+            if(!$source_weibo['uid']){
+                if(!$check_empty){
+                    S('weibo_' . $id, null);
+                    $weibo = $this->getWeiboDetail($id);
+                }
+            }
+        }
+
         return $weibo;
     }
 
@@ -119,9 +133,18 @@ class WeiboModel extends Model
 
     public function deleteWeibo($weibo_id)
     {
+        $weibo = $this->getWeiboDetail($weibo_id);
+
+
         //从数据库中删除微博、以及附属评论
         $result = $this->where(array('id' => $weibo_id))->save(array('status' => -1, 'comment_count' => 0));
         D('Weibo/WeiboComment')->where(array('weibo_id' => $weibo_id))->setField('status', -1);
+
+        if($weibo['type'] == 'repost'){
+            $this->where(array('id'=>$weibo['weibo_data']['sourceId']))->setDec('repost_count');
+            S('weibo_' . $weibo['weibo_data']['sourceId'], null);
+        }
+
         S('weibo_' . $weibo_id, null);
         return $result;
     }

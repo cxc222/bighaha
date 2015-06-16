@@ -113,7 +113,7 @@ $(function () {
                 }
                 query = form.find('input,select,textarea').serialize();
             }
-            if(query==''){
+            if(query==''&&$(this).attr('hide-data') != 'true'){
                 updateAlert('请勾选操作对象。','danger');
                 return false;
             }

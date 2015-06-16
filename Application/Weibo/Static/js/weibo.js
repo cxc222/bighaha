@@ -52,8 +52,9 @@ var weibo = {
             $('#load_more_text').text('');
             weibo.isLoadingWeibo = false;
             weibo_bind();
-            bind_atwho();
             toast.hideLoading();
+            bind_atwho();
+
         });
     },
     clearWeiboList: function () {

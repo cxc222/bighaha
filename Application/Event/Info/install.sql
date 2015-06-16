@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS `ocenter_event_attend` (
   `event_id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
   `phone` bigint(20) NOT NULL,
-  `creat_time` int(11) NOT NULL,
+  `create_time` int(11) NOT NULL,
   `status` tinyint(4) NOT NULL COMMENT '0为报名，1为参加',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

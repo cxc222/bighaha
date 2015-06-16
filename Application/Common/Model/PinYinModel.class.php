@@ -68,7 +68,10 @@ class PinYinModel extends Model{
 			}
 			$_Res .= $this->_Pinyin($_P, $_Data);
 		}
-		return preg_replace("/[^a-z0-9]*/", '', $_Res);
+
+
+        return str_replace("_", '', $_Res);
+       // return preg_replace("/[^a-z0-9]*/", '', $_Res);
 	}
 	private function _Pinyin($_Num, $_Data){
 		if($_Num>0 && $_Num<160 ){

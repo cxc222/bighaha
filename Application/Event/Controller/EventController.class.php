@@ -155,7 +155,7 @@ class EventController extends AdminController
 
 
         $builder->title('活动分类管理')
-            ->buttonNew(U('Event/add'))
+            ->buttonNew(U('Event/add'))->setLevel(1)
             ->data($tree)
             ->display();
     }
@@ -195,7 +195,7 @@ class EventController extends AdminController
             }
 
 
-            $builder->title('新增分类')->keyId()->keyText('title', '标题')->keySelect('pid', '父分类', '选择父级分类', array('0' => '顶级分类')+$opt)
+            $builder->title('新增分类')->keyId()->keyText('title', '标题')
                 ->keyStatus()->keyCreateTime()->keyUpdateTime()
                 ->data($eventtype)
                 ->buttonSubmit(U('Event/add'))->buttonBack()->display();

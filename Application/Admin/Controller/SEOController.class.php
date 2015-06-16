@@ -46,7 +46,7 @@ class SEOController extends AdminController
         //显示页面
         $builder = new AdminListBuilder();
         $builder->title('SEO规则回收站')
-            ->setStatusUrl(U('setRuleStatus'))->setClearUrl(U('doClear'))->buttonRestore()->buttonClear()
+            ->setStatusUrl(U('setRuleStatus'))->setDeleteTrueUrl(U('doClear'))->buttonRestore()->buttonDeleteTrue()
             ->keyId()->keyTitle()->keyText('app', '模块')->keyText('controller', '控制器')->keyText('action', '方法')
             ->keyText('seo_title', 'SEO标题')->keyText('seo_keywords', 'SEO关键字')->keyText('seo_description', 'SEO描述')
             ->data($ruleList)

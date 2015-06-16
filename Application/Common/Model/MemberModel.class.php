@@ -57,11 +57,11 @@ class MemberModel extends Model
      */
     protected function checkDenyNickname($nickname)
     {
-        $denyName=M("Config")->where(array('name' => 'USER_NAME_BAOLIU'))->getField('value');
-        if($denyName!=''){
-            $denyName=explode(',',$denyName);
-            foreach($denyName as $val){
-                if(!is_bool(strpos($nickname,$val))){
+        $denyName = M("Config")->where(array('name' => 'USER_NAME_BAOLIU'))->getField('value');
+        if ($denyName != '') {
+            $denyName = explode(',', $denyName);
+            foreach ($denyName as $val) {
+                if (!is_bool(strpos($nickname, $val))) {
                     return false;
                 }
             }
@@ -125,7 +125,12 @@ class MemberModel extends Model
             header('Content-Type:application/json; charset=utf-8');
             $data['status'] = 1;
             $data['url'] = U('Ucenter/Member/activate');
-            exit(json_encode($data));
+
+            if (IS_AJAX) {
+                exit(json_encode($data));
+            } else {
+                redirect($data['url']);
+            }
         }
 
         if (1 != $user['status']) {
@@ -140,8 +145,12 @@ class MemberModel extends Model
             //执行步骤在start的时候执行下一步，否则执行此步骤
             $go = $step == 'start' ? get_next_step($step) : check_step($step);
             $data['url'] = U('Ucenter/Member/step', array('step' => $go));
+            if (IS_AJAX) {
+                exit(json_encode($data));
+            } else {
+                redirect($data['url']);
+            }
 
-            exit(json_encode($data));
         }
         /* 登录用户 */
         $this->autoLogin($user, $remember);
@@ -159,8 +168,8 @@ class MemberModel extends Model
      */
     public function logout()
     {
-        session('_AUTH_LIST_'.get_uid().'1',null);
-        session('_AUTH_LIST_'.get_uid().'2',null);
+        session('_AUTH_LIST_' . get_uid() . '1', null);
+        session('_AUTH_LIST_' . get_uid() . '2', null);
         session('user_auth', null);
         session('user_auth_sign', null);
 
@@ -317,7 +326,6 @@ class MemberModel extends Model
     }
 
 
-
     /**
      * 设置角色用户默认基本信息
      * @param $role_id
@@ -461,37 +469,37 @@ class MemberModel extends Model
         return $change;
     }
 
-    private function initFollow($uid=0)
+    private function initFollow($uid = 0)
     {
-        if($uid!=0){
-            $followModel=D('Common/Follow');
-            $follow=modC('NEW_USER_FOLLOW','','USERCONFIG');
-            $fans=modC('NEW_USER_FANS','','USERCONFIG');
-            $friends=modC('NEW_USER_FRIENDS','','USERCONFIG');
-            if($follow!=''){
-                $follow=explode(',',$follow);
-                foreach($follow as $val){
-                    if(query_user('uid',$val)){
-                        $followModel->addFollow($uid,$val);
+        if ($uid != 0) {
+            $followModel = D('Common/Follow');
+            $follow = modC('NEW_USER_FOLLOW', '', 'USERCONFIG');
+            $fans = modC('NEW_USER_FANS', '', 'USERCONFIG');
+            $friends = modC('NEW_USER_FRIENDS', '', 'USERCONFIG');
+            if ($follow != '') {
+                $follow = explode(',', $follow);
+                foreach ($follow as $val) {
+                    if (query_user('uid', $val)) {
+                        $followModel->addFollow($uid, $val);
                     }
                 }
                 unset($val);
             }
-            if($fans!=''){
-                $fans=explode(',',$fans);
-                foreach($fans as $val){
-                    if(query_user('uid',$val)){
-                        $followModel->addFollow($val,$uid);
+            if ($fans != '') {
+                $fans = explode(',', $fans);
+                foreach ($fans as $val) {
+                    if (query_user('uid', $val)) {
+                        $followModel->addFollow($val, $uid);
                     }
                 }
                 unset($val);
             }
-            if($friends!=''){
-                $friends=explode(',',$friends);
-                foreach($friends as $val){
-                    if(query_user('uid',$val)){
-                        $followModel->addFollow($val,$uid);
-                        $followModel->addFollow($uid,$val);
+            if ($friends != '') {
+                $friends = explode(',', $friends);
+                foreach ($friends as $val) {
+                    if (query_user('uid', $val)) {
+                        $followModel->addFollow($val, $uid);
+                        $followModel->addFollow($uid, $val);
                     }
                 }
                 unset($val);
@@ -511,15 +519,15 @@ class MemberModel extends Model
     public function addSyncData($uid, $info)
     {
         //去除特殊字符。
-        $data['nickname'] = preg_replace('/[^A-Za-z0-9_\x80-\xff\s\']/', '',$info['nick'] );
+        $data['nickname'] = preg_replace('/[^A-Za-z0-9_\x80-\xff\s\']/', '', $info['nick']);
         // 截取字数
         $data['nickname'] = mb_substr($data['nickname'], 0, 32, 'utf-8');
         // 为空则随机生成
-        if(empty($data['nickname'])){
+        if (empty($data['nickname'])) {
             $data['nickname'] = $this->rand_nickname();
-        }else{
+        } else {
             if ($this->where(array('nickname' => $data['nickname']))->select()) {
-                $data['nickname'] .= '_'.$uid;
+                $data['nickname'] .= '_' . $uid;
             }
         }
         $data['sex'] = $info['sex'];
@@ -534,7 +542,7 @@ class MemberModel extends Model
         return $res;
     }
 
-    private  function rand_nickname()
+    private function rand_nickname()
     {
         $nickname = create_rand(4);
         if ($this->where(array('nickname' => $nickname))->select()) {
@@ -543,9 +551,6 @@ class MemberModel extends Model
             return $nickname;
         }
     }
-
-
-
 
 
 }

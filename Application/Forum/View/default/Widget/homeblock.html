@@ -65,11 +65,11 @@
                                 <volist name="forum_show" id="vo">
                                     <div class="clearfix">
                                         <div class="col-xs-4 ">
-                                            <a href="{:U('Index/forum',array('id'=>$vo['id']))}"><img
+                                            <a href="{:U('Forum/Index/forum',array('id'=>$vo['id']))}"><img
                                                     src="{$vo.logo|getThumbImageById=128,128}"> </a>
                                         </div>
                                         <div class="col-xs-4 text-ellipsis">
-                                            <a class="title" href="{:U('Index/forum',array('id'=>$vo['id']))}">
+                                            <a class="title" href="{:U('Forum/Index/forum',array('id'=>$vo['id']))}">
                                                 {$vo.title|text}
                                             </a>
 

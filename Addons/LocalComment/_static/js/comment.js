@@ -3,7 +3,7 @@
  */
 
 $(function () {
-    $.post(U('Weibo/Index/atWhoJson'),{},function(res){
+    $.post(U('Core/Public/atWhoJson'),{},function(res){
         atwho_config = {
             at: "@",
             data: res,

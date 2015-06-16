@@ -13,38 +13,26 @@
     <!--微博内容列表部分-->
     <div class="weibo_middle pull-left" style="width: 660px">
 
-        <!--  筛选部分-->
 
-
-
-
-        <!--筛选部分结束-->
-        <div id="top_list">
-            <volist name="top_list" id="top">
-                {:W('WeiboDetail/detail',array('weibo_id'=>$top,'can_hide'=>1))}
+        <div id="weibo_list">
+            <volist name="list" id="weibo">
+                {:W('Weibo/WeiboDetail/detail',array('weibo_id'=>$weibo))}
             </volist>
         </div>
-        <div id="weibo_list">
-            <php>
-                if($page != 1){
-            </php>
-            <include file="loadweibo"/>
-            <php>
-                }
-            </php>
 
-        </div>
-        <div id="load_more" class="text-center text-muted"
-        <if condition="$page neq 1">style="display:none"</if>
-        >
-        <p id="load_more_text">载入更多</p>
-    </div>
-    <div id="index_weibo_page" style=" <if condition='$page eq 1'>display:none</if>">
+
+
+
+    <div id="index_weibo_page">
         <div class="text-right">
-            {:getPagination($total_count,30)}
+            {:getPagination($totalCount,$r)}
         </div>
     </div>
     </div>
+
+
+
+
 
     <!--微博内容列表部分结束-->
     <!--首页右侧部分-->
