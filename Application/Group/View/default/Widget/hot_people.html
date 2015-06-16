@@ -24,7 +24,15 @@
 <div class="">
     <div class="joined">
         <volist name="all" id="vo">
-            <a ucard="{$vo.uid}" href="{$vo.user.space_url}" style="margin-right:5px;"><img class="avatar-img avatar"  src="{$vo.user.avatar64}" style="width: 32px;height: 32px;margin-bottom: 5px"/></a>
+
+            <div class="clearfix text-center" style="width: 50px; display: inline-block">
+                <a ucard="{$vo.uid}" href="{$vo.user.space_url}" style="margin-right:5px;"><img class="avatar-img avatar"  src="{$vo.user.avatar64}" style="width: 32px;height: 32px;margin-bottom: 5px"/></a>
+
+                <div  class="text-more" style="width: 50px"><a ucard="{$vo.uid}" href="{$vo.user.space_url}" style="margin-right:5px;">{$vo.user.nickname}</a></div>
+            </div>
+
+
+
         </volist>
 
     </div>

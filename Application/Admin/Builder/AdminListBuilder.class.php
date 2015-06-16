@@ -14,7 +14,7 @@ class AdminListBuilder extends AdminBuilder
     private $_setStatusUrl;
     private $_searchPostUrl;
     private $_selectPostUrl;
-    private $_setClearUrl;
+    private $_setDeleteTrueUrl;
 
     private $_search = array();
     private $_select = array();
@@ -58,9 +58,9 @@ class AdminListBuilder extends AdminBuilder
      * @return $this
      * @author 郑钟良<zzl@ourstu.com>
      */
-    public function setClearUrl($url)
+    public function setDeleteTrueUrl($url)
     {
-        $this->_setClearUrl = $url;
+        $this->_setDeleteTrueUrl = $url;
         return $this;
     }
 
@@ -182,14 +182,24 @@ class AdminListBuilder extends AdminBuilder
         return $this->buttonSetStatus($url, 1, $title, $attr);
     }
 
-    /**彻底删除回收站
+    /**清空回收站
+     * @param null $model
+     * @return $this
+     * @author 陈一枭
+     */
+    public function buttonClear($model = null)
+    {
+        return $this->button('清空', array('class' => 'btn ajax-post tox-confirm', 'data-confirm' => '您确实要清空回收站吗？（清空后不可恢复）', 'url' => U('', array('model' => $model)), 'target-form' => 'ids','hide-data'=>'true'));
+    }
+
+    /**彻底删除
      * @param null $url
      * @return $this
-     * @author 陈一枭 -> 郑钟良<zzl@ourstu.com>
+     * @author 郑钟良<zzl@ourstu.com>
      */
-    public function buttonClear($url = null)
+    public function buttonDeleteTrue($url = null)
     {
-        if (!$url) $url = $this->_setClearUrl;
+        if (!$url) $url = $this->_setDeleteTrueUrl;
         $attr['class'] = 'btn ajax-post tox-confirm';
         $attr['data-confirm'] = '您确实要彻底删除吗？（彻底删除后不可恢复）';
         $attr['url'] = $url;
@@ -806,7 +816,7 @@ class AdminListBuilder extends AdminBuilder
      * @param $ids
      * @author 郑钟良<zzl@ourstu.com>
      */
-    public function doClear($model, $ids)
+    public function doDeleteTrue($model, $ids)
     {
         $ids = is_array($ids) ? $ids : explode(',', $ids);
         M($model)->where(array('id' => array('in', $ids)))->delete();

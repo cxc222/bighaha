@@ -119,6 +119,9 @@ class IndexController extends Controller{
         }
 
         $info=$this->newsModel->getData($aId);
+        if($info['dead_line']<=time()&&!check_auth('News/Index/edit',$info['uid'])){
+            $this->error('该资讯已过期！');
+        }
         $author=query_user(array('uid','space_url','nickname','avatar64','signature'),$info['uid']);
         $author['news_count']=$this->newsModel->where(array('uid'=>$info['uid']))->count();
         /* 获取模板 */

@@ -178,7 +178,7 @@ class ScoreModel extends Model
 
             }
             clean_query_user_cache($uid, 'title');
-        }  
+        }
     }
 
     public function getAllScore($uid)

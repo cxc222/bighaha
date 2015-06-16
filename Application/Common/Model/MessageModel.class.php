@@ -109,9 +109,8 @@ class MessageModel extends Model
                 if($content['url']){
                     $content['web_url'] = is_bool(strpos($content['url'],'http://')) ? U($content['url'],$content['args']):$content['url'];
                 }else{
-                    $content['web_url'] = U('ucenter/message/message');
+                    $content['web_url'] = U('ucenter/message/message',array('tab'=>'all'));
                 }
-
             }
             S('message_content_' . $id, $content, 60 * 60);
         }

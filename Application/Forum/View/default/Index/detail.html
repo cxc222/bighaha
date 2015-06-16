@@ -222,7 +222,7 @@
                                 <php>$config='';</php>
 
                             </p>
-                            {:W('Common/Ueditor/editor',array('myeditor','content','','100%','350px',$config))}
+                            {:W('Common/Ueditor/editor',array('content','content','','100%','350px',$config))}
 
                             <p class="pull-right" style="margin-top: 10px;">
                                 <input type="submit" id="reply_button" class="btn btn-primary" value="发表 Ctrl+Enter"/>
@@ -245,13 +245,31 @@
     var SUPPORT_URL = "{:addons_url('Support://Support/doSupport')}";
     //点击收藏/取消收藏按钮
     $(function () {
+        $.post(U('Core/Public/atWhoJson'),{},function(res){
+            atwho_config = {
+                at: "@",
+                data: res,
+                tpl: "<li data-value='@${nickname}'><img class='avatar-img' style='width:2em;margin-right: 0.6em' src='${avatar32}'/>${nickname}</li>",
+                show_the_at: true,
+                search_key: 'search_key',
+                start_with_space: false
+            };
+        },'json')
 
-        $('#reply_form').keypress(function (e) {
-            if (e.ctrlKey && e.which == 13 || e.which == 10) {
-                $('#reply_button').focus();
-                $("#reply_form").submit();
-            }
-        });
+        ue_content.addListener( 'ready', function( editor ) {
+            $(this.document.body).atwho(atwho_config);
+            editor.setCursor();
+
+        } );
+
+        ue_content.addListener("beforeSubmit",function(){
+            ue_content.sync();
+            $("#reply_form").submit();
+            return false;
+        })
+
+
+
 
 
        /* var $inputor = $('#contentEditor').atwho(atwho_config);

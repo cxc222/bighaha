@@ -227,7 +227,7 @@ class GroupController extends AdminController
         //显示页面
         $builder = new AdminListBuilder();
         $builder
-            ->title('群组回收站')->buttonClear(U('groupClear'))
+            ->title('群组回收站')->buttonDeleteTrue(U('groupClear'))
             ->setStatusUrl(U('Group/setGroupStatus'))->buttonRestore()
             ->keyId()->keyLink('title', '标题', 'Group/post?group_id=###')
             ->keyCreateTime()->keyText('post_count', '文章数量')
@@ -437,7 +437,7 @@ class GroupController extends AdminController
         //显示页面
         $builder = new AdminListBuilder();
         $builder->title('文章回收站')
-            ->setStatusUrl(U('Group/setPostStatus'))->buttonRestore()->buttonClear(U('postClear'))
+            ->setStatusUrl(U('Group/setPostStatus'))->buttonRestore()->buttonDeleteTrue(U('postClear'))
             ->keyId()->keyLink('title', '标题', 'Group/reply?post_id=###')
             ->keyCreateTime()->keyUpdateTime()->keyTime('last_reply_time', '最后回复时间')->keyBool('is_top', '是否置顶')
             ->data($list)
@@ -532,7 +532,7 @@ class GroupController extends AdminController
         //显示页面
         $builder = new AdminListBuilder();
         $builder->title('回复回收站')
-            ->setStatusUrl(U('setReplyStatus'))->buttonRestore()->buttonClear(U('postReplyClear'))
+            ->setStatusUrl(U('setReplyStatus'))->buttonRestore()->buttonDeleteTrue(U('postReplyClear'))
             ->keyId()->keyTruncText('content', '内容', 50)->keyText('uname', '发布者')->keyCreateTime()->keyUpdateTime()->keyStatus()->keyLink('show', '楼中楼', 'Admin/Group/lzlreplyTrash?id=###')
             ->data($list)
             ->pagination($totalCount, $r)
@@ -693,7 +693,7 @@ class GroupController extends AdminController
         //显示页面
         $builder = new AdminListBuilder();
         $builder->title('回复回收站')
-            ->setStatusUrl(U('setLzlReplyStatus'))->buttonRestore()->buttonClear(U('lzlClear'))
+            ->setStatusUrl(U('setLzlReplyStatus'))->buttonRestore()->buttonDeleteTrue(U('lzlClear'))
             ->keyId()->keyTruncText('content', '内容', 50)->keyText('uname', '发布者')->keyCreateTime()->keyUpdateTime()->keyStatus()
             ->data($list)
             ->pagination($totalCount, $r)

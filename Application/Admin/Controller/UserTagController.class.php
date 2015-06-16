@@ -116,7 +116,7 @@ class UserTagController extends AdminController
         //显示页面
 
         $builder->title('标签分类回收站')
-            ->setStatusUrl(U('setStatus'))->buttonRestore()->buttonClear(U('UserTag/userTagClear'))
+            ->setStatusUrl(U('setStatus'))->buttonRestore()->buttonDeleteTrue(U('UserTag/userTagClear'))
             ->keyId()->keyText('title', '标题')->keyText('pid','父分类id')
             ->data($list)
             ->pagination($totalCount, $r)

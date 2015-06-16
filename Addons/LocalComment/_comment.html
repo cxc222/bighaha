@@ -32,7 +32,13 @@
             {$comment.content|parse_comment_content}
         </div>
         <div class="actions">
+            <php>
+                if($comment['uid']){
+            </php>
             <a href="javascript:" data-role="reply_local_comment" data-nickname="{$comment.user.nickname|op_t}">回复</a>
+            <php>
+               }
+            </php>
             <php>if(check_auth('deleteLocalComment',$comment['uid'])){</php>
             <a href="javascript:" data-role="delete_local_comment" data-id="{$comment.id}">删除</a>
             <php>}</php>

@@ -61,19 +61,12 @@
         </div>
 
         <div class="form-group clearfix">
-            <div class="pull-left" style="width: 47%;">
-                <input type="text" name="url" class="form-control " placeholder="输入消息的URL链接，U函数第一个参数">
-            </div>
-            <div class="pull-right" style="width: 52%">
-                <input type="text" name="args" class="form-control" placeholder="URL参数，[参数名]/[参数值]/[参数名]/[参数值]">
-            </div>
-
-
+                <input type="text" name="url" class="form-control " placeholder="输入消息的URL链接">
         </div>
 
 
         <div class="form-group">
-            {:W('Common/Ueditor/editor',array('content','content','','100%','200px','','',array('is_load_script'=>1)))}
+            {:W('Common/Ueditor/editor',array('content','content','','100%','200px','','',array('is_load_script'=>1,'zIndex'=>1050)))}
 
         </div>
 

@@ -165,8 +165,8 @@ class IndexController extends Controller
         if (trim(op_h($address)) == '') {
             $this->error('请输入地点。');
         }
-        if ($sTime < $deadline) {
-            $this->error('报名截止不能大于活动开始时间');
+        if ($eTime < $deadline) {
+            $this->error('报名截止不能大于活动结束时间');
         }
         if ($deadline == '') {
             $this->error('请输入截止日期');
@@ -206,7 +206,19 @@ class IndexController extends Controller
                 $user = query_user(array('username', 'nickname'), is_login());
                 D('Common/Message')->sendMessage(C('USER_ADMINISTRATOR'), $title = '活动发布提醒', "{$user['nickname']}发布了一个活动，请到后台审核。",  'Admin/Event/verify', array(),is_login(), 2);
             }
+
+            $content['attentionCount'] = 1;
+            $content['signCount'] = 1;
             $rs = D('Event')->add($content);
+
+
+            $data['uid'] = is_login();
+            $data['event_id'] = $rs;
+            $data['create_time'] = time();
+            $data['status'] = 1;
+            D('event_attend')->add($data);
+
+
             if (D('Common/Module')->isInstalled('Weibo')) { //安装了微博模块
                 //同步到微博
                 $postUrl = "http://$_SERVER[HTTP_HOST]" . U('Event/Index/detail', array('id' => $rs));
@@ -366,7 +378,7 @@ class IndexController extends Controller
             $data['event_id'] = $event_id;
             $data['name'] = $name;
             $data['phone'] = $phone;
-            $data['creat_time'] = time();
+            $data['create_time'] = time();
             $res = D('event_attend')->add($data);
             if ($res) {
 

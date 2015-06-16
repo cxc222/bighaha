@@ -18,7 +18,7 @@
             <php>if($can_guest || is_login()){</php>
             <div class="form">
                 <div class="form-group">
-                    <textarea class="form-control new-comment-text" rows="2" placeholder=""></textarea>
+                    <textarea class="form-control new-comment-text " id="local_comment_textarea" rows="2" placeholder=""></textarea>
                 </div>
                 <div class="pull-right">
                     <a href="javascript:" data-role="send_local_comment" data-path="{$path}"  data-this-url="{$this_url}"
@@ -53,5 +53,16 @@
             bind_local_comment();
         }, 'json');
     }
+
+
+    $(function () {
+        $('#local_comment_textarea').keypress(function (e) {
+            if (e.ctrlKey && e.which == 13 || e.which == 10) {
+                $(this).closest('.form').find("[data-role='send_local_comment']").click();
+            }
+        });
+    })
+
+
 </script>
 <script type="text/javascript" src="{:getRootUrl()}Addons/LocalComment/_static/js/comment.js"></script>

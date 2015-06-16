@@ -14,6 +14,6 @@
 
 define('UC_APP_ID', 1); //应用ID
 define('UC_API_TYPE', 'Model'); //可选值 Model / Service
-define('UC_AUTH_KEY', 'U4GxcMalDgLKqmApQI8ZvXOnr9t3fSoT7JshCkVN'); //加密KEY
+define('UC_AUTH_KEY', 'Roip7meCHVv1lgUaM2ty6OQYswJqDPWx9j5ZITch'); //加密KEY
 define('UC_DB_DSN', 'mysqli://gaoxiao2:z3787582@112.124.42.201:3306/gaoxiao2'); // 数据库连接，使用Model方式调用API必须配置此项
 define('UC_TABLE_PREFIX', 'big_'); // 数据表前缀，使用Model方式调用API必须配置此项

@@ -166,7 +166,7 @@ class WeiboController extends AdminController
         //显示页面
 
         $builder->title('微博回收站')
-            ->setStatusUrl(U('setWeiboStatus'))->buttonRestore()->buttonClear(U('weiboTrash'))
+            ->setStatusUrl(U('setWeiboStatus'))->buttonRestore()->buttonClear('Weibo')
             ->keyId()->keyLink('content', '内容', 'comment?weibo_id=###')->keyUid()->keyCreateTime()
             ->data($list)
             ->pagination($totalCount, $r)
@@ -238,10 +238,9 @@ class WeiboController extends AdminController
     public function commentTrash()
     {
         $aPage = I('page', 1, 'intval');
-        $aModel = I('model', '', 'op_t');
         $r = 20;
         $builder = new AdminListBuilder();
-        $builder->clearTrash($aModel);
+        $builder->clearTrash('WeiboComment');
         //读取评论列表
         $map = array('status' => -1);
         $model = M('WeiboComment');

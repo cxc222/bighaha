@@ -2,7 +2,149 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5785017a-e03f-4beb-af71-9d49b771e732" name="默认的" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Admin/View/default/Public/base.html" afterPath="$PROJECT_DIR$/Application/Admin/View/default/Public/base.html" />
+      <change type="DELETED" beforePath="E:\word\bighaha\Application\Atlas\Info\cleanData.sql.bk" afterPath="" />
+      <change type="DELETED" beforePath="E:\word\bighaha\Application\Atlas\Info\guide.json.bk" afterPath="" />
+      <change type="DELETED" beforePath="E:\word\bighaha\Application\Atlas\Info\install.sql.bk" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Admin/Builder/AdminListBuilder.class.php" afterPath="$PROJECT_DIR$/Application/Admin/Builder/AdminListBuilder.class.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Group/Controller/BaseController.class.php" afterPath="$PROJECT_DIR$/Application/Group/Controller/BaseController.class.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Weibo/Controller/BaseController.class.php" afterPath="$PROJECT_DIR$/Application/Weibo/Controller/BaseController.class.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Ucenter/Controller/ConfigController.class.php" afterPath="$PROJECT_DIR$/Application/Ucenter/Controller/ConfigController.class.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Group/Widget/DynamicWidget.class.php" afterPath="$PROJECT_DIR$/Application/Group/Widget/DynamicWidget.class.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Event/Controller/EventController.class.php" afterPath="$PROJECT_DIR$/Application/Event/Controller/EventController.class.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Forum/Controller/ForumController.class.php" afterPath="$PROJECT_DIR$/Application/Forum/Controller/ForumController.class.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Forum/Model/ForumLzlReplyModel.class.php" afterPath="$PROJECT_DIR$/Application/Forum/Model/ForumLzlReplyModel.class.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Forum/Model/ForumModel.class.php" afterPath="$PROJECT_DIR$/Application/Forum/Model/ForumModel.class.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Forum/Model/ForumPostModel.class.php" afterPath="$PROJECT_DIR$/Application/Forum/Model/ForumPostModel.class.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Forum/Model/ForumPostReplyModel.class.php" afterPath="$PROJECT_DIR$/Application/Forum/Model/ForumPostReplyModel.class.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Forum/Model/ForumTypeModel.class.php" afterPath="$PROJECT_DIR$/Application/Forum/Model/ForumTypeModel.class.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Group/Controller/GroupController.class.php" afterPath="$PROJECT_DIR$/Application/Group/Controller/GroupController.class.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Group/Model/GroupLzlReplyModel.class.php" afterPath="$PROJECT_DIR$/Application/Group/Model/GroupLzlReplyModel.class.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Group/Model/GroupMemberModel.class.php" afterPath="$PROJECT_DIR$/Application/Group/Model/GroupMemberModel.class.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Group/Model/GroupModel.class.php" afterPath="$PROJECT_DIR$/Application/Group/Model/GroupModel.class.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Group/Model/GroupPostModel.class.php" afterPath="$PROJECT_DIR$/Application/Group/Model/GroupPostModel.class.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Group/Model/GroupPostReplyModel.class.php" afterPath="$PROJECT_DIR$/Application/Group/Model/GroupPostReplyModel.class.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Forum/Widget/HomeBlockWidget.class.php" afterPath="$PROJECT_DIR$/Application/Forum/Widget/HomeBlockWidget.class.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Group/Widget/HotPeopleWidget.class.php" afterPath="$PROJECT_DIR$/Application/Group/Widget/HotPeopleWidget.class.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Addons/LocalComment/Controller/IndexController.class.php" afterPath="$PROJECT_DIR$/Addons/LocalComment/Controller/IndexController.class.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Event/Controller/IndexController.class.php" afterPath="$PROJECT_DIR$/Application/Event/Controller/IndexController.class.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Forum/Controller/IndexController.class.php" afterPath="$PROJECT_DIR$/Application/Forum/Controller/IndexController.class.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Group/Controller/IndexController.class.php" afterPath="$PROJECT_DIR$/Application/Group/Controller/IndexController.class.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Install/Controller/IndexController.class.php" afterPath="$PROJECT_DIR$/Application/Install/Controller/IndexController.class.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/News/Controller/IndexController.class.php" afterPath="$PROJECT_DIR$/Application/News/Controller/IndexController.class.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Weibo/Controller/IndexController.class.php" afterPath="$PROJECT_DIR$/Application/Weibo/Controller/IndexController.class.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Install/Controller/InstallController.class.php" afterPath="$PROJECT_DIR$/Application/Install/Controller/InstallController.class.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Ucenter/Controller/InviteController.class.php" afterPath="$PROJECT_DIR$/Application/Ucenter/Controller/InviteController.class.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Forum/Controller/LZLController.class.php" afterPath="$PROJECT_DIR$/Application/Forum/Controller/LZLController.class.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Forum/View/default/Widget/LZLReply.html" afterPath="$PROJECT_DIR$/Application/Forum/View/default/Widget/LZLReply.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Group/Widget/LZLReplyWidget.class.php" afterPath="$PROJECT_DIR$/Application/Group/Widget/LZLReplyWidget.class.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Group/Controller/ManageController.class.php" afterPath="$PROJECT_DIR$/Application/Group/Controller/ManageController.class.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Ucenter/Controller/MemberController.class.php" afterPath="$PROJECT_DIR$/Application/Ucenter/Controller/MemberController.class.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Common/Model/MemberModel.class.php" afterPath="$PROJECT_DIR$/Application/Common/Model/MemberModel.class.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Ucenter/Controller/MessageController.class.php" afterPath="$PROJECT_DIR$/Application/Ucenter/Controller/MessageController.class.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Common/Model/MessageModel.class.php" afterPath="$PROJECT_DIR$/Application/Common/Model/MessageModel.class.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Common/Model/ModuleModel.class.php" afterPath="$PROJECT_DIR$/Application/Common/Model/ModuleModel.class.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/News/Controller/NewsController.class.php" afterPath="$PROJECT_DIR$/Application/News/Controller/NewsController.class.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Common/Model/PinYinModel.class.php" afterPath="$PROJECT_DIR$/Application/Common/Model/PinYinModel.class.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Admin/Controller/SEOController.class.php" afterPath="$PROJECT_DIR$/Application/Admin/Controller/SEOController.class.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Ucenter/Model/ScoreModel.class.php" afterPath="$PROJECT_DIR$/Application/Ucenter/Model/ScoreModel.class.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Weibo/Controller/ShareController.class.php" afterPath="$PROJECT_DIR$/Application/Weibo/Controller/ShareController.class.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Ucenter/Model/TitleModel.class.php" afterPath="$PROJECT_DIR$/Application/Ucenter/Model/TitleModel.class.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Weibo/Controller/TopicController.class.php" afterPath="$PROJECT_DIR$/Application/Weibo/Controller/TopicController.class.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Weibo/Controller/TypeController.class.php" afterPath="$PROJECT_DIR$/Application/Weibo/Controller/TypeController.class.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Common/Widget/UeditorWidget.class.php" afterPath="$PROJECT_DIR$/Application/Common/Widget/UeditorWidget.class.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Public/static/ueditor/php/Uploader.class.php" afterPath="$PROJECT_DIR$/Public/static/ueditor/php/Uploader.class.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Admin/Controller/UserTagController.class.php" afterPath="$PROJECT_DIR$/Application/Admin/Controller/UserTagController.class.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Weibo/Model/WeiboCommentModel.class.php" afterPath="$PROJECT_DIR$/Application/Weibo/Model/WeiboCommentModel.class.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Weibo/Controller/WeiboController.class.php" afterPath="$PROJECT_DIR$/Application/Weibo/Controller/WeiboController.class.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Weibo/Model/WeiboModel.class.php" afterPath="$PROJECT_DIR$/Application/Weibo/Model/WeiboModel.class.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Addons/LocalComment/_comment.html" afterPath="$PROJECT_DIR$/Addons/LocalComment/_comment.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Weibo/View/default/Index/_operation.html" afterPath="$PROJECT_DIR$/Application/Weibo/View/default/Index/_operation.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Weibo/View/default/Topic/_operation.html" afterPath="$PROJECT_DIR$/Application/Weibo/View/default/Topic/_operation.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Weibo/View/default/Topic/_quickweibo.html" afterPath="$PROJECT_DIR$/Application/Weibo/View/default/Topic/_quickweibo.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Ucenter/View/default/Index/_right_link.html" afterPath="$PROJECT_DIR$/Application/Ucenter/View/default/Index/_right_link.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Event/View/default/Index/add.html" afterPath="$PROJECT_DIR$/Application/Event/View/default/Index/add.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/News/View/default/Admin/audit.html" afterPath="$PROJECT_DIR$/Application/News/View/default/Admin/audit.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Ucenter/View/default/Config/base.html" afterPath="$PROJECT_DIR$/Application/Ucenter/View/default/Config/base.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/bighaha.iml" afterPath="$PROJECT_DIR$/.idea/bighaha.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Ucenter/Static/css/center.css" afterPath="$PROJECT_DIR$/Application/Ucenter/Static/css/center.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Ucenter/View/default/Config/changeaccount.html" afterPath="$PROJECT_DIR$/Application/Ucenter/View/default/Config/changeaccount.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Addons/LocalComment/comment.html" afterPath="$PROJECT_DIR$/Addons/LocalComment/comment.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Weibo/View/default/Widget/comment/comment.html" afterPath="$PROJECT_DIR$/Application/Weibo/View/default/Widget/comment/comment.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Addons/LocalComment/_static/js/comment.js" afterPath="$PROJECT_DIR$/Addons/LocalComment/_static/js/comment.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Admin/Static/js/common.js" afterPath="$PROJECT_DIR$/Application/Admin/Static/js/common.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Forum/Static/js/common.js" afterPath="$PROJECT_DIR$/Application/Forum/Static/js/common.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Public/static/ueditor/php/config.json" afterPath="$PROJECT_DIR$/Public/static/ueditor/php/config.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Ucenter/Conf/config_sae.php" afterPath="$PROJECT_DIR$/Application/Ucenter/Conf/config_sae.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Event/View/default/Index/detail.html" afterPath="$PROJECT_DIR$/Application/Event/View/default/Index/detail.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Forum/View/default/Index/detail.html" afterPath="$PROJECT_DIR$/Application/Forum/View/default/Index/detail.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Group/View/default/Index/detail.html" afterPath="$PROJECT_DIR$/Application/Group/View/default/Index/detail.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/News/View/default/Index/tmpl/detail.html" afterPath="$PROJECT_DIR$/Application/News/View/default/Index/tmpl/detail.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Weibo/View/default/Widget/detail.html" afterPath="$PROJECT_DIR$/Application/Weibo/View/default/Widget/detail.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Event/View/default/Index/edit.html" afterPath="$PROJECT_DIR$/Application/Event/View/default/Index/edit.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/News/View/default/Index/edit.html" afterPath="$PROJECT_DIR$/Application/News/View/default/Index/edit.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Forum/View/default/Index/editreply.html" afterPath="$PROJECT_DIR$/Application/Forum/View/default/Index/editreply.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Event/Static/css/event.css" afterPath="$PROJECT_DIR$/Application/Event/Static/css/event.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Event/Static/css/event.less" afterPath="$PROJECT_DIR$/Application/Event/Static/css/event.less" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Weibo/View/default/Type/fetchrepost.html" afterPath="$PROJECT_DIR$/Application/Weibo/View/default/Type/fetchrepost.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Forum/View/default/Public/forum-side.html" afterPath="$PROJECT_DIR$/Application/Forum/View/default/Public/forum-side.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Forum/Static/css/forum.css" afterPath="$PROJECT_DIR$/Application/Forum/Static/css/forum.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Ucenter/View/default/Collection/forum.html" afterPath="$PROJECT_DIR$/Application/Ucenter/View/default/Collection/forum.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Forum/Static/css/forum.less" afterPath="$PROJECT_DIR$/Application/Forum/Static/css/forum.less" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Common/Common/function.php" afterPath="$PROJECT_DIR$/Application/Common/Common/function.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Forum/Common/function.php" afterPath="$PROJECT_DIR$/Application/Forum/Common/function.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Install/Common/function.php" afterPath="$PROJECT_DIR$/Application/Install/Common/function.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Weibo/Common/function.php" afterPath="$PROJECT_DIR$/Application/Weibo/Common/function.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Group/Static/css/group.css" afterPath="$PROJECT_DIR$/Application/Group/Static/css/group.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Forum/View/default/Widget/homeblock.html" afterPath="$PROJECT_DIR$/Application/Forum/View/default/Widget/homeblock.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Weibo/View/default/Widget/homeblock.html" afterPath="$PROJECT_DIR$/Application/Weibo/View/default/Widget/homeblock.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Weibo/Static/css/hot-topic.css" afterPath="$PROJECT_DIR$/Application/Weibo/Static/css/hot-topic.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Group/View/default/Widget/hot_people.html" afterPath="$PROJECT_DIR$/Application/Group/View/default/Widget/hot_people.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Ucenter/View/default/Config/index.html" afterPath="$PROJECT_DIR$/Application/Ucenter/View/default/Config/index.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Event/Info/install.sql.bk" afterPath="$PROJECT_DIR$/Application/Event/Info/install.sql.bk" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Weibo/Info/install.sql.bk" afterPath="$PROJECT_DIR$/Application/Weibo/Info/install.sql.bk" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Event/Info/install.sql" afterPath="$PROJECT_DIR$/Application/Event/Info/install.sql" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Forum/Info/install.sql" afterPath="$PROJECT_DIR$/Application/Forum/Info/install.sql" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Install/Data/install.sql" afterPath="$PROJECT_DIR$/Application/Install/Data/install.sql" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Ucenter/Static/css/invite.css" afterPath="$PROJECT_DIR$/Application/Ucenter/Static/css/invite.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Public/static/ueditor/third-party/jquery-1.10.2.min.js" afterPath="$PROJECT_DIR$/Public/static/ueditor/third-party/jquery-1.10.2.min.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Common/Common/limit.php" afterPath="$PROJECT_DIR$/Application/Common/Common/limit.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Forum/View/default/Index/lists.html" afterPath="$PROJECT_DIR$/Application/Forum/View/default/Index/lists.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Ucenter/View/default/Widget/Login/login.html" afterPath="$PROJECT_DIR$/Application/Ucenter/View/default/Widget/Login/login.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Forum/View/default/Lzl/lzllist.html" afterPath="$PROJECT_DIR$/Application/Forum/View/default/Lzl/lzllist.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Event/Static/js/masonry/masonry.js" afterPath="$PROJECT_DIR$/Application/Event/Static/js/masonry/masonry.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Ucenter/View/default/Message/message.html" afterPath="$PROJECT_DIR$/Application/Ucenter/View/default/Message/message.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Ucenter/View/default/Forum/mybookmark.html" afterPath="$PROJECT_DIR$/Application/Ucenter/View/default/Forum/mybookmark.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Ucenter/View/default/Forum/mytakepartin.html" afterPath="$PROJECT_DIR$/Application/Ucenter/View/default/Forum/mytakepartin.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Ucenter/View/default/Forum/mytopic.html" afterPath="$PROJECT_DIR$/Application/Ucenter/View/default/Forum/mytopic.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/News/Static/css/news.css" afterPath="$PROJECT_DIR$/Application/News/Static/css/news.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/News/Static/css/news.less" afterPath="$PROJECT_DIR$/Application/News/Static/css/news.less" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Ucenter/View/default/Config/password.html" afterPath="$PROJECT_DIR$/Application/Ucenter/View/default/Config/password.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Forum/View/default/Public/post-item.html" afterPath="$PROJECT_DIR$/Application/Forum/View/default/Public/post-item.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Forum/View/default/Public/post_item_look.html" afterPath="$PROJECT_DIR$/Application/Forum/View/default/Public/post_item_look.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Forum/View/default/Index/profile_content.html" afterPath="$PROJECT_DIR$/Application/Forum/View/default/Index/profile_content.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Weibo/View/default/Index/profile_content.html" afterPath="$PROJECT_DIR$/Application/Weibo/View/default/Index/profile_content.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Ucenter/View/default/Index/rank_verify.html" afterPath="$PROJECT_DIR$/Application/Ucenter/View/default/Index/rank_verify.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Ucenter/View/default/Member/register.html" afterPath="$PROJECT_DIR$/Application/Ucenter/View/default/Member/register.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Group/View/default/Widget/detail/replydetail.html" afterPath="$PROJECT_DIR$/Application/Group/View/default/Widget/detail/replydetail.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Ucenter/View/default/Config/role.html" afterPath="$PROJECT_DIR$/Application/Ucenter/View/default/Config/role.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Ucenter/View/default/Config/score.html" afterPath="$PROJECT_DIR$/Application/Ucenter/View/default/Config/score.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Weibo/View/default/Index/search.html" afterPath="$PROJECT_DIR$/Application/Weibo/View/default/Index/search.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Group/Static/css/select.css" afterPath="$PROJECT_DIR$/Application/Group/Static/css/select.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Admin/View/default/Message/sendmessage.html" afterPath="$PROJECT_DIR$/Application/Admin/View/default/Message/sendmessage.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Weibo/View/default/Index/sendrepost.html" afterPath="$PROJECT_DIR$/Application/Weibo/View/default/Index/sendrepost.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Weibo/View/default/Widget/share/sharebtn.html" afterPath="$PROJECT_DIR$/Application/Weibo/View/default/Widget/share/sharebtn.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Weibo/Static/css/topic.css" afterPath="$PROJECT_DIR$/Application/Weibo/Static/css/topic.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Forum/View/default/Forum/type.html" afterPath="$PROJECT_DIR$/Application/Forum/View/default/Forum/type.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Weibo/View/default/Widget/ucenterblock.html" afterPath="$PROJECT_DIR$/Application/Weibo/View/default/Widget/ucenterblock.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Public/static/ueditor/ueditor.all.min.js" afterPath="$PROJECT_DIR$/Public/static/ueditor/ueditor.all.min.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Public/static/ueditor/ueditor.config.js" afterPath="$PROJECT_DIR$/Public/static/ueditor/ueditor.config.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Ucenter/View/default/Widget/uploadavatar.html" afterPath="$PROJECT_DIR$/Application/Ucenter/View/default/Widget/uploadavatar.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Conf/user.php" afterPath="$PROJECT_DIR$/Conf/user.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Public/static/ueditor/dialogs/video/video.js" afterPath="$PROJECT_DIR$/Public/static/ueditor/dialogs/video/video.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Weibo/Static/css/weibo.css" afterPath="$PROJECT_DIR$/Application/Weibo/Static/css/weibo.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Weibo/Static/js/weibo.js" afterPath="$PROJECT_DIR$/Application/Weibo/Static/js/weibo.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/Weibo/Static/css/weibo.less" afterPath="$PROJECT_DIR$/Application/Weibo/Static/css/weibo.less" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="bighaha.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -43,7 +185,7 @@
       <file leaf-file-name="CollectRule.class.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Application/Atlas/Rule/CollectRule.class.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-44.966103" vertical-offset="47" max-vertical-offset="2860">
+            <state vertical-scroll-proportion="0.0" vertical-offset="47" max-vertical-offset="2860">
               <caret line="135" column="35" selection-start-line="135" selection-start-column="15" selection-end-line="135" selection-end-column="35" />
               <folding>
                 <element signature="e#6#27#0#PHP" expanded="true" />
@@ -52,24 +194,12 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="budejie.class.php" pinned="false" current-in-tab="false">
+      <file leaf-file-name="budejie.class.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Application/Atlas/Rule/budejie.class.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-11.379311" vertical-offset="670" max-vertical-offset="1820">
+            <state vertical-scroll-proportion="0.1317716" vertical-offset="910" max-vertical-offset="1820">
               <caret line="50" column="30" selection-start-line="50" selection-start-column="30" selection-end-line="50" selection-end-column="30" />
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="base.html" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/Application/Admin/View/default/Public/base.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.28431374" vertical-offset="3844" max-vertical-offset="7460">
-              <caret line="198" column="0" selection-start-line="198" selection-start-column="0" selection-end-line="198" selection-end-column="0" />
-              <folding>
-                <element signature="n#style#0;n#div#2;n#body#0;n#html#0;n#!!top" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -151,34 +281,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="Scope">
-        <subPane subId="问题" />
-        <subPane subId="Project Files">
-          <PATH>
-            <PATH_ELEMENT USER_OBJECT="Root">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT USER_OBJECT="bighaha">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-        <subPane subId="更改的文件">
-          <PATH>
-            <PATH_ELEMENT USER_OBJECT="Root">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT USER_OBJECT="bighaha">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-        <subPane subId="测试" />
-      </pane>
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -207,6 +309,20 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="Conf" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="bighaha" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="bighaha" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="Application" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -247,33 +363,40 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="Rule" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="bighaha" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="bighaha" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Application" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Atlas" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Controller" />
+              <option name="myItemId" value="Info" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
+        <option name="show-excluded-files" value="false" />
+      </pane>
+      <pane id="Scope">
+        <subPane subId="问题" />
+        <subPane subId="Project Files">
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="bighaha">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+        <subPane subId="更改的文件">
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="bighaha">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+        <subPane subId="测试" />
       </pane>
     </panes>
   </component>
@@ -284,6 +407,7 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../pinphp" />
     <property name="LayoutCode.rearrangeEntriesPHP" value="false" />
+    <property name="FullScreen" value="false" />
   </component>
   <component name="RunManager">
     <configuration default="true" type="PHPUnitRunConfigurationType" factoryName="PHPUnit">
@@ -304,6 +428,12 @@
       <method />
     </configuration>
     <configuration default="true" type="js.build_tools.gulp" factoryName="Gulp.js">
+      <node-options />
+      <gulpfile />
+      <tasks />
+      <arguments />
+      <pass-parent-envs>true</pass-parent-envs>
+      <envs />
       <method />
     </configuration>
     <list size="0" />
@@ -325,29 +455,29 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1616" height="876" extended-state="6" />
-    <editor active="true" />
+    <frame x="-8" y="-8" width="1616" height="876" extended-state="7" />
+    <editor active="false" />
     <layout>
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="PHP-CGI Server" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32928476" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
-      <window_info id="更改" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="运行" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="版本控制" active="false" anchor="bottom" auto_hide="true" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3294271" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="找到" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.35357624" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" x="0" y="299" width="1600" height="262" />
+      <window_info id="更改" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="版本控制" active="false" anchor="bottom" auto_hide="true" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3294271" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="找到" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.35357624" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" x="0" y="299" width="1600" height="262" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.151875" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="调试" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32928476" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="PHP-CGI Server" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="运行" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="调试" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
@@ -380,12 +510,80 @@
     </find-history>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/Conf/common.php">
+    <entry file="file://$PROJECT_DIR$/Application/Atlas/Controller/AtlasController.class.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.44363105" vertical-offset="1617" max-vertical-offset="2580">
-          <caret line="96" column="0" selection-start-line="96" selection-start-column="0" selection-end-line="96" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="3490" max-vertical-offset="9640">
+          <caret line="194" column="41" selection-start-line="194" selection-start-column="41" selection-end-line="194" selection-end-column="41" />
           <folding>
-            <element signature="e#6#80#0#PHP" expanded="false" />
+            <element signature="e#6#69#0#PHP" expanded="true" />
+            <element signature="e#99#142#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Application/Atlas/Rule/CollectRule.class.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="47" max-vertical-offset="2860">
+          <caret line="135" column="35" selection-start-line="135" selection-start-column="15" selection-end-line="135" selection-end-column="35" />
+          <folding>
+            <element signature="e#6#27#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Application/Atlas/Rule/budejie.class.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="670" max-vertical-offset="1820">
+          <caret line="50" column="30" selection-start-line="50" selection-start-column="30" selection-end-line="50" selection-end-column="30" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Application/Admin/View/default/Public/base.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="7460">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="n#style#0;n#div#2;n#body#0;n#html#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Application/Atlas/Controller/AtlasController.class.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="3490" max-vertical-offset="9640">
+          <caret line="194" column="41" selection-start-line="194" selection-start-column="41" selection-end-line="194" selection-end-column="41" />
+          <folding>
+            <element signature="e#6#69#0#PHP" expanded="true" />
+            <element signature="e#99#142#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Application/Atlas/Rule/CollectRule.class.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="47" max-vertical-offset="2860">
+          <caret line="135" column="35" selection-start-line="135" selection-start-column="15" selection-end-line="135" selection-end-column="35" />
+          <folding>
+            <element signature="e#6#27#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Application/Atlas/Rule/budejie.class.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="670" max-vertical-offset="1820">
+          <caret line="50" column="30" selection-start-line="50" selection-start-column="30" selection-end-line="50" selection-end-column="30" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Application/Admin/View/default/Public/base.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="7460">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="n#style#0;n#div#2;n#body#0;n#html#0;n#!!top" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -403,7 +601,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Application/Atlas/Rule/CollectRule.class.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-44.966103" vertical-offset="47" max-vertical-offset="2860">
+        <state vertical-scroll-proportion="0.0" vertical-offset="47" max-vertical-offset="2860">
           <caret line="135" column="35" selection-start-line="135" selection-start-column="15" selection-end-line="135" selection-end-column="35" />
           <folding>
             <element signature="e#6#27#0#PHP" expanded="true" />
@@ -411,21 +609,37 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Application/Atlas/Rule/budejie.class.php">
+    <entry file="file://$PROJECT_DIR$/Conf/user.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-11.379311" vertical-offset="670" max-vertical-offset="1820">
-          <caret line="50" column="30" selection-start-line="50" selection-start-column="30" selection-end-line="50" selection-end-column="30" />
+        <state vertical-scroll-proportion="0.3806735" vertical-offset="0" max-vertical-offset="683">
+          <caret line="19" column="0" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Conf/common.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-2.5724745" vertical-offset="1757" max-vertical-offset="2440">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Application/Admin/View/default/Public/base.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.28431374" vertical-offset="3844" max-vertical-offset="7460">
-          <caret line="198" column="0" selection-start-line="198" selection-start-column="0" selection-end-line="198" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.6567164" vertical-offset="360" max-vertical-offset="7460">
+          <caret line="40" column="7" selection-start-line="40" selection-start-column="7" selection-end-line="40" selection-end-column="7" />
           <folding>
             <element signature="n#style#0;n#div#2;n#body#0;n#html#0;n#!!top" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Application/Atlas/Rule/budejie.class.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.1317716" vertical-offset="910" max-vertical-offset="1820">
+          <caret line="50" column="30" selection-start-line="50" selection-start-column="30" selection-end-line="50" selection-end-column="30" />
+          <folding />
         </state>
       </provider>
     </entry>
