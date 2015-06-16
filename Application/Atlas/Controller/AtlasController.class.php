@@ -126,6 +126,7 @@ class AtlasController extends AdminController
             
             $data['start_id']=I('post.start_id',0,'intval');
             $data['end_id']=I('post.end_id',0,'intval');
+            $data['vest_uids']=I('post.vest_uids','','trim');
             $this->_checkOk($data);
             
             if($data['id']){
@@ -152,7 +153,7 @@ class AtlasController extends AdminController
 	        $builder->title($title.'采集项目')
 	        ->data($data)
 	        ->keyId()
-	        ->keyText('name','名称')->keyText('className','对应类名称')
+	        ->keyText('name','名称')->keyText('className','对应类名称')->keyText('vest_uids','马甲用户','填写uid, 多个用" , "隔开')
 	        ->keyText('url','采集URL')
 	        ->keyText('page','采集页数')
 	        ->keyText('start_id','上次采集开始id')
@@ -179,6 +180,10 @@ class AtlasController extends AdminController
 	function collection(){
 	    $aId = I('id',0,'intval');
         $rule = new \Atlas\Rule\CollectRule();
+
+        print_r($rule->getRandomVest("100,101,102,103,104,105,106,107"));
+
+        die();
         $rule->execute($aId);
         $this->success('采集成功, 成功数: '.$rule->zindex,U('admin/atlas/index'));
 

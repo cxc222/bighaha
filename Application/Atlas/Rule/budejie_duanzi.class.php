@@ -2,7 +2,7 @@
 namespace Atlas\Rule;
 
 /** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
-class budejie extends \Atlas\Rule\CollectRule{
+class budejie_duanzi extends \Atlas\Rule\CollectRule{
 	private $start_id;
 	private $url;
 	private $page_Count;
@@ -32,11 +32,10 @@ class budejie extends \Atlas\Rule\CollectRule{
 			$html = str_get_html($results);
 			foreach ($html->find('.web_left') as $webLeft){
 				foreach ($webLeft->find('.post-body') as $postbody){
-					$img = $postbody->find('img',0);
-					$src = $img->src;
-					$alt = $img->alt;
-					$id = str_replace('pic-',' ',$img->id);
-					
+					$p = $postbody->find('p',0);
+					$id = str_replace('pic-',' ',$p->id);
+                    $content = $p->innertext;
+
 					//判断是否结束
 					if($this->finish($id)){
                         //跳出循环
@@ -45,13 +44,13 @@ class budejie extends \Atlas\Rule\CollectRule{
 
                     /** @noinspection PhpParamsInspection */
                     $this->Fast($this->zindex,$id);	//首次采集, 记录ID号
-					//开始下载
-					$info = $this->download($src);
+					//开始下载 存文本, 不需要下载
+					/*$info = $this->download($src);
 					if($info){
 					    //保存数据库
 					    $this->save($alt, $info['id']);
-					}
-
+					}*/
+                    $this->save($content,0,1,2);
 				}
 			}
 		}
