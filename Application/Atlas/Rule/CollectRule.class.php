@@ -15,6 +15,10 @@ class CollectRule {
 	public $PictureClass;
 	public $diskPath = 'Uploads/atlas/';
     public $zindex = 1;
+
+    static $_aid;
+    static $_url;
+    static $_vest_uids;
 	
 	function __construct() {
 		Vendor ( 'Curl.Curl' );
@@ -34,6 +38,17 @@ class CollectRule {
 		    mkdir($this->diskPath, 0777,true);
 		}
 	}
+
+
+    /**
+     * @param $atlasCollection  返回 采集的数据列表
+     *
+     */
+    function _parameter($atlasCollection){
+        self::$_aid = $atlasCollection['id'];
+        self::$_url = $atlasCollection['url'];
+        self::$_vest_uids = $atlasCollection['vest_uids'];
+    }
 	
 	/**
 	 * 工场模式加载采集类
@@ -42,11 +57,17 @@ class CollectRule {
 	function execute($aId){
         set_time_limit(0);
 		$atlasCollection = $this->atlasCollectionModel->find($aId);
-		
+
+		if(!$atlasCollection){
+            return false;
+        }
+
 		/* $url = $atlasCollection['url'];
 		$page_suffix = '{page}';
 		$page_Count = $atlasCollection['page'];	//页码 */
-		
+
+        $this->_parameter($atlasCollection);    //赋值
+
 		$atlasCollectionData['id'] = $aId;
 		$atlasCollectionData['url'] = $atlasCollection['url'];
 		$atlasCollectionData['page_count'] = $atlasCollection['page'];
@@ -94,14 +115,6 @@ class CollectRule {
 	        }else{
 	            //暂停60秒
 	            //sleep(60);
-	            /* $_data['uid'] = 1;
-	            $_data['content'] = $alt;
-	            $_data['image_id'] = $info['id'];
-	            $_data['addtime'] = time();
-	            $_data['status'] = 1;
-	            if($this->atlasModel->create($_data) && ( $this->atlasModel->add())){
-	                $this->zindex++;
-	            } */
 	            return $info;
 	        }
 	        
@@ -117,8 +130,9 @@ class CollectRule {
      * @param int $type
      */
 	function save($content,$image_id,$uid=1,$type=1){
+
         //随机马甲
-	    $_data['uid'] = $uid;
+	    $_data['uid'] = $uid?$uid:$this->getRandomVest(self::$_vest_uids);
 	    $_data['content'] = $content;
 	    $_data['image_id'] = $image_id;
 	    $_data['addtime'] = strtotime($this->randomDate(date("Y-m-d",strtotime("-1 month"))));  //随机时间
@@ -155,10 +169,12 @@ class CollectRule {
         return date("Y-m-d H:i:s", $timestamp);
     }
 
+
     /**
      * 获取随机马甲
      *
      * @param $uids 用户uid, 多个 , 号隔开
+     * @return mixed
      */
     function getRandomVest($uids){
         /** @var TYPE_NAME $uids */
@@ -167,9 +183,8 @@ class CollectRule {
         $ids = explode(",",$ids);
         if($ids){
             $uid = $this->_randomVest($ids);
-            print_r($uid);
-            die();
         }
+        return $uid;
     }
 
     /**
@@ -183,12 +198,13 @@ class CollectRule {
            // $uids = array_diff($uids,$rmUids);
            unset($uids[array_search($rmUids,$uids)]);
         }
+        \Think\Log::write('测试:'.print_r($uids,true),'WARN');
         $randId = array_rand($uids);
         $uid = $uids[$randId];
         $user = query_user(array('avatar128', 'avatar64', 'nickname', 'uid', 'space_url', 'icons_html'), $uid);
         if(!$user){
             //不存在这个用户, 重新随机
-            $this->_randomVest($uids,$uid);
+            return $this->_randomVest($uids,$uid);
         }
         return $uid;
     }

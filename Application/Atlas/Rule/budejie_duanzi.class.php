@@ -33,7 +33,7 @@ class budejie_duanzi extends \Atlas\Rule\CollectRule{
 			foreach ($html->find('.web_left') as $webLeft){
 				foreach ($webLeft->find('.post-body') as $postbody){
 					$p = $postbody->find('p',0);
-					$id = str_replace('pic-',' ',$p->id);
+					$id = str_replace('title-',' ',$p->id);
                     $content = $p->innertext;
 
 					//判断是否结束
@@ -50,7 +50,7 @@ class budejie_duanzi extends \Atlas\Rule\CollectRule{
 					    //保存数据库
 					    $this->save($alt, $info['id']);
 					}*/
-                    $this->save($content,0,1,2);
+                    $this->save($content,0,0,2);
 				}
 			}
 		}

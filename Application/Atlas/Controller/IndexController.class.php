@@ -32,7 +32,7 @@ class IndexController extends FrontBaseController {
 	    //获取图集列表
 		$map['status'] = 1;
 		$page = intval($page);
-		$atlas_list = $this->atlasModel->page($page, 10)->order('id desc')->select();
+		$atlas_list = $this->atlasModel->page($page, 10)->order('addtime desc, id desc')->select();
 		$totalCount = $this->atlasModel->where($map)->count();
 		$list_ids = getSubByKey($atlas_list, 'id');
 		$atlas_list = $this->getAtlasByIds($list_ids);
@@ -41,6 +41,27 @@ class IndexController extends FrontBaseController {
 		$this->assign('current','new');
 		$this->display ();
 	}
+
+
+    /**
+     * 段子入口
+     *
+     * @param int $page
+     */
+    function jokes($page = 1){
+        //获取搞笑段子列表
+        $map['status'] = 1;
+        $map['type'] = 2;
+        $page = intval($page);
+        $atlas_list = $this->atlasModel->page($page, 10)->order('addtime desc, id desc')->select();
+        $totalCount = $this->atlasModel->where($map)->count();
+        $list_ids = getSubByKey($atlas_list, 'id');
+        $atlas_list = $this->getAtlasByIds($list_ids);
+        $this->assign('atlas_list', $atlas_list);
+        $this->assign('totalCount', $totalCount);
+        $this->assign('current','new');
+        $this->display ();
+    }
 	
 	/**
 	 * 图集详情
@@ -144,6 +165,10 @@ class IndexController extends FrontBaseController {
 	 */
 	function test(){
 		
+		/*
+
+		//淘宝采集 demo
+
 		$url = 'http://detail.tmall.com/item.htm?spm=a230r.1.14.21.H2Zthj&id=43553395005&cm_id=140105335569ed55e27b&abbucket=19';
 		
 		Vendor('Curl.Curl');
@@ -197,14 +222,18 @@ class IndexController extends FrontBaseController {
 			$pathName = basename($imgUrl);
 			$curl_down = $curl->download($imgUrl, $path.$pathName);
 		}
-		
+
+		//淘宝采集 end
+
+		*/
+
 		//print_r($imgHtml->src);
 		//print_r($h1->outertext);
 		/* print_r($imgHtml->src);
 		echo"<br>";
 		print_r($priceHtml->html); */
-		print_r($results);
-		die();
+		//print_r($results);
+		//die();
 		/* $url = 'http://www.budejie.com/';
 		$page_suffix = '{page}';
 		$page_Count = 50;	//页码

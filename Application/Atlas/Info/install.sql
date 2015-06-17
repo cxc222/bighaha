@@ -9,12 +9,13 @@ CREATE TABLE IF NOT EXISTS `big_atlas` (
   `tag` varchar(80) NOT NULL COMMENT '标签',
   `addtime` int(11) NOT NULL COMMENT '创建时间',
   `status` tinyint(4) NOT NULL DEFAULT '1' COMMENT '状态, 0=需要审核,1=通过',
+  `type` tinyint(1) NOT NULL DEFAULT '1' COMMENT '类型,1=图片,2=段子',
   `like_count` int(11) NOT NULL DEFAULT '0' COMMENT '喜欢数',
   `unlike_count` int(11) NOT NULL DEFAULT '0' COMMENT '不喜欢数',
   `comment_count` int(11) NOT NULL DEFAULT '0' COMMENT '评论内容',
   `is_recommend` tinyint(3) NOT NULL DEFAULT '0' COMMENT '是否推荐, 0:没有, 1:推荐',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=49 DEFAULT CHARSET=utf8 COMMENT='搞笑图集';
+) ENGINE=MyISAM AUTO_INCREMENT=21 DEFAULT CHARSET=utf8 COMMENT='搞笑图集';
 
 
 -- -----------------------------
@@ -28,9 +29,10 @@ CREATE TABLE IF NOT EXISTS `big_atlas_collection` (
   `start_id` int(11) NOT NULL DEFAULT '0' COMMENT '开始采集Id',
   `end_id` int(11) NOT NULL DEFAULT '0' COMMENT '结束采集id',
   `className` varchar(26) NOT NULL COMMENT '类名',
+  `vest_uids` text COMMENT '马甲uids',
   `addtime` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='可以采集列表';
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='可以采集列表';
 
 
 -- -----------------------------
@@ -59,4 +61,5 @@ CREATE TABLE IF NOT EXISTS `big_atlas_like` (
 -- -----------------------------
 -- 表内记录 `big_atlas_collection`
 -- -----------------------------
-INSERT INTO `big_atlas_collection` VALUES ('1', '百思不得姐', 'http://www.budejie.com/', '1', '14484340', '14570351', 'budejie', '1432473113');
+INSERT INTO `big_atlas_collection` VALUES ('1', '百思不得姐', 'http://www.budejie.com/', '1', '14586653', '14521439', 'budejie', '100,101,102', '1432473113');
+INSERT INTO `big_atlas_collection` VALUES ('2', '百思不得姐-段子', 'http://www.budejie.com/duanzi/', '1', '14362293', '14362293', 'budejie_duanzi', '100,101,102,103,104,105,106', '1434462687');

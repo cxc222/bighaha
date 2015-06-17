@@ -180,10 +180,6 @@ class AtlasController extends AdminController
 	function collection(){
 	    $aId = I('id',0,'intval');
         $rule = new \Atlas\Rule\CollectRule();
-
-        print_r($rule->getRandomVest("100,101,102,103,104,105,106,107"));
-
-        die();
         $rule->execute($aId);
         $this->success('采集成功, 成功数: '.$rule->zindex,U('admin/atlas/index'));
 
