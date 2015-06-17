@@ -6,12 +6,15 @@
 namespace Atlas\Controller;
 
 use Think\Controller;
+use Atlas\Api\AtlasApi;
 
 /**
  * 前台公共控制器
  * 为防止多分组Controller名称冲突，公共Controller名称统一使用分组名称
  */
 class FrontBaseController extends Controller{
+    public $atlasModel;
+    public $atlasApi;
 
 	/* 空操作，用于输出404页面 */
 	public function _empty()
@@ -33,14 +36,22 @@ class FrontBaseController extends Controller{
 		array(
 				'left' =>
 				array(
-						array('tab' => 'new', 'title' => '最新', 'href' => U('Atlas/Index/index')),
+					array('tab' => 'all', 'title' => '全部', 'href' => U('Atlas/Index/index')),
+                    array('tab' => 'picture', 'title' => '图片', 'href' => U('Atlas/Index/picture')),
+                    array('tab' => 'jokes', 'title' => '段子', 'href' => U('Atlas/Index/jokes')),
 				),
 				'right' =>
 				array(
 						array('tab'=>'create','title' => '<i class="icon-edit"></i> 投稿', 'href' =>is_login()?U('Atlas/Index/publish'):"javascript:toast.error('登录后才能操作')")
 				)
 		);
+        /*if(is_login()){
+            $sub_menu['right'][]=array('tab' => 'user', 'title' => '我的投稿', 'href' =>U('Atlas/User/index'));
+        }*/
 		$this->assign('sub_menu', $sub_menu);
+
+        $this->atlasModel = D('Atlas');
+        $this->atlasApi = new AtlasApi();
 	}
 	
 	
@@ -82,4 +93,11 @@ class FrontBaseController extends Controller{
 		}
 		return $atlas;
 	}
+
+    protected function requireLogin()
+    {
+        if (!is_login()) {
+            $this->error('必须登录才能操作');
+        }
+    }
 }

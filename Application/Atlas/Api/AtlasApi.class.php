@@ -77,6 +77,9 @@ class AtlasApi extends Api
     	$atlas = S('atlas_' . $id);
     	if (empty($atlas) || $refresh) {
     		$atlas = D('Atlas')->where(array('status' => 1, 'id' => $id))->find();
+            if(!$atlas){
+                return false;
+            }
     		$atlas['user'] = query_user(array('avatar128', 'avatar64', 'nickname', 'uid', 'space_url', 'icons_html'), $atlas['uid']);
     		S('atlas_' . $id, $atlas, 300);
     	}

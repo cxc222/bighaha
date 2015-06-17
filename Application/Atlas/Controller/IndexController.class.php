@@ -8,23 +8,14 @@
 // +----------------------------------------------------------------------
 namespace Atlas\Controller;
 use Think\Controller;
-use Think\Log;
-use Think\Hook;
-use Atlas\Api\AtlasApi;
-use Think\Exception;
-use Common\Exception\ApiException;
 
 /**
  * 前台首页控制器
  * 主要获取首页聚合数据
  */
 class IndexController extends FrontBaseController {
-	private $atlasModel;
-	private $atlasApi;
-	
+
 	public function _initialize(){
-		$this->atlasModel = D('Atlas');
-		$this->atlasApi = new AtlasApi();
 		parent::_initialize();
 	}
 	
@@ -32,15 +23,35 @@ class IndexController extends FrontBaseController {
 	    //获取图集列表
 		$map['status'] = 1;
 		$page = intval($page);
-		$atlas_list = $this->atlasModel->page($page, 10)->order('addtime desc, id desc')->select();
+		$atlas_list = $this->atlasModel->where($map)->page($page, 10)->order('addtime desc, id desc')->select();
 		$totalCount = $this->atlasModel->where($map)->count();
 		$list_ids = getSubByKey($atlas_list, 'id');
 		$atlas_list = $this->getAtlasByIds($list_ids);
 		$this->assign('atlas_list', $atlas_list);
 		$this->assign('totalCount', $totalCount);
-		$this->assign('current','new');
+		$this->assign('current','all');
 		$this->display ();
 	}
+
+
+    /**
+     * @param int $page
+     */
+    function picture($page = 1){
+        //获取搞笑图片列表
+        $map['status'] = 1;
+        $map['type'] = 1;
+
+        $page = intval($page);
+        $atlas_list = $this->atlasModel->where($map)->page($page, 10)->order('addtime desc, id desc')->select();
+        $totalCount = $this->atlasModel->where($map)->count();
+        $list_ids = getSubByKey($atlas_list, 'id');
+        $atlas_list = $this->getAtlasByIds($list_ids);
+        $this->assign('atlas_list', $atlas_list);
+        $this->assign('totalCount', $totalCount);
+        $this->assign('current','picture');
+        $this->display ();
+    }
 
 
     /**
@@ -53,13 +64,13 @@ class IndexController extends FrontBaseController {
         $map['status'] = 1;
         $map['type'] = 2;
         $page = intval($page);
-        $atlas_list = $this->atlasModel->page($page, 10)->order('addtime desc, id desc')->select();
+        $atlas_list = $this->atlasModel->where($map)->page($page, 10)->order('addtime desc, id desc')->select();
         $totalCount = $this->atlasModel->where($map)->count();
         $list_ids = getSubByKey($atlas_list, 'id');
         $atlas_list = $this->getAtlasByIds($list_ids);
         $this->assign('atlas_list', $atlas_list);
         $this->assign('totalCount', $totalCount);
-        $this->assign('current','new');
+        $this->assign('current','jokes');
         $this->display ();
     }
 	
@@ -69,6 +80,9 @@ class IndexController extends FrontBaseController {
 	 */
 	function detail($id){
 		$detail = $this->atlasApi->getAtlas($id);
+        if(!$detail){
+            $this->error("您要找的尿点不存在, 正在努力回到首页",U('Atlas\Index\index'));
+        }
 		$this->assign('detail', $detail);
 		$this->display();
 	}
@@ -105,13 +119,16 @@ class IndexController extends FrontBaseController {
 	    if (!is_login()) {
 	        $this->error('请登陆后再投稿。',U('Atlas\Index\publish'));
 	    }
-	    if (!$image_id) {
+	    /*if (!$image_id) {
 	        $this->error('请上传糗图。',U('Atlas\Index\publish'));
-	    }
+	    }*/
 	    if (trim(op_t($content)) == '') {
 	        $this->error('请输入内容。',U('Atlas\Index\publish'));
 	    }
 	    $item = D('Atlas')->create();
+        if (!$image_id) {
+            $item['type'] = 2;
+        }
 	    if ($id) {
 	        //编辑
 	    	$content_temp = D('Atlas')->find($id);
@@ -131,7 +148,7 @@ class IndexController extends FrontBaseController {
 	    	}
 	   } else {
 	       $this->checkActionLimit('add_atlas', 'atlas', 0, is_login(), true);
-	       $this->checkAuth('Atlas/Index/publish', -1, '您无图文发布权限。');
+	       $this->checkAuth('Atlas/Index/publish', -1, '您无发布权限。');
 	       if (modC('NEED_VERIFY', 0) && !is_administrator()) //需要审核且不是管理员
             {
 	           $item['status'] = 0;
@@ -142,7 +159,7 @@ class IndexController extends FrontBaseController {
 	           //同步到微博
 	           $postUrl = "http://$_SERVER[HTTP_HOST]" . U('Atlas/Index/detail', array('id' => $rs));
 	           $weiboModel = D('Weibo/Weibo');
-	           $weiboModel->addWeibo("我发布了一个新的尿点图【" . $content . "】：" . $postUrl);
+	           $weiboModel->addWeibo("我发布了一个新的尿点【" . $content . "】：" . $postUrl);
 	       }
 	       if ($rs) {
 	           $this->success('发布成功。' . $tip, U('Atlas/Index/detail',array('id'=>$rs)));

@@ -129,7 +129,7 @@ class CollectRule {
      * @param int $uid
      * @param int $type
      */
-	function save($content,$image_id,$uid=1,$type=1){
+	function save($content,$image_id,$uid=0,$type=1){
 
         //随机马甲
 	    $_data['uid'] = $uid?$uid:$this->getRandomVest(self::$_vest_uids);
@@ -198,7 +198,6 @@ class CollectRule {
            // $uids = array_diff($uids,$rmUids);
            unset($uids[array_search($rmUids,$uids)]);
         }
-        \Think\Log::write('测试:'.print_r($uids,true),'WARN');
         $randId = array_rand($uids);
         $uid = $uids[$randId];
         $user = query_user(array('avatar128', 'avatar64', 'nickname', 'uid', 'space_url', 'icons_html'), $uid);

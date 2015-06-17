@@ -61,7 +61,6 @@ class AtlasController extends AdminController
 		->buttonDelete()
 		->button('设为推荐', array_merge($attr, array('url' => U('doRecommend', array('tip' => 1)))))
 		->button('取消推荐', array_merge($attr, array('url' => U('doRecommend', array('tip' => 0)))))
-		
             ->keyId()->keyLink('content', '内容', 'Atlas/Index/detail?id=###')
 		->keyUid()->keyCreateTime('addtime')->keyStatus()
 		->keyMap('is_recommend', '是否推荐', array(0 => '否', 1 => '是'))
