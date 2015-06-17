@@ -27,5 +27,20 @@ class AtlasModel extends Model{
         array('status', '0', self::MODEL_INSERT),
         array('uid', 'is_login',3, 'function'),
     );
-    
+
+    public function getListByPage($map,$page=1,$order='addtime desc',$field='*',$r=20)
+    {
+        require_once "Application/Atlas/Common/function.php";
+        $totalCount=$this->where($map)->count();
+        if($totalCount){
+            $list=$this->where($map)->page($page,$r)->order($order)->field($field)->select();
+            foreach($list as $k => $v){
+                //处理一下图片显示问题
+                if($v['type'] == 1){
+                    $list[$k]['image'] = getAtlasQiniuImageById($v['image_id'],1,'gravity/Center/crop/120x120');
+                }
+            }
+        }
+        return array($list,$totalCount);
+    }
 }

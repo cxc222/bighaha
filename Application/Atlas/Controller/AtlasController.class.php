@@ -77,6 +77,36 @@ class AtlasController extends AdminController
 	    
 	    $builder->display();
 	}
+
+    //待审核列表
+    public function audit($page=1,$r=20){
+        $aAudit=I('audit',0);
+        $map['status'] = $aAudit;
+
+        $model = $this->atlasModel;
+
+        list($list,$totalCount) = $model->getListByPage($map,$page,'addtime desc','*',$r);
+
+        $builder=new AdminListBuilder();
+        $builder->title('搞笑列表（审核通过的不在该列表中）')
+            ->data($list)
+            ->setStatusUrl(U('Atlas/setNewsStatus'))
+            ->buttonEnable(null,'审核通过')
+            ->buttonModalPopup(U('Atlas/doAudit'),null,'审核不通过',array('data-title'=>'设置审核失败原因','target-form'=>'ids'))
+            ->setSelectPostUrl(U('Admin/Atlas/audit'))
+            ->select('','audit','select','','','',array(array('id'=>0,'value'=>'待审核'),array('id'=>-1,'value'=>'审核失败')))
+            ->keyId()->keyText('content', '内容')
+            ->keyImage('image', '图片')
+            ->keyUid()->keyCreateTime('addtime')->keyStatus();
+        if($aAudit==1){
+            $builder->keyText('reason','审核失败原因');
+        }
+
+        $builder
+            //->keyDoActionEdit('Atlas/editNews?id=###')
+            ->pagination($totalCount,$r)
+            ->display();
+    }
 	
 	/**
 	 * 采集列表
