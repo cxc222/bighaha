@@ -114,16 +114,22 @@ class CollectRule {
      * @param $content
      * @param $image_id
      * @param int $uid
+     * @param int $type
      */
-	function save($content,$image_id,$uid=1){
+	function save($content,$image_id,$uid=1,$type=1){
+        //随机马甲
 	    $_data['uid'] = $uid;
 	    $_data['content'] = $content;
 	    $_data['image_id'] = $image_id;
-	    $_data['addtime'] = time();
+	    $_data['addtime'] = strtotime($this->randomDate(date("Y-m-d",strtotime("-1 month"))));  //随机时间
 	    $_data['status'] = 1;
-	    if($this->atlasModel->create($_data) && ( $this->atlasModel->add())){
+        $_data['type'] = $type;
+        if($this->atlasModel->add($_data)){
+            $this->zindex++;
+        }
+	   /* if($this->atlasModel->create($_data) && ( $this->atlasModel->add())){
 	        $this->zindex++;
-	    }
+	    }*/
 	}
 
     /**
@@ -135,4 +141,56 @@ class CollectRule {
     function Success($aId,$id){
         $this->atlasCollectionModel->where(array('id'=>$aId))->setField('end_id',$id);
     }
+
+    /**
+     *   生成某个范围内的随机时间
+     * @param string $begintime  起始时间 格式为 Y-m-d H:i:s
+     * @param string $endtime   结束时间 格式为 Y-m-d H:i:s
+     * @return bool|string
+     */
+    function randomDate($begintime, $endtime="") {
+        $begin = strtotime($begintime);
+        $end = $endtime == "" ? mktime() : strtotime($endtime);
+        $timestamp = rand($begin, $end);
+        return date("Y-m-d H:i:s", $timestamp);
+    }
+
+    /**
+     * 获取随机马甲
+     *
+     * @param $uids 用户uid, 多个 , 号隔开
+     */
+    function getRandomVest($uids){
+        /** @var TYPE_NAME $uids */
+        $ids = trim($uids, ',');
+        /** @noinspection PhpParamsInspection */
+        $ids = explode(",",$ids);
+        if($ids){
+            $uid = $this->_randomVest($ids);
+            print_r($uid);
+            die();
+        }
+    }
+
+    /**
+     * @param $uids
+     * @param $rmUids
+     * @return mixed
+     */
+    private function _randomVest(& $uids,$rmUids){
+        if ($rmUids) {
+            //去掉其中的数组
+           // $uids = array_diff($uids,$rmUids);
+           unset($uids[array_search($rmUids,$uids)]);
+        }
+        $randId = array_rand($uids);
+        $uid = $uids[$randId];
+        $user = query_user(array('avatar128', 'avatar64', 'nickname', 'uid', 'space_url', 'icons_html'), $uid);
+        if(!$user){
+            //不存在这个用户, 重新随机
+            $this->_randomVest($uids,$uid);
+        }
+        return $uid;
+    }
+
 }
