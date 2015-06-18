@@ -12,6 +12,7 @@ class HotWidget extends Controller{
     public function lists($timespan = 604800, $limit = 6){
         
         $map['status']=1;
+        $map['type'] = 1;
         $map['addtime']=array('gt',time()-$timespan);//一周以内
         $map['like_count'] = array('gt',50);
         
@@ -24,6 +25,7 @@ class HotWidget extends Controller{
         }else{
             //随机取几条
             $randMap['status']=1;
+            $randMap['type'] = 1;
             $randMap['addtime']=array('gt',time()-$timespan);//一周以内
             $ids = $AtlasModel->where($randMap)->limit($limit)->order("rand()")->getField('id',true);
         }
