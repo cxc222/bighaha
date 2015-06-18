@@ -135,7 +135,7 @@ class CollectRule {
 	    $_data['uid'] = $uid?$uid:$this->getRandomVest(self::$_vest_uids);
 	    $_data['content'] = $content;
 	    $_data['image_id'] = $image_id;
-	    $_data['addtime'] = strtotime($this->randomDate(date("Y-m-d",strtotime("-1 month"))));  //随机时间
+	    $_data['addtime'] = strtotime($this->randomDate(date("Y-m-d",strtotime("-1 week"))));  //随机时间
 	    $_data['status'] = 1;
         $_data['type'] = $type;
         if($this->atlasModel->add($_data)){
