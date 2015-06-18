@@ -637,3 +637,10 @@ html {
 .copyright a {
     margin: 0 4px;
 }
+
+
+/*表格重写*/
+.table > thead > tr > th{
+    word-break: keep-all;
+    white-space:nowrap;
+}
